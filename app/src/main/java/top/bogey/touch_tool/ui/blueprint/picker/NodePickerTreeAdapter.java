@@ -49,6 +49,12 @@ public class NodePickerTreeAdapter extends TreeAdapter {
         return new ViewHolder(binding);
     }
 
+    public void setRoots(List<NodeInfo> roots) {
+        this.roots.clear();
+        this.roots.addAll(roots);
+        searchNodes(null);
+    }
+
     public void setSelectedNode(NodeInfo nodeInfo) {
         if (selectedNode != null) {
             int index = treeNodes.indexOf(selectedNode);
@@ -103,7 +109,7 @@ public class NodePickerTreeAdapter extends TreeAdapter {
 
     private static TreeNode findTreeNode(List<TreeNode> treeNodes, Object value) {
         for (TreeNode treeNode : treeNodes) {
-            if (Objects.equals(treeNode.getData(), value)) return treeNode;
+            if (treeNode.getData() == value) return treeNode;
             TreeNode childNode = findTreeNode(treeNode.getChildren(), value);
             if (childNode != null) return childNode;
         }

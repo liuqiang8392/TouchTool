@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +46,8 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
     private final PinNodePathString nodePath;
     private NodeInfo nodeInfo = null;
 
+    private List<NodeInfo> cachedFindNodes = new ArrayList<>();
+
     public NodePicker(@NonNull Context context, ResultCallback<NodeInfo> callback, String path) {
         super(context, callback);
 
@@ -57,8 +60,7 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
         // 不知道为啥，webview需要第二次才能正常显示节点
         postDelayed(() -> {
             roots = NodeInfo.getWindows();
-            adapter = new NodePickerTreeAdapter(this, roots);
-            binding.widgetRecyclerView.setAdapter(adapter);
+            adapter.setRoots(roots);
         }, 50);
 
         gridPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -272,6 +274,12 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
         for (NodeInfo root : roots) {
             List<NodeInfo> children = root.findChildren(new Rect(x, y, x, y), justUsable);
             if (children.isEmpty()) continue;
+            if (justUsable && cachedFindNodes.equals(children)) {
+                int index = children.indexOf(nodeInfo);
+                if (index == 0) return children.get(children.size() - 1);
+                return children.get(index - 1);
+            }
+            cachedFindNodes = children;
             return children.get(children.size() - 1);
         }
         return null;

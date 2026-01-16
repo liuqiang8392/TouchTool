@@ -328,7 +328,7 @@ public class DisplayUtil {
 
     public static native List<MatchResult> nativeMatchAllTemplate(Bitmap bitmap, Bitmap template, int similarity, int speed);
 
-    public static synchronized List<Rect> matchAllTemplate(Bitmap bitmap, Bitmap template, Rect area, int similarity, int speed) {
+    public static synchronized List<MatchResult> matchAllTemplate(Bitmap bitmap, Bitmap template, Rect area, int similarity, int speed) {
         if (bitmap == null) return null;
         if (template == null) return null;
         // 如果图片尺寸小于模板尺寸，则不匹配
@@ -348,13 +348,13 @@ public class DisplayUtil {
 
         if (matchResults == null || matchResults.isEmpty()) return null;
         matchResults.sort(Comparator.comparingDouble(result -> result.value));
-        List<Rect> rectList = new ArrayList<>();
+        List<MatchResult> resultList = new ArrayList<>();
         for (int i = matchResults.size() - 1; i >= 0; i--) {
             MatchResult result = matchResults.get(i);
             result.area.offset(area.left, area.top);
-            rectList.add(result.area);
+            resultList.add(result);
         }
-        return rectList;
+        return resultList;
     }
 
     public static native List<MatchResult> nativeMatchColor(Bitmap bitmap, int[] color, int similarity);

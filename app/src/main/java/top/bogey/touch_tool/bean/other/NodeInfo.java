@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Queue;
 import java.util.Stack;
 import java.util.regex.Pattern;
@@ -43,7 +44,7 @@ public class NodeInfo extends SimpleNodeInfo implements ITreeNodeData {
         CharSequence nodeDesc = node.getContentDescription();
         if (nodeDesc != null) desc = nodeDesc.toString();
 
-        usable = node.isEnabled() && (node.isClickable() || node.isLongClickable() || node.isEditable() || node.isFocusable());
+        usable = node.isEnabled() && (node.isClickable() || node.isLongClickable() || node.isEditable());
         visible = node.isVisibleToUser();
         area = new Rect();
         node.getBoundsInScreen(area);
@@ -409,6 +410,19 @@ public class NodeInfo extends SimpleNodeInfo implements ITreeNodeData {
         if (id != null && !id.isEmpty()) builder.append("[id=").append(id).append("]");
         builder.append("[").append(index).append("]");
         return builder.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        NodeInfo nodeInfo = (NodeInfo) o;
+        return usable == nodeInfo.usable && visible == nodeInfo.visible && Objects.equals(text, nodeInfo.text) && Objects.equals(desc, nodeInfo.desc) && Objects.equals(area, nodeInfo.area);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), text, desc, usable, visible, area);
     }
 
     @Override

@@ -127,7 +127,20 @@ public class CreateListActionCard extends ActionCard {
             });
             popup.show();
         });
+        refreshKeyValueType();
+    }
 
+    @Override
+    public void refreshCardInfo() {
+        initCardInfo(binding.icon, binding.title, binding.des);
+    }
+
+    @Override
+    public void refreshCardLockState() {
+        initLock(binding.lockButton);
+    }
+
+    private void refreshKeyValueType() {
         if (action instanceof MakeListAction makeListAction) {
             Pin listPin = makeListAction.getListPin();
             PinList pinList = listPin.getValue(PinList.class);
@@ -146,17 +159,9 @@ public class CreateListActionCard extends ActionCard {
     }
 
     @Override
-    public void refreshCardInfo() {
-        initCardInfo(binding.icon, binding.title, binding.des);
-    }
-
-    @Override
-    public void refreshCardLockState() {
-        initLock(binding.lockButton);
-    }
-
-    @Override
     public boolean check() {
+        refreshKeyValueType();
+
         ActionCheckResult result = new ActionCheckResult();
         action.check(result, task);
         ActionCheckResult.Result importantResult = result.getImportantResult();

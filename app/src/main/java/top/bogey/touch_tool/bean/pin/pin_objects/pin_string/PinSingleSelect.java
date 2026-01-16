@@ -45,6 +45,13 @@ public class PinSingleSelect extends PinString {
     }
 
     @Override
+    public void reset() {
+        super.reset();
+        if (options.isEmpty()) value = null;
+        else setValue(options.get(0));
+    }
+
+    @Override
     public boolean linkFromAble(PinBase pin) {
         if (getType().getGroup() == pin.getType().getGroup()) {
             if (pin instanceof PinSingleSelect pinSingleSelect) {
@@ -90,10 +97,10 @@ public class PinSingleSelect extends PinString {
     }
 
     public void setOptions(List<String> options) {
+        if (options == null) options = new ArrayList<>();
         this.options = options;
-        if (value != null && !value.isEmpty()) {
-            if (!options.contains(value)) reset();
-        }
+        if (value != null && !value.isEmpty() && options.contains(value)) return;
+        reset();
     }
 
     @Override

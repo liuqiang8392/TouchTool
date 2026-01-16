@@ -117,6 +117,7 @@
     <!-- 错误 -->
     <string name="card_check_error_tips">存在%d个问题卡片</string>
     <string name="running_error_tips">检测到应用出现崩溃，是否加入QQ群去上报错误？</string>
+    <string name="bind_service_failed_tips">绑定服务失败</string>
 
     <string name="check_pin_linkable_error">针脚类型不匹配</string>
     <string name="check_need_super_user_error">需要超级用户权限</string>

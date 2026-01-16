@@ -4,6 +4,8 @@ import android.os.Build;
 
 import com.google.gson.JsonObject;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
@@ -39,14 +41,21 @@ public class TouchAction extends ExecuteAction {
         PinNumber<?> time = getPinValue(runnable, timePin);
         PinNumber<?> offset = getPinValue(runnable, offsetPin);
 
+        AtomicBoolean pause = new AtomicBoolean(true);
         MainAccessibilityService service = MainApplication.getInstance().getService();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            service.runGesture(path.getStrokesList(time.floatValue(), offset.intValue()), result -> runnable.resume());
+            service.runGesture(path.getStrokesList(time.floatValue(), offset.intValue()), result -> {
+                pause.set(false);
+                runnable.resume();
+            });
         } else {
-            service.runGesture(path.getStrokes(time.floatValue(), offset.intValue()), result -> runnable.resume());
+            service.runGesture(path.getStrokes(time.floatValue(), offset.intValue()), result -> {
+                pause.set(false);
+                runnable.resume();
+            });
         }
         TouchPathFloatView.showGesture(path.getPathParts(EAnchor.TOP_LEFT), time.floatValue());
-        runnable.await();
+        if (pause.get()) runnable.await();
         executeNext(runnable, outPin);
     }
 }

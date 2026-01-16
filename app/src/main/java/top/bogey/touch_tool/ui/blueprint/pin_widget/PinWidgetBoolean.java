@@ -24,10 +24,10 @@ public class PinWidgetBoolean extends PinWidget<PinBoolean> {
     @Override
     protected void initBase() {
         binding.enableSwitch.setChecked(pinBase.getValue());
-        binding.enableSwitch.setOnClickListener(v -> {
-            pinBase.setValue(!pinBase.getValue());
+        binding.enableSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (pinBase.getValue() == isChecked) return;
+            pinBase.setValue(isChecked);
             pinView.getPin().notifyValueUpdated(card.getTask());
-            binding.enableSwitch.setChecked(pinBase.getValue());
         });
     }
 

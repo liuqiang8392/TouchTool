@@ -590,7 +590,10 @@ public class MainAccessibilityService extends AccessibilityService {
 
             Intent intent = new Intent(OCR_SERVICE_ACTION);
             intent.setComponent(new ComponentName(packageName, OCR_SERVICE_ACTION));
-            if (!bindService(intent, connection, Context.BIND_AUTO_CREATE)) callback.onResult(new ArrayList<>());
+            if (!bindService(intent, connection, Context.BIND_AUTO_CREATE)) {
+                new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(this, R.string.bind_service_failed_tips, Toast.LENGTH_SHORT).show());
+                callback.onResult(new ArrayList<>());
+            }
         } else {
             try {
                 iOcr.runOcr(bitmap, new IOcrCallback.Stub() {
@@ -628,7 +631,10 @@ public class MainAccessibilityService extends AccessibilityService {
 
             Intent intent = new Intent();
             intent.setComponent(new ComponentName(YOLO_APP_PACKAGE, YOLO_APP_SERVICE));
-            if (!bindService(intent, connection, Context.BIND_AUTO_CREATE)) callback.onResult(false);
+            if (!bindService(intent, connection, Context.BIND_AUTO_CREATE)) {
+                new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(this, R.string.bind_service_failed_tips, Toast.LENGTH_SHORT).show());
+                callback.onResult(false);
+            }
         } else {
             callback.onResult(true);
         }

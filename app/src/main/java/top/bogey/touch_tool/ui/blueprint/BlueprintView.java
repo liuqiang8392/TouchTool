@@ -312,13 +312,15 @@ public class BlueprintView extends Fragment {
 
         binding.exchangeButton.setOnClickListener(v -> AppUtil.showEditDialog(getContext(), R.string.task_exchange_to_custom, "", result -> {
             if (result.isEmpty()) return;
+
+            Task currTask = taskStack.peek();
             Task innerTask = new Task();
             binding.cardLayout.getSelectedActionsCopy().forEach(innerTask::addAction);
             innerTask.addAction(new CustomStartAction());
             innerTask.addAction(new CustomEndAction());
             innerTask.setTitle(result);
-            task.addTask(innerTask);
-            task.save();
+            currTask.addTask(innerTask);
+            currTask.save();
             pushStack(innerTask);
         }));
 

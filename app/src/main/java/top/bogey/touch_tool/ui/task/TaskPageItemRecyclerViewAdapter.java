@@ -192,12 +192,11 @@ public class TaskPageItemRecyclerViewAdapter extends RecyclerView.Adapter<TaskPa
                 dialog.show();
             });
 
-            binding.enableSwitch.setOnClickListener(v -> {
+            binding.enableSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 int position = getBindingAdapterPosition();
                 Task task = tasks.get(position);
-
-                if (binding.enableSwitch.isChecked() == task.isEnable()) return;
-                task.setEnable(binding.enableSwitch.isChecked());
+                if (task.isEnable() == isChecked) return;
+                task.setEnable(isChecked);
                 task.save();
             });
 

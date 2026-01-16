@@ -391,7 +391,7 @@ public class SelectActionDialog extends BottomSheetDialog {
                 List<Object> list = entry.getValue();
                 for (Object object : list) {
                     String name = SelectActionItemRecyclerViewAdapter.getObjectTitle(object);
-                    if (AppUtil.isStringContains(name, text.toString())) {
+                    if (AppUtil.isStringContainsWithPinyin(name, text.toString())) {
                         data.add(object);
                     }
                 }

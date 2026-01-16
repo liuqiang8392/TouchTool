@@ -1,7 +1,6 @@
 package top.bogey.touch_tool.bean.action.image;
 
 import android.graphics.Bitmap;
-import android.graphics.Rect;
 import android.os.Build;
 
 import com.google.gson.JsonObject;
@@ -26,6 +25,7 @@ import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.utils.DisplayUtil;
+import top.bogey.touch_tool.utils.MatchResult;
 
 public class FindImagesAction extends FindExecuteAction {
     private final transient Pin sourcePin = new Pin(new PinImage(), R.string.pin_image_full, false, false, true);
@@ -33,17 +33,17 @@ public class FindImagesAction extends FindExecuteAction {
     private final transient Pin similarityPin = new Pin(new PinInteger(80), R.string.find_images_action_similarity);
     private final transient Pin scalePin = new Pin(new PinSingleSelect(R.array.match_image_scale, 1), R.string.find_images_action_scale, false, false, true);
     private final transient Pin areasPin = new Pin(new PinList(new PinArea()), true);
-    private final transient Pin firstAreaPin = new Pin(new PinArea(), R.string.pin_area_first, true);
+    private final transient Pin similaritiesPin = new Pin(new PinList(new PinInteger()), true);
 
     public FindImagesAction() {
         super(ActionType.FIND_IMAGES);
         intervalPin.getValue(PinInteger.class).setValue(200);
-        addPins(sourcePin, templatePin, similarityPin, scalePin, areasPin, firstAreaPin);
+        addPins(sourcePin, templatePin, similarityPin, scalePin, areasPin, similaritiesPin);
     }
 
     public FindImagesAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(sourcePin, templatePin, similarityPin, scalePin, areasPin, firstAreaPin);
+        reAddPins(sourcePin, templatePin, similarityPin, scalePin, areasPin, similaritiesPin);
     }
 
     @Override
@@ -60,12 +60,13 @@ public class FindImagesAction extends FindExecuteAction {
         PinNumber<?> similarity = getPinValue(runnable, similarityPin);
         PinSingleSelect scale = getPinValue(runnable, scalePin);
 
-        List<Rect> rectList = DisplayUtil.matchAllTemplate(bitmap, template.getImage(), null, similarity.intValue(), scale.getIndex() + 1);
+        List<MatchResult> rectList = DisplayUtil.matchAllTemplate(bitmap, template.getImage(), null, similarity.intValue(), scale.getIndex() + 1);
         if (rectList != null && !rectList.isEmpty()) {
-            rectList.forEach(rect -> areasPin.getValue(PinList.class).add(new PinArea(rect)));
-            firstAreaPin.getValue(PinArea.class).setValue(rectList.get(0));
+            rectList.forEach(result -> {
+                areasPin.getValue(PinList.class).add(new PinArea(result.area));
+                similaritiesPin.getValue(PinList.class).add(new PinInteger((int) result.value));
+            });
         }
-
         return !areasPin.getValue(PinList.class).isEmpty();
     }
 

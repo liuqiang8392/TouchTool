@@ -76,12 +76,12 @@ public class ParseJsonAction extends CalculateAction implements SyncAction {
                 Map<String, Object> map = gson.fromJson(json, new TypeToken<Map<String, Object>>() {
                 }.getType());
                 PinBase pinBase = PinBase.parseValue(map);
-                resultPin.setValue(pinBase);
+                resultPin.setValue(context, pinBase);
             } else if (json.startsWith("[")) {
                 List<Object> list = gson.fromJson(json, new TypeToken<List<Object>>() {
                 }.getType());
                 PinBase pinBase = PinBase.parseValue(list);
-                resultPin.setValue(pinBase);
+                resultPin.setValue(context, pinBase);
             }
         } catch (Exception ignored) {
         }

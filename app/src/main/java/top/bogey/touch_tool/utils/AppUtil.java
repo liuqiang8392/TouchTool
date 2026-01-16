@@ -302,11 +302,11 @@ public class AppUtil {
     }
 
     public static boolean isStringContains(String str, String value) {
-        Pattern pattern = getPattern(value);
+        Pattern pattern = getPattern(value.toLowerCase());
         if (pattern == null) {
-            return str.contains(value);
+            return str.toLowerCase().contains(value);
         } else {
-            Matcher matcher = pattern.matcher(str);
+            Matcher matcher = pattern.matcher(str.toLowerCase());
             return matcher.find();
         }
     }
