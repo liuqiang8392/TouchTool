@@ -88,8 +88,9 @@ public class YoloDetectAction extends ExecuteAction implements SyncAction {
         if (service == null || !service.isEnabled()) return;
         service.getYoloModelList(result -> {
             if (result.isEmpty()) return;
-            PinSingleSelect singleSelect = new PinSingleSelect(result);
-            modelPin.setValue(context, singleSelect);
+            modelPin.getValue(PinSingleSelect.class).setOptions(result);
+            // 刷新针脚
+            modelPin.setValue(context, modelPin.getValue());
         });
     }
 }
