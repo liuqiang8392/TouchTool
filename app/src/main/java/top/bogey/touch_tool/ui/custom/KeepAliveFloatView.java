@@ -1,6 +1,7 @@
 package top.bogey.touch_tool.ui.custom;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Handler;
 import android.widget.FrameLayout;
 
@@ -24,6 +25,8 @@ import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 public class KeepAliveFloatView extends FrameLayout implements FloatInterface, ITaskListener {
     private final Handler handler;
 
+    private final boolean darkMode;
+
     public KeepAliveFloatView(@NonNull Context context) {
         super(context);
         handler = new Handler();
@@ -40,6 +43,8 @@ public class KeepAliveFloatView extends FrameLayout implements FloatInterface, I
         addView(cardView);
 
         setAlpha(0);
+
+        darkMode = (context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
     }
 
     private void showMe() {
@@ -101,5 +106,9 @@ public class KeepAliveFloatView extends FrameLayout implements FloatInterface, I
         Context context = getContext();
         if (context instanceof BaseActivity) return context;
         return DynamicColors.wrapContextIfAvailable(context);
+    }
+
+    public boolean isDarkMode() {
+        return darkMode;
     }
 }

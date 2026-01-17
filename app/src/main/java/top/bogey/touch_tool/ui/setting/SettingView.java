@@ -189,10 +189,6 @@ public class SettingView extends Fragment {
         binding.forgeServiceSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setKeepAliveForegroundServiceEnabled(activity, binding.forgeServiceSwitch.isChecked()));
         binding.forgeServiceSwitch.setChecked(SettingSaver.getInstance().isKeepAliveForegroundServiceEnabled());
 
-        // 开机自启
-        binding.autoStartSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setBootCompletedAutoStart(binding.autoStartSwitch.isChecked()));
-        binding.autoStartSwitch.setChecked(SettingSaver.getInstance().isBootCompletedAutoStart());
-
         // 清理缓存
         binding.cleanCacheButton.setOnButtonClickListener(v -> {
             String[] dirs = new String[]{AppUtil.LOG_DIR_NAME, AppUtil.TASK_DIR_NAME, AppUtil.DOCUMENT_DIR_NAME};

@@ -5,6 +5,7 @@ import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -20,7 +21,9 @@ import com.tencent.mmkv.MMKV;
 import java.util.List;
 
 import top.bogey.touch_tool.service.KeepAliveService;
+import top.bogey.touch_tool.ui.custom.KeepAliveFloatView;
 import top.bogey.touch_tool.utils.callback.ActivityLifecycleCallback;
+import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 
 public class SettingSaver {
     private static SettingSaver instance;
@@ -53,7 +56,6 @@ public class SettingSaver {
     private static final String SERVICE_ENABLED = "SERVICE_ENABLED";                                    // 功能是否开启
     private static final String HIDE_APP_BACKGROUND = "HIDE_APP_BACKGROUND";                            // 隐藏后台
     private static final String KEEP_ALIVE_FOREGROUND_SERVICE = "KEEP_ALIVE_FOREGROUND_SERVICE";        // 前台保活服务
-    private static final String BOOT_COMPLETED_AUTO_START = "BOOT_COMPLETED_AUTO_START";                // 开机自启动
 
     private static final String SUPER_USER_TYPE = "SUPER_USER_TYPE";                                    // 超级用户
     private static final String NOTIFICATION_TYPE = "NOTIFICATION_TYPE";                                // 通知来源
@@ -228,15 +230,6 @@ public class SettingSaver {
         else context.stopService(intent);
     }
 
-    public boolean isBootCompletedAutoStart() {
-        return mmkv.decodeBool(BOOT_COMPLETED_AUTO_START, false);
-    }
-
-    public void setBootCompletedAutoStart(boolean enable) {
-        mmkv.encode(BOOT_COMPLETED_AUTO_START, enable);
-    }
-
-
     public int getSuperUserType() {
         return mmkv.decodeInt(SUPER_USER_TYPE, 0);
     }
@@ -374,6 +367,15 @@ public class SettingSaver {
     public DynamicColorsOptions getDynamicColorOptions() {
         DynamicColorsOptions.Builder builder = new DynamicColorsOptions.Builder();
         builder.setPrecondition((activity, theme) -> isDynamicColorTheme());
+        builder.setOnAppliedCallback(activity -> {
+            boolean darkMode = (activity.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
+
+            KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
+            if (keepView != null) {
+                if (keepView.isDarkMode() == darkMode) return;
+            }
+            FloatWindow.dismiss(KeepAliveFloatView.class.getName());
+        });
         int colorValue = getDynamicColorValue();
         if (colorValue != Color.BLACK) builder.setContentBasedSource(colorValue);
         return builder.build();

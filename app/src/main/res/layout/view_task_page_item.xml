@@ -39,7 +39,7 @@
                     android:layout_weight="1"
                     android:ellipsize="end"
                     android:maxLines="2"
-                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge.Emphasized" />
+                    android:textAppearance="@style/TextAppearance.Material3.BodyMedium.Emphasized" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/editButton"

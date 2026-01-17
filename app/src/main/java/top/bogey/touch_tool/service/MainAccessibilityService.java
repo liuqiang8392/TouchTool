@@ -199,6 +199,9 @@ public class MainAccessibilityService extends AccessibilityService {
 
             resetAllAlarm();
             SuperUser.getInstance().tryInit();
+            Intent intent = new Intent(this, InstantActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
         } else {
             if (systemEventReceiver != null) systemEventReceiver.unregister();
             systemEventReceiver = null;
@@ -306,6 +309,14 @@ public class MainAccessibilityService extends AccessibilityService {
     public void stopAllTask() {
         for (TaskRunnable runnable : tasks) {
             if (runnable.isInterrupt()) continue;
+            runnable.stop();
+        }
+    }
+
+    public void stopAllTask(Task exclude) {
+        for (TaskRunnable runnable : tasks) {
+            if (runnable.isInterrupt()) continue;
+            if (runnable.getStartTask().equals(exclude)) continue;
             runnable.stop();
         }
     }

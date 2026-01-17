@@ -122,14 +122,6 @@
                         app:icon="@drawable/icon_notifications"
                         app:title="@string/app_setting_forge_service" />
 
-                    <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSwitch
-                        android:id="@+id/autoStartSwitch"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:description="@string/app_setting_auto_start_desc"
-                        app:icon="@drawable/icon_autoplay"
-                        app:title="@string/app_setting_auto_start" />
-
                     <top.bogey.touch_tool.ui.setting.widget.SettingWidgetNormal
                         android:id="@+id/cleanCacheButton"
                         android:layout_width="match_parent"

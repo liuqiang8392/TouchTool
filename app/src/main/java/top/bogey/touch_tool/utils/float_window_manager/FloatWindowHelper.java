@@ -117,8 +117,7 @@ public class FloatWindowHelper {
 
                         new Handler().postDelayed(() -> {
                             InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                            if (inputMethodManager != null)
-                                inputMethodManager.showSoftInput(editText, 0);
+                            if (inputMethodManager != null) inputMethodManager.showSoftInput(editText, 0);
                         }, 100);
                     }
                     return false;

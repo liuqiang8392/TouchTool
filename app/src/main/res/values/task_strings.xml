@@ -131,6 +131,7 @@
     <string name="stop_task_action">停止任务</string>
     <string name="stop_task_action_desc">停止对应任务</string>
     <string name="stop_task_action_task_id">任务(默认当前)</string>
+    <string name="stop_task_action_task_all">除自身所有任务</string>
 
     <string name="custom_start_action">自定义开始</string>
     <string name="custom_start_action_desc">任务内有自定义开始才能被其他任务调用</string>
