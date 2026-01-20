@@ -198,7 +198,7 @@
     <string name="picker_area_title">选择区域</string>
     <string name="picker_area_offset">置信度：%d</string>
     <string name="picker_color_title">选择颜色</string>
-    <string name="picker_color_offset">偏移：%d</string>
+    <string name="picker_color_offset">相似度：%d</string>
     <string name="picker_image_title">选择图片</string>
     <string name="picker_image_offset">相似度：%d</string>
     <string name="picker_point_title">选择位置</string>

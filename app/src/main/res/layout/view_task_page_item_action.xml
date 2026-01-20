@@ -11,7 +11,7 @@
         android:layout_weight="1"
         android:ellipsize="end"
         android:maxLines="2"
-        android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
+        android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
 
     <FrameLayout
         android:layout_width="?attr/iconButtonSize"

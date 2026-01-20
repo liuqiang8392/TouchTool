@@ -3,18 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/back"
-        android:icon="@drawable/menu_undo"
-        android:title=""
-        app:showAsAction="always" />
-
-    <item
-        android:id="@+id/forward"
-        android:icon="@drawable/menu_redo"
-        android:title=""
-        app:showAsAction="always" />
-
-    <item
         android:id="@+id/save"
         android:icon="@drawable/menu_save"
         android:title=""
