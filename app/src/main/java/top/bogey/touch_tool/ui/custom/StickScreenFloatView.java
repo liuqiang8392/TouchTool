@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.Toast;
@@ -42,6 +43,7 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
     private int originWidth = 0, originHeight = 0;
     private float minScale, maxScale;
     private boolean dragging = false;
+    private boolean showButton = true;
 
     public static String showStick(PinObject object, EAnchor anchor, EAnchor gravity, Point location) {
         KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
@@ -61,6 +63,23 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
         this.tag = tag;
 
         binding.closeButton.setOnClickListener(v -> dismiss());
+
+        binding.image.setOnClickListener(v -> {
+            if (needDelete) {
+                dismiss();
+            } else {
+                needDelete = true;
+                postDelayed(() -> {
+                    showButton = !showButton;
+                    binding.closeButton.setVisibility(showButton ? View.VISIBLE : View.INVISIBLE);
+                    binding.saveButton.setVisibility(showButton ? View.VISIBLE : View.INVISIBLE);
+
+                    needDelete = false;
+                }, 500);
+            }
+        });
+        binding.closeButton.setVisibility(showButton ? View.VISIBLE : View.INVISIBLE);
+        binding.saveButton.setVisibility(showButton ? View.VISIBLE : View.INVISIBLE);
 
 //        top = (int) DisplayUtil.dp2px(context, 24);
         top = 0;

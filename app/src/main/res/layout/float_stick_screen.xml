@@ -43,11 +43,10 @@
             android:translationX="4dp"
             android:translationY="4dp" />
 
-        <com.google.android.material.button.MaterialButtonGroup
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="top|end"
-            android:spacing="0dp">
+            android:layout_gravity="top|end">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/saveButton"
@@ -59,7 +58,7 @@
                 style="?attr/iconButton"
                 app:icon="@drawable/icon_close" />
 
-        </com.google.android.material.button.MaterialButtonGroup>
+        </LinearLayout>
 
     </FrameLayout>
 

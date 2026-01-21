@@ -567,7 +567,7 @@ public class MainAccessibilityService extends AccessibilityService {
     private final Map<String, IOcr> ocrBinderMap = new HashMap<>();
 
     public synchronized void runOcr(Bitmap bitmap, String packageName, ResultCallback<List<OcrResult>> callback) {
-        if (bitmap == null) {
+        if (bitmap == null || bitmap.isRecycled()) {
             callback.onResult(new ArrayList<>());
             return;
         }
@@ -652,7 +652,7 @@ public class MainAccessibilityService extends AccessibilityService {
     }
 
     public synchronized void runYolo(Bitmap bitmap, String modelName, int similarity, ResultCallback<List<YoloResult>> callback) {
-        if (bitmap == null) {
+        if (bitmap == null || bitmap.isRecycled()) {
             callback.onResult(new ArrayList<>());
             return;
         }

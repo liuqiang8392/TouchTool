@@ -120,10 +120,10 @@ public class BlueprintView extends Fragment {
         public void onCreateMenu(@NonNull Menu currMenu, @NonNull MenuInflater menuInflater) {
             menu = currMenu;
             menuInflater.inflate(R.menu.menu_blueprint, currMenu);
-            if (history != null) {
-                menu.findItem(R.id.back).setEnabled(history.canBack());
-                menu.findItem(R.id.forward).setEnabled(history.canForward());
-            }
+//            if (history != null) {
+//                menu.findItem(R.id.back).setEnabled(history.canBack());
+//                menu.findItem(R.id.forward).setEnabled(history.canForward());
+//            }
         }
 
         @Override
@@ -152,7 +152,7 @@ public class BlueprintView extends Fragment {
         @Override
         public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
             int itemId = menuItem.getItemId();
-            if (itemId == R.id.back) {
+            /*if (itemId == R.id.back) {
                 if (history != null) history.back(binding.cardLayout);
                 menu.findItem(R.id.back).setEnabled(history.canBack());
                 menu.findItem(R.id.forward).setEnabled(history.canForward());
@@ -162,7 +162,7 @@ public class BlueprintView extends Fragment {
                 menu.findItem(R.id.back).setEnabled(history.canBack());
                 menu.findItem(R.id.forward).setEnabled(history.canForward());
                 return true;
-            } else if (itemId == R.id.save) {
+            } else */if (itemId == R.id.save) {
                 Task task = taskStack.peek();
                 task.save();
                 return true;
@@ -402,10 +402,10 @@ public class BlueprintView extends Fragment {
         history = managers.computeIfAbsent(task.getId(), s -> new HistoryManager());
         binding.cardLayout.setTask(task, history);
 
-        if (menu != null) {
-            menu.findItem(R.id.back).setEnabled(history.canBack());
-            menu.findItem(R.id.forward).setEnabled(history.canForward());
-        }
+//        if (menu != null) {
+//            menu.findItem(R.id.back).setEnabled(history.canBack());
+//            menu.findItem(R.id.forward).setEnabled(history.canForward());
+//        }
 
         binding.toolBar.setTitle(task.getTitle());
 
