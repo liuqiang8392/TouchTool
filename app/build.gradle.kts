@@ -67,6 +67,7 @@ configure<ApplicationExtension> {
     buildFeatures {
         viewBinding = true
         aidl = true
+        resValues = true
     }
 }
 
