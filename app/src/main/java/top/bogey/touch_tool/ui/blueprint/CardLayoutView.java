@@ -56,24 +56,12 @@ import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.bean.task.Variable;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.blueprint.card.ShowTextActionCard;
-import top.bogey.touch_tool.ui.blueprint.history.HistoryManager;
-import top.bogey.touch_tool.ui.blueprint.history.HistoryStep;
-import top.bogey.touch_tool.ui.blueprint.history.IHistoryOwner;
-import top.bogey.touch_tool.ui.blueprint.history.edit.CardAddHistory;
-import top.bogey.touch_tool.ui.blueprint.history.edit.CardMoveHistory;
-import top.bogey.touch_tool.ui.blueprint.history.edit.CardRemoveHistory;
-import top.bogey.touch_tool.ui.blueprint.history.edit.CardUpdateHistory;
-import top.bogey.touch_tool.ui.blueprint.history.edit.EditHistory;
-import top.bogey.touch_tool.ui.blueprint.history.edit.PinAddHistory;
-import top.bogey.touch_tool.ui.blueprint.history.edit.PinLinkHistory;
-import top.bogey.touch_tool.ui.blueprint.history.edit.PinRemoveHistory;
-import top.bogey.touch_tool.ui.blueprint.history.edit.PinUpdateHistory;
 import top.bogey.touch_tool.ui.blueprint.pin.PinView;
 import top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionByPinDialog;
 import top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionDialog;
 import top.bogey.touch_tool.utils.DisplayUtil;
 
-public class CardLayoutView extends FrameLayout implements TaskSaveListener, VariableSaveListener, IHistoryOwner {
+public class CardLayoutView extends FrameLayout implements TaskSaveListener, VariableSaveListener {
     public static final int GRID_DP_SIZE = 12;
 
     private static final int TOUCH_NONE = 0;
@@ -124,7 +112,6 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
     private final Map<String, ActionCard> cards = new HashMap<>();
     private Task task;
     private List<Action> actions;
-    private HistoryManager history;
 
     private boolean editable = true;
 
@@ -195,9 +182,8 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
         VariableSaver.getInstance().removeListener(this);
     }
 
-    public void setTask(Task task, HistoryManager history) {
+    public void setTask(Task task) {
         this.task = task;
-        this.history = history;
         loaded = false;
         offsetX = 0;
         offsetY = 0;
@@ -1161,160 +1147,5 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
     @Override
     public void onRemove(Variable var) {
         checkCards();
-    }
-
-    @Override
-    public void back(HistoryStep step) {
-        List<EditHistory> stepHistory = step.getHistory();
-        for (int i = stepHistory.size() - 1; i >= 0; i--) {
-            EditHistory editHistory = stepHistory.get(i);
-            switch (editHistory.getType()) {
-                case ADD_CARD -> {
-                    CardAddHistory cardAddHistory = (CardAddHistory) editHistory;
-                    Action action = cardAddHistory.getAction();
-                    task.removeAction(action.getId());
-                    ActionCard card = cards.remove(action.getId());
-                    removeView(card);
-                }
-
-                case REMOVE_CARD -> {
-                    CardRemoveHistory cardRemoveHistory = (CardRemoveHistory) editHistory;
-                    Action action = cardRemoveHistory.getAction();
-                    addCard(action);
-                }
-
-                case UPDATE_CARD -> {
-                    CardUpdateHistory cardUpdateHistory = (CardUpdateHistory) editHistory;
-                    String actionId = cardUpdateHistory.getActionId();
-                    ActionCard card = cards.get(actionId);
-                    if (card == null) continue;
-                    card.setDescription(cardUpdateHistory.getFrom());
-                }
-
-                case MOVE_CARD -> {
-                    CardMoveHistory cardMoveHistory = (CardMoveHistory) editHistory;
-                    String actionId = cardMoveHistory.getActionId();
-                    ActionCard card = cards.get(actionId);
-                    if (card == null) continue;
-                    card.getAction().setPos(cardMoveHistory.getStart());
-                    updateCardPos(card);
-                }
-
-                case ADD_PIN -> {
-                    PinAddHistory pinAddHistory = (PinAddHistory) editHistory;
-                    String actionId = pinAddHistory.getActionId();
-                    ActionCard card = cards.get(actionId);
-                    if (card == null) continue;
-                    card.removePin(pinAddHistory.getPin());
-                }
-
-                case REMOVE_PIN -> {
-                    PinRemoveHistory pinRemoveHistory = (PinRemoveHistory) editHistory;
-                    String actionId = pinRemoveHistory.getActionId();
-                    ActionCard card = cards.get(actionId);
-                    if (card == null) return;
-                    card.addPin(pinRemoveHistory.getPin());
-                }
-
-                case UPDATE_PIN -> {
-                    PinUpdateHistory pinUpdateHistory = (PinUpdateHistory) editHistory;
-                    String actionId = pinUpdateHistory.getActionId();
-                    ActionCard card = cards.get(actionId);
-                    if (card == null) return;
-                    PinView pinView = card.getPinView(pinUpdateHistory.getPinId());
-                    if (pinView == null) return;
-                    pinView.getPin().setValue(task, pinUpdateHistory.getFrom());
-                    pinView.refreshPin();
-                }
-
-                case LINK_PIN -> {
-                    PinLinkHistory pinLinkHistory = (PinLinkHistory) editHistory;
-                    String actionId = pinLinkHistory.getActionId();
-                    ActionCard card = cards.get(actionId);
-                    if (card == null) return;
-                    PinView pinView = card.getPinView(pinLinkHistory.getPinId());
-                    if (pinView == null) return;
-                    pinView.getPin().getLinks().clear();
-                    pinView.getPin().getLinks().putAll(pinLinkHistory.getFrom());
-                    postInvalidate();
-                }
-            }
-        }
-    }
-
-    @Override
-    public void forward(HistoryStep step) {
-        step.getHistory().forEach(editHistory -> {
-            switch (editHistory.getType()) {
-                case ADD_CARD -> {
-                    CardAddHistory cardAddHistory = (CardAddHistory) editHistory;
-                    Action action = cardAddHistory.getAction();
-                    task.addAction(action);
-                    addCard(action);
-                }
-
-                case REMOVE_CARD -> {
-                    CardRemoveHistory cardRemoveHistory = (CardRemoveHistory) editHistory;
-                    Action action = cardRemoveHistory.getAction();
-                    task.removeAction(action.getId());
-                    ActionCard card = cards.remove(action.getId());
-                    removeView(card);
-                }
-
-                case UPDATE_CARD -> {
-                    CardUpdateHistory cardUpdateHistory = (CardUpdateHistory) editHistory;
-                    String actionId = cardUpdateHistory.getActionId();
-                    ActionCard card = cards.get(actionId);
-                    if (card == null) return;
-                    card.setDescription(cardUpdateHistory.getTo());
-                }
-
-                case MOVE_CARD -> {
-                    CardMoveHistory cardMoveHistory = (CardMoveHistory) editHistory;
-                    String actionId = cardMoveHistory.getActionId();
-                    ActionCard card = cards.get(actionId);
-                    if (card == null) return;
-                    card.getAction().setPos(cardMoveHistory.getEnd());
-                }
-
-                case ADD_PIN -> {
-                    PinAddHistory pinAddHistory = (PinAddHistory) editHistory;
-                    String actionId = pinAddHistory.getActionId();
-                    ActionCard card = cards.get(actionId);
-                    if (card == null) return;
-                    card.addPin(pinAddHistory.getPin());
-                }
-
-                case REMOVE_PIN -> {
-                    PinRemoveHistory pinRemoveHistory = (PinRemoveHistory) editHistory;
-                    String actionId = pinRemoveHistory.getActionId();
-                    ActionCard card = cards.get(actionId);
-                    if (card == null) return;
-                    card.removePin(pinRemoveHistory.getPin());
-                }
-
-                case UPDATE_PIN -> {
-                    PinUpdateHistory pinUpdateHistory = (PinUpdateHistory) editHistory;
-                    String actionId = pinUpdateHistory.getActionId();
-                    ActionCard card = cards.get(actionId);
-                    if (card == null) return;
-                    PinView pinView = card.getPinView(pinUpdateHistory.getPinId());
-                    if (pinView == null) return;
-                    pinView.getPin().setValue(task, pinUpdateHistory.getTo());
-                    pinView.refreshPin();
-                }
-
-                case LINK_PIN -> {
-                    PinLinkHistory pinLinkHistory = (PinLinkHistory) editHistory;
-                    String actionId = pinLinkHistory.getActionId();
-                    ActionCard card = cards.get(actionId);
-                    if (card == null) return;
-                    PinView pinView = card.getPinView(pinLinkHistory.getPinId());
-                    if (pinView == null) return;
-                    pinView.getPin().getLinks().clear();
-                    pinView.getPin().getLinks().putAll(pinLinkHistory.getTo());
-                }
-            }
-        });
     }
 }

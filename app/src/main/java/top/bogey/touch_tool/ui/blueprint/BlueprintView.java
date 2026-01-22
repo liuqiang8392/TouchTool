@@ -22,11 +22,9 @@ import com.google.android.material.imageview.ShapeableImageView;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Queue;
 import java.util.Stack;
 
@@ -42,7 +40,6 @@ import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.ViewBlueprintBinding;
 import top.bogey.touch_tool.ui.MainActivity;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
-import top.bogey.touch_tool.ui.blueprint.history.HistoryManager;
 import top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionDialog;
 import top.bogey.touch_tool.ui.tool.log.LogFloatView;
 import top.bogey.touch_tool.utils.AppUtil;
@@ -52,10 +49,8 @@ public class BlueprintView extends Fragment {
     private final static List<Action> copyActions = new ArrayList<>();
 
     private final Stack<Task> taskStack = new Stack<>();
-    private final Map<String, HistoryManager> managers = new HashMap<>();
 
     private ViewBlueprintBinding binding;
-    private HistoryManager history;
     private boolean needDelete = false;
 
     public static void tryPushStack(Task task) {
@@ -114,16 +109,10 @@ public class BlueprintView extends Fragment {
         }
     };
 
-    private Menu menu;
     private final MenuProvider menuProvider = new MenuProvider() {
         @Override
         public void onCreateMenu(@NonNull Menu currMenu, @NonNull MenuInflater menuInflater) {
-            menu = currMenu;
             menuInflater.inflate(R.menu.menu_blueprint, currMenu);
-//            if (history != null) {
-//                menu.findItem(R.id.back).setEnabled(history.canBack());
-//                menu.findItem(R.id.forward).setEnabled(history.canForward());
-//            }
         }
 
         @Override
@@ -152,17 +141,7 @@ public class BlueprintView extends Fragment {
         @Override
         public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
             int itemId = menuItem.getItemId();
-            /*if (itemId == R.id.back) {
-                if (history != null) history.back(binding.cardLayout);
-                menu.findItem(R.id.back).setEnabled(history.canBack());
-                menu.findItem(R.id.forward).setEnabled(history.canForward());
-                return true;
-            } else if (itemId == R.id.forward) {
-                if (history != null) history.forward(binding.cardLayout);
-                menu.findItem(R.id.back).setEnabled(history.canBack());
-                menu.findItem(R.id.forward).setEnabled(history.canForward());
-                return true;
-            } else */if (itemId == R.id.save) {
+            if (itemId == R.id.save) {
                 Task task = taskStack.peek();
                 task.save();
                 return true;
@@ -399,13 +378,7 @@ public class BlueprintView extends Fragment {
     }
 
     public void setTask(Task task) {
-        history = managers.computeIfAbsent(task.getId(), s -> new HistoryManager());
-        binding.cardLayout.setTask(task, history);
-
-//        if (menu != null) {
-//            menu.findItem(R.id.back).setEnabled(history.canBack());
-//            menu.findItem(R.id.forward).setEnabled(history.canForward());
-//        }
+        binding.cardLayout.setTask(task);
 
         binding.toolBar.setTitle(task.getTitle());
 
