@@ -361,7 +361,7 @@
     <string name="preference_setting_theme">深色模式</string>
 
     <string name="preference_setting_color">动态颜色</string>
-    <string name="preference_setting_color_desc">在支持的Android版本上，开启后应用将使用壁纸颜色或自选颜色作为主色调。\n(点击此处自选颜色，纯黑为壁纸主色调)</string>
+    <string name="preference_setting_color_desc">在支持的Android版本上，开启后应用将使用壁纸颜色或自选颜色作为主色调\n(点击此处自选颜色，纯黑为壁纸主色调)</string>
 
     <!-- 设置-偏好设置-手动执行 -->
     <string name="preference_setting_manual_play">手动执行</string>
@@ -373,6 +373,9 @@
 
     <string name="preference_setting_manual_play_hide">隐藏悬浮窗</string>
     <string name="preference_setting_manual_play_hide_desc">设置长按悬浮窗展开收起按钮默认隐藏规则</string>
+
+    <string name="preference_setting_manual_play_hide_when_screen_shot">截屏时隐藏悬浮窗</string>
+    <string name="preference_setting_manual_play_hide_when_screen_shot_desc">设置悬浮窗是否会被手机截屏或录屏捕获\n(一些系统可能无效)</string>
 
     <string name="preference_setting_manual_playing_hide">执行时隐藏</string>
     <string name="preference_setting_manual_playing_hide_desc">设置任务运行时是否隐藏其他执行按钮</string>

@@ -72,6 +72,15 @@
                         app:title="@string/preference_setting_manual_play_hide" />
 
                     <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSwitch
+                        android:id="@+id/hideManualPlaySelectWhenScreenShot"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:description="@string/preference_setting_manual_play_hide_when_screen_shot_desc"
+                        app:icon="@drawable/icon_visibility_off"
+                        app:options="@array/manual_play_hide_type"
+                        app:title="@string/preference_setting_manual_play_hide_when_screen_shot" />
+
+                    <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSwitch
                         android:id="@+id/manualPlayingHideSwitch"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

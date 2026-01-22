@@ -21,6 +21,12 @@ import android.widget.EditText;
 
 import androidx.appcompat.view.ContextThemeWrapper;
 
+import org.lsposed.hiddenapibypass.HiddenApiBypass;
+
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.Optional;
+
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.EAnchor;
@@ -99,6 +105,34 @@ public class FloatWindowHelper {
             if (config.callback != null) config.callback.onRotate();
         });
 
+        if (config.hideByScreenshot) {
+            viewParent.post(() -> {
+                try {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        Object viewRootImpl = HiddenApiBypass.invoke(View.class, viewParent, "getViewRootImpl");
+                        if (viewRootImpl != null) {
+                            Object surfaceControl = HiddenApiBypass.invoke(viewRootImpl.getClass(), viewRootImpl, "getSurfaceControl");
+                            if (surfaceControl != null) {
+                                List<Field> fields = HiddenApiBypass.getInstanceFields(viewRootImpl.getClass());
+                                Optional<Field> first = fields.stream().filter(field -> field.getName().equals("mTransaction")).findFirst();
+                                if (first.isPresent()) {
+                                    Field transactionField = first.get();
+                                    transactionField.setAccessible(true);
+                                    Object transaction = transactionField.get(viewRootImpl);
+                                    if (transaction != null) {
+                                        HiddenApiBypass.invoke(transaction.getClass(), transaction, "setSkipScreenshot", surfaceControl, true);
+                                        manager.updateViewLayout(viewParent, params);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+
         initEditText(viewParent);
     }
 
@@ -176,14 +210,14 @@ public class FloatWindowHelper {
                     public void onAnimationCancel(Animator animation) {
                         super.onAnimationCancel(animation);
                         config.animating = false;
-                        manager.removeView(viewParent);
+                        removeViewFromWindow(viewParent);
                     }
 
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
                         config.animating = false;
-                        manager.removeView(viewParent);
+                        removeViewFromWindow(viewParent);
                     }
 
                     @Override
@@ -194,10 +228,17 @@ public class FloatWindowHelper {
                 });
                 exit.start();
             } else {
-                manager.removeView(viewParent);
+                removeViewFromWindow(viewParent);
             }
         } else {
-            manager.removeView(viewParent);
+            removeViewFromWindow(viewParent);
+        }
+    }
+
+    private void removeViewFromWindow(View view) {
+        try {
+            manager.removeView(view);
+        } catch (Exception ignored) {
         }
     }
 

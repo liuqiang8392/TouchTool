@@ -238,6 +238,11 @@ public class FloatWindow {
             return this;
         }
 
+        public Builder setHideByScreenshot(boolean hide) {
+            config.hideByScreenshot = hide;
+            return this;
+        }
+
         public void show() {
             if (config.layoutId == 0 && config.layoutView == null) {
                 return;

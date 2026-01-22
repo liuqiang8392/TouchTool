@@ -53,4 +53,7 @@ class FloatConfig {
 
     // 悬浮窗回调
     FloatCallback callback = null;
+
+    // 对截图或录屏隐藏
+    boolean hideByScreenshot = false;
 }

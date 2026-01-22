@@ -81,6 +81,7 @@ public class SettingSaver {
     private static final String MANUAL_PLAY_SHOW_TYPE = "MANUAL_PLAY_SHOW_TYPE";                        // 手动执行什么时候显示
     private static final String MANUAL_PLAY_PAUSE_TYPE = "MANUAL_PLAY_PAUSE_TYPE";                      // 手动执行暂停模式
     private static final String MANUAL_PLAY_HIDE_TYPE = "MANUAL_PLAY_HIDE_TYPE";                        // 手动执行什么时候隐藏
+    private static final String MANUAL_PLAY_HIDE_WHEN_SCREENSHOT = "MANUAL_PLAY_HIDE_WHEN_SCREENSHOT";  // 手动执行对截图隐藏
     private static final String MANUAL_PLAYING_HIDE = "MANUAL_PLAYING_HIDE";                            // 手动执行中隐藏模式
     private static final String NOT_PLAY_HIDE = "NOT_PLAY_HIDE";                                        // 手动执行未使用时淡化模式
     private static final String NOT_PLAY_HIDE_ALPHA = "NOT_PLAY_HIDE_ALPHA";                            // 手动执行未使用时淡化模式
@@ -405,6 +406,13 @@ public class SettingSaver {
         mmkv.encode(MANUAL_PLAY_HIDE_TYPE, type);
     }
 
+    public boolean isManualPlayHideWhenScreenshot() {
+        return mmkv.decodeBool(MANUAL_PLAY_HIDE_WHEN_SCREENSHOT, false);
+    }
+
+    public void setManualPlayHideWhenScreenshot(boolean enable) {
+        mmkv.encode(MANUAL_PLAY_HIDE_WHEN_SCREENSHOT, enable);
+    }
 
     public boolean isManualPlayingHide() {
         return mmkv.decodeBool(MANUAL_PLAYING_HIDE, false);

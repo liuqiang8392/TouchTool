@@ -73,6 +73,10 @@ public class SettingPlayView extends Fragment {
         });
         binding.hideManualPlaySelect.checkIndex(SettingSaver.getInstance().getManualPlayHideType());
 
+        // 对截图录屏隐藏
+        binding.hideManualPlaySelectWhenScreenShot.setOnSwitchClickListener(v -> SettingSaver.getInstance().setManualPlayHideWhenScreenshot(binding.hideManualPlaySelectWhenScreenShot.isChecked()));
+        binding.hideManualPlaySelectWhenScreenShot.setChecked(SettingSaver.getInstance().isManualPlayHideWhenScreenshot());
+
         // 执行时隐藏悬浮窗
         binding.manualPlayingHideSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setManualPlayingHide(binding.manualPlayingHideSwitch.isChecked()));
         binding.manualPlayingHideSwitch.setChecked(SettingSaver.getInstance().isManualPlayingHide());

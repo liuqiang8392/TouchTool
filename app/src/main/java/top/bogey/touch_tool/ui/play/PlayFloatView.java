@@ -297,6 +297,7 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
                 .setLocation(EAnchor.CENTER_RIGHT, pos.x, pos.y)
                 .setCallback(new PlayFloatCallback())
                 .setSpecial(true)
+                .setHideByScreenshot(SettingSaver.getInstance().isManualPlayHideWhenScreenshot())
                 .show();
     }
 
