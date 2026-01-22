@@ -1,4 +1,5 @@
-import com.android.build.gradle.internal.api.BaseVariantOutputImpl
+import com.android.build.api.dsl.ApplicationExtension
+import com.android.build.gradle.tasks.PackageAndroidArtifact
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -7,21 +8,20 @@ plugins {
     alias(libs.plugins.nav.safeargs)
 }
 
-android {
-    namespace = "top.bogey.touch_tool"
-    compileSdk = 36
-    ndkVersion = "29.0.14206865"
-    buildToolsVersion = "36.1.0"
+val pattern: DateTimeFormatter? = DateTimeFormatter.ofPattern("yyMMdd_HHmm")
+val now: String? = LocalDateTime.now().format(pattern)
 
-    val pattern = DateTimeFormatter.ofPattern("yyMMdd_HHmm")
-    val now = LocalDateTime.now().format(pattern)
-    val code = 1
+configure<ApplicationExtension> {
+    namespace = "top.bogey.touch_tool"
+    compileSdk = common.versions.targetSdk.get().toInt()
+    ndkVersion = common.versions.ndkVersion.get()
+    buildToolsVersion = common.versions.buildToolsVersion.get()
 
     defaultConfig {
         applicationId = "top.bogey.touch_tool"
-        minSdk = 24
-        targetSdk = 36
-        versionCode = code
+        minSdk = common.versions.minSdk.get().toInt()
+        targetSdk = common.versions.targetSdk.get().toInt()
+        versionCode = 1
         versionName = now
 
         @Suppress("UnstableApiUsage")
@@ -52,15 +52,6 @@ android {
         }
     }
 
-    applicationVariants.all {
-        outputs.all {
-            if (buildType.name == "release") {
-                val impl = this as BaseVariantOutputImpl
-                impl.outputFileName = "点击助手_${now}_${code}.APK"
-            }
-        }
-    }
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
@@ -69,13 +60,25 @@ android {
     externalNativeBuild {
         cmake {
             path = file("src/main/cpp/CMakeLists.txt")
-            version = "4.1.2"
+            version = common.versions.cmakeVersion.get()
         }
     }
 
     buildFeatures {
         viewBinding = true
         aidl = true
+    }
+}
+
+tasks.withType<PackageAndroidArtifact>().configureEach {
+    if (name.contains("release", true)) {
+        doLast {
+            val dir = outputDirectory.get().asFile
+            val apk = dir.listFiles()?.firstOrNull { it.extension == "apk" } ?: return@doLast
+
+            val target = File(dir, "点击助手_${now}.APK")
+            apk.copyTo(target, true)
+        }
     }
 }
 
