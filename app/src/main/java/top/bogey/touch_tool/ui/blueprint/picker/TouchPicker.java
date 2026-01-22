@@ -122,6 +122,7 @@ public class TouchPicker extends FullScreenPicker<PinTouchPath> {
         if (action == MotionEvent.ACTION_MOVE) {
             float dx = x - lastX;
             float dy = y - lastY;
+            if (dx == 0 && dy == 0) return true;
             moved = true;
             if (mode == MODE_MARKING) {
                 addPathPart(event, -1);

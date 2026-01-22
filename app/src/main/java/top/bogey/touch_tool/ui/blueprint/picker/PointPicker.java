@@ -64,6 +64,7 @@ public class PointPicker extends FullScreenPicker<Point> {
         if (action == MotionEvent.ACTION_MOVE) {
             float dx = x - lastX;
             float dy = y - lastY;
+            if (dx == 0 && dy == 0) return true;
             currentX += dx / 5;
             currentY += dy / 5;
             currentX = Math.max(0, Math.min(currentX, getWidth() + location[0] - 1));

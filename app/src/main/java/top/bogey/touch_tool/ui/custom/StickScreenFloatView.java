@@ -43,6 +43,7 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
     private int originWidth = 0, originHeight = 0;
     private float minScale, maxScale;
     private boolean dragging = false;
+    private boolean canDrag = false;
     private boolean showButton = true;
 
     public static String showStick(PinObject object, EAnchor anchor, EAnchor gravity, Point location) {
@@ -131,6 +132,36 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
             binding.saveButton.setOnClickListener(v -> AppUtil.copyToClipboard(getContext(), object.toString()));
         }
         post(() -> FloatWindow.setLocation(tag, anchor, gravity, location));
+    }
+
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent event) {
+        float x = event.getRawX();
+        float y = event.getRawY();
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            canDrag = false;
+            int[] location = new int[2];
+            binding.dragImage.getLocationOnScreen(location);
+            if (new RectF(location[0], location[1], location[0] + binding.dragImage.getWidth(), location[1] + binding.dragImage.getHeight()).contains(x, y)) {
+                FloatWindow.setDragAble(tag, false);
+                lastX = 0;
+                lastY = 0;
+                canDrag = true;
+                return super.onInterceptTouchEvent(event);
+            }
+            FloatWindow.setDragAble(tag, true);
+        } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+            if (!canDrag) return false;
+            if ((lastX == 0 && lastY == 0) || (lastX == x && lastY == y)) {
+                lastX = x;
+                lastY = y;
+                return false;
+            }
+            dragging = true;
+            return true;
+        }
+        return super.onInterceptTouchEvent(event);
     }
 
     @SuppressLint("ClickableViewAccessibility")

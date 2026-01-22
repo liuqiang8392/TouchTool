@@ -118,6 +118,8 @@ public class ImagePicker extends FullScreenPicker<Bitmap> {
             mode = moveMode;
             float dx = x - lastX;
             float dy = y - lastY;
+            if (dx == 0 && dy == 0) return true;
+
             boolean flag = true;
             if (mode == MODE_NONE) {
                 mode = MODE_BR;
