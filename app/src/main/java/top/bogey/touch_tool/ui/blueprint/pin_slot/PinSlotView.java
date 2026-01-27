@@ -32,7 +32,7 @@ public abstract class PinSlotView extends FrameLayout {
         return getPinColor(pin);
     }
 
-    public static @ColorInt int getPinColor(Pin pin) {
+    protected static @ColorInt int getPinColor(Pin pin) {
         if (pin.linkAble()) {
             PinBase pinBase = pin.getValue();
             if (pinBase instanceof PinList pinList) {

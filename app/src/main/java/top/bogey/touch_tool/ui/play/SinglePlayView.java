@@ -69,7 +69,7 @@ public class SinglePlayView extends PlayFloatItemView implements FloatInterface 
 
     @Override
     public void tryRemoveFromParent() {
-        if (playState == PLAY_STATE_STOPED) dismiss();
+        if (playState == PLAY_STATE_STOPPED) dismiss();
         else remove = true;
     }
 

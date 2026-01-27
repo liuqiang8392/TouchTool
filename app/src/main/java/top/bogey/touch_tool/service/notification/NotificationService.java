@@ -3,6 +3,7 @@ package top.bogey.touch_tool.service.notification;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
@@ -51,7 +52,7 @@ public class NotificationService extends NotificationListenerService {
 
     public static void requestConnect(Context context) {
         if (!isEnabled) {
-            context.startActivity(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
+            context.startActivity(new Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS));
             Toast.makeText(context, R.string.permission_setting_notification_type_tips, Toast.LENGTH_SHORT).show();
         }
     }

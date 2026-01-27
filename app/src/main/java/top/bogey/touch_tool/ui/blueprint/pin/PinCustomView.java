@@ -25,7 +25,6 @@ import top.bogey.touch_tool.bean.pin.PinInfo;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinType;
 import top.bogey.touch_tool.bean.task.Variable;
-import top.bogey.touch_tool.common.StaticFunction;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.blueprint.card.IDynamicPinCard;
 import top.bogey.touch_tool.utils.DisplayUtil;
@@ -66,7 +65,7 @@ public abstract class PinCustomView extends PinView {
                 popup.setAdapter(adapter);
                 popup.setAnchorView(keyTypeView);
                 popup.setModal(true);
-                popup.setWidth(StaticFunction.measureArrayAdapterContentWidth(getContext(), adapter));
+                popup.setWidth(DisplayUtil.measureArrayAdapterContentWidth(getContext(), adapter));
                 popup.setOnItemClickListener((parent, view, position, id) -> {
                     PinInfo pinInfo = pinInfoList.get(position);
                     keyTypeView.setText(pinInfo.getTitle());
@@ -91,7 +90,7 @@ public abstract class PinCustomView extends PinView {
                 popup.setAdapter(adapter);
                 popup.setAnchorView(valueTypeView);
                 popup.setModal(true);
-                popup.setWidth(StaticFunction.measureArrayAdapterContentWidth(getContext(), adapter));
+                popup.setWidth(DisplayUtil.measureArrayAdapterContentWidth(getContext(), adapter));
                 popup.setOnItemClickListener((parent, view, position, id) -> {
                     PinInfo pinInfo = pinInfoList.get(position);
                     valueTypeView.setText(pinInfo.getTitle());
@@ -112,7 +111,7 @@ public abstract class PinCustomView extends PinView {
                 popup.setAdapter(adapter);
                 popup.setAnchorView(typeView);
                 popup.setModal(true);
-                popup.setWidth(StaticFunction.measureArrayAdapterContentWidth(getContext(), adapter));
+                popup.setWidth(DisplayUtil.measureArrayAdapterContentWidth(getContext(), adapter));
                 popup.setOnItemClickListener((parent, view, position, id) -> {
                     typeView.setIconResource(ICON_ARRAY[position]);
                     variable.setType(Variable.VariableType.values()[position]);

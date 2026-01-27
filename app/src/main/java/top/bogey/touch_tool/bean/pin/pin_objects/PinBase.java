@@ -115,40 +115,48 @@ public abstract class PinBase implements Copyable {
     }
 
     public static PinBase parseValue(Object value) {
-        if (value instanceof Map<?, ?> map) {
-            PinMap pinMap = new PinMap();
-            map.forEach((key, v) -> {
-                PinBase pinKey = parseValue(key);
-                PinBase pinValue = parseValue(v);
-                if (pinMap.isDynamic()) {
-                    pinMap.setKeyType(getTypeValue((PinObject) pinKey));
-                    pinMap.setValueType(getTypeValue((PinObject) pinValue));
-                }
-                pinMap.put(new PinString(String.valueOf(key)), (PinObject) parseValue(v));
-            });
-            return pinMap;
-        } else if (value instanceof List<?> list) {
-            PinList pinList = new PinList();
-            for (Object v : list) {
-                PinBase pinValue = parseValue(v);
-                if (pinList.isDynamic()) {
-                    pinList.setValueType(getTypeValue((PinObject) pinValue));
-                }
-                pinList.add((PinObject) pinValue);
+        switch (value) {
+            case Map<?, ?> map -> {
+                PinMap pinMap = new PinMap();
+                map.forEach((key, v) -> {
+                    PinBase pinKey = parseValue(key);
+                    PinBase pinValue = parseValue(v);
+                    if (pinMap.isDynamic()) {
+                        pinMap.setKeyType(getTypeValue((PinObject) pinKey));
+                        pinMap.setValueType(getTypeValue((PinObject) pinValue));
+                    }
+                    pinMap.put(new PinString(String.valueOf(key)), (PinObject) parseValue(v));
+                });
+                return pinMap;
             }
-            return pinList;
-        } else if (value instanceof String str) {
-            return new PinString(str);
-        } else if (value instanceof Number num) {
-            return new PinDouble(num.doubleValue());
-        } else if (value instanceof Boolean bool) {
-            return new PinBoolean(bool);
-        } else if (value instanceof Bitmap bitmap) {
-            PinImage image = new PinImage();
-            image.setImage(bitmap);
-            return image;
-        } else {
-            return new PinString(value.toString());
+            case List<?> list -> {
+                PinList pinList = new PinList();
+                for (Object v : list) {
+                    PinBase pinValue = parseValue(v);
+                    if (pinList.isDynamic()) {
+                        pinList.setValueType(getTypeValue((PinObject) pinValue));
+                    }
+                    pinList.add((PinObject) pinValue);
+                }
+                return pinList;
+            }
+            case String str -> {
+                return new PinString(str);
+            }
+            case Number num -> {
+                return new PinDouble(num.doubleValue());
+            }
+            case Boolean bool -> {
+                return new PinBoolean(bool);
+            }
+            case Bitmap bitmap -> {
+                PinImage image = new PinImage();
+                image.setImage(bitmap);
+                return image;
+            }
+            default -> {
+                return new PinString(value.toString());
+            }
         }
     }
 

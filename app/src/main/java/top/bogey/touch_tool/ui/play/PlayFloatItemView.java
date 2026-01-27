@@ -29,9 +29,9 @@ import top.bogey.touch_tool.utils.DisplayUtil;
 
 @SuppressLint("ViewConstructor")
 public class PlayFloatItemView extends FrameLayout implements ITaskListener {
-    public static final int PLAY_STATE_STOPED = 0;
-    public static final int PLAY_STATE_RUNNING = 1;
-    public static final int PLAY_STATE_PAUSED = 2;
+    protected static final int PLAY_STATE_STOPPED = 0;
+    protected static final int PLAY_STATE_RUNNING = 1;
+    protected static final int PLAY_STATE_PAUSED = 2;
 
     protected final FloatPlayItemBinding binding;
     protected int size;
@@ -40,7 +40,7 @@ public class PlayFloatItemView extends FrameLayout implements ITaskListener {
     protected Task task;
     protected StartAction startAction;
 
-    protected int playState = PLAY_STATE_STOPED;
+    protected int playState = PLAY_STATE_STOPPED;
     protected TaskRunnable runnable;
     protected boolean remove = false;
 
@@ -93,7 +93,7 @@ public class PlayFloatItemView extends FrameLayout implements ITaskListener {
     }
 
     public void tryRemoveFromParent() {
-        if (playState == PLAY_STATE_STOPED) {
+        if (playState == PLAY_STATE_STOPPED) {
             ((ViewGroup) getParent()).removeView(this);
         } else {
             remove = true;
@@ -137,7 +137,7 @@ public class PlayFloatItemView extends FrameLayout implements ITaskListener {
         if (runnable == null) return;
         runnable.stop();
         runnable = null;
-        playState = PLAY_STATE_STOPED;
+        playState = PLAY_STATE_STOPPED;
 
         binding.circleProgress.setIndeterminate(false);
         binding.lineProgress.setIndeterminate(false);

@@ -14,10 +14,10 @@ import java.util.Arrays;
 
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleSelect;
-import top.bogey.touch_tool.common.StaticFunction;
 import top.bogey.touch_tool.databinding.PinWidgetSelectBinding;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.blueprint.pin.PinView;
+import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.listener.TextChangedListener;
 
 @SuppressLint("ViewConstructor")
@@ -39,7 +39,7 @@ public class PinWidgetSelect extends PinWidget<PinSingleSelect> {
             popup.setAdapter(adapter);
             popup.setAnchorView(binding.spinner);
             popup.setModal(true);
-            popup.setWidth(StaticFunction.measureArrayAdapterContentWidth(getContext(), adapter));
+            popup.setWidth(DisplayUtil.measureArrayAdapterContentWidth(getContext(), adapter));
             popup.setOnItemClickListener((parent, view, position, id) -> {
                 pinBase.setValue(adapter.getItem(position));
                 binding.spinner.setText(pinBase.getValue());

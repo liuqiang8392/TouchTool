@@ -18,6 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 
 import androidx.annotation.ColorInt;
 
@@ -295,6 +297,28 @@ public class DisplayUtil {
         }
 
         return bitmap;
+    }
+
+    public static int measureArrayAdapterContentWidth(Context context, ArrayAdapter<?> adapter) {
+        int maxWidth = 0;
+        View itemView = null;
+        int itemType = 0;
+
+        final int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+        final int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+
+        for (int i = 0; i < adapter.getCount(); i++) {
+            int positionType = adapter.getItemViewType(i);
+            if (positionType != itemType) {
+                itemType = positionType;
+                itemView = null;
+            }
+            itemView = adapter.getView(i, itemView, new FrameLayout(context));
+            itemView.measure(widthMeasureSpec, heightMeasureSpec);
+            maxWidth = Math.max(maxWidth, itemView.getMeasuredWidth());
+        }
+
+        return maxWidth;
     }
 
     public static native MatchResult nativeMatchTemplate(Bitmap bitmap, Bitmap template, int speed);

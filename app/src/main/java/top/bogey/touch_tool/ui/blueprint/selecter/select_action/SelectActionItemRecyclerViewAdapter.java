@@ -37,7 +37,6 @@ import top.bogey.touch_tool.bean.save.task.TaskSaver;
 import top.bogey.touch_tool.bean.save.variable.VariableSaver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.bean.task.Variable;
-import top.bogey.touch_tool.common.StaticFunction;
 import top.bogey.touch_tool.databinding.DialogSelectActionNormalItemBinding;
 import top.bogey.touch_tool.databinding.DialogSelectActionTaskItemBinding;
 import top.bogey.touch_tool.databinding.DialogSelectActionVariableItemBinding;
@@ -338,7 +337,7 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
                 popup.setAdapter(adapter);
                 popup.setAnchorView(binding.keySlot);
                 popup.setModal(true);
-                popup.setWidth(StaticFunction.measureArrayAdapterContentWidth(context, adapter));
+                popup.setWidth(DisplayUtil.measureArrayAdapterContentWidth(context, adapter));
                 popup.setOnItemClickListener((parent, view, position, id) -> {
                     PinInfo pinInfo = pinInfoList.get(position);
                     binding.keySlot.setText(pinInfo.getTitle());
@@ -358,7 +357,7 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
                 popup.setAdapter(adapter);
                 popup.setAnchorView(binding.typeSpinner);
                 popup.setModal(true);
-                popup.setWidth(StaticFunction.measureArrayAdapterContentWidth(context, adapter));
+                popup.setWidth(DisplayUtil.measureArrayAdapterContentWidth(context, adapter));
                 popup.setOnItemClickListener((parent, view, position, id) -> {
                     binding.typeSpinner.setText(array[position]);
                     int index = getBindingAdapterPosition();
@@ -383,7 +382,7 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
                 popup.setAdapter(adapter);
                 popup.setAnchorView(binding.valueSlot);
                 popup.setModal(true);
-                popup.setWidth(StaticFunction.measureArrayAdapterContentWidth(context, adapter));
+                popup.setWidth(DisplayUtil.measureArrayAdapterContentWidth(context, adapter));
                 popup.setOnItemClickListener((parent, view, position, id) -> {
                     PinInfo pinInfo = pinInfoList.get(position);
                     binding.valueSlot.setText(pinInfo.getTitle());

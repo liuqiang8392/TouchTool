@@ -1156,9 +1156,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
     }
 
     private static class TaskEditLayoutInfo {
-        public static final float DEFAULT_SCALE = 0.75f;
-
-        private float scale = DEFAULT_SCALE;
+        private float scale = 0.75f;
         private float offsetX = 0;
         private float offsetY = 0;
 

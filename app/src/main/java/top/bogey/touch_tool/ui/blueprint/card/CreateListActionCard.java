@@ -31,7 +31,6 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinType;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
 import top.bogey.touch_tool.bean.task.Task;
-import top.bogey.touch_tool.common.StaticFunction;
 import top.bogey.touch_tool.databinding.CardCreateListBinding;
 import top.bogey.touch_tool.ui.blueprint.pin.PinBottomView;
 import top.bogey.touch_tool.ui.blueprint.pin.PinLeftView;
@@ -73,7 +72,7 @@ public class CreateListActionCard extends ActionCard {
             popup.setAdapter(adapter);
             popup.setAnchorView(binding.keySlot);
             popup.setModal(true);
-            popup.setWidth(StaticFunction.measureArrayAdapterContentWidth(getContext(), adapter));
+            popup.setWidth(DisplayUtil.measureArrayAdapterContentWidth(getContext(), adapter));
             popup.setOnItemClickListener((parent, view, position, id) -> {
                 PinInfo pinInfo = pinInfoList.get(position);
                 binding.keySlot.setText(pinInfo.getTitle());
@@ -109,7 +108,7 @@ public class CreateListActionCard extends ActionCard {
             popup.setAdapter(adapter);
             popup.setAnchorView(binding.valueSlot);
             popup.setModal(true);
-            popup.setWidth(StaticFunction.measureArrayAdapterContentWidth(getContext(), adapter));
+            popup.setWidth(DisplayUtil.measureArrayAdapterContentWidth(getContext(), adapter));
             popup.setOnItemClickListener((parent, view, position, id) -> {
                 PinInfo pinInfo = pinInfoList.get(position);
                 binding.valueSlot.setText(pinInfo.getTitle());

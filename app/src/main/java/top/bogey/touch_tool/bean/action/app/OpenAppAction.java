@@ -49,7 +49,7 @@ public class OpenAppAction extends ExecuteAction {
             Intent.FLAG_ACTIVITY_RETAIN_IN_RECENTS,
             Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT
     );
-    public static final List<String> CATEGORIES = Arrays.asList(
+    private static final List<String> CATEGORIES = Arrays.asList(
             Intent.CATEGORY_DEFAULT,
             Intent.CATEGORY_BROWSABLE,
             Intent.CATEGORY_VOICE,
