@@ -39,7 +39,6 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.bean.save.task.TaskSaver;
 import top.bogey.touch_tool.bean.task.Task;
-import top.bogey.touch_tool.common.StaticValues;
 import top.bogey.touch_tool.ui.MainActivity;
 import top.bogey.touch_tool.ui.custom.ChoiceExecuteFloatView;
 import top.bogey.touch_tool.ui.play.PlayFloatView;
@@ -48,6 +47,12 @@ import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.callback.ResultCallback;
 
 public class TaskInfoSummary {
+    public static final String YOLO_APP_PACKAGE = "top.bogey.yolo";
+    public static final String YOLO_APP_ACTIVITY = "top.bogey.yolo.ui.MainActivity";
+    public static final String YOLO_APP_SERVICE = "top.bogey.yolo.service.YoloService";
+    public static final String OCR_SERVICE_ACTION = "top.bogey.ocr.OcrService";
+
+
     private static final String XMLNS_ANDROID = "http://schemas.android.com/apk/res/android";
 
     private static TaskInfoSummary instance;
@@ -88,7 +93,7 @@ public class TaskInfoSummary {
         }
 
         ocrApps.clear();
-        Intent intent = new Intent(StaticValues.OCR_SERVICE_ACTION);
+        Intent intent = new Intent(OCR_SERVICE_ACTION);
         List<ResolveInfo> resolveInfos = packageManager.queryIntentServices(intent, PackageManager.MATCH_ALL);
         for (ResolveInfo resolveInfo : resolveInfos) {
             ocrApps.add(resolveInfo.serviceInfo.packageName);

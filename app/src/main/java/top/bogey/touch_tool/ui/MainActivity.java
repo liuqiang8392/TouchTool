@@ -35,7 +35,6 @@ public class MainActivity extends FloatViewActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         MainApplication.getInstance().setActivity(this);
-        TaskInfoSummary.getInstance().resetApps();
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
 
@@ -47,6 +46,7 @@ public class MainActivity extends FloatViewActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        TaskInfoSummary.getInstance().resetApps();
 
         NavController controller = Navigation.findNavController(this, R.id.conView);
         NavigationUI.setupWithNavController(binding.menuView, controller);

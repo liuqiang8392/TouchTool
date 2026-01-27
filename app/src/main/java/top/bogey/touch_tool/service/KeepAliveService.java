@@ -13,7 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 import top.bogey.touch_tool.R;
-import top.bogey.touch_tool.common.StaticValues;
+import top.bogey.touch_tool.service.capture.CaptureService;
 
 public class KeepAliveService extends Service {
     private final static int NOTIFICATION_ID = (int) (Math.random() * Integer.MAX_VALUE);
@@ -42,14 +42,14 @@ public class KeepAliveService extends Service {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-            NotificationChannel runningChannel = notificationManager.getNotificationChannel(StaticValues.FOREGROUND_NOTIFICATION_CHANNEL);
+            NotificationChannel runningChannel = notificationManager.getNotificationChannel(CaptureService.FOREGROUND_NOTIFICATION_CHANNEL);
             if (runningChannel == null) {
-                runningChannel = new NotificationChannel(StaticValues.FOREGROUND_NOTIFICATION_CHANNEL, getString(R.string.app_setting_forge_service_channel_title), NotificationManager.IMPORTANCE_DEFAULT);
+                runningChannel = new NotificationChannel(CaptureService.FOREGROUND_NOTIFICATION_CHANNEL, getString(R.string.app_setting_forge_service_channel_title), NotificationManager.IMPORTANCE_DEFAULT);
                 runningChannel.setDescription(getString(R.string.app_setting_forge_service_channel_desc));
                 notificationManager.createNotificationChannel(runningChannel);
             }
 
-            Notification foregroundNotification = new NotificationCompat.Builder(this, StaticValues.FOREGROUND_NOTIFICATION_CHANNEL).build();
+            Notification foregroundNotification = new NotificationCompat.Builder(this, CaptureService.FOREGROUND_NOTIFICATION_CHANNEL).build();
             startForeground(NOTIFICATION_ID, foregroundNotification);
         }
     }

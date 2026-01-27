@@ -62,7 +62,6 @@ import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.bean.save.log.LogSaver;
 import top.bogey.touch_tool.bean.save.task.TaskSaver;
 import top.bogey.touch_tool.bean.task.Task;
-import top.bogey.touch_tool.common.StaticValues;
 import top.bogey.touch_tool.service.capture.CaptureService;
 import top.bogey.touch_tool.service.receiver.SystemEventReceiver;
 import top.bogey.touch_tool.service.super_user.SuperUser;
@@ -585,7 +584,7 @@ public class MainAccessibilityService extends AccessibilityService {
                 }
             };
 
-            Intent intent = new Intent(StaticValues.OCR_SERVICE_ACTION);
+            Intent intent = new Intent(TaskInfoSummary.OCR_SERVICE_ACTION);
             intent.setPackage(packageName);
             if (bindService(intent, connection, Context.BIND_AUTO_CREATE)) {
 
@@ -661,7 +660,7 @@ public class MainAccessibilityService extends AccessibilityService {
             };
 
             Intent intent = new Intent();
-            intent.setComponent(new ComponentName(StaticValues.YOLO_APP_PACKAGE, StaticValues.YOLO_APP_SERVICE));
+            intent.setComponent(new ComponentName(TaskInfoSummary.YOLO_APP_PACKAGE, TaskInfoSummary.YOLO_APP_SERVICE));
             if (!bindService(intent, yoloConnection, Context.BIND_AUTO_CREATE)) {
                 new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(this, R.string.bind_service_failed_tips, Toast.LENGTH_SHORT).show());
                 callback.onResult(false);

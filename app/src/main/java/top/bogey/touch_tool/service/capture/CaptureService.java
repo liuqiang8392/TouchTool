@@ -30,11 +30,11 @@ import java.nio.ByteBuffer;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
-import top.bogey.touch_tool.common.StaticValues;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 
 public class CaptureService extends Service {
     public static final String DATA = "DATA";
+    public static final String FOREGROUND_NOTIFICATION_CHANNEL = "FOREGROUND_NOTIFICATION_CHANNEL";
 
     private static final String NOTIFICATION_CHANNEL = "NOTIFICATION_CHANNEL";
     private static final int NOTIFICATION_ID = 10000;
@@ -124,14 +124,14 @@ public class CaptureService extends Service {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-            NotificationChannel runningChannel = notificationManager.getNotificationChannel(StaticValues.FOREGROUND_NOTIFICATION_CHANNEL);
+            NotificationChannel runningChannel = notificationManager.getNotificationChannel(FOREGROUND_NOTIFICATION_CHANNEL);
             if (runningChannel == null) {
-                runningChannel = new NotificationChannel(StaticValues.FOREGROUND_NOTIFICATION_CHANNEL, getString(R.string.app_setting_forge_service_channel_title), NotificationManager.IMPORTANCE_DEFAULT);
+                runningChannel = new NotificationChannel(FOREGROUND_NOTIFICATION_CHANNEL, getString(R.string.app_setting_forge_service_channel_title), NotificationManager.IMPORTANCE_DEFAULT);
                 runningChannel.setDescription(getString(R.string.app_setting_forge_service_channel_desc));
                 notificationManager.createNotificationChannel(runningChannel);
             }
 
-            Notification foregroundNotification = new NotificationCompat.Builder(this, StaticValues.FOREGROUND_NOTIFICATION_CHANNEL).build();
+            Notification foregroundNotification = new NotificationCompat.Builder(this, FOREGROUND_NOTIFICATION_CHANNEL).build();
             startForeground((int) (Math.random() * Integer.MAX_VALUE), foregroundNotification);
 
             NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL, getString(R.string.permission_setting_capture_channel_name), NotificationManager.IMPORTANCE_DEFAULT);
