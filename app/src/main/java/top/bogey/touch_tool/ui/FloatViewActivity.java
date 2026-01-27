@@ -1,5 +1,6 @@
 package top.bogey.touch_tool.ui;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 
@@ -21,7 +22,7 @@ public class FloatViewActivity extends BaseActivity {
             if (enabled) {
                 View view = FloatWindow.getView(KeepAliveFloatView.class.getName());
                 if (view != null) return;
-                new KeepAliveFloatView(this).show();
+                new KeepAliveFloatView(getThemeContext()).show();
             } else {
                 FloatWindow.dismiss(KeepAliveFloatView.class.getName());
             }
@@ -36,7 +37,7 @@ public class FloatViewActivity extends BaseActivity {
         if (service != null && service.isEnabled()) {
             View view = FloatWindow.getView(KeepAliveFloatView.class.getName());
             if (view != null) return;
-            new KeepAliveFloatView(this).show();
+            new KeepAliveFloatView(getThemeContext()).show();
         }
     }
 
@@ -44,6 +45,10 @@ public class FloatViewActivity extends BaseActivity {
     protected void onNightModeChanged(int mode) {
         super.onNightModeChanged(mode);
         FloatWindow.dismiss(KeepAliveFloatView.class.getName());
+    }
+
+    protected Context getThemeContext() {
+        return this;
     }
 
 }

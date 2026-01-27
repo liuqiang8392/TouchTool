@@ -78,6 +78,7 @@ import top.bogey.touch_tool.utils.callback.ResultCallback;
 import top.bogey.yolo.IYolo;
 import top.bogey.yolo.IYoloCallback;
 
+@SuppressLint("AccessibilityPolicy")
 public class MainAccessibilityService extends AccessibilityService {
     static {
         System.loadLibrary("native");
@@ -211,6 +212,8 @@ public class MainAccessibilityService extends AccessibilityService {
 
             stopAllTask();
             stopCapture();
+            stopOcrService();
+            stopYoloService();
             stopSound(null);
             cancelAllAlarm();
             SuperUser.getInstance().exit();
@@ -565,6 +568,39 @@ public class MainAccessibilityService extends AccessibilityService {
 
     // Ocr ----------------------------------------------------------------------------- start
     private final Map<String, IOcr> ocrBinderMap = new HashMap<>();
+    private final Map<String, ServiceConnection> ocrConnectionMap = new HashMap<>();
+
+    private synchronized void initOcrService(String packageName, BooleanResultCallback callback) {
+        IOcr iOcr = ocrBinderMap.get(packageName);
+        if (iOcr == null || !iOcr.asBinder().isBinderAlive()) {
+            ServiceConnection connection = new ServiceConnection() {
+                @Override
+                public void onServiceConnected(ComponentName name, IBinder service) {
+                    IOcr iOcr = IOcr.Stub.asInterface(service);
+                    ocrBinderMap.put(packageName, iOcr);
+                    callback.onResult(true);
+                }
+
+                @Override
+                public void onServiceDisconnected(ComponentName name) {
+                    ocrBinderMap.remove(packageName);
+                    ocrConnectionMap.remove(packageName);
+                }
+            };
+
+            Intent intent = new Intent(OCR_SERVICE_ACTION);
+            intent.setPackage(packageName);
+            if (bindService(intent, connection, Context.BIND_AUTO_CREATE)) {
+
+                ocrConnectionMap.put(packageName, connection);
+            } else {
+                new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(this, R.string.bind_service_failed_tips, Toast.LENGTH_SHORT).show());
+                callback.onResult(false);
+            }
+        } else {
+            callback.onResult(true);
+        }
+    }
 
     public synchronized void runOcr(Bitmap bitmap, String packageName, ResultCallback<List<OcrResult>> callback) {
         if (bitmap == null || bitmap.isRecycled()) {
@@ -572,14 +608,10 @@ public class MainAccessibilityService extends AccessibilityService {
             return;
         }
 
-        IOcr iOcr = ocrBinderMap.get(packageName);
-        if (iOcr == null || !iOcr.asBinder().isBinderAlive()) {
-            ocrBinderMap.remove(packageName);
-            ServiceConnection connection = new ServiceConnection() {
-                @Override
-                public void onServiceConnected(ComponentName name, IBinder service) {
-                    IOcr iOcr = IOcr.Stub.asInterface(service);
-                    ocrBinderMap.put(packageName, iOcr);
+        initOcrService(packageName, result -> {
+            if (result) {
+                IOcr iOcr = ocrBinderMap.get(packageName);
+                if (iOcr != null && iOcr.asBinder().isBinderAlive()) {
                     try {
                         iOcr.runOcr(bitmap, new IOcrCallback.Stub() {
                             @Override
@@ -591,43 +623,33 @@ public class MainAccessibilityService extends AccessibilityService {
                         e.printStackTrace();
                         callback.onResult(new ArrayList<>());
                     }
+                } else {
+                    callback.onResult(new ArrayList<>());
                 }
-
-                @Override
-                public void onServiceDisconnected(ComponentName name) {
-                    ocrBinderMap.remove(packageName);
-                }
-            };
-
-            Intent intent = new Intent(OCR_SERVICE_ACTION);
-            intent.setComponent(new ComponentName(packageName, OCR_SERVICE_ACTION));
-            if (!bindService(intent, connection, Context.BIND_AUTO_CREATE)) {
-                new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(this, R.string.bind_service_failed_tips, Toast.LENGTH_SHORT).show());
-                callback.onResult(new ArrayList<>());
             }
-        } else {
-            try {
-                iOcr.runOcr(bitmap, new IOcrCallback.Stub() {
-                    @Override
-                    public void onResult(List<OcrResult> result) {
-                        callback.onResult(result);
-                    }
-                });
-            } catch (RemoteException e) {
-                e.printStackTrace();
-                callback.onResult(new ArrayList<>());
+        });
+    }
+
+    private void stopOcrService() {
+        for (String packageName : ocrConnectionMap.keySet()) {
+            ServiceConnection connection = ocrConnectionMap.get(packageName);
+            if (connection != null) {
+                unbindService(connection);
             }
         }
+        ocrBinderMap.clear();
+        ocrConnectionMap.clear();
     }
 
     // Ocr ----------------------------------------------------------------------------- end
 
     // Yolo ----------------------------------------------------------------------------- start
     private IYolo yolo;
+    private ServiceConnection yoloConnection;
 
     private void initYoloService(BooleanResultCallback callback) {
         if (yolo == null || !yolo.asBinder().isBinderAlive()) {
-            ServiceConnection connection = new ServiceConnection() {
+            yoloConnection = new ServiceConnection() {
                 @Override
                 public void onServiceConnected(ComponentName name, IBinder service) {
                     yolo = IYolo.Stub.asInterface(service);
@@ -637,12 +659,13 @@ public class MainAccessibilityService extends AccessibilityService {
                 @Override
                 public void onServiceDisconnected(ComponentName name) {
                     yolo = null;
+                    yoloConnection = null;
                 }
             };
 
             Intent intent = new Intent();
             intent.setComponent(new ComponentName(YOLO_APP_PACKAGE, YOLO_APP_SERVICE));
-            if (!bindService(intent, connection, Context.BIND_AUTO_CREATE)) {
+            if (!bindService(intent, yoloConnection, Context.BIND_AUTO_CREATE)) {
                 new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(this, R.string.bind_service_failed_tips, Toast.LENGTH_SHORT).show());
                 callback.onResult(false);
             }
@@ -684,6 +707,14 @@ public class MainAccessibilityService extends AccessibilityService {
                 }
             }
         });
+    }
+
+    private void stopYoloService() {
+        if (yoloConnection != null) {
+            unbindService(yoloConnection);
+            yoloConnection = null;
+        }
+        yolo = null;
     }
 
     // Yolo ----------------------------------------------------------------------------- end

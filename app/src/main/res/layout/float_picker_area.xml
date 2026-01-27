@@ -14,14 +14,34 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="#0FFF0000" />
+            android:background="#0FFF0000">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:alpha="0.05"
+                android:text="@string/picker_area_pos_change"
+                android:textAppearance="@style/TextAppearance.Material3.DisplayLarge" />
+
+        </FrameLayout>
 
         <FrameLayout
             android:id="@+id/bottomArea"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="#0F00FF00" />
+            android:background="#0F00FF00">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:alpha="0.05"
+                android:text="@string/picker_area_size_change"
+                android:textAppearance="@style/TextAppearance.Material3.DisplayLarge" />
+
+        </FrameLayout>
 
     </LinearLayout>
 

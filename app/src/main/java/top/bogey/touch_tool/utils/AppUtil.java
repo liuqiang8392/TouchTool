@@ -179,7 +179,7 @@ public class AppUtil {
             ComponentName component = intent.getComponent();
             if (component != null && !component.getClassName().isEmpty()) {
                 ActivityInfo activityInfo = TaskInfoSummary.getInstance().getActivityInfo(component.getPackageName(), component.getClassName());
-                if (!activityInfo.exported) {
+                if (activityInfo != null && !activityInfo.exported) {
 
                     String currAssistant = Settings.Secure.getString(context.getContentResolver(), "assistant");
                     String assistant = component.flattenToString();
@@ -199,7 +199,11 @@ public class AppUtil {
                 }
             }
         }
-        context.startActivity(intent, options);
+        try {
+            context.startActivity(intent, options);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void gotoUrl(Context context, String url) {
