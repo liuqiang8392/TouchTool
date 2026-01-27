@@ -75,8 +75,18 @@ public class PinNodePathString extends PinString {
     }
 
     public String getSimpleValue() {
+        return getSimpleValue(1, false);
+    }
+
+    public String getSimpleValue(int lines, boolean ellipsis) {
         if (value == null) return "";
         String[] strings = value.split("\n");
-        return strings[strings.length - 1];
+        if (lines >= strings.length) return value;
+        StringBuilder builder = new StringBuilder();
+        if (ellipsis) builder.append("…");
+        for (int i = lines; i >= 1; i--) {
+            builder.append(strings[strings.length - i]).append("\n");
+        }
+        return builder.toString().trim();
     }
 }

@@ -211,8 +211,8 @@
     <string name="picker_node_type_1">仅可用</string>
     <string name="picker_node_type_2">顶部优先</string>
     <string name="picker_node_type_3">深度优先</string>
-    <string name="picker_area_pos_change">位置微调</string>
-    <string name="picker_area_size_change">大小微调</string>
+    <string name="picker_area_pos_change">位置微调区</string>
+    <string name="picker_area_size_change">大小微调区</string>
 
     <!-- 位置 -->
     <string name="point_x">X</string>

@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="?attr/smallIconButtonSize">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -32,6 +32,7 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/copyButton"
             style="?attr/iconButton"
+            android:layout_height="?attr/smallIconButtonSize"
             app:icon="@drawable/icon_content_copy" />
 
     </LinearLayout>

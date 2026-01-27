@@ -55,7 +55,7 @@ public class NodePickerPreview extends BasePicker<String> {
 
         binding.pickerButton.setOnClickListener(v -> new NodePicker(context, result -> {
             nodePath.setValue(result);
-            binding.pathText.setText(nodePath.getValue());
+            binding.pathText.setText(nodePath.getSimpleValue(10, true));
         }, nodePath.getValue()).show());
 
         binding.copyButton.setOnClickListener(v -> AppUtil.copyToClipboard(getContext(), nodePath.getValue()));

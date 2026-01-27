@@ -79,8 +79,6 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
 
     private static final long LONG_TOUCH_TIME = 300L;
 
-    private static final float DEFAULT_SCALE = 0.75f;
-
     private final Handler longTouchHandler;
     private final Handler doubleTouchHandler;
 
@@ -106,8 +104,8 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
     private float lastX, lastY, realLastX, realLastY;
     private boolean movingTouch = false;
 
-    private float offsetX, offsetY;
-    private float scale = DEFAULT_SCALE;
+    private float offsetX, offsetY, scale;
+    private final Map<Task, TaskEditLayoutInfo> layoutInfoMap = new HashMap<>();
 
     private final Map<String, ActionCard> cards = new HashMap<>();
     private Task task;
@@ -183,11 +181,19 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
     }
 
     public void setTask(Task task) {
+        if (this.task != null) {
+            TaskEditLayoutInfo layoutInfo = layoutInfoMap.computeIfAbsent(this.task, t -> new TaskEditLayoutInfo());
+            layoutInfo.setOffsetX(offsetX);
+            layoutInfo.setOffsetY(offsetY);
+            layoutInfo.setScale(scale);
+        }
+        TaskEditLayoutInfo layoutInfo = layoutInfoMap.computeIfAbsent(task, t -> new TaskEditLayoutInfo());
+
         this.task = task;
         loaded = false;
-        offsetX = 0;
-        offsetY = 0;
-        scale = DEFAULT_SCALE;
+        offsetX = layoutInfo.getOffsetX();
+        offsetY = layoutInfo.getOffsetY();
+        scale = layoutInfo.getScale();
         cleanSelectedCards();
 
         cards.values().forEach(this::removeView);
@@ -1147,5 +1153,37 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
     @Override
     public void onRemove(Variable var) {
         checkCards();
+    }
+
+    private static class TaskEditLayoutInfo {
+        public static final float DEFAULT_SCALE = 0.75f;
+
+        private float scale = DEFAULT_SCALE;
+        private float offsetX = 0;
+        private float offsetY = 0;
+
+        public float getScale() {
+            return scale;
+        }
+
+        public void setScale(float scale) {
+            this.scale = scale;
+        }
+
+        public float getOffsetX() {
+            return offsetX;
+        }
+
+        public void setOffsetX(float offsetX) {
+            this.offsetX = offsetX;
+        }
+
+        public float getOffsetY() {
+            return offsetY;
+        }
+
+        public void setOffsetY(float offsetY) {
+            this.offsetY = offsetY;
+        }
     }
 }

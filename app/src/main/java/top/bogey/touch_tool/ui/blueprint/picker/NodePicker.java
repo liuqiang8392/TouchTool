@@ -276,7 +276,7 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
             if (children.isEmpty()) continue;
             if (justUsable && cachedFindNodes.equals(children)) {
                 int index = children.indexOf(nodeInfo);
-                if (index == 0) return children.get(children.size() - 1);
+                if (index <= 0) return children.get(children.size() - 1);
                 return children.get(index - 1);
             }
             cachedFindNodes = children;

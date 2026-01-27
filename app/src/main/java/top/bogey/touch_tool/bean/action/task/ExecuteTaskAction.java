@@ -20,6 +20,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleSelect;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinTaskString;
 import top.bogey.touch_tool.bean.pin.special_pin.NotLinkAblePin;
 import top.bogey.touch_tool.bean.pin.special_pin.ShowAblePin;
@@ -224,6 +225,9 @@ public class ExecuteTaskAction extends Action implements DynamicPinsAction, Sync
                             dynamicPin.clearLinks(context);
                             dynamicPin.setValue(syncPin.getValue().copy());
                         }
+                    } else if (syncPin.getValue() instanceof PinSingleSelect pinSingleSelect) {
+                        PinSingleSelect dPinSingleSelect = dynamicPin.getValue();
+                        dPinSingleSelect.setOptions(pinSingleSelect.getOptions());
                     }
                 }
                 dynamicPin.setHide(syncPin.isHide());

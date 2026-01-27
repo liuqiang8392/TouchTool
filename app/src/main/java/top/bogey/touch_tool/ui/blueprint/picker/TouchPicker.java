@@ -42,6 +42,7 @@ public class TouchPicker extends FullScreenPicker<PinTouchPath> {
     private final List<PinTouchPath.PathPart> pathParts = new ArrayList<>();
     private EAnchor anchor;
     private final Map<Integer, Path> pathMap = new HashMap<>();
+    private Rect pathArea = new Rect();
 
     private int mode;
     private float lastX, lastY;
@@ -129,13 +130,17 @@ public class TouchPicker extends FullScreenPicker<PinTouchPath> {
             }
 
             if (mode == MODE_MOVE) {
-                pathParts.forEach(pathPart -> pathPart.offset((int) dx, (int) dy));
-                pathMap.values().forEach(path -> path.offset((int) dx, (int) dy));
+                if (pathArea.left + dx >= 0 && pathArea.right + dx <= getWidth() && pathArea.top + dy >= 0 && pathArea.bottom + dy <= getHeight()) {
+                    pathParts.forEach(pathPart -> pathPart.offset((int) dx, (int) dy));
+                    pathMap.values().forEach(path -> path.offset((int) dx, (int) dy));
+                }
             }
 
             if (mode == MODE_LOW_MOVE) {
-                pathParts.forEach(pathPart -> pathPart.offset((int) (dx / 5), (int) (dy / 5)));
-                pathMap.values().forEach(path -> path.offset((int) (dx / 5), (int) (dy / 5)));
+                if (pathArea.left + dx >= 0 && pathArea.right + dx <= getWidth() && pathArea.top + dy >= 0 && pathArea.bottom + dy <= getHeight()) {
+                    pathParts.forEach(pathPart -> pathPart.offset((int) (dx / 5), (int) (dy / 5)));
+                    pathMap.values().forEach(path -> path.offset((int) (dx / 5), (int) (dy / 5)));
+                }
             }
             lastX = x;
             lastY = y;
@@ -262,42 +267,42 @@ public class TouchPicker extends FullScreenPicker<PinTouchPath> {
     }
 
     private void refreshUI() {
+        List<Point> points = new ArrayList<>();
+        for (PinTouchPath.PathPart part : pathParts) {
+            points.addAll(part.getPoints());
+        }
+        pathArea = DisplayUtil.getPointsArea(points);
+
         if (mode == MODE_MARKED) {
             binding.buttonBox.setVisibility(VISIBLE);
             binding.markBox.setVisibility(VISIBLE);
 
-            List<Point> points = new ArrayList<>();
-            for (PinTouchPath.PathPart part : pathParts) {
-                points.addAll(part.getPoints());
-            }
-            Rect area = DisplayUtil.getPointsArea(points);
-
-            int width = area.width() + padding * 2;
-            int height = area.height() + padding * 2;
+            int width = pathArea.width() + padding * 2;
+            int height = pathArea.height() + padding * 2;
             DisplayUtil.setViewWidth(binding.markBox, width);
             DisplayUtil.setViewHeight(binding.markBox, height);
-            binding.markBox.setX(area.left - padding);
-            binding.markBox.setY(area.top - padding);
+            binding.markBox.setX(pathArea.left - padding);
+            binding.markBox.setY(pathArea.top - padding);
 
             binding.topRightButton.setX(width - binding.topRightButton.getWidth());
             binding.bottomLeftButton.setY(height - binding.bottomLeftButton.getHeight());
             binding.bottomRightButton.setX(width - binding.bottomRightButton.getWidth());
             binding.bottomRightButton.setY(height - binding.bottomRightButton.getHeight());
 
-            float x = area.left + (area.width() - binding.buttonBox.getWidth()) / 2f;
+            float x = pathArea.left + (pathArea.width() - binding.buttonBox.getWidth()) / 2f;
             x = Math.max(0, Math.min(getWidth() - binding.buttonBox.getWidth(), x));
             binding.buttonBox.setX(x);
 
             int doubleOffset = padding * 2;
-            if (getHeight() < area.height() + binding.buttonBox.getHeight() + doubleOffset) {
+            if (getHeight() < pathArea.height() + binding.buttonBox.getHeight() + doubleOffset) {
                 // 内部
-                binding.buttonBox.setY(area.bottom - binding.buttonBox.getHeight() - doubleOffset);
-            } else if (getHeight() < area.bottom + binding.buttonBox.getHeight() + doubleOffset) {
+                binding.buttonBox.setY(pathArea.bottom - binding.buttonBox.getHeight() - doubleOffset);
+            } else if (getHeight() < pathArea.bottom + binding.buttonBox.getHeight() + doubleOffset) {
                 // 外部 顶上
-                binding.buttonBox.setY(area.top - binding.buttonBox.getHeight() - doubleOffset);
+                binding.buttonBox.setY(pathArea.top - binding.buttonBox.getHeight() - doubleOffset);
             } else {
                 // 外部 底下
-                binding.buttonBox.setY(area.bottom + doubleOffset);
+                binding.buttonBox.setY(pathArea.bottom + doubleOffset);
             }
         } else {
             binding.buttonBox.setVisibility(INVISIBLE);

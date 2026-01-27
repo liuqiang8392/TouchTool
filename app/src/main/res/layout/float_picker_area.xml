@@ -20,7 +20,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:alpha="0.05"
+                android:alpha="0.1"
                 android:text="@string/picker_area_pos_change"
                 android:textAppearance="@style/TextAppearance.Material3.DisplayLarge" />
 
@@ -37,7 +37,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:alpha="0.05"
+                android:alpha="0.1"
                 android:text="@string/picker_area_size_change"
                 android:textAppearance="@style/TextAppearance.Material3.DisplayLarge" />
 
