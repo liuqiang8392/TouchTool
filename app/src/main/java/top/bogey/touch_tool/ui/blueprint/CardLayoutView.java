@@ -1,7 +1,5 @@
 package top.bogey.touch_tool.ui.blueprint;
 
-import static top.bogey.touch_tool.ui.blueprint.CardLayoutHelper.CORNER_OFFSET_SCALE;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
@@ -793,20 +791,21 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
         updateCardsPos();
         cards.values().forEach(card -> card.setNeedDraw(true));
 
+        int cornerOffsetScale = CardLayoutHelper.CORNER_GRID_COUNT;
         // 计算所有卡片的绘制区域
         RectF area = calculateCardsArea(cards.values());
-        area.left -= gridSize * (CORNER_OFFSET_SCALE + 1);
-        area.top -= gridSize * (CORNER_OFFSET_SCALE + 1);
-        area.right += gridSize * (CORNER_OFFSET_SCALE + 1);
-        area.bottom += gridSize * (CORNER_OFFSET_SCALE + 1);
+        area.left -= gridSize * (cornerOffsetScale + 1);
+        area.top -= gridSize * (cornerOffsetScale + 1);
+        area.right += gridSize * (cornerOffsetScale + 1);
+        area.bottom += gridSize * (cornerOffsetScale + 1);
 
-        scale = Math.min(2048 / area.width(), 2048 / area.height());
+        scale = Math.min(4096 / area.width(), 4096 / area.height());
         updateCardsPos();
         area = calculateCardsArea(cards.values());
-        area.left -= gridSize * (CORNER_OFFSET_SCALE + 1);
-        area.top -= gridSize * (CORNER_OFFSET_SCALE + 1);
-        area.right += gridSize * (CORNER_OFFSET_SCALE + 1);
-        area.bottom += gridSize * (CORNER_OFFSET_SCALE + 1);
+        area.left -= gridSize * (cornerOffsetScale + 1);
+        area.top -= gridSize * (cornerOffsetScale + 1);
+        area.right += gridSize * (cornerOffsetScale + 1);
+        area.bottom += gridSize * (cornerOffsetScale + 1);
 
         // 设置偏移
         offsetX = -area.left;
@@ -880,7 +879,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
         drawBackground(canvas, offsetX, offsetY, gridSize);
 
 
-        CornerPathEffect cornerPathEffect = new CornerPathEffect(gridSize * CORNER_OFFSET_SCALE / 2);
+        CornerPathEffect cornerPathEffect = new CornerPathEffect(gridSize * CardLayoutHelper.CORNER_GRID_COUNT / 2);
         linkPaint.setPathEffect(cornerPathEffect);
 
         linkPaint.setStrokeWidth(gridSize / 4);

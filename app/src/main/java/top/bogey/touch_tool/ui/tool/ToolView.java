@@ -1,8 +1,5 @@
 package top.bogey.touch_tool.ui.tool;
 
-import static top.bogey.touch_tool.common.StaticValues.YOLO_APP_ACTIVITY;
-import static top.bogey.touch_tool.common.StaticValues.YOLO_APP_PACKAGE;
-
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +17,7 @@ import java.util.List;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
+import top.bogey.touch_tool.common.StaticValues;
 import top.bogey.touch_tool.databinding.ViewToolBinding;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskInfoSummary;
@@ -74,7 +72,7 @@ public class ToolView extends Fragment {
             case TOOL_RUNNING_LOG -> new LogFloatView(context).show();
             case TOOL_YOLO_MODEL -> {
                 Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setComponent(new ComponentName(YOLO_APP_PACKAGE, YOLO_APP_ACTIVITY));
+                intent.setComponent(new ComponentName(StaticValues.YOLO_APP_PACKAGE, StaticValues.YOLO_APP_ACTIVITY));
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 try {
                     MainApplication.getInstance().startActivity(intent);

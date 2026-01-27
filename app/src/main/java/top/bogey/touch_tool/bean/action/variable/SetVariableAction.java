@@ -1,7 +1,5 @@
 package top.bogey.touch_tool.bean.action.variable;
 
-import static top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionDialog.GLOBAL_FLAG;
-
 import com.google.gson.JsonObject;
 
 import top.bogey.touch_tool.MainApplication;
@@ -20,6 +18,7 @@ import top.bogey.touch_tool.bean.save.variable.VariableSaver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.bean.task.Variable;
 import top.bogey.touch_tool.service.TaskRunnable;
+import top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionDialog;
 import top.bogey.touch_tool.utils.GsonUtil;
 
 public class SetVariableAction extends ExecuteAction implements SyncAction {
@@ -88,7 +87,7 @@ public class SetVariableAction extends ExecuteAction implements SyncAction {
         if (!varPin.isSameClass(variable.getValue())) {
             varPin.setValue(variable.getValue().copy());
         }
-        String globalFlag = variable.getParent() == null ? GLOBAL_FLAG : "";
+        String globalFlag = variable.getParent() == null ? SelectActionDialog.GLOBAL_FLAG : "";
         PinInfo pinInfo = PinInfo.getPinInfo(variable.getValue());
         setTitle(MainApplication.getInstance().getString(R.string.set_value_action, pinInfo.getTitle()) + " - " + globalFlag + variable.getTitle());
     }

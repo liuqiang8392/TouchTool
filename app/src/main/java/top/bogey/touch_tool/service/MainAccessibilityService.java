@@ -1,8 +1,5 @@
 package top.bogey.touch_tool.service;
 
-import static top.bogey.touch_tool.common.StaticValues.YOLO_APP_PACKAGE;
-import static top.bogey.touch_tool.common.StaticValues.YOLO_APP_SERVICE;
-
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.GestureDescription;
 import android.annotation.SuppressLint;
@@ -664,7 +661,7 @@ public class MainAccessibilityService extends AccessibilityService {
             };
 
             Intent intent = new Intent();
-            intent.setComponent(new ComponentName(YOLO_APP_PACKAGE, YOLO_APP_SERVICE));
+            intent.setComponent(new ComponentName(StaticValues.YOLO_APP_PACKAGE, StaticValues.YOLO_APP_SERVICE));
             if (!bindService(intent, yoloConnection, Context.BIND_AUTO_CREATE)) {
                 new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(this, R.string.bind_service_failed_tips, Toast.LENGTH_SHORT).show());
                 callback.onResult(false);

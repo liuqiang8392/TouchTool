@@ -1,7 +1,5 @@
 package top.bogey.touch_tool.ui.task;
 
-import static top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionItemRecyclerViewAdapter.getTipsLinearLayout;
-
 import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -45,6 +43,7 @@ import top.bogey.touch_tool.service.ITaskListener;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.ui.MainActivity;
+import top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionItemRecyclerViewAdapter;
 import top.bogey.touch_tool.ui.custom.EditTaskDialog;
 import top.bogey.touch_tool.ui.tool.task_manager.ExportTaskDialog;
 import top.bogey.touch_tool.ui.tool.task_manager.ImportTaskDialog;
@@ -190,7 +189,7 @@ public class TaskView extends Fragment implements ITaskListener, TaskSaveListene
                 usages.addAll(TaskSaver.getInstance().getTaskUses(id));
             }
             if (!usages.isEmpty()) {
-                LinearLayout linearLayout = getTipsLinearLayout(requireContext(), usages, R.string.task_delete_tips);
+                LinearLayout linearLayout = SelectActionItemRecyclerViewAdapter.getTipsLinearLayout(requireContext(), usages, R.string.task_delete_tips);
                 new MaterialAlertDialogBuilder(requireContext())
                         .setTitle(R.string.remove_task)
                         .setView(linearLayout)

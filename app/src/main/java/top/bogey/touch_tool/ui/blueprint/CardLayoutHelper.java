@@ -17,7 +17,7 @@ import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 
 public class CardLayoutHelper {
-    public static final int CORNER_OFFSET_SCALE = 2;
+    public static final int CORNER_GRID_COUNT = 2;
 
     public static Path calculateLinkPath(float gridSize, PointF start, PointF end, boolean vertical) {
         Path path = new Path();
@@ -25,7 +25,7 @@ public class CardLayoutHelper {
 
         float dx = Math.abs(start.x - end.x);
         float dy = Math.abs(start.y - end.y);
-        float minOffset = gridSize * CORNER_OFFSET_SCALE;
+        float minOffset = gridSize * CORNER_GRID_COUNT;
         if (dx <= minOffset && dy <= minOffset) {
             path.lineTo(end.x, end.y);
             return path;
@@ -34,11 +34,11 @@ public class CardLayoutHelper {
         PointF startPoint = new PointF(start.x, start.y);
         PointF endPoint = new PointF(end.x, end.y);
         if (vertical) {
-            startPoint.y += gridSize * CORNER_OFFSET_SCALE;
-            endPoint.y -= gridSize * CORNER_OFFSET_SCALE;
+            startPoint.y += gridSize * CORNER_GRID_COUNT;
+            endPoint.y -= gridSize * CORNER_GRID_COUNT;
         } else {
-            startPoint.x += gridSize * CORNER_OFFSET_SCALE;
-            endPoint.x -= gridSize * CORNER_OFFSET_SCALE;
+            startPoint.x += gridSize * CORNER_GRID_COUNT;
+            endPoint.x -= gridSize * CORNER_GRID_COUNT;
         }
 
         path.lineTo(startPoint.x, startPoint.y);
@@ -77,7 +77,7 @@ public class CardLayoutHelper {
         */
 
         boolean flag = true;
-        float gridOffset = gridSize * (2 + CORNER_OFFSET_SCALE);
+        float gridOffset = gridSize * (2 + CORNER_GRID_COUNT);
         if (vertical) {
             if (!isYPositive) {
                 if (dx < gridOffset && dy > gridOffset) { //← ↑ →
@@ -110,7 +110,7 @@ public class CardLayoutHelper {
         } else {
             if (!isXPositive) {
                 if (dy < gridOffset && dx > gridOffset) { //↓ ← ↑
-                    float y = Math.max(endPoint.y, startPoint.y) + gridSize * (CORNER_OFFSET_SCALE + 4);
+                    float y = Math.max(endPoint.y, startPoint.y) + gridSize * (CORNER_GRID_COUNT + 4);
                     path.lineTo(startPoint.x, y);
                     path.lineTo(endPoint.x, y);
                     flag = false;

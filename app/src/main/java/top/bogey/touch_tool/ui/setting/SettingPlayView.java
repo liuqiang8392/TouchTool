@@ -1,9 +1,5 @@
 package top.bogey.touch_tool.ui.setting;
 
-import static top.bogey.touch_tool.ui.play.PlayFloatView.BUTTON_DP_SIZE;
-import static top.bogey.touch_tool.ui.play.PlayFloatView.UNIT_DP_SIZE;
-import static top.bogey.touch_tool.ui.play.PlayFloatView.UNIT_GROW_DP_SIZE;
-
 import android.content.res.Configuration;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -20,6 +16,7 @@ import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.databinding.ViewSettingPlayViewBinding;
 import top.bogey.touch_tool.ui.MainActivity;
+import top.bogey.touch_tool.ui.play.PlayFloatView;
 import top.bogey.touch_tool.utils.DisplayUtil;
 
 public class SettingPlayView extends Fragment {
@@ -145,7 +142,7 @@ public class SettingPlayView extends Fragment {
         int size = SettingSaver.getInstance().getManualPlayViewExpandSize();
         int height = SettingSaver.getInstance().getManualPlayViewButtonHeight();
 
-        int px = (int) DisplayUtil.dp2px(requireContext(), UNIT_DP_SIZE * padding);
+        int px = (int) DisplayUtil.dp2px(requireContext(), PlayFloatView.UNIT_DP_SIZE * padding);
         DisplayUtil.setViewMargin(binding.playButtonBox, px, 0, px, 0);
         String testText = this.testText.substring(0, Math.min(this.testText.length(), size));
         binding.playTitle.setText(testText);
@@ -155,8 +152,8 @@ public class SettingPlayView extends Fragment {
         binding.lineProgress.setVisibility(size == height ? View.GONE : View.VISIBLE);
         binding.lineProgress.setIndeterminate(true);
 
-        int sizePx = (int) DisplayUtil.dp2px(requireContext(), BUTTON_DP_SIZE + UNIT_GROW_DP_SIZE * (size - 1));
-        int heightPx = (int) DisplayUtil.dp2px(requireContext(), BUTTON_DP_SIZE + UNIT_GROW_DP_SIZE * (height - 1));
+        int sizePx = (int) DisplayUtil.dp2px(requireContext(), PlayFloatView.BUTTON_DP_SIZE + PlayFloatView.UNIT_GROW_DP_SIZE * (size - 1));
+        int heightPx = (int) DisplayUtil.dp2px(requireContext(), PlayFloatView.BUTTON_DP_SIZE + PlayFloatView.UNIT_GROW_DP_SIZE * (height - 1));
         binding.circleProgress.setIndicatorSize(sizePx);
         DisplayUtil.setViewWidth(binding.lineProgress, sizePx);
         DisplayUtil.setViewWidth(binding.playButton, sizePx);
@@ -165,8 +162,8 @@ public class SettingPlayView extends Fragment {
 
     private void refreshCloseView() {
         int size = SettingSaver.getInstance().getManualPlayViewCloseSize();
-        int buttonDpSize = BUTTON_DP_SIZE * 2 / 3;
-        int growDpSize = (BUTTON_DP_SIZE - buttonDpSize) / 2;
+        int buttonDpSize = PlayFloatView.BUTTON_DP_SIZE * 2 / 3;
+        int growDpSize = (PlayFloatView.BUTTON_DP_SIZE - buttonDpSize) / 2;
         int px = (int) DisplayUtil.dp2px(requireContext(), buttonDpSize + growDpSize * (size - 1));
         DisplayUtil.setViewWidth(binding.dragButton, px);
     }
@@ -177,7 +174,7 @@ public class SettingPlayView extends Fragment {
         String testText = this.testText.substring(0, Math.min(this.testText.length(), size));
         binding.singleTitle.setText(testText);
 
-        int px = (int) DisplayUtil.dp2px(requireContext(), BUTTON_DP_SIZE + UNIT_GROW_DP_SIZE * (size - 1));
+        int px = (int) DisplayUtil.dp2px(requireContext(), PlayFloatView.BUTTON_DP_SIZE + PlayFloatView.UNIT_GROW_DP_SIZE * (size - 1));
         DisplayUtil.setViewWidth(binding.singleButtonCard, px);
         DisplayUtil.setViewHeight(binding.singleButtonCard, px);
 

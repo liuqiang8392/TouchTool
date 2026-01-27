@@ -1,8 +1,5 @@
 package top.bogey.touch_tool.ui.play;
 
-import static top.bogey.touch_tool.ui.play.PlayFloatView.BUTTON_DP_SIZE;
-import static top.bogey.touch_tool.ui.play.PlayFloatView.UNIT_GROW_DP_SIZE;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -79,8 +76,8 @@ public class PlayFloatItemView extends FrameLayout implements ITaskListener {
         binding.lineProgress.setVisibility(View.GONE);
 
 
-        int sizePx = (int) DisplayUtil.dp2px(context, BUTTON_DP_SIZE + UNIT_GROW_DP_SIZE * (size - 1));
-        int heightPx = (int) DisplayUtil.dp2px(context, BUTTON_DP_SIZE + UNIT_GROW_DP_SIZE * (height - 1));
+        int sizePx = (int) DisplayUtil.dp2px(context, PlayFloatView.BUTTON_DP_SIZE + PlayFloatView.UNIT_GROW_DP_SIZE * (size - 1));
+        int heightPx = (int) DisplayUtil.dp2px(context, PlayFloatView.BUTTON_DP_SIZE + PlayFloatView.UNIT_GROW_DP_SIZE * (height - 1));
         binding.circleProgress.setIndicatorSize(sizePx);
         DisplayUtil.setViewWidth(binding.lineProgress, sizePx);
 

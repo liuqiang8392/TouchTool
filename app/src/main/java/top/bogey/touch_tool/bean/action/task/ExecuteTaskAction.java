@@ -1,7 +1,5 @@
 package top.bogey.touch_tool.bean.action.task;
 
-import static top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionDialog.GLOBAL_FLAG;
-
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
@@ -27,6 +25,7 @@ import top.bogey.touch_tool.bean.pin.special_pin.ShowAblePin;
 import top.bogey.touch_tool.bean.save.task.TaskSaver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.TaskRunnable;
+import top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionDialog;
 
 public class ExecuteTaskAction extends Action implements DynamicPinsAction, SyncAction {
     private final transient Pin taskPin = new NotLinkAblePin(new PinTaskString(), R.string.execute_task_action_task_id, false, false, true);
@@ -161,7 +160,7 @@ public class ExecuteTaskAction extends Action implements DynamicPinsAction, Sync
     }
 
     public void sync(Task context, Task task) {
-        String globalFlag = task.getParent() == null ? GLOBAL_FLAG : "";
+        String globalFlag = task.getParent() == null ? SelectActionDialog.GLOBAL_FLAG : "";
         setTitle(globalFlag + task.getTitle());
 
         List<Pin> syncPins = new ArrayList<>();
