@@ -213,6 +213,10 @@
     <string name="string_to_app_action_package">包名</string>
     <string name="string_to_app_action_activity">界面类名</string>
 
+    <string name="wait_in_app_action">等待在应用内</string>
+    <string name="wait_in_app_action_desc">等待当前处于某个应用或界面内</string>
+    <string name="wait_in_app_action_exact_match">匹配界面</string>
+
     <!-- 动作-System -->
     <string name="execute_shell_action">执行Shell命令</string>
     <string name="execute_shell_action_desc">执行Shell命令</string>
@@ -705,6 +709,11 @@
 
     <string name="list_index_of_action">元素索引</string>
     <string name="list_index_of_action_desc">获取元素在列表中的索引</string>
+
+    <string name="list_sublist_action">获取子列表</string>
+    <string name="list_sublist_action_desc">获取列表中指定范围的子列表</string>
+    <string name="list_sublist_action_start">起始索引</string>
+    <string name="list_sublist_action_end">结束索引</string>
 
     <string name="list_foreach_action">遍历列表</string>
     <string name="list_foreach_action_desc">遍历列表中的每个元素</string>

@@ -53,8 +53,8 @@ public class EditTextPasteAction extends ExecuteAction {
 
         boolean result = true;
         if (nodeInfo != null && nodeInfo.usable && nodeInfo.node != null && nodeInfo.node.isFocusable()) {
-            result &= nodeInfo.node.performAction(AccessibilityNodeInfo.ACTION_FOCUS);
-            result &= nodeInfo.node.performAction(AccessibilityNodeInfo.ACTION_PASTE);
+            nodeInfo.node.performAction(AccessibilityNodeInfo.ACTION_FOCUS);
+            result = nodeInfo.node.performAction(AccessibilityNodeInfo.ACTION_PASTE);
 
             if (result && enter.getValue() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 nodeInfo.node.performAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_IME_ENTER.getId());

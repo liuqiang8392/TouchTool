@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.view.ContextThemeWrapper;
 
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.color.DynamicColors;
@@ -104,7 +105,7 @@ public class KeepAliveFloatView extends FrameLayout implements FloatInterface, I
 
     public Context getThemeContext() {
         Context context = getContext();
-        if (context instanceof BaseActivity) return context;
+        if (context instanceof BaseActivity || context instanceof ContextThemeWrapper) return context;
         return DynamicColors.wrapContextIfAvailable(context);
     }
 

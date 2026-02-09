@@ -217,7 +217,8 @@ public class TaskPageItemRecyclerViewAdapter extends RecyclerView.Adapter<TaskPa
             binding.taskDesc.setText(task.getDescription());
 
             binding.actionsBox.removeAllViews();
-            for (Action action : task.getActions(StartAction.class)) {
+            List<Action> startActions = task.getActions(StartAction.class);
+            for (Action action : startActions) {
                 StartAction startAction = (StartAction) action;
                 ViewTaskPageItemActionBinding actionBinding = ViewTaskPageItemActionBinding.inflate(LayoutInflater.from(context), binding.actionsBox, true);
                 actionBinding.taskDesc.setText(startAction.getFullDescription());
@@ -236,6 +237,7 @@ public class TaskPageItemRecyclerViewAdapter extends RecyclerView.Adapter<TaskPa
             binding.taskTag.setVisibility(tagString.isEmpty() ? View.INVISIBLE : View.VISIBLE);
 
             if (binding.enableSwitch.isChecked() != task.isEnable()) binding.enableSwitch.setChecked(task.isEnable());
+            binding.enableSwitch.setVisibility(startActions.isEmpty() ? View.GONE : View.VISIBLE);
 
             ActionCheckResult result = new ActionCheckResult();
             task.check(result);

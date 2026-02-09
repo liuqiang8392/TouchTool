@@ -47,7 +47,7 @@ public class ReadClipboardFloatView extends FrameLayout implements FloatInterfac
         return null;
     }
 
-    private boolean layouted = false;
+    private boolean flag = false;
 
     public ReadClipboardFloatView(@NonNull Context context, ObjectResultCallback callback) {
         super(context);
@@ -79,8 +79,8 @@ public class ReadClipboardFloatView extends FrameLayout implements FloatInterfac
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
-        if (!layouted) {
-            layouted = true;
+        if (!flag) {
+            flag = true;
             FloatWindow.getHelper(ReadClipboardFloatView.class.getName()).setFocusable(true, false);
         }
     }

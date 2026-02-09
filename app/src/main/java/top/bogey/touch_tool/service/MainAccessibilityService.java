@@ -252,7 +252,10 @@ public class MainAccessibilityService extends AccessibilityService {
 
         // 直接加入到任务列表。如果在开始里加入，需要等待线程启动，当同时有多条开始进来时，重入策略会失效
         if (startAction.getRestartType() == StartAction.RestartType.RESTART) {
-            stopTask(runnable.getStartTask());
+            TaskRunnable taskRunnable = getTaskRunnable(task.getId(), startAction.getId());
+            if (taskRunnable != null) {
+                taskRunnable.stop();
+            }
         }
         tasks.add(runnable);
 
@@ -275,6 +278,7 @@ public class MainAccessibilityService extends AccessibilityService {
     }
 
     public TaskRunnable getTaskRunnable(String taskId, String actionId) {
+        Log.d("TAG", "getTaskRunnable: " + taskId + " " + actionId);
         for (TaskRunnable runnable : tasks) {
             if (runnable.isInterrupt()) continue;
 

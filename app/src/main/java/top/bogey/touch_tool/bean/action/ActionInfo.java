@@ -14,6 +14,7 @@ import top.bogey.touch_tool.bean.action.app.OpenAppAction;
 import top.bogey.touch_tool.bean.action.app.OpenShortcutAction;
 import top.bogey.touch_tool.bean.action.app.OpenUriSchemeAction;
 import top.bogey.touch_tool.bean.action.app.StringToAppAction;
+import top.bogey.touch_tool.bean.action.app.WaitInAppAction;
 import top.bogey.touch_tool.bean.action.area.AreaFromIntegerAction;
 import top.bogey.touch_tool.bean.action.area.AreaToIntegerAction;
 import top.bogey.touch_tool.bean.action.area.CheckAreaContainPosAction;
@@ -54,6 +55,7 @@ import top.bogey.touch_tool.bean.action.list.ListIsEmptyAction;
 import top.bogey.touch_tool.bean.action.list.ListRemoveAction;
 import top.bogey.touch_tool.bean.action.list.ListSetAction;
 import top.bogey.touch_tool.bean.action.list.ListSizeAction;
+import top.bogey.touch_tool.bean.action.list.ListSubListAction;
 import top.bogey.touch_tool.bean.action.list.MakeListAction;
 import top.bogey.touch_tool.bean.action.logic.ChoiceExecuteAction;
 import top.bogey.touch_tool.bean.action.logic.ForLoopAction;
@@ -232,6 +234,7 @@ public class ActionInfo {
     private final static ActionInfo GET_CURRENT_APPLICATION_INFO = new ActionInfo(ActionType.GET_CURRENT_APPLICATION, GetCurrentAppAction.class, R.drawable.icon_apps, R.string.get_current_app_action, R.string.get_current_app_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo CHECK_IN_APPLICATION_INFO = new ActionInfo(ActionType.CHECK_IN_APPLICATION, CheckInAppAction.class, R.drawable.icon_apps, R.string.check_in_app_action, R.string.check_in_app_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo STRING_TO_APP_INFO = new ActionInfo(ActionType.STRING_TO_APP, StringToAppAction.class, R.drawable.icon_apps, R.string.string_to_app_action, R.string.string_to_app_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo WAIT_IN_APPLICATION_INFO = new ActionInfo(ActionType.WAIT_IN_APPLICATION, WaitInAppAction.class, R.drawable.icon_hourglass_bottom, R.string.wait_in_app_action, R.string.wait_in_app_action_desc, 0, NormalActionCard.class);
 
     // 系统动作
     private final static ActionInfo SHELL_INFO = new ActionInfo(ActionType.SHELL, ExecuteShellAction.class, R.drawable.icon_terminal, R.string.execute_shell_action, R.string.execute_shell_action_desc, 0, NormalActionCard.class);
@@ -376,6 +379,7 @@ public class ActionInfo {
     private final static ActionInfo LIST_GET_INFO = new ActionInfo(ActionType.LIST_GET, ListGetAction.class, R.drawable.icon_upload, R.string.list_get_action, R.string.list_get_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo LIST_SET_INFO = new ActionInfo(ActionType.LIST_SET, ListSetAction.class, R.drawable.icon_download, R.string.list_set_action, R.string.list_set_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo LIST_INDEX_OF_INFO = new ActionInfo(ActionType.LIST_INDEX_OF, ListIndexOfAction.class, R.drawable.icon_123, R.string.list_index_of_action, R.string.list_index_of_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo LIST_SUBLIST_INFO = new ActionInfo(ActionType.LIST_SUBLIST, ListSubListAction.class, R.drawable.icon_split_scene, R.string.list_sublist_action, R.string.list_sublist_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo LIST_FOREACH_INFO = new ActionInfo(ActionType.LIST_FOREACH, ListForeachAction.class, R.drawable.icon_repeat, R.string.list_foreach_action, R.string.list_foreach_action_desc, 0, NormalActionCard.class);
 
 
@@ -442,6 +446,7 @@ public class ActionInfo {
             case GET_CURRENT_APPLICATION -> GET_CURRENT_APPLICATION_INFO;
             case CHECK_IN_APPLICATION -> CHECK_IN_APPLICATION_INFO;
             case STRING_TO_APP -> STRING_TO_APP_INFO;
+            case WAIT_IN_APPLICATION -> WAIT_IN_APPLICATION_INFO;
 
 
             case SHELL -> SHELL_INFO;
@@ -582,6 +587,7 @@ public class ActionInfo {
             case LIST_GET -> LIST_GET_INFO;
             case LIST_SET -> LIST_SET_INFO;
             case LIST_INDEX_OF -> LIST_INDEX_OF_INFO;
+            case LIST_SUBLIST -> LIST_SUBLIST_INFO;
             case LIST_FOREACH -> LIST_FOREACH_INFO;
 
             case MAP_MAKE -> MAP_MAKE_INFO;

@@ -35,7 +35,7 @@ import top.bogey.touch_tool.utils.listener.TextChangedListener;
 @SuppressLint("ViewConstructor")
 public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePickerTreeAdapter.SelectNode {
     private final FloatPickerNodeBinding binding;
-    private NodePickerTreeAdapter adapter;
+    private final NodePickerTreeAdapter adapter;
 
     private List<NodeInfo> roots = NodeInfo.getWindows();
 

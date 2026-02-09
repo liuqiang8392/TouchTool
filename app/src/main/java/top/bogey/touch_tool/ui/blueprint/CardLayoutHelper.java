@@ -6,6 +6,7 @@ import android.graphics.PointF;
 import android.graphics.RectF;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -145,22 +146,22 @@ public class CardLayoutHelper {
     }
 
     public static class ActionArea {
-        private final int MORE_OFFSET = SettingSaver.getInstance().getArrangeCardOffset();
-        private final int SCALE = MORE_OFFSET * 2;
+        private final int ORIGIN_OFFSET = SettingSaver.getInstance().getArrangeCardOffset();
+        private final int OFFSET = ORIGIN_OFFSET * 2;
 
         public Action action;
         public boolean execute;
-        // 动作对应卡片区域
-        public RectF actionArea = new RectF();
-        // 公共参数区域
-        public RectF commonParamsArea;
-        // 动作使用的参数与自身共同占据的区域大小
-        public RectF allArea = new RectF();
+
+        public RectF allArea = new RectF(); // 动作使用的所有参数+参数使用的参数+自身共同占据的区域大小
+        public RectF actionArea = new RectF(); // 动作对应卡片区域
+        public RectF paramsArea = new RectF(); // 参数区域
+        public final RectF commonParamsArea; // 公共参数区域，完整包含参数区域
+        public final RectF occupiedArea = new RectF(); // 执行真实占用区域，包含子树
 
         public List<ActionArea> executes = new ArrayList<>();
         public List<ActionArea> params = new ArrayList<>();
 
-        private float gridSize;
+        private final float gridSize;
 
         public ActionArea(CardLayoutView cardLayoutView, Set<Action> handledActions, Action action, RectF commonParamsArea, boolean execute) {
             this.action = action;
@@ -168,7 +169,7 @@ public class CardLayoutHelper {
             this.commonParamsArea = commonParamsArea;
 
             gridSize = cardLayoutView.getGridSize();
-            float scaleGridSize = gridSize * SCALE;
+            float gridOffset = gridSize * OFFSET;
 
             ActionCard card = cardLayoutView.getActionCard(action);
             actionArea = new RectF(0, 0, formatToGridPx(card.getWidth()), formatToGridPx(card.getHeight()));
@@ -200,24 +201,19 @@ public class CardLayoutHelper {
             });
 
             // 计算参数区域，递归计算
-            RectF paramsArea = new RectF();
-            for (Action paramAction : params) {
+            for (int i = 0; i < params.size(); i++) {
+                Action paramAction = params.get(i);
                 ActionArea area = new ActionArea(cardLayoutView, handledActions, paramAction, new RectF(), false);
                 this.params.add(area);
                 paramsArea.right = Math.max(paramsArea.width(), area.allArea.width());
-                paramsArea.bottom += area.allArea.height() + gridSize;
+                paramsArea.bottom += (area.allArea.height() + (i == params.size() - 1 ? 0 : gridSize));
             }
 
-            // 参数区域不为空，偏移动作区域，同时尝试扩展公共参数区域
-            if (!paramsArea.isEmpty()) {
-                float offset = paramsArea.width() + scaleGridSize;
-                actionArea.offset(offset, 0);
-                commonParamsArea.right = Math.max(commonParamsArea.right, offset);
-            }
+            commonParamsArea.right = Math.max(commonParamsArea.width(), paramsArea.width());
+            commonParamsArea.bottom += Math.max(actionArea.height(), paramsArea.height());
 
-            // 计算所有区域，即动作区域和参数区域的总和
-            allArea.union(paramsArea);
-            allArea.union(actionArea);
+            allArea.right = paramsArea.width() + gridOffset + actionArea.width();
+            allArea.bottom = Math.max(actionArea.height(), paramsArea.height());
 
             // 继续计算向下的执行
             for (int i = 0, executesSize = executes.size(); i < executesSize; i++) {
@@ -228,8 +224,11 @@ public class CardLayoutHelper {
             }
         }
 
-        public ActionArea(CardLayoutView cardLayoutView, Set<Action> handledActions, List<Action> startActions) {
+        public ActionArea(CardLayoutView cardLayoutView, List<Action> startActions) {
             gridSize = cardLayoutView.getGridSize();
+            commonParamsArea = new RectF();
+
+            Set<Action> handledActions = new HashSet<>();
 
             for (Action action : startActions) {
                 if (handledActions.contains(action)) return;
@@ -238,64 +237,130 @@ public class CardLayoutHelper {
                 ActionArea area = new ActionArea(cardLayoutView, handledActions, action, new RectF(), true);
                 executes.add(area);
             }
-            commonParamsArea = new RectF();
         }
 
         /**
          * 整理动作区域
          *
-         * @param cardLayoutView         布局界面，用来获取网格大小
-         * @param start                  动作区域的开始位置
-         * @param parentCommonParamsArea 父级动作的公共参数区域
+         * @param start  动作区域的开始位置
+         * @param offset 偏移
          * @return 动作区域最终占据的宽度
          */
-        public int arrange(CardLayoutView cardLayoutView, Point start, RectF parentCommonParamsArea) {
-            gridSize = cardLayoutView.getGridSize();
-            float scaleGridSize = gridSize * SCALE;
+        public RectF arrange(PointF start, float offset) {
+            float gridOffset = gridSize * OFFSET;
 
             // 设置动作位置
             if (action != null && !action.isLocked()) {
-                int actionStartX;
-                if (execute) {
-                    // 执行动作只需要偏移参数区域
-                    actionStartX = (int) (start.x + commonParamsArea.width());
-                } else {
-                    // 参数动作需要右对齐，所以用父参数区域去减间隔和自身的宽度
-                    actionStartX = (int) (start.x + parentCommonParamsArea.width() - scaleGridSize - actionArea.width());
-                }
-                int actionStartY = start.y;
+                float actionStartX = start.x + offset;
+                float actionStartY = start.y;
                 int x = formatToGrid(actionStartX);
                 int y = formatToGrid(actionStartY);
                 action.setPos(x, y);
             }
 
-            int executeWidth = (int) (actionArea.width());
-
             // 每个子执行需要互不干扰，所以需要每次偏移之前的执行宽度
-            int areaTotalExecuteWidth = 0;
-            int executeStartX = start.x;
-            int executeStartY = (int) (start.y + allArea.height() + (action == null ? 0 : scaleGridSize));
+            float areaTotalWidth = 0;
+            float areaTotalHeight = 0;
+
+            float executeStartX = start.x;
+            float executeStartY = start.y + allArea.height() + (action == null ? 0 : gridOffset);
             for (int i = 0; i < executes.size(); i++) {
                 ActionArea area = executes.get(i);
-                int areaExecuteWidth = area.arrange(cardLayoutView, new Point(executeStartX, executeStartY), commonParamsArea);
-                executeStartX += (int) (scaleGridSize + area.commonParamsArea.width() + areaExecuteWidth);
-                if (i == 0) areaTotalExecuteWidth += areaExecuteWidth;
-                else areaTotalExecuteWidth += (int) (scaleGridSize + area.commonParamsArea.width() + areaExecuteWidth);
+                RectF areaOccupiedArea = area.arrange(new PointF(executeStartX, executeStartY), area.commonParamsArea.width());
+
+                float realExecuteWidth = area.commonParamsArea.width() + areaOccupiedArea.width() + gridOffset;
+                executeStartX += realExecuteWidth;
+
+                if (i == 0) areaTotalWidth += areaOccupiedArea.width();
+                else areaTotalWidth += realExecuteWidth;
+
+                areaTotalHeight = Math.max(areaTotalHeight, areaOccupiedArea.height());
             }
 
-            int paramStartX = start.x;
-            int paramStartY = start.y;
+            float paramStartX = start.x;
+            float paramStartY = start.y;
             for (ActionArea area : params) {
-                RectF paramArea = commonParamsArea;
-                if (!execute) {
-                    paramArea = new RectF(parentCommonParamsArea);
-                    paramArea.right += (-scaleGridSize - actionArea.width());
-                }
-                area.arrange(cardLayoutView, new Point(paramStartX, paramStartY), paramArea);
-                paramStartY += (int) (gridSize + area.allArea.height());
+                float paramOffset = commonParamsArea.width() - area.actionArea.width() - gridOffset;
+                if (!execute) paramOffset = offset - area.actionArea.width() - gridOffset;
+                area.arrange(new PointF(paramStartX, paramStartY), paramOffset);
+                paramStartY += (area.allArea.height() + gridOffset);
             }
 
-            return Math.max(executeWidth, areaTotalExecuteWidth);
+            areaTotalHeight += (allArea.height() + gridOffset);
+
+            occupiedArea.right = Math.max(actionArea.width(), areaTotalWidth);
+            occupiedArea.bottom = Math.max(allArea.height(), areaTotalHeight);
+            return occupiedArea;
+        }
+
+        // 计算当前支线块
+        public void compact() {
+            float gridOffset = gridSize * OFFSET;
+
+            List<RectF> rectList = new ArrayList<>();
+            for (int i = 0; i < executes.size(); i++) {
+                ActionArea area = executes.get(i);
+                area.compact();
+
+                if (i != 0) {
+                    ActionArea prevArea = executes.get(i - 1);
+                    getAllActionArea(rectList, prevArea);
+                    RectF rectF = calculateRealActionArea(area);
+                    float left = rectF.left - area.commonParamsArea.width();
+                    float top = rectF.top;
+                    float right = rectF.left + area.occupiedArea.width();
+                    float bottom = Math.max(rectF.bottom, rectF.top + area.occupiedArea.height());
+                    RectF blockArea = new RectF(left, top, right, bottom);
+
+                    float minLeft = findMinLeft(rectList, blockArea);
+                    float targetLeft = minLeft + gridOffset + area.commonParamsArea.width();
+
+                    offsetActionArea(area, formatToGrid(targetLeft - rectF.left));
+                }
+            }
+        }
+
+        private static void offsetActionArea(ActionArea area, int grid) {
+            if (grid == 0) return;
+            area.action.getPos().offset(grid, 0);
+
+            for (ActionArea execute : area.executes) {
+                offsetActionArea(execute, grid);
+            }
+
+            for (ActionArea param : area.params) {
+                offsetActionArea(param, grid);
+            }
+        }
+
+        private static float findMinLeft(List<RectF> rectList, RectF blockArea) {
+            float minLeft = 0;
+            for (RectF rectF : rectList) {
+                // 跳过不在同一行的
+                if (rectF.bottom < blockArea.top || rectF.top > blockArea.bottom) continue;
+                minLeft = Math.max(rectF.right, minLeft);
+            }
+            return minLeft;
+        }
+
+        private static void getAllActionArea(List<RectF> rectList, ActionArea area) {
+            rectList.add(calculateRealActionArea(area));
+
+            for (ActionArea execute : area.executes) {
+                getAllActionArea(rectList, execute);
+            }
+            for (ActionArea param : area.params) {
+                getAllActionArea(rectList, param);
+            }
+        }
+
+        private static RectF calculateRealActionArea(ActionArea area) {
+            Point pos = area.action.getPos();
+            float x = pos.x * area.gridSize;
+            float y = pos.y * area.gridSize;
+            RectF rectF = new RectF(area.actionArea);
+            rectF.offset(x, y);
+            return rectF;
         }
 
         private int formatToGridPx(float size) {

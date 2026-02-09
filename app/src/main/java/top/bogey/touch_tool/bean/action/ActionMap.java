@@ -67,7 +67,8 @@ public class ActionMap {
                     ActionType.OPEN_SHORTCUT,
                     ActionType.GET_CURRENT_APPLICATION,
                     ActionType.CHECK_IN_APPLICATION,
-                    ActionType.STRING_TO_APP
+                    ActionType.STRING_TO_APP,
+                    ActionType.WAIT_IN_APPLICATION
             ));
 
             case SYSTEM -> list.addAll(Arrays.asList(
@@ -215,7 +216,8 @@ public class ActionMap {
                     ActionType.LIST_REMOVE,
                     ActionType.LIST_APPEND,
                     ActionType.LIST_CLEAR,
-                    ActionType.LIST_INDEX_OF
+                    ActionType.LIST_INDEX_OF,
+                    ActionType.LIST_SUBLIST
             ));
 
             case MAP -> list.addAll(Arrays.asList(

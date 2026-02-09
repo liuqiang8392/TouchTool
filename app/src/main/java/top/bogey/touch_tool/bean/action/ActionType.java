@@ -52,6 +52,7 @@ public enum ActionType {
     GET_CURRENT_APPLICATION,
     CHECK_IN_APPLICATION,
     STRING_TO_APP,
+    WAIT_IN_APPLICATION,
 
     // 系统动作
     SHELL,
@@ -195,6 +196,7 @@ public enum ActionType {
     LIST_CHOICE,
     LIST_SET,
     LIST_INDEX_OF,
+    LIST_SUBLIST,
     LIST_FOREACH,
 
     // 字典
