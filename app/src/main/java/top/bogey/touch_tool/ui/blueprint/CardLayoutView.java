@@ -41,6 +41,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.ActionInfo;
@@ -388,7 +389,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
     }
 
     private void refreshEditView() {
-        BlueprintView.tryShowFloatingToolBar(selectedCards.size() > 1);
+        BlueprintView.tryShowFloatingToolBar(!selectedCards.isEmpty());
     }
 
     public void refreshPinView() {
@@ -997,7 +998,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
         super.dispatchDraw(canvas);
 
         // 框选
-        if (touchState == TOUCH_SELECT_AREA || selectedCards.size() > 1) {
+        if (touchState == TOUCH_SELECT_AREA || !selectedCards.isEmpty()) {
             DashPathEffect dashPathEffect = new DashPathEffect(new float[]{gridSize, gridSize}, 0);
             linkPaint.setPathEffect(new ComposePathEffect(cornerPathEffect, dashPathEffect));
             linkPaint.setColor(DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorPrimaryVariant));
@@ -1155,9 +1156,10 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
     }
 
     private static class TaskEditLayoutInfo {
+        private static final float DEFAULT_OFFSET = DisplayUtil.dp2px(MainApplication.getInstance(), 5 * GRID_DP_SIZE);
         private float scale = 0.75f;
-        private float offsetX = 0;
-        private float offsetY = 0;
+        private float offsetX = DEFAULT_OFFSET;
+        private float offsetY = DEFAULT_OFFSET;
 
         public float getScale() {
             return scale;

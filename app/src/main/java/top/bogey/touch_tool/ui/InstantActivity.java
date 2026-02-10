@@ -1,11 +1,8 @@
 package top.bogey.touch_tool.ui;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-
-import androidx.appcompat.view.ContextThemeWrapper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,7 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import top.bogey.touch_tool.MainApplication;
-import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.start.InnerStartAction;
 import top.bogey.touch_tool.bean.action.start.StartAction;
@@ -29,7 +25,7 @@ import top.bogey.touch_tool.service.TaskInfoSummary;
 import top.bogey.touch_tool.ui.tool.ToolView;
 import top.bogey.touch_tool.utils.AppUtil;
 
-public class InstantActivity extends FloatViewActivity {
+public class InstantActivity extends BaseActivity {
     public static final String INTENT_KEY_DO_ACTION = "INTENT_KEY_DO_ACTION";
     public static final String TASK_ID = "TASK_ID";
     public static final String ACTION_ID = "ACTION_ID";
@@ -42,11 +38,6 @@ public class InstantActivity extends FloatViewActivity {
         Intent intent = getIntent();
         handleIntent(intent);
         finish();
-    }
-
-    @Override
-    protected Context getThemeContext() {
-        return new ContextThemeWrapper(this, R.style.Theme_TouchTool_DayNight);
     }
 
     private void handleIntent(Intent intent) {

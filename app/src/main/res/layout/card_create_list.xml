@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <com.google.android.material.imageview.ShapeableImageView
@@ -15,7 +15,7 @@
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
@@ -50,7 +50,7 @@
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/des"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="?attr/smallIconButtonSize"
             android:background="?attr/colorTertiaryContainer"
             android:gravity="center"
             android:paddingHorizontal="?attr/defaultPadding"
@@ -163,7 +163,7 @@
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/errorText"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="?attr/smallIconButtonSize"
             android:gravity="center"
             android:paddingHorizontal="?attr/defaultPadding"
             android:textAppearance="@style/TextAppearance.Material3.BodySmall"

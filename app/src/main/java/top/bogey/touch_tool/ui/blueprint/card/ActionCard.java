@@ -299,8 +299,21 @@ public abstract class ActionCard extends MaterialCardView implements ActionListe
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        // 测量最大值
         int widthSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
         int heightSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
+        super.onMeasure(widthSpec, heightSpec);
+
+        // 对齐网格宽度，高度不用
+        float gridSize = DisplayUtil.dp2px(getContext(), CardLayoutView.GRID_DP_SIZE);
+        int measureWidth = getMeasuredWidth();
+        int measureHeight = getMeasuredHeight();
+        int gridWidth = (int) (Math.ceil(measureWidth / gridSize) * gridSize);
+        setMeasuredDimension(gridWidth, measureHeight);
+
+        // 使用新的测量参数重新测量
+        widthSpec = MeasureSpec.makeMeasureSpec(gridWidth, MeasureSpec.EXACTLY);
+        heightSpec = MeasureSpec.makeMeasureSpec(measureHeight, MeasureSpec.EXACTLY);
         super.onMeasure(widthSpec, heightSpec);
     }
 

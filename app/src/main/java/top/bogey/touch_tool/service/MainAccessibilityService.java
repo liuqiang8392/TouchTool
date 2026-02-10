@@ -66,6 +66,7 @@ import top.bogey.touch_tool.service.capture.CaptureService;
 import top.bogey.touch_tool.service.receiver.SystemEventReceiver;
 import top.bogey.touch_tool.service.super_user.SuperUser;
 import top.bogey.touch_tool.ui.InstantActivity;
+import top.bogey.touch_tool.ui.MainActivity;
 import top.bogey.touch_tool.ui.PermissionActivity;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.ThreadUtil;
@@ -196,9 +197,14 @@ public class MainAccessibilityService extends AccessibilityService {
 
             resetAllAlarm();
             SuperUser.getInstance().tryInit();
-            Intent intent = new Intent(this, InstantActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
+
+            MainActivity activity = MainApplication.getInstance().getActivity();
+            if (activity == null) {
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.setAction(MainActivity.INTENT_KEY_AUTO_START);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
         } else {
             if (systemEventReceiver != null) systemEventReceiver.unregister();
             systemEventReceiver = null;

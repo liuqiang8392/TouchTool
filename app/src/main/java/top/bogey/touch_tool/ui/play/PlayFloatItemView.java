@@ -2,6 +2,7 @@ package top.bogey.touch_tool.ui.play;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,8 @@ import top.bogey.touch_tool.databinding.FloatPlayItemBinding;
 import top.bogey.touch_tool.service.ITaskListener;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskRunnable;
+import top.bogey.touch_tool.ui.InstantActivity;
+import top.bogey.touch_tool.ui.MainActivity;
 import top.bogey.touch_tool.utils.DisplayUtil;
 
 @SuppressLint("ViewConstructor")
@@ -67,8 +70,16 @@ public class PlayFloatItemView extends FrameLayout implements ITaskListener {
         });
 
         binding.getRoot().setOnLongClickListener(v -> {
-            if (pauseType == 0) stop();
-            else pause();
+            if (playState == PLAY_STATE_STOPPED) {
+                Intent intent = new Intent(context, MainActivity.class);
+                intent.setAction(MainActivity.INTENT_KEY_OPEN_TASK);
+                intent.putExtra(InstantActivity.TASK_ID, task.getId());
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+            } else {
+                if (pauseType == 0) stop();
+                else pause();
+            }
             return true;
         });
 

@@ -15,12 +15,19 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.save.SettingSaver;
+import top.bogey.touch_tool.bean.save.task.TaskSaver;
+import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.ActivityMainBinding;
 import top.bogey.touch_tool.service.TaskInfoSummary;
+import top.bogey.touch_tool.ui.blueprint.BlueprintView;
+import top.bogey.touch_tool.ui.task.TaskViewDirections;
 import top.bogey.touch_tool.ui.tool.task_manager.ImportTaskDialog;
 import top.bogey.touch_tool.utils.AppUtil;
 
 public class MainActivity extends FloatViewActivity {
+    public static final String INTENT_KEY_OPEN_TASK = "INTENT_KEY_OPEN_TASK";
+
+
     private ActivityMainBinding binding;
 
     public static Fragment getCurrentFragment() {
@@ -114,6 +121,16 @@ public class MainActivity extends FloatViewActivity {
         }
         if (uri != null) {
             ImportTaskDialog.showDialog(this, uri);
+        }
+
+        if (INTENT_KEY_OPEN_TASK.equals(intent.getAction())) {
+            String taskId = intent.getStringExtra(InstantActivity.TASK_ID);
+            Task task = TaskSaver.getInstance().getTask(taskId);
+            if (!BlueprintView.tryPushStack(task)) {
+                NavController controller = Navigation.findNavController(this, R.id.conView);
+                controller.navigate(R.id.task);
+                controller.navigate(TaskViewDirections.actionTaskToBlueprint(taskId));
+            }
         }
     }
 }

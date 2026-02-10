@@ -41,17 +41,18 @@ public class ListAddAction extends ListExecuteAction {
         PinList list = getPinValue(runnable, listPin);
         PinObject element = getPinValue(runnable, elementPin);
         PinNumber<?> index = getPinValue(runnable, indexPin);
-        int i = index.intValue();
-        if (i == 0) i = 1; // 0和1一样，代表添加到第一个位置
-        if (i < 0) i = list.size() + i + 2; // 这里+2，因为索引从1开始，之后会再-1
-        i--;
-
-        if (i < 0 || i > list.size()) {
-            resultPin.getValue(PinBoolean.class).setValue(false);
-        } else {
-            list.add(i, element);
-            resultPin.getValue(PinBoolean.class).setValue(true);
+        int indexValue = index.intValue();
+        if (indexValue == 0) indexValue = 1;
+        int size = list.size();
+        boolean added = false;
+        if (indexValue >= 1 && indexValue <= size + 1) {
+            list.add(indexValue - 1, element);
+            added = true;
+        } else if (indexValue < 0 && indexValue >= -size) {
+            list.add(size + indexValue + 1, element);
+            added = true;
         }
+        resultPin.getValue(PinBoolean.class).setValue(added);
         executeNext(runnable, outPin);
     }
 
