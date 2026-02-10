@@ -4,21 +4,70 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     tools:context=".ui.blueprint.BlueprintView">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
+    <com.google.android.material.card.MaterialCardView
+        style="?attr/materialCardViewFilledStyle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true">
+        android:layout_marginStart="?attr/defaultPadding"
+        android:layout_marginTop="?attr/iconButtonSize"
+        app:cardBackgroundColor="?attr/colorSurface"
+        app:cardElevation="5dp"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:navigationIcon="@drawable/menu_arrow_back" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="?attr/iconButtonSize"
+            android:gravity="center_vertical">
 
-    </com.google.android.material.appbar.AppBarLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/backButton"
+                style="?attr/iconButton"
+                app:icon="@drawable/icon_arrow_back" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="?attr/defaultPadding"
+                android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                android:textColor="?attr/colorOnSurface" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        style="?attr/materialCardViewFilledStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="?attr/iconButtonSize"
+        android:layout_marginEnd="?attr/defaultPadding"
+        app:cardBackgroundColor="?attr/colorSurface"
+        app:cardElevation="5dp"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full">
+
+        <com.google.android.material.button.MaterialButtonGroup
+            android:id="@+id/buttonBox"
+            android:layout_width="wrap_content"
+            android:layout_height="?attr/iconButtonSize"
+            android:spacing="?attr/defaultOffset">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/saveButton"
+                style="?attr/iconButton"
+                app:icon="@drawable/icon_save" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/moreButton"
+                style="?attr/iconButton"
+                app:icon="@drawable/icon_more_horiz" />
+
+        </com.google.android.material.button.MaterialButtonGroup>
+
+    </com.google.android.material.card.MaterialCardView>
 
     <top.bogey.touch_tool.ui.blueprint.CardLayoutView
         android:id="@+id/cardLayout"
@@ -33,6 +82,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"
         android:layout_marginBottom="?attr/minTouchTargetSize"
+        app:cardBackgroundColor="?attr/colorSurface"
         app:cardElevation="5dp"
         app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full">
 
@@ -84,6 +134,7 @@
         android:layout_gravity="bottom|center"
         android:layout_marginBottom="48dp"
         android:visibility="gone"
+        app:cardBackgroundColor="?attr/colorSurface"
         app:cardElevation="5dp"
         app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full">
 

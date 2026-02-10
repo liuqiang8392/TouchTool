@@ -4,18 +4,18 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.PointF;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.view.MenuProvider;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -24,14 +24,11 @@ import com.google.android.material.imageview.ShapeableImageView;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.Stack;
 
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
-import top.bogey.touch_tool.bean.action.normal.LoggerAction;
 import top.bogey.touch_tool.bean.action.start.StartAction;
 import top.bogey.touch_tool.bean.action.task.CustomEndAction;
 import top.bogey.touch_tool.bean.action.task.CustomStartAction;
@@ -45,8 +42,10 @@ import top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionDial
 import top.bogey.touch_tool.ui.tool.log.LogFloatView;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.DisplayUtil;
+import top.bogey.touch_tool.utils.ThreadUtil;
 
 public class BlueprintView extends Fragment {
+
     private final static List<Action> copyActions = new ArrayList<>();
 
     private final Stack<Task> taskStack = new Stack<>();
@@ -54,11 +53,13 @@ public class BlueprintView extends Fragment {
     private ViewBlueprintBinding binding;
     private boolean needDelete = false;
 
-    public static void tryPushStack(Task task) {
+    public static boolean tryPushStack(Task task) {
         Fragment fragment = MainActivity.getCurrentFragment();
         if (fragment instanceof BlueprintView blueprintView) {
             blueprintView.pushStack(task);
+            return true;
         }
+        return false;
     }
 
     public static void tryFocusAction(Task task, Action action) {
@@ -110,107 +111,17 @@ public class BlueprintView extends Fragment {
         }
     };
 
-    private final MenuProvider menuProvider = new MenuProvider() {
-        @Override
-        public void onCreateMenu(@NonNull Menu currMenu, @NonNull MenuInflater menuInflater) {
-            menuInflater.inflate(R.menu.menu_blueprint, currMenu);
-        }
-
-        @Override
-        public void onPrepareMenu(@NonNull Menu menu) {
-            Task task = taskStack.peek();
-            MenuItem item = menu.findItem(R.id.taskDetailLog);
-            item.setChecked(task.hasFlag(Task.FLAG_DEBUG));
-            item.setVisible(task.getParent() == null);
-
-            boolean logFlag = false;
-            Queue<Task> queue = new LinkedList<>();
-            queue.add(task);
-            while (!queue.isEmpty()) {
-                Task pool = queue.poll();
-                if (pool == null) continue;
-                for (Action action : pool.getActions(LoggerAction.class)) {
-                    LoggerAction logger = (LoggerAction) action;
-                    logFlag |= logger.getLogSwitch();
-                }
-                queue.addAll(pool.getTasks());
-            }
-            MenuItem logSwitchItem = menu.findItem(R.id.taskRunningLogSwitch);
-            logSwitchItem.setChecked(logFlag);
-        }
-
-        @Override
-        public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-            int itemId = menuItem.getItemId();
-            if (itemId == R.id.save) {
-                Task task = taskStack.peek();
-                task.save();
-                return true;
-            } else if (itemId == R.id.taskRunningLog) {
-                Task task = taskStack.peek();
-                while (task.getParent() != null) task = task.getParent();
-                new LogFloatView(requireContext(), task).show();
-                return true;
-            } else if (itemId == R.id.taskRunningLogSwitch) {
-                boolean logFlag = false;
-                Task task = taskStack.peek();
-                Queue<Task> queue = new LinkedList<>();
-                queue.add(task);
-                while (!queue.isEmpty()) {
-                    Task pool = queue.poll();
-                    if (pool == null) continue;
-                    for (Action action : pool.getActions(LoggerAction.class)) {
-                        LoggerAction logger = (LoggerAction) action;
-                        logFlag |= logger.switchLog();
-                    }
-                    queue.addAll(pool.getTasks());
-                }
-                task.save();
-                menuItem.setChecked(logFlag);
-                return true;
-            } else if (itemId == R.id.taskDetailLog) {
-                Task task = taskStack.peek();
-                task.toggleFlag(Task.FLAG_DEBUG);
-                task.save();
-                menuItem.setChecked(task.hasFlag(Task.FLAG_DEBUG));
-                return true;
-            } else if (itemId == R.id.taskCapture) {
-                Bitmap bitmap = binding.cardLayout.takeTaskCapture();
-                ShapeableImageView imageView = new ShapeableImageView(requireContext());
-                imageView.setImageBitmap(bitmap);
-
-                new MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(R.string.task_capture)
-                        .setView(imageView)
-                        .setPositiveButton(R.string.save, (dialog, which) -> {
-                            dialog.dismiss();
-                            AppUtil.saveImage(requireContext(), bitmap);
-                        })
-                        .setNegativeButton(R.string.share_to_action, (dialog, which) -> {
-                            dialog.dismiss();
-                            AppUtil.shareImage(requireContext(), bitmap);
-                        })
-                        .setNeutralButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
-                        .show();
-
-                Point size = DisplayUtil.getScreenSize(requireContext());
-                DisplayUtil.setViewWidth(imageView, ViewGroup.LayoutParams.MATCH_PARENT);
-                DisplayUtil.setViewHeight(imageView, size.y / 2);
-                return true;
-            }
-            return false;
-        }
-    };
-
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+        refreshUI();
+    }
+
+    private void refreshUI() {
         if (DisplayUtil.isPortrait(requireContext())) {
-            DisplayUtil.setViewHeight(binding.toolBar, (int) DisplayUtil.dp2px(requireContext(), 56));
             DisplayUtil.setViewMargin(binding.floatingToolBar, 0, 0, 0, (int) DisplayUtil.dp2px(requireContext(), 48));
             DisplayUtil.setViewMargin(binding.baseToolBar, 0, 0, 0, (int) DisplayUtil.dp2px(requireContext(), 48));
         } else {
-            DisplayUtil.setViewHeight(binding.toolBar, (int) DisplayUtil.dp2px(requireContext(), 48));
             DisplayUtil.setViewMargin(binding.floatingToolBar, 0, 0, 0, (int) DisplayUtil.dp2px(requireContext(), 24));
             DisplayUtil.setViewMargin(binding.baseToolBar, 0, 0, 0, (int) DisplayUtil.dp2px(requireContext(), 24));
         }
@@ -225,15 +136,76 @@ public class BlueprintView extends Fragment {
         Task task = TaskSaver.getInstance().getTask(args.getTaskId());
         if (task == null) throw new IllegalArgumentException();
 
+        Window window = requireActivity().getWindow();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.setDecorFitsSystemWindows(false);
+        } else {
+            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        }
+
         binding = ViewBlueprintBinding.inflate(inflater, container, false);
 
-        binding.toolBar.addMenuProvider(menuProvider, getViewLifecycleOwner());
-        binding.toolBar.setNavigationOnClickListener(v -> {
+        binding.backButton.setOnClickListener(v -> {
             if (taskStack.size() > 1) {
                 popStack();
             } else {
                 requireActivity().getOnBackPressedDispatcher().onBackPressed();
             }
+        });
+
+        binding.saveButton.setOnClickListener(v -> {
+            Task currTask = taskStack.peek();
+            currTask.save();
+        });
+
+        binding.moreButton.setOnClickListener(v -> {
+            PopupMenu popupMenu = new PopupMenu(requireContext(), binding.buttonBox);
+            popupMenu.getMenuInflater().inflate(R.menu.menu_blueprint, popupMenu.getMenu());
+
+            MenuItem menuItem = popupMenu.getMenu().findItem(R.id.taskDetailLog);
+            menuItem.setChecked(task.hasFlag(Task.FLAG_DEBUG));
+            menuItem.setVisible(task.getParent() == null);
+
+            popupMenu.setOnMenuItemClickListener(item -> {
+                int itemId = item.getItemId();
+                if (itemId == R.id.taskRunningLog) {
+                    Task currTask = taskStack.peek();
+                    while (currTask.getParent() != null) currTask = currTask.getParent();
+                    new LogFloatView(requireContext(), currTask).show();
+                    return true;
+                } else if (itemId == R.id.taskDetailLog) {
+                    Task currTask = taskStack.peek();
+                    currTask.toggleFlag(Task.FLAG_DEBUG);
+                    currTask.save();
+                    item.setChecked(currTask.hasFlag(Task.FLAG_DEBUG));
+                    return true;
+                } else if (itemId == R.id.taskCapture) {
+                    Bitmap bitmap = binding.cardLayout.takeTaskCapture();
+                    ShapeableImageView imageView = new ShapeableImageView(requireContext());
+                    imageView.setImageBitmap(bitmap);
+
+                    new MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(R.string.task_capture)
+                            .setView(imageView)
+                            .setPositiveButton(R.string.save, (dialog, which) -> {
+                                dialog.dismiss();
+                                AppUtil.saveImage(requireContext(), bitmap);
+                            })
+                            .setNegativeButton(R.string.share_to_action, (dialog, which) -> {
+                                dialog.dismiss();
+                                AppUtil.shareImage(requireContext(), bitmap);
+                            })
+                            .setNeutralButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
+                            .show();
+
+                    Point size = DisplayUtil.getScreenSize(requireContext());
+                    DisplayUtil.setViewWidth(imageView, ViewGroup.LayoutParams.MATCH_PARENT);
+                    DisplayUtil.setViewHeight(imageView, size.y / 2);
+                    return true;
+                }
+                return false;
+            });
+            popupMenu.show();
         });
 
         binding.addButton.setOnClickListener(v -> new SelectActionDialog(requireContext(), taskStack.peek(), action -> {
@@ -244,15 +216,17 @@ public class BlueprintView extends Fragment {
 
         binding.sortButton.setOnClickListener(v -> {
             if (!binding.cardLayout.isLoaded()) return;
-            Task currTask = taskStack.peek();
-            List<Action> startActions = currTask.getActions(StartAction.class);
-            List<Action> actions = currTask.getActions(CustomStartAction.class);
-            startActions.addAll(actions);
-            CardLayoutHelper.ActionArea actionArea = new CardLayoutHelper.ActionArea(binding.cardLayout, startActions);
-            actionArea.arrange(new PointF(), 0);
-            actionArea.compact();
-            binding.cardLayout.updateCardsPos();
-            currTask.save();
+            ThreadUtil.execute(() -> {
+                Task currTask = taskStack.peek();
+                List<Action> startActions = currTask.getActions(StartAction.class);
+                List<Action> actions = currTask.getActions(CustomStartAction.class);
+                startActions.addAll(actions);
+                CardLayoutHelper.ActionArea actionArea = new CardLayoutHelper.ActionArea(binding.cardLayout, startActions);
+                actionArea.arrange(new PointF(), 0);
+                actionArea.compact();
+                currTask.save();
+                binding.cardLayout.post(() -> binding.cardLayout.updateCardsPos());
+            });
         });
 
         binding.editButton.setOnClickListener(v -> {
@@ -349,12 +323,24 @@ public class BlueprintView extends Fragment {
                 }, 1500);
             }
         });
+        refreshUI();
 
 
         pushStack(task);
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
 
         return binding.getRoot();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Window window = requireActivity().getWindow();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.setDecorFitsSystemWindows(true);
+        } else {
+            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+        }
     }
 
     public void pushStack(Task task) {
@@ -381,9 +367,7 @@ public class BlueprintView extends Fragment {
 
     public void setTask(Task task) {
         binding.cardLayout.setTask(task);
-
-        binding.toolBar.setTitle(task.getTitle());
-
+        binding.title.setText(task.getTitle());
         callback.setEnabled(taskStack.size() > 1);
     }
 }

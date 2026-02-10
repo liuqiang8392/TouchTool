@@ -1,6 +1,7 @@
 package top.bogey.touch_tool.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -12,6 +13,7 @@ import top.bogey.touch_tool.ui.custom.KeepAliveFloatView;
 import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 
 public class FloatViewActivity extends BaseActivity {
+    public static final String INTENT_KEY_AUTO_START = "INTENT_KEY_AUTO_START";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,6 +40,12 @@ public class FloatViewActivity extends BaseActivity {
             View view = FloatWindow.getView(KeepAliveFloatView.class.getName());
             if (view != null) return;
             new KeepAliveFloatView(getThemeContext()).show();
+        }
+
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        if (INTENT_KEY_AUTO_START.equals(action)) {
+            moveTaskToBack(true);
         }
     }
 

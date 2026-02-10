@@ -61,7 +61,7 @@
     <LinearLayout
         android:id="@+id/pinSlotBox"
         android:layout_width="?attr/halfIconButtonSize"
-        android:layout_height="?attr/halfIconButtonSize"
+        android:layout_height="?attr/smallIconButtonSize"
         android:layout_gravity="start"
         android:layout_marginStart="15dp"
         android:gravity="bottom"

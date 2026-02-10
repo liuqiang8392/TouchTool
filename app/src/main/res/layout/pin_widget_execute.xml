@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:minWidth="?attr/minTouchTargetSize"
-    android:orientation="vertical">
+    android:minWidth="?attr/minTouchTargetSize">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/pickButton"
@@ -20,6 +19,7 @@
         android:id="@+id/titleBox"
         android:layout_width="wrap_content"
         android:layout_height="?attr/iconButtonSize"
+        android:layout_marginTop="30dp"
         android:clipChildren="false"
         android:minWidth="?attr/minTouchTargetSize"
         app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large">
@@ -38,5 +38,4 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-
-</LinearLayout>
+</FrameLayout>

@@ -215,7 +215,6 @@
 
     <string name="wait_in_app_action">等待在应用内</string>
     <string name="wait_in_app_action_desc">等待当前处于某个应用或界面内</string>
-    <string name="wait_in_app_action_exact_match">匹配界面</string>
 
     <!-- 动作-System -->
     <string name="execute_shell_action">执行Shell命令</string>

@@ -22,16 +22,21 @@
         style="@style/Widget.Material3.MaterialButtonGroup.Connected"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:spacing="-4dp">
+        android:spacing="-2dp">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/keySlot"
-            style="?attr/iconButtonOutlined"
+            style="?attr/materialButtonOutlinedStyle"
             android:layout_width="wrap_content"
+            android:layout_height="?attr/iconButtonSize"
             android:layout_weight="1"
             android:minWidth="?attr/iconButtonSize"
-            android:paddingHorizontal="0dp"
-            android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
+            android:paddingHorizontal="?attr/defaultPadding"
+            android:paddingVertical="?attr/iconButtonPadding"
+            android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+            app:icon="@drawable/icon_keyboard_arrow_down"
+            app:iconGravity="textEnd"
+            app:iconPadding="?attr/defaultOffset" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/typeSpinner"
@@ -41,12 +46,17 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/valueSlot"
-            style="?attr/iconButtonOutlined"
+            style="?attr/materialButtonOutlinedStyle"
             android:layout_width="wrap_content"
+            android:layout_height="?attr/iconButtonSize"
             android:layout_weight="1"
             android:minWidth="?attr/iconButtonSize"
-            android:paddingHorizontal="0dp"
-            android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
+            android:paddingHorizontal="?attr/defaultPadding"
+            android:paddingVertical="?attr/iconButtonPadding"
+            android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+            app:icon="@drawable/icon_keyboard_arrow_down"
+            app:iconGravity="textEnd"
+            app:iconPadding="?attr/defaultOffset" />
 
     </com.google.android.material.button.MaterialButtonGroup>
 

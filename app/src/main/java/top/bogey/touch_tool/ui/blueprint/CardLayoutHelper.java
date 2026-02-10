@@ -21,16 +21,18 @@ public class CardLayoutHelper {
     public static final int CORNER_GRID_COUNT = 2;
 
     public static Path calculateLinkPath(float gridSize, PointF start, PointF end, boolean vertical) {
-        Path path = new Path();
-        path.moveTo(start.x, start.y);
-
         float dx = Math.abs(start.x - end.x);
         float dy = Math.abs(start.y - end.y);
         float minOffset = gridSize * CORNER_GRID_COUNT;
         if (dx <= minOffset && dy <= minOffset) {
+            Path path = new Path();
+            path.moveTo(start.x, start.y);
             path.lineTo(end.x, end.y);
             return path;
         }
+
+        List<PointF> points = new ArrayList<>();
+        points.add(start);
 
         PointF startPoint = new PointF(start.x, start.y);
         PointF endPoint = new PointF(end.x, end.y);
@@ -42,15 +44,15 @@ public class CardLayoutHelper {
             endPoint.x -= gridSize * CORNER_GRID_COUNT;
         }
 
-        path.lineTo(startPoint.x, startPoint.y);
+        points.add(startPoint);
 
         boolean isXPositive = startPoint.x < endPoint.x;
         boolean isYPositive = startPoint.y < endPoint.y;
         int xScale = isXPositive ? 1 : -1;
         int yScale = isYPositive ? 1 : -1;
 
-        dx = Math.abs(endPoint.x - startPoint.x);
-        dy = Math.abs(endPoint.y - startPoint.y);
+        dx = Math.round(Math.abs(endPoint.x - startPoint.x) * 100) / 100f;
+        dy = Math.round(Math.abs(endPoint.y - startPoint.y) * 100) / 100f;
         boolean xLong = dx > dy;
         float halfLen = Math.abs(dx - dy) / 2;
 
@@ -83,8 +85,8 @@ public class CardLayoutHelper {
             if (!isYPositive) {
                 if (dx < gridOffset && dy > gridOffset) { //← ↑ →
                     float x = Math.min(endPoint.x, startPoint.x) - gridOffset;
-                    path.lineTo(x, startPoint.y);
-                    path.lineTo(x, endPoint.y);
+                    points.add(new PointF(x, startPoint.y));
+                    points.add(new PointF(x, endPoint.y));
                     flag = false;
                 }
             }
@@ -92,19 +94,19 @@ public class CardLayoutHelper {
             if (flag) {
                 if (xLong) {
                     if (isYPositive) {  //↓ ← ↓, ↓ → ↓
-                        path.lineTo(startPoint.x, startPoint.y + dy / 2);
-                        path.lineTo(endPoint.x, endPoint.y - dy / 2);
+                        points.add(new PointF(startPoint.x, startPoint.y + dy / 2));
+                        points.add(new PointF(endPoint.x, endPoint.y - dy / 2));
                     } else {            //← ↖ ←, → ↗ →
-                        path.lineTo(startPoint.x + halfLen * xScale, startPoint.y);
-                        path.lineTo(endPoint.x - halfLen * xScale, endPoint.y);
+                        points.add(new PointF(startPoint.x + halfLen * xScale, startPoint.y));
+                        points.add(new PointF(endPoint.x - halfLen * xScale, endPoint.y));
                     }
                 } else {
                     if (isYPositive) {  //↓ ↙ ↓, ↓ ↘ ↓
-                        path.lineTo(startPoint.x, startPoint.y + halfLen);
-                        path.lineTo(endPoint.x, endPoint.y - halfLen);
+                        points.add(new PointF(startPoint.x, startPoint.y + halfLen));
+                        points.add(new PointF(endPoint.x, endPoint.y - halfLen));
                     } else {            //← ↑ ←, → ↑ →
-                        path.lineTo(startPoint.x + dx * xScale / 2, startPoint.y);
-                        path.lineTo(endPoint.x - dx * xScale / 2, endPoint.y);
+                        points.add(new PointF(startPoint.x + dx * xScale / 2, startPoint.y));
+                        points.add(new PointF(endPoint.x - dx * xScale / 2, endPoint.y));
                     }
                 }
             }
@@ -112,8 +114,8 @@ public class CardLayoutHelper {
             if (!isXPositive) {
                 if (dy < gridOffset && dx > gridOffset) { //↓ ← ↑
                     float y = Math.max(endPoint.y, startPoint.y) + gridSize * (CORNER_GRID_COUNT + 4);
-                    path.lineTo(startPoint.x, y);
-                    path.lineTo(endPoint.x, y);
+                    points.add(new PointF(startPoint.x, y));
+                    points.add(new PointF(endPoint.x, y));
                     flag = false;
                 }
             }
@@ -121,28 +123,100 @@ public class CardLayoutHelper {
             if (flag) {
                 if (xLong) {
                     if (isXPositive) {  //→ ↗ →, → ↘ →
-                        path.lineTo(startPoint.x + halfLen, startPoint.y);
-                        path.lineTo(endPoint.x - halfLen, endPoint.y);
+                        points.add(new PointF(startPoint.x + halfLen, startPoint.y));
+                        points.add(new PointF(endPoint.x - halfLen, endPoint.y));
                     } else {            //↑ ← ↑, ↓ ← ↓
-                        path.lineTo(startPoint.x, startPoint.y + dy * yScale / 2);
-                        path.lineTo(endPoint.x, endPoint.y - dy * yScale / 2);
+                        points.add(new PointF(startPoint.x, startPoint.y + dy * yScale / 2));
+                        points.add(new PointF(endPoint.x, endPoint.y - dy * yScale / 2));
                     }
                 } else {
                     if (isXPositive) {  //→ ↑ →, → ↓ →
-                        path.lineTo(startPoint.x + dx / 2, startPoint.y);
-                        path.lineTo(endPoint.x - dx / 2, endPoint.y);
+                        points.add(new PointF(startPoint.x + dx / 2, startPoint.y));
+                        points.add(new PointF(endPoint.x - dx / 2, endPoint.y));
                     } else {            //↑ ↖ ↑, ↓ ↙ ↓
-                        path.lineTo(startPoint.x, startPoint.y + halfLen * yScale);
-                        path.lineTo(endPoint.x, endPoint.y - halfLen * yScale);
+                        points.add(new PointF(startPoint.x, startPoint.y + halfLen * yScale));
+                        points.add(new PointF(endPoint.x, endPoint.y - halfLen * yScale));
                     }
                 }
             }
         }
 
-        path.lineTo(endPoint.x, endPoint.y);
-        path.lineTo(end.x, end.y);
+        points.add(endPoint);
+        points.add(end);
+
+        points = keepCorners(points);
+        Path path = new Path();
+        for (int i = 0; i < points.size(); i++) {
+            if (i == 0) {
+                path.moveTo(points.get(i).x, points.get(i).y);
+            } else {
+                path.lineTo(points.get(i).x, points.get(i).y);
+            }
+        }
 
         return path;
+    }
+
+
+    private static final float FUSION_THRESHOLD = 5;
+
+    private static List<PointF> keepCorners(List<PointF> points) {
+        if (points.size() <= 2) return points;
+
+        // ===== 第一步：平均融合近距离点 =====
+        List<PointF> fused = new ArrayList<>();
+        float sumX = points.get(0).x;
+        float sumY = points.get(0).y;
+        int count = 1;
+
+        for (int i = 1; i < points.size(); i++) {
+            PointF current = points.get(i);
+            // 计算到当前融合组“平均点”的距离（用最新平均值）
+            float avgX = sumX / count;
+            float avgY = sumY / count;
+            float dx = current.x - avgX;
+            float dy = current.y - avgY;
+            float dist = (float) Math.sqrt(dx * dx + dy * dy);
+
+            if (dist <= FUSION_THRESHOLD) {
+                // 融入当前组
+                sumX += current.x;
+                sumY += current.y;
+                count++;
+            } else {
+                // 输出当前组的平均点
+                fused.add(new PointF(sumX / count, sumY / count));
+                // 开启新组
+                sumX = current.x;
+                sumY = current.y;
+                count = 1;
+            }
+        }
+        // 添加最后一组
+        fused.add(new PointF(sumX / count, sumY / count));
+
+        // ===== 第二步：移除共线中间点 =====
+        if (fused.size() <= 2) {
+            return new ArrayList<>(fused);
+        }
+
+        List<PointF> result = new ArrayList<>();
+        result.add(fused.get(0));
+
+        for (int i = 1; i < fused.size() - 1; i++) {
+            PointF a = fused.get(i - 1);
+            PointF b = fused.get(i);
+            PointF c = fused.get(i + 1);
+
+            // 叉积判断三点是否共线
+            float cross = (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
+            if (cross != 0) {
+                result.add(b);
+            }
+        }
+
+        result.add(fused.get(fused.size() - 1));
+        return result;
     }
 
     public static class ActionArea {
@@ -151,6 +225,8 @@ public class CardLayoutHelper {
 
         public Action action;
         public boolean execute;
+
+        public final Point pos;
 
         public RectF allArea = new RectF(); // 动作使用的所有参数+参数使用的参数+自身共同占据的区域大小
         public RectF actionArea = new RectF(); // 动作对应卡片区域
@@ -168,6 +244,7 @@ public class CardLayoutHelper {
             this.execute = execute;
             this.commonParamsArea = commonParamsArea;
 
+            pos = new Point(action.getPos());
             gridSize = cardLayoutView.getGridSize();
             float gridOffset = gridSize * OFFSET;
 
@@ -227,6 +304,7 @@ public class CardLayoutHelper {
         public ActionArea(CardLayoutView cardLayoutView, List<Action> startActions) {
             gridSize = cardLayoutView.getGridSize();
             commonParamsArea = new RectF();
+            pos = new Point();
 
             Set<Action> handledActions = new HashSet<>();
 
@@ -250,12 +328,14 @@ public class CardLayoutHelper {
             float gridOffset = gridSize * OFFSET;
 
             // 设置动作位置
-            if (action != null && !action.isLocked()) {
+            if (action != null) {
                 float actionStartX = start.x + offset;
                 float actionStartY = start.y;
                 int x = formatToGrid(actionStartX);
                 int y = formatToGrid(actionStartY);
-                action.setPos(x, y);
+                pos.x = x;
+                pos.y = y;
+                if (!action.isLocked()) action.setPos(x, y);
             }
 
             // 每个子执行需要互不干扰，所以需要每次偏移之前的执行宽度
@@ -283,7 +363,7 @@ public class CardLayoutHelper {
                 float paramOffset = commonParamsArea.width() - area.actionArea.width() - gridOffset;
                 if (!execute) paramOffset = offset - area.actionArea.width() - gridOffset;
                 area.arrange(new PointF(paramStartX, paramStartY), paramOffset);
-                paramStartY += (area.allArea.height() + gridOffset);
+                paramStartY += (area.allArea.height() + gridSize);
             }
 
             areaTotalHeight += (allArea.height() + gridOffset);
@@ -322,7 +402,8 @@ public class CardLayoutHelper {
 
         private static void offsetActionArea(ActionArea area, int grid) {
             if (grid == 0) return;
-            area.action.getPos().offset(grid, 0);
+            area.pos.offset(grid, 0);
+            if (!area.action.isLocked()) area.action.getPos().offset(grid, 0);
 
             for (ActionArea execute : area.executes) {
                 offsetActionArea(execute, grid);
@@ -355,7 +436,7 @@ public class CardLayoutHelper {
         }
 
         private static RectF calculateRealActionArea(ActionArea area) {
-            Point pos = area.action.getPos();
+            Point pos = area.pos;
             float x = pos.x * area.gridSize;
             float y = pos.y * area.gridSize;
             RectF rectF = new RectF(area.actionArea);
@@ -364,7 +445,7 @@ public class CardLayoutHelper {
         }
 
         private int formatToGridPx(float size) {
-            return (int) (Math.ceil(size / gridSize) * gridSize);
+            return (int) (Math.round(size / gridSize) * gridSize);
         }
 
         private int formatToGrid(float size) {

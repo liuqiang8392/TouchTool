@@ -27,7 +27,7 @@
         android:paddingEnd="0dp"
         app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:spanCount="2"
+        app:spanCount="4"
         tools:listitem="@layout/view_tool_item" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

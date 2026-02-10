@@ -16,16 +16,15 @@ import top.bogey.touch_tool.service.TaskRunnable;
 
 public class WaitInAppAction extends FindExecuteAction {
     private final transient Pin appsPin = new Pin(new PinApplications(), R.string.pin_app);
-    private final transient Pin exactMatchPin = new Pin(new PinBoolean(false), R.string.wait_in_app_action_exact_match);
 
     public WaitInAppAction() {
         super(ActionType.WAIT_IN_APPLICATION);
-        addPins(appsPin, exactMatchPin);
+        addPin(appsPin);
     }
 
     public WaitInAppAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(appsPin, exactMatchPin);
+        reAddPin(appsPin);
     }
 
     @Override
@@ -35,11 +34,10 @@ public class WaitInAppAction extends FindExecuteAction {
         String currentPackage = packageActivity.packageName();
         String currentActivity = packageActivity.activityName();
 
-        PinBoolean exactMatch = getPinValue(runnable, exactMatchPin);
         PinApplications apps = PinApplications.convertAppList(getPinValue(runnable, appsPin));
         PinApplication currentApp = new PinApplication();
         currentApp.setPackageName(currentPackage);
-        if (exactMatch.getValue()) currentApp.setActivityClasses(Collections.singletonList(currentActivity));
+        currentApp.setActivityClasses(Collections.singletonList(currentActivity));
         return apps.contains(currentApp);
     }
 }

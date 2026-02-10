@@ -47,6 +47,7 @@
                     app:icon="@drawable/icon_edit" />
 
                 <FrameLayout
+                    android:id="@+id/enableSwitchBox"
                     android:layout_width="?attr/iconButtonSize"
                     android:layout_height="?attr/iconButtonSize">
 
