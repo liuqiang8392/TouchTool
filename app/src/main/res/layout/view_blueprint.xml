@@ -7,11 +7,10 @@
     tools:context=".ui.blueprint.BlueprintView">
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/backBox"
         style="?attr/materialCardViewFilledStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="?attr/defaultPadding"
-        android:layout_marginTop="?attr/iconButtonSize"
         app:cardBackgroundColor="?attr/colorSurface"
         app:cardElevation="5dp"
         app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full">
@@ -39,18 +38,16 @@
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/saveBox"
         style="?attr/materialCardViewFilledStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:layout_marginTop="?attr/iconButtonSize"
-        android:layout_marginEnd="?attr/defaultPadding"
         app:cardBackgroundColor="?attr/colorSurface"
         app:cardElevation="5dp"
         app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full">
 
         <com.google.android.material.button.MaterialButtonGroup
-            android:id="@+id/buttonBox"
             android:layout_width="wrap_content"
             android:layout_height="?attr/iconButtonSize"
             android:spacing="?attr/defaultOffset">

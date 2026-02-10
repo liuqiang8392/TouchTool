@@ -145,6 +145,11 @@ public class BlueprintView extends Fragment {
 
         binding = ViewBlueprintBinding.inflate(inflater, container, false);
 
+        float offset = DisplayUtil.dp2px(requireContext(), 8);
+        float statusBarHeight = DisplayUtil.getStatusBarHeight(requireContext());
+        DisplayUtil.setViewMargin(binding.backBox, (int) offset, (int) (offset + statusBarHeight), 0, 0);
+        DisplayUtil.setViewMargin(binding.saveBox, 0, (int) (offset + statusBarHeight), (int) offset, 0);
+
         binding.backButton.setOnClickListener(v -> {
             if (taskStack.size() > 1) {
                 popStack();
@@ -159,7 +164,7 @@ public class BlueprintView extends Fragment {
         });
 
         binding.moreButton.setOnClickListener(v -> {
-            PopupMenu popupMenu = new PopupMenu(requireContext(), binding.buttonBox);
+            PopupMenu popupMenu = new PopupMenu(requireContext(), binding.saveBox);
             popupMenu.getMenuInflater().inflate(R.menu.menu_blueprint, popupMenu.getMenu());
 
             MenuItem menuItem = popupMenu.getMenu().findItem(R.id.taskDetailLog);
