@@ -41,7 +41,7 @@ public class StringEncodeAction extends CalculateAction {
             case 0 -> {
                 yield URLEncoder.encode(value, StandardCharsets.UTF_8);
             }
-            case 1 -> Base64.encodeToString(value.getBytes(), Base64.DEFAULT);
+            case 1 -> Base64.encodeToString(value.getBytes(), Base64.NO_WRAP);
             default -> value;
         };
         resultPin.getValue(PinString.class).setValue(result);
