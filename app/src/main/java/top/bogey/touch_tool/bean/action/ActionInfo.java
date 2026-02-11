@@ -123,6 +123,7 @@ import top.bogey.touch_tool.bean.action.start.ApplicationQuitStartAction;
 import top.bogey.touch_tool.bean.action.start.ApplicationStartAction;
 import top.bogey.touch_tool.bean.action.start.BatteryStartAction;
 import top.bogey.touch_tool.bean.action.start.BluetoothStartAction;
+import top.bogey.touch_tool.bean.action.start.BroadcastStartAction;
 import top.bogey.touch_tool.bean.action.start.ManualStartAction;
 import top.bogey.touch_tool.bean.action.start.NetworkStartAction;
 import top.bogey.touch_tool.bean.action.start.NotificationStartAction;
@@ -156,6 +157,7 @@ import top.bogey.touch_tool.bean.action.system.GetVolumeAction;
 import top.bogey.touch_tool.bean.action.system.PlayRingtoneAction;
 import top.bogey.touch_tool.bean.action.system.ReadFromClipboardAction;
 import top.bogey.touch_tool.bean.action.system.SendNotificationAction;
+import top.bogey.touch_tool.bean.action.system.SendBroadcastAction;
 import top.bogey.touch_tool.bean.action.system.SendToastAction;
 import top.bogey.touch_tool.bean.action.system.SetVolumeAction;
 import top.bogey.touch_tool.bean.action.system.ShareToAction;
@@ -193,6 +195,7 @@ public class ActionInfo {
     private final static ActionInfo SCREEN_START_INFO = new ActionInfo(ActionType.SCREEN_START, ScreenStartAction.class, R.drawable.icon_mobile, R.string.screen_start_action, R.string.screen_start_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo BLUETOOTH_START_INFO = new ActionInfo(ActionType.BLUETOOTH_START, BluetoothStartAction.class, R.drawable.icon_bluetooth, R.string.bluetooth_start_action, R.string.bluetooth_start_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo RECEIVED_SHARE_START_INFO = new ActionInfo(ActionType.RECEIVED_SHARE_START, ReceivedShareStartAction.class, R.drawable.icon_share, R.string.received_share_start_action, R.string.received_share_start_action_desc, 0, DynamicParamsActionCard.class);
+    private final static ActionInfo BROADCAST_START_INFO = new ActionInfo(ActionType.BROADCAST_START, BroadcastStartAction.class, R.drawable.icon_share, R.string.broadcast_start_action, R.string.broadcast_start_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo OUT_CALL_START_INFO = new ActionInfo(ActionType.OUT_CALL_START, OutCallStartAction.class, R.drawable.icon_autoplay, R.string.out_call_start_action, R.string.out_call_start_action_desc, 0, DynamicParamsActionCard.class);
 
     // 自定义动作
@@ -246,6 +249,7 @@ public class ActionInfo {
     private final static ActionInfo TEXT_TO_SPEECH_INFO = new ActionInfo(ActionType.TEXT_TO_SPEECH, TextToSpeechAction.class, R.drawable.icon_text_to_speech, R.string.text_to_speak_action, R.string.text_to_speak_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo VIBRATE_INFO = new ActionInfo(ActionType.VIBRATE, VibrateAction.class, R.drawable.icon_mobile_vibrate, R.string.vibrate_action, R.string.vibrate_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo SEND_NOTIFICATION_INFO = new ActionInfo(ActionType.SEND_NOTIFICATION, SendNotificationAction.class, R.drawable.icon_notifications, R.string.send_notification_action, R.string.send_notification_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo SEND_BROADCAST_INFO = new ActionInfo(ActionType.SEND_BROADCAST, SendBroadcastAction.class, R.drawable.icon_share, R.string.send_broadcast_action, R.string.send_broadcast_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo SEND_TOAST_INFO = new ActionInfo(ActionType.SEND_TOAST, SendToastAction.class, R.drawable.icon_toast, R.string.send_toast_action, R.string.send_toast_action_desc, 0, NormalActionCard.class);
 
     private final static ActionInfo WRITE_TO_CLIPBOARD_INFO = new ActionInfo(ActionType.WRITE_TO_CLIPBOARD, WriteToClipboardAction.class, R.drawable.icon_content_copy, R.string.write_to_clipboard_action, R.string.write_to_clipboard_action_desc, 0, NormalActionCard.class);
@@ -410,6 +414,7 @@ public class ActionInfo {
             case SCREEN_START -> SCREEN_START_INFO;
             case BLUETOOTH_START -> BLUETOOTH_START_INFO;
             case RECEIVED_SHARE_START -> RECEIVED_SHARE_START_INFO;
+            case BROADCAST_START -> BROADCAST_START_INFO;
             case OUT_CALL_START -> OUT_CALL_START_INFO;
 
             case CUSTOM_START -> CUSTOM_START_INFO;
@@ -458,6 +463,7 @@ public class ActionInfo {
             case TEXT_TO_SPEECH -> TEXT_TO_SPEECH_INFO;
             case VIBRATE -> VIBRATE_INFO;
             case SEND_NOTIFICATION -> SEND_NOTIFICATION_INFO;
+            case SEND_BROADCAST -> SEND_BROADCAST_INFO;
             case SEND_TOAST -> SEND_TOAST_INFO;
 
             case WRITE_TO_CLIPBOARD -> WRITE_TO_CLIPBOARD_INFO;

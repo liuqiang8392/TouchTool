@@ -23,6 +23,7 @@ public class ActionMap {
                     ActionType.SCREEN_START,
                     ActionType.BLUETOOTH_START,
                     ActionType.RECEIVED_SHARE_START,
+                    ActionType.BROADCAST_START,
                     ActionType.OUT_CALL_START,
                     ActionType.CUSTOM_START,
                     ActionType.CUSTOM_END
@@ -81,6 +82,7 @@ public class ActionMap {
                     ActionType.TEXT_TO_SPEECH,
                     ActionType.VIBRATE,
                     ActionType.SEND_NOTIFICATION,
+                    ActionType.SEND_BROADCAST,
                     ActionType.SEND_TOAST,
 
                     ActionType.WRITE_TO_CLIPBOARD,

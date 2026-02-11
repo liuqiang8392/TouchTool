@@ -63,6 +63,13 @@
     <string name="received_share_start_action">收到分享时执行</string>
     <string name="received_share_start_action_desc">接受分享行为，分享的内容将自动转换为对应参数</string>
 
+    <string name="broadcast_start_action">收到广播时执行</string>
+    <string name="broadcast_start_action_desc">收到指定广播时自动执行</string>
+    <string name="broadcast_start_action_name">广播名</string>
+    <string name="broadcast_start_action_received_name">收到广播</string>
+    <string name="broadcast_start_action_data">Data</string>
+    <string name="broadcast_start_action_extra">Extra</string>
+
     <string name="out_call_start_action">外部调用</string>
     <string name="out_call_start_action_desc">外部调用任务，能自动将传入的参数转换到任务内同名变量中去</string>
     <string name="out_call_start_action_url">链接</string>
@@ -259,6 +266,13 @@
     <string name="send_notification_action_icon">图标</string>
     <string name="send_notification_action_auto_cancel">自动取消</string>
     <string name="send_notification_action_execute">点按执行</string>
+
+    <string name="send_broadcast_action">发送广播</string>
+    <string name="send_broadcast_action_desc">发送自定义广播</string>
+    <string name="send_broadcast_action_name">广播名</string>
+    <string name="send_broadcast_action_package">目标应用包名</string>
+    <string name="send_broadcast_action_data">Data</string>
+    <string name="send_broadcast_action_extra">Extra</string>
 
     <string name="send_toast_action">弹出提示</string>
     <string name="send_toast_action_desc">弹出自定义提示文本</string>
