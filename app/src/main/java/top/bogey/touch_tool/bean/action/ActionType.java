@@ -12,6 +12,7 @@ public enum ActionType {
     SCREEN_START,
     BLUETOOTH_START,
     RECEIVED_SHARE_START,
+    BROADCAST_START,
     OUT_CALL_START,
     INNER_START,
 
@@ -67,6 +68,7 @@ public enum ActionType {
     VIBRATE,
 
     SEND_NOTIFICATION,
+    SEND_BROADCAST,
     SEND_TOAST,
 
     WRITE_TO_CLIPBOARD,

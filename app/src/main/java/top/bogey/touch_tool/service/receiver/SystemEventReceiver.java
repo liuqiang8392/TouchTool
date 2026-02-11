@@ -16,14 +16,34 @@ import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import top.bogey.touch_tool.bean.action.Action;
+import top.bogey.touch_tool.bean.action.start.BroadcastStartAction;
+import top.bogey.touch_tool.bean.save.task.TaskSaver;
+import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.TaskInfoSummary;
 import top.bogey.touch_tool.ui.InstantActivity;
 
 public class SystemEventReceiver extends BroadcastReceiver {
     private final Context context;
     private ConnectivityManager.NetworkCallback networkCallback;
+
+    private final BroadcastReceiver broadcastStartReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action == null) return;
+            String data = null;
+            if (intent.getData() != null) {
+                data = intent.getData().toString();
+            }
+            TaskInfoSummary.getInstance().setBroadcastInfo(action, data, parseExtras(intent));
+        }
+    };
+    private boolean broadcastRegistered = false;
 
     public SystemEventReceiver(Context context) {
         this.context = context;
@@ -80,11 +100,50 @@ public class SystemEventReceiver extends BroadcastReceiver {
     public void register() {
         ContextCompat.registerReceiver(context, this, getFilter(), ContextCompat.RECEIVER_EXPORTED);
         registerNetworkReceiver();
+        refreshBroadcastStartReceiver();
     }
 
     public void unregister() {
         context.unregisterReceiver(this);
         unregisterNetworkReceiver();
+        unregisterBroadcastStartReceiver();
+    }
+
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
+    public void refreshBroadcastStartReceiver() {
+        unregisterBroadcastStartReceiver();
+
+        IntentFilter filter = new IntentFilter();
+        for (Task task : TaskSaver.getInstance().getTasks(BroadcastStartAction.class)) {
+            for (Action action : task.getActions(BroadcastStartAction.class)) {
+                BroadcastStartAction startAction = (BroadcastStartAction) action;
+                if (!startAction.isEnable()) continue;
+                String actionName = startAction.getAction();
+                if (actionName == null || actionName.isEmpty()) continue;
+                if (BroadcastStartAction.isSystemAction(actionName)) continue;
+                filter.addAction(actionName);
+            }
+        }
+
+        if (filter.countActions() == 0) return;
+        ContextCompat.registerReceiver(context, broadcastStartReceiver, filter, ContextCompat.RECEIVER_EXPORTED);
+        broadcastRegistered = true;
+    }
+
+    private void unregisterBroadcastStartReceiver() {
+        if (!broadcastRegistered) return;
+        context.unregisterReceiver(broadcastStartReceiver);
+        broadcastRegistered = false;
+    }
+
+    private Map<String, String> parseExtras(Intent intent) {
+        Map<String, String> map = new HashMap<>();
+        if (intent.getExtras() == null) return map;
+        for (String key : intent.getExtras().keySet()) {
+            Object value = intent.getExtras().get(key);
+            map.put(key, value == null ? "" : String.valueOf(value));
+        }
+        return map;
     }
 
     private void registerNetworkReceiver() {

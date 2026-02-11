@@ -416,6 +416,7 @@ public class MainAccessibilityService extends AccessibilityService {
 
     public void replaceAlarm(Task task) {
         if (task == null) return;
+        refreshStartReceiver();
         Task originTask = TaskSaver.getInstance().getOriginTask(task.getId());
         List<Action> actions = task.getActions(TimeStartAction.class);
 
@@ -445,6 +446,11 @@ public class MainAccessibilityService extends AccessibilityService {
                 cancelAlarm(task, timeStartAction);
             }
         });
+    }
+
+    private void refreshStartReceiver() {
+        if (systemEventReceiver == null) return;
+        systemEventReceiver.refreshBroadcastStartReceiver();
     }
 
     // 定时 ----------------------------------------------------------------------------- end

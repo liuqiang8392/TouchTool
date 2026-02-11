@@ -28,6 +28,7 @@ import top.bogey.touch_tool.bean.action.start.ApplicationQuitStartAction;
 import top.bogey.touch_tool.bean.action.start.ApplicationStartAction;
 import top.bogey.touch_tool.bean.action.start.BatteryStartAction;
 import top.bogey.touch_tool.bean.action.start.BluetoothStartAction;
+import top.bogey.touch_tool.bean.action.start.BroadcastStartAction;
 import top.bogey.touch_tool.bean.action.start.ManualStartAction;
 import top.bogey.touch_tool.bean.action.start.NetworkStartAction;
 import top.bogey.touch_tool.bean.action.start.NotificationStartAction;
@@ -77,6 +78,7 @@ public class TaskInfoSummary {
     private Notification notification;
     private BatteryInfo batteryInfo;
     private BluetoothInfo bluetoothInfo;
+    private BroadcastInfo broadcastInfo;
     private String lastClipboard;
     private List<NotworkState> networkState;
 
@@ -472,6 +474,15 @@ public class TaskInfoSummary {
         tryStartActions(BluetoothStartAction.class);
     }
 
+    public BroadcastInfo getBroadcastInfo() {
+        return broadcastInfo;
+    }
+
+    public void setBroadcastInfo(String action, String data, Map<String, String> extras) {
+        broadcastInfo = new BroadcastInfo(action, data, extras);
+        tryStartActions(BroadcastStartAction.class);
+    }
+
     public PhoneState getPhoneState() {
         return AppUtil.getPhoneState(MainApplication.getInstance());
     }
@@ -525,6 +536,9 @@ public class TaskInfoSummary {
     }
 
     public record BluetoothInfo(String bluetoothAddress, String bluetoothName, boolean active) {
+    }
+
+    public record BroadcastInfo(String action, String data, Map<String, String> extras) {
     }
 
     public record ManualExecuteInfo(Task task, ManualStartAction action) {
