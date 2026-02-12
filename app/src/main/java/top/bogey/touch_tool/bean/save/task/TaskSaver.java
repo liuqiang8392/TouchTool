@@ -180,6 +180,7 @@ public class TaskSaver {
         MainAccessibilityService service = MainApplication.getInstance().getService();
         if (service != null) {
             service.replaceAlarm(task);
+            service.replaceBroadcast(task);
         }
     }
 
@@ -194,6 +195,7 @@ public class TaskSaver {
         MainAccessibilityService service = MainApplication.getInstance().getService();
         if (service != null) {
             service.replaceAlarm(task);
+            service.replaceBroadcast(task);
         }
 
         LogSave logSave = LogSaver.getInstance().getLogSave(id);

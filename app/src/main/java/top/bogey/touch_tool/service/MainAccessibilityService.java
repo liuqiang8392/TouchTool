@@ -6,9 +6,11 @@ import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.Path;
@@ -32,6 +34,7 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.MutableLiveData;
 
 import java.lang.ref.WeakReference;
@@ -54,6 +57,7 @@ import top.bogey.ocr.IOcrCallback;
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
+import top.bogey.touch_tool.bean.action.start.BroadcastStartAction;
 import top.bogey.touch_tool.bean.action.start.StartAction;
 import top.bogey.touch_tool.bean.action.start.TimeStartAction;
 import top.bogey.touch_tool.bean.other.log.LogInfo;
@@ -65,13 +69,16 @@ import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.capture.CaptureService;
 import top.bogey.touch_tool.service.receiver.SystemEventReceiver;
 import top.bogey.touch_tool.service.super_user.SuperUser;
+import top.bogey.touch_tool.ui.FloatViewActivity;
 import top.bogey.touch_tool.ui.InstantActivity;
 import top.bogey.touch_tool.ui.MainActivity;
 import top.bogey.touch_tool.ui.PermissionActivity;
+import top.bogey.touch_tool.ui.custom.KeepAliveFloatView;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.ThreadUtil;
 import top.bogey.touch_tool.utils.callback.BooleanResultCallback;
 import top.bogey.touch_tool.utils.callback.ResultCallback;
+import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 import top.bogey.yolo.IYolo;
 import top.bogey.yolo.IYoloCallback;
 
@@ -177,6 +184,7 @@ public class MainAccessibilityService extends AccessibilityService {
         connected.setValue(false);
         setEnabled(false);
         MainApplication.getInstance().setService(null);
+        FloatWindow.reset();
     }
 
     public boolean isConnected() {
@@ -196,12 +204,13 @@ public class MainAccessibilityService extends AccessibilityService {
             systemEventReceiver.register();
 
             resetAllAlarm();
+            resetAllBroadcast();
             SuperUser.getInstance().tryInit();
 
             MainActivity activity = MainApplication.getInstance().getActivity();
             if (activity == null) {
-                Intent intent = new Intent(this, MainActivity.class);
-                intent.setAction(MainActivity.INTENT_KEY_AUTO_START);
+                Intent intent = new Intent(this, FloatViewActivity.class);
+                intent.setAction(FloatViewActivity.INTENT_KEY_AUTO_START);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
@@ -218,7 +227,9 @@ public class MainAccessibilityService extends AccessibilityService {
             stopYoloService();
             stopSound(null);
             cancelAllAlarm();
+            cancelAllBroadcast();
             SuperUser.getInstance().exit();
+            FloatWindow.dismiss(KeepAliveFloatView.class.getName());
         }
     }
 
@@ -284,7 +295,6 @@ public class MainAccessibilityService extends AccessibilityService {
     }
 
     public TaskRunnable getTaskRunnable(String taskId, String actionId) {
-        Log.d("TAG", "getTaskRunnable: " + taskId + " " + actionId);
         for (TaskRunnable runnable : tasks) {
             if (runnable.isInterrupt()) continue;
 
@@ -404,7 +414,6 @@ public class MainAccessibilityService extends AccessibilityService {
             if (manager.canScheduleExactAlarms()) {
                 AlarmManager.AlarmClockInfo clockInfo = new AlarmManager.AlarmClockInfo(nextStartTime, null);
                 manager.setAlarmClock(clockInfo, pendingIntent);
-//                manager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, nextStartTime, pendingIntent);
             } else {
                 manager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, nextStartTime, pendingIntent);
             }
@@ -416,7 +425,6 @@ public class MainAccessibilityService extends AccessibilityService {
 
     public void replaceAlarm(Task task) {
         if (task == null) return;
-        refreshStartReceiver();
         Task originTask = TaskSaver.getInstance().getOriginTask(task.getId());
         List<Action> actions = task.getActions(TimeStartAction.class);
 
@@ -448,12 +456,101 @@ public class MainAccessibilityService extends AccessibilityService {
         });
     }
 
-    private void refreshStartReceiver() {
-        if (systemEventReceiver == null) return;
-        systemEventReceiver.refreshBroadcastStartReceiver();
+    // 定时 ----------------------------------------------------------------------------- end
+
+    // 广播 ----------------------------------------------------------------------------- start
+
+    private final Map<String, BroadcastReceiver> broadcastReceivers = new HashMap<>();
+
+    private void resetAllBroadcast() {
+        cancelAllBroadcast();
+        for (Task task : TaskSaver.getInstance().getTasks(BroadcastStartAction.class)) {
+            replaceBroadcast(task);
+        }
     }
 
-    // 定时 ----------------------------------------------------------------------------- end
+    private void cancelAllBroadcast() {
+        for (BroadcastReceiver receiver : broadcastReceivers.values()) {
+            unregisterReceiver(receiver);
+        }
+        broadcastReceivers.clear();
+    }
+
+    public void cancelBroadcast(Task task, BroadcastStartAction broadcastStartAction) {
+        if (task == null || broadcastStartAction == null) return;
+        String key = task.getId() + broadcastStartAction.getId();
+        BroadcastReceiver receiver = broadcastReceivers.get(key);
+        if (receiver == null) return;
+        unregisterReceiver(receiver);
+        broadcastReceivers.remove(key);
+    }
+
+    public void addBroadcast(Task task, BroadcastStartAction broadcastStartAction) {
+        if (task == null || broadcastStartAction == null) return;
+        if (!broadcastStartAction.isEnable()) return;
+        if (broadcastStartAction.getAction() == null || broadcastStartAction.getAction().isEmpty()) return;
+        if (!isEnabled()) return;
+
+        String key = task.getId() + broadcastStartAction.getId();
+        BroadcastReceiver receiver = broadcastReceivers.get(key);
+        if (receiver != null) return;
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getAction();
+                if (action == null) return;
+                Uri uri = intent.getData();
+                String data = "";
+                if (uri != null) data = uri.toString();
+                Map<String, String> extras = new HashMap<>();
+                Bundle bundle = intent.getExtras();
+                if (bundle != null) {
+                    for (String name : bundle.keySet()) {
+                        extras.put(name, String.valueOf(bundle.get(name)));
+                    }
+                }
+                TaskInfoSummary.getInstance().setBroadcastInfo(action, data, extras);
+            }
+        };
+        broadcastReceivers.put(key, receiver);
+        IntentFilter filter = new IntentFilter(broadcastStartAction.getAction());
+        ContextCompat.registerReceiver(this, receiver, filter, ContextCompat.RECEIVER_EXPORTED);
+    }
+
+    public void replaceBroadcast(Task task) {
+        if (task == null) return;
+        Task originTask = TaskSaver.getInstance().getOriginTask(task.getId());
+        List<Action> actions = task.getActions(BroadcastStartAction.class);
+
+        if (originTask != null) {
+            originTask.getActions(BroadcastStartAction.class).forEach(startAction -> {
+                BroadcastStartAction broadcastStartAction = (BroadcastStartAction) startAction;
+                if (!broadcastStartAction.isEnable()) return;
+
+                boolean isExist = false;
+                for (Action action : actions) {
+                    if (action.getId().equals(broadcastStartAction.getId())) {
+                        isExist = true;
+                        break;
+                    }
+                }
+                if (!isExist) {
+                    cancelBroadcast(task, broadcastStartAction);
+                }
+            });
+        }
+
+        actions.forEach(startAction -> {
+            BroadcastStartAction broadcastStartAction = (BroadcastStartAction) startAction;
+            if (broadcastStartAction.isEnable()) {
+                addBroadcast(task, broadcastStartAction);
+            } else {
+                cancelBroadcast(task, broadcastStartAction);
+            }
+        });
+    }
+
+    // 广播 ----------------------------------------------------------------------------- end
 
     // 录屏 ----------------------------------------------------------------------------- start
     private BooleanResultCallback captureCallback;

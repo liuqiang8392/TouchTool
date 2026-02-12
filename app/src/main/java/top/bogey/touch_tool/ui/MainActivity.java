@@ -53,7 +53,6 @@ public class MainActivity extends FloatViewActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        TaskInfoSummary.getInstance().resetApps();
 
         NavController controller = Navigation.findNavController(this, R.id.conView);
         NavigationUI.setupWithNavController(binding.menuView, controller);

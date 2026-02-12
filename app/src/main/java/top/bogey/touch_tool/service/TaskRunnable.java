@@ -27,7 +27,7 @@ public class TaskRunnable implements Runnable {
 
     private final Task task;
     private final StartAction startAction;
-    private final boolean debug;
+    private boolean debug;
 
 
     private int progress = 0;
@@ -256,6 +256,10 @@ public class TaskRunnable implements Runnable {
 
     public boolean isDebug() {
         return debug;
+    }
+
+    public void setDebug(boolean debug) {
+        this.debug = debug;
     }
 
     public void setFuture(Future<?> future) {

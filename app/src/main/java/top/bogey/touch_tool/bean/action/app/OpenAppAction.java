@@ -28,28 +28,8 @@ import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.utils.AppUtil;
 
 public class OpenAppAction extends ExecuteAction {
-    private final static List<Integer> FLAGS = Arrays.asList(
-            Intent.FLAG_ACTIVITY_NEW_TASK,
-            Intent.FLAG_ACTIVITY_NO_HISTORY,
-            Intent.FLAG_ACTIVITY_SINGLE_TOP,
-            Intent.FLAG_ACTIVITY_MULTIPLE_TASK,
-            Intent.FLAG_ACTIVITY_CLEAR_TOP,
-            Intent.FLAG_ACTIVITY_FORWARD_RESULT,
-            Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP,
-            Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS,
-            Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT,
-            Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED,
-            Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY,
-            Intent.FLAG_ACTIVITY_NEW_DOCUMENT,
-            Intent.FLAG_ACTIVITY_NO_USER_ACTION,
-            Intent.FLAG_ACTIVITY_REORDER_TO_FRONT,
-            Intent.FLAG_ACTIVITY_NO_ANIMATION,
-            Intent.FLAG_ACTIVITY_CLEAR_TASK,
-            Intent.FLAG_ACTIVITY_TASK_ON_HOME,
-            Intent.FLAG_ACTIVITY_RETAIN_IN_RECENTS,
-            Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT
-    );
-    private static final List<String> CATEGORIES = Arrays.asList(
+
+    public static final List<String> CATEGORIES = Arrays.asList(
             Intent.CATEGORY_DEFAULT,
             Intent.CATEGORY_BROWSABLE,
             Intent.CATEGORY_VOICE,
@@ -86,6 +66,28 @@ public class OpenAppAction extends ExecuteAction {
             Intent.CATEGORY_APP_MAPS,
             Intent.CATEGORY_APP_MESSAGING,
             Intent.CATEGORY_APP_MUSIC
+    );
+
+    private final static List<Integer> FLAGS = Arrays.asList(
+            Intent.FLAG_ACTIVITY_NEW_TASK,
+            Intent.FLAG_ACTIVITY_NO_HISTORY,
+            Intent.FLAG_ACTIVITY_SINGLE_TOP,
+            Intent.FLAG_ACTIVITY_MULTIPLE_TASK,
+            Intent.FLAG_ACTIVITY_CLEAR_TOP,
+            Intent.FLAG_ACTIVITY_FORWARD_RESULT,
+            Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP,
+            Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS,
+            Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT,
+            Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED,
+            Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY,
+            Intent.FLAG_ACTIVITY_NEW_DOCUMENT,
+            Intent.FLAG_ACTIVITY_NO_USER_ACTION,
+            Intent.FLAG_ACTIVITY_REORDER_TO_FRONT,
+            Intent.FLAG_ACTIVITY_NO_ANIMATION,
+            Intent.FLAG_ACTIVITY_CLEAR_TASK,
+            Intent.FLAG_ACTIVITY_TASK_ON_HOME,
+            Intent.FLAG_ACTIVITY_RETAIN_IN_RECENTS,
+            Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT
     );
 
     private final transient Pin appPin = new Pin(new PinApplication(PinSubType.SINGLE_APP_WITH_ACTIVITY), R.string.pin_app);
@@ -199,7 +201,7 @@ public class OpenAppAction extends ExecuteAction {
         }
     }
 
-    private void putBundle(Bundle bundle, String key, String value) {
+    public static void putBundle(Bundle bundle, String key, String value) {
         if (value == null || value.isEmpty()) return;
         try {
             int i = Integer.parseInt(value);

@@ -449,7 +449,7 @@ public class CardLayoutHelper {
         }
 
         private int formatToGrid(float size) {
-            return (int) (size / gridSize);
+            return Math.round(size / gridSize);
         }
     }
 }

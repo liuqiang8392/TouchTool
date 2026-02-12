@@ -24,6 +24,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
 import top.bogey.touch_tool.bean.pin.special_pin.AlwaysShowPin;
 import top.bogey.touch_tool.bean.save.log.LogSaver;
+import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskListener;
 import top.bogey.touch_tool.service.TaskRunnable;
@@ -69,8 +70,12 @@ public class ParallelExecuteAction extends ExecuteAction implements DynamicPinsA
         CountDownLatch latch = new CountDownLatch(validPins.size());
         int countValue = count.intValue();
         List<TaskRunnable> runnableList = new ArrayList<>();
+
+        Task currTask = runnable.getTask();
+        if (runnable.isDebug()) currTask.addFlag(Task.FLAG_DEBUG);
+
         for (Pin dynamicPin : validPins) {
-            TaskRunnable taskRunnable = service.runTask(runnable.getTask(), new InnerStartAction(dynamicPin), new TaskListener() {
+            TaskRunnable taskRunnable = service.runTask(currTask, new InnerStartAction(dynamicPin), new TaskListener() {
                 @Override
                 public void onExecute(TaskRunnable run, Action action, int progress) {
                     if (runnable.isCurrentInterrupt()) run.stop();
@@ -78,10 +83,10 @@ public class ParallelExecuteAction extends ExecuteAction implements DynamicPinsA
 
                 @Override
                 public void onFinish(TaskRunnable run) {
-                    if (run.isDebug()) {
+                    if (runnable.isDebug()) {
                         List<LogInfo> logList = run.getCacheLogList();
                         List<String> logs = saveLogs(runnable, logList);
-                        LogInfo logInfo = new LogInfo(new ActionLog(runnable.getProgress() + 1, runnable.getTask(), ParallelExecuteAction.this, true));
+                        LogInfo logInfo = new LogInfo(new ActionLog(runnable.getProgress() + 1, currTask, ParallelExecuteAction.this, true));
                         logInfo.setChildren(logs);
                         runnable.addLog(logInfo, 0);
                     }

@@ -99,6 +99,13 @@
         </activity>
 
         <activity
+            android:name=".ui.FloatViewActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:taskAffinity="ui.FloatViewActivity" />
+
+        <activity
             android:name=".ui.PermissionActivity"
             android:excludeFromRecents="true"
             android:exported="false"

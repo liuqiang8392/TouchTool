@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.XmlResourceParser;
 import android.net.Uri;
+import android.util.Log;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -110,6 +111,8 @@ public class TaskInfoSummary {
             launcherApps.add(resolveInfo.activityInfo.packageName);
         }
         launcherApps.sort(String::compareTo);
+
+        Log.d("TAG", "resetApps: " + apps.size());
     }
 
     public PackageInfo getAppInfo(String packageName) {

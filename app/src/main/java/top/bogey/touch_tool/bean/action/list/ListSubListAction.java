@@ -39,20 +39,25 @@ public class ListSubListAction extends ListCalculateAction {
         PinNumber<?> startIndex = getPinValue(runnable, startIndexPin);
         PinNumber<?> endIndex = getPinValue(runnable, endIndexPin);
 
+        int size = list.size();
         int start = startIndex.intValue();
         int end = endIndex.intValue();
 
-        if (start < 0) {
-            start += list.size() + 1;
-        }
-        if (end < 0) {
-            end += list.size() + 1;
+        if (start < 0) start = start + size + 1;
+        if (end < 0) end = end + size + 1;
+        start = Math.max(1, Math.min(start, size));
+        end = Math.max(1, Math.min(end, size));
+
+        if (start > end) {
+            int temp = start;
+            start = end;
+            end = temp;
         }
 
-        int fromIndex = Math.max(0, Math.min(start - 1, list.size()));
-        int toIndex = Math.max(fromIndex, Math.min(end, list.size()));
-
+        int fromIndex = start - 1;
+        int toIndex = end;
         List<PinObject> subList = list.subList(fromIndex, toIndex);
+
         PinList result = new PinList();
         for (PinObject obj : subList) {
             result.add((PinObject) obj.copy());

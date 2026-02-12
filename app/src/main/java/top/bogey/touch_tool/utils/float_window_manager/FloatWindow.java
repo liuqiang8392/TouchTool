@@ -109,6 +109,11 @@ public class FloatWindow {
         return result;
     }
 
+    public static void reset() {
+        tags.clear();
+        views.clear();
+    }
+
     public static Point getLocation(String tag) {
         tag = checkTag(tag);
         FloatWindowHelper helper = getHelper(tag);

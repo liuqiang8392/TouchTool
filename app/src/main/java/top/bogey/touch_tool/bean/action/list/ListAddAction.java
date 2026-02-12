@@ -48,7 +48,7 @@ public class ListAddAction extends ListExecuteAction {
         if (indexValue >= 1 && indexValue <= size + 1) {
             list.add(indexValue - 1, element);
             added = true;
-        } else if (indexValue < 0 && indexValue >= -size) {
+        } else if (indexValue <= -1 && indexValue >= -(size + 1)) {
             list.add(size + indexValue + 1, element);
             added = true;
         }
