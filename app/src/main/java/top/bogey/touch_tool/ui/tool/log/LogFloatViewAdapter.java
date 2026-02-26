@@ -2,6 +2,7 @@ package top.bogey.touch_tool.ui.tool.log;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,8 @@ import top.bogey.touch_tool.databinding.FloatLogActionItemBinding;
 import top.bogey.touch_tool.databinding.FloatLogActionValueItemBinding;
 import top.bogey.touch_tool.databinding.FloatLogDateTimeItemBinding;
 import top.bogey.touch_tool.databinding.FloatLogNormalItemBinding;
+import top.bogey.touch_tool.ui.InstantActivity;
+import top.bogey.touch_tool.ui.MainActivity;
 import top.bogey.touch_tool.ui.blueprint.BlueprintView;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.DisplayUtil;
@@ -221,7 +224,13 @@ public class LogFloatViewAdapter extends TreeAdapter {
                         if (currTask != null) {
                             Action action = currTask.getAction(actionLog.getActionId());
                             if (action != null) {
-                                BlueprintView.tryFocusAction(currTask, action);
+                                if (!BlueprintView.tryFocusAction(currTask, action)) {
+                                    Intent intent = new Intent(context, MainActivity.class);
+                                    intent.setAction(MainActivity.INTENT_KEY_OPEN_TASK);
+                                    intent.putExtra(InstantActivity.TASK_ID, task.getId());
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    context.startActivity(intent);
+                                }
                             }
                         }
                     }
@@ -242,6 +251,18 @@ public class LogFloatViewAdapter extends TreeAdapter {
             super(LogFloatViewAdapter.this, binding.getRoot());
             context = binding.getRoot().getContext();
             this.dateTimeBinding = binding;
+        }
+
+        @Override
+        public void onClicked(View view) {
+            super.onClicked(view);
+            if (searchIndex != -1) {
+                int index = searchIndex;
+                searchIndex = -1;
+                notifyItemChanged(index);
+            }
+            searchIndex = -1;
+            notifyItemChanged(getBindingAdapterPosition());
         }
 
         @SuppressLint("SetTextI18n")
