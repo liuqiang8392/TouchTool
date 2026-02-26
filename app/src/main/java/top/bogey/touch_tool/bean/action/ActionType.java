@@ -169,6 +169,7 @@ public enum ActionType {
     // 区域
     AREA_TO_INT,
     AREA_FROM_INT,
+    AREA_OFFSET,
     CHECK_AREA_CONTAIN_POS,
     CHECK_AREA_RELATION,
     GET_AREA_INTERSECTION,

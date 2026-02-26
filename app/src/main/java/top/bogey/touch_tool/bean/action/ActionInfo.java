@@ -16,6 +16,7 @@ import top.bogey.touch_tool.bean.action.app.OpenUriSchemeAction;
 import top.bogey.touch_tool.bean.action.app.StringToAppAction;
 import top.bogey.touch_tool.bean.action.app.WaitInAppAction;
 import top.bogey.touch_tool.bean.action.area.AreaFromIntegerAction;
+import top.bogey.touch_tool.bean.action.area.AreaOffsetAction;
 import top.bogey.touch_tool.bean.action.area.AreaToIntegerAction;
 import top.bogey.touch_tool.bean.action.area.CheckAreaContainPosAction;
 import top.bogey.touch_tool.bean.action.area.CheckAreaRelationAction;
@@ -353,6 +354,7 @@ public class ActionInfo {
     // 区域操作
     private final static ActionInfo AREA_TO_INT_INFO = new ActionInfo(ActionType.AREA_TO_INT, AreaToIntegerAction.class, R.drawable.icon_123, R.string.area_to_integer_action, R.string.area_to_integer_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo AREA_FROM_INT_INFO = new ActionInfo(ActionType.AREA_FROM_INT, AreaFromIntegerAction.class, R.drawable.icon_area, R.string.area_from_integer_action, R.string.area_from_integer_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo AREA_OFFSET_INFO = new ActionInfo(ActionType.AREA_OFFSET, AreaOffsetAction.class, R.drawable.icon_my_location, R.string.area_offset_action, R.string.area_offset_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo CHECK_AREA_CONTAIN_POS_INFO = new ActionInfo(ActionType.CHECK_AREA_CONTAIN_POS, CheckAreaContainPosAction.class, R.drawable.icon_my_location, R.string.check_area_contain_pos_action, R.string.check_area_contain_pos_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo CHECK_AREA_RELATION_INFO = new ActionInfo(ActionType.CHECK_AREA_RELATION, CheckAreaRelationAction.class, R.drawable.icon_crop, R.string.check_area_relation_action, R.string.check_area_relation_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo GET_AREA_INTERSECTION_INFO = new ActionInfo(ActionType.GET_AREA_INTERSECTION, GetAreaIntersectionAction.class, R.drawable.icon_join_inner, R.string.get_area_intersection_action, R.string.get_area_intersection_action_desc, 0, NormalActionCard.class);
@@ -566,6 +568,7 @@ public class ActionInfo {
 
             case AREA_TO_INT -> AREA_TO_INT_INFO;
             case AREA_FROM_INT -> AREA_FROM_INT_INFO;
+            case AREA_OFFSET -> AREA_OFFSET_INFO;
             case CHECK_AREA_CONTAIN_POS -> CHECK_AREA_CONTAIN_POS_INFO;
             case CHECK_AREA_RELATION -> CHECK_AREA_RELATION_INFO;
             case GET_AREA_INTERSECTION -> GET_AREA_INTERSECTION_INFO;

@@ -186,6 +186,7 @@ public class ActionMap {
             case AREA -> list.addAll(Arrays.asList(
                     ActionType.AREA_TO_INT,
                     ActionType.AREA_FROM_INT,
+                    ActionType.AREA_OFFSET,
                     ActionType.CHECK_AREA_CONTAIN_POS,
                     ActionType.CHECK_AREA_RELATION,
                     ActionType.GET_AREA_INTERSECTION,

@@ -460,6 +460,10 @@
     <string name="area_from_integer_action">数值转区域</string>
     <string name="area_from_integer_action_desc">将数值转换为区域</string>
 
+    <string name="area_offset_action">区域偏移</string>
+    <string name="area_offset_action_desc">将区域进行偏移</string>
+    <string name="area_offset_action_offset">偏移</string>
+
     <string name="check_area_contain_pos_action">位置是否在区域里</string>
     <string name="check_area_contain_pos_action_desc">判断一个位置是否在指定区域内</string>
 
