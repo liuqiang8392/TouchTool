@@ -9,7 +9,7 @@ import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.parent.ExecuteAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinArea;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinArea;
 import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.ui.blueprint.picker.AreaPicker;
 

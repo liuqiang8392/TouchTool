@@ -13,7 +13,7 @@ import top.bogey.touch_tool.bean.other.log.NormalLog;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinPoint;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinPoint;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleSelect;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
 import top.bogey.touch_tool.service.TaskRunnable;
@@ -26,11 +26,13 @@ public class LoggerAction extends ExecuteAction {
     private final transient Pin showPin = new Pin(new PinBoolean(true), R.string.log_action_show, false, false, true);
     private final transient Pin anchorPin = new Pin(new PinSingleSelect(R.array.anchor, 7), R.string.window_anchor, false, false, true);
     private final transient Pin gravityPin = new Pin(new PinSingleSelect(R.array.anchor, 7), R.string.screen_anchor, false, false, true);
-    private final transient Pin showPosPin = new Pin(new PinPoint(0, -0.2f), R.string.screen_anchor_pos, false, false, true);
+    private final transient Pin showPosPin = new Pin(new PinPoint(), R.string.screen_anchor_pos, false, false, true);
     private final transient Pin savePin = new Pin(new PinBoolean(true), R.string.log_action_save, false, false, true);
 
     public LoggerAction() {
         super(ActionType.LOG);
+        Point size = DisplayUtil.getScreenSize(MainApplication.getInstance());
+        showPosPin.getValue(PinPoint.class).setValue(new Point(0, -size.y / 5));
         addPins(logPin, showPin, anchorPin, gravityPin, showPosPin, savePin);
     }
 

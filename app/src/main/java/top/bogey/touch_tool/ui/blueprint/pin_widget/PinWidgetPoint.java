@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 
 import androidx.annotation.NonNull;
 
-import top.bogey.touch_tool.bean.pin.pin_objects.PinPoint;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinPoint;
 import top.bogey.touch_tool.databinding.PinWidgetPointBinding;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.blueprint.picker.PointPickerPreview;
@@ -28,6 +28,7 @@ public class PinWidgetPoint extends PinWidget<PinPoint> {
     @Override
     protected void initBase() {
         Point point = pinBase.getValue();
+        pinBase.setValue(point);
         binding.xEdit.setText(String.valueOf(point.x));
         binding.yEdit.setText(String.valueOf(point.y));
 
@@ -35,7 +36,6 @@ public class PinWidgetPoint extends PinWidget<PinPoint> {
             @Override
             public void afterTextChanged(Editable s) {
                 point.x = toInt(s);
-                pinBase.setValue(point);
                 pinView.getPin().notifyValueUpdated(card.getTask());
             }
         });
@@ -44,14 +44,12 @@ public class PinWidgetPoint extends PinWidget<PinPoint> {
             @Override
             public void afterTextChanged(Editable s) {
                 point.y = toInt(s);
-                pinBase.setValue(point);
                 pinView.getPin().notifyValueUpdated(card.getTask());
             }
         });
 
         binding.pickButton.setOnClickListener(v -> new PointPickerPreview(getContext(), result -> {
             point.set(result.x, result.y);
-            pinBase.setValue(point);
             pinView.getPin().notifyValueUpdated(card.getTask());
             binding.xEdit.setText(String.valueOf(point.x));
             binding.yEdit.setText(String.valueOf(point.y));

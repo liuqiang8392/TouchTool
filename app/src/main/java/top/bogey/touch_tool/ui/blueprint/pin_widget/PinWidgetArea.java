@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 
 import androidx.annotation.NonNull;
 
-import top.bogey.touch_tool.bean.pin.pin_objects.PinArea;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinArea;
 import top.bogey.touch_tool.databinding.PinWidgetAreaBinding;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.blueprint.picker.AreaPickerPreview;
@@ -28,6 +28,7 @@ public class PinWidgetArea extends PinWidget<PinArea> {
     @Override
     protected void initBase() {
         Rect area = pinBase.getValue();
+        pinBase.setValue(area);
         binding.leftEdit.setText(String.valueOf(area.left));
         binding.topEdit.setText(String.valueOf(area.top));
         binding.rightEdit.setText(String.valueOf(area.right));
@@ -37,7 +38,6 @@ public class PinWidgetArea extends PinWidget<PinArea> {
             @Override
             public void afterTextChanged(Editable s) {
                 area.left = toInt(s);
-                pinBase.setValue(area);
                 pinView.getPin().notifyValueUpdated(card.getTask());
             }
         });
@@ -45,7 +45,6 @@ public class PinWidgetArea extends PinWidget<PinArea> {
             @Override
             public void afterTextChanged(Editable s) {
                 area.top = toInt(s);
-                pinBase.setValue(area);
                 pinView.getPin().notifyValueUpdated(card.getTask());
             }
         });
@@ -53,7 +52,6 @@ public class PinWidgetArea extends PinWidget<PinArea> {
             @Override
             public void afterTextChanged(Editable s) {
                 area.right = toInt(s);
-                pinBase.setValue(area);
                 pinView.getPin().notifyValueUpdated(card.getTask());
             }
         });
@@ -61,14 +59,12 @@ public class PinWidgetArea extends PinWidget<PinArea> {
             @Override
             public void afterTextChanged(Editable s) {
                 area.bottom = toInt(s);
-                pinBase.setValue(area);
                 pinView.getPin().notifyValueUpdated(card.getTask());
             }
         });
 
         binding.pickButton.setOnClickListener(v -> new AreaPickerPreview(getContext(), result -> {
             area.set(result);
-            pinBase.setValue(area);
             binding.leftEdit.setText(String.valueOf(area.left));
             binding.topEdit.setText(String.valueOf(area.top));
             binding.rightEdit.setText(String.valueOf(area.right));
