@@ -21,6 +21,8 @@ import top.bogey.touch_tool.utils.tree.ITreeNodeData;
 
 public class NodeInfo extends SimpleNodeInfo implements ITreeNodeData {
     public final transient AccessibilityNodeInfo node;
+
+    public transient NodeInfo parent;
     private final transient List<NodeInfo> children = new ArrayList<>();
 
     public String text;
@@ -54,7 +56,29 @@ public class NodeInfo extends SimpleNodeInfo implements ITreeNodeData {
         }
     }
 
+    public NodeInfo(SavedNodeInfo savedNodeInfo) {
+        parent = null;
+        node = null;
+
+        clazz = savedNodeInfo.clazz;
+        id = savedNodeInfo.id;
+        index = savedNodeInfo.index;
+
+        text = savedNodeInfo.text;
+        desc = savedNodeInfo.desc;
+        usable = savedNodeInfo.usable;
+        visible = savedNodeInfo.visible;
+        area = savedNodeInfo.area;
+
+        for (SavedNodeInfo child : savedNodeInfo.children) {
+            NodeInfo nodeInfo = new NodeInfo(child);
+            children.add(nodeInfo);
+            nodeInfo.parent = this;
+        }
+    }
+
     public int getChildCount() {
+        if (node == null) return children.size();
         return node.getChildCount();
     }
 
@@ -74,7 +98,7 @@ public class NodeInfo extends SimpleNodeInfo implements ITreeNodeData {
     public NodeInfo getChild(int index) {
         if (children.isEmpty()) return null;
         NodeInfo nodeInfo = children.get(index);
-        if (nodeInfo == null) {
+        if (nodeInfo == null && node != null) {
             AccessibilityNodeInfo child = node.getChild(index);
             if (child != null) {
                 nodeInfo = new NodeInfo(child);
@@ -97,20 +121,25 @@ public class NodeInfo extends SimpleNodeInfo implements ITreeNodeData {
     }
 
     public NodeInfo getParent() {
-        AccessibilityNodeInfo parent = node.getParent();
-        if (parent == null) return null;
-        NodeInfo nodeInfo = new NodeInfo(parent);
-        AccessibilityNodeInfo grandParent = parent.getParent();
+        if (parent != null) return parent;
+
+        if (node == null) return null;
+        AccessibilityNodeInfo nodeParent = node.getParent();
+        if (nodeParent == null) return null;
+        parent = new NodeInfo(nodeParent);
+
+        // 获取索引
+        AccessibilityNodeInfo grandParent = nodeParent.getParent();
         if (grandParent != null) {
             for (int i = 0; i < grandParent.getChildCount(); i++) {
                 AccessibilityNodeInfo child = grandParent.getChild(i);
-                if (parent.equals(child)) {
-                    nodeInfo.index = i + 1;
+                if (nodeParent.equals(child)) {
+                    parent.index = i + 1;
                     break;
                 }
             }
         }
-        return nodeInfo;
+        return parent;
     }
 
     public NodeInfo findUsableParent() {
@@ -240,7 +269,7 @@ public class NodeInfo extends SimpleNodeInfo implements ITreeNodeData {
         List<NodeInfo> nodes = new ArrayList<>();
 
         String regexMetaChars = ".*+?^$|\\[]{}()";
-        boolean flag = true;
+        boolean flag = node != null;
         for (char c : regexMetaChars.toCharArray()) {
             if (text.indexOf(c) != -1) {
                 flag = false;
@@ -295,7 +324,8 @@ public class NodeInfo extends SimpleNodeInfo implements ITreeNodeData {
         if (area.contains(this.area) || Rect.intersects(area, this.area)) {
             if (id.equals(this.id)) nodes.add(this);
 
-            List<AccessibilityNodeInfo> list = node.findAccessibilityNodeInfosByViewId(id);
+            List<AccessibilityNodeInfo> list = new ArrayList<>();
+            if (node != null) list = node.findAccessibilityNodeInfosByViewId(id);
             if (list == null || list.isEmpty()) {
                 Stack<NodeInfo> stack = new Stack<>();
                 stack.push(this);

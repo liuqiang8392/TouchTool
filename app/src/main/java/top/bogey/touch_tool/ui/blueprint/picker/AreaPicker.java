@@ -128,10 +128,10 @@ public class AreaPicker extends FullScreenPicker<Rect> {
         }
 
         if (action == MotionEvent.ACTION_MOVE) {
-            mode = moveMode;
             float dx = x - lastX;
             float dy = y - lastY;
             if (dx == 0 && dy == 0) return true;
+            mode = moveMode;
             boolean flag = true;
             if (mode == MODE_NONE) {
                 mode = MODE_BR;
@@ -172,13 +172,17 @@ public class AreaPicker extends FullScreenPicker<Rect> {
 
         if (action == MotionEvent.ACTION_UP) {
             if (mode == MODE_NONE) {
-                for (int i = screenInfo.getRootNodes().size() - 1; i >= 0; i--) {
-                    NodeInfo nodeInfo = screenInfo.getRootNodes().get(i);
-                    NodeInfo child = nodeInfo.findUsableChild((int) x, (int) y);
-                    if (child != null) {
-                        area.set(child.area);
-                        break;
+                if (area.isEmpty()) {
+                    for (int i = screenInfo.getRootNodes().size() - 1; i >= 0; i--) {
+                        NodeInfo nodeInfo = screenInfo.getRootNodes().get(i);
+                        NodeInfo child = nodeInfo.findUsableChild((int) x, (int) y);
+                        if (child != null) {
+                            area.set(child.area);
+                            break;
+                        }
                     }
+                } else {
+                    area.setEmpty();
                 }
             }
             mode = MODE_NONE;

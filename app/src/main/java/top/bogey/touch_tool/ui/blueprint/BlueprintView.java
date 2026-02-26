@@ -62,8 +62,8 @@ public class BlueprintView extends Fragment {
         return false;
     }
 
-    public static void tryFocusAction(Task task, Action action) {
-        if (task == null || action == null) return;
+    public static boolean tryFocusAction(Task task, Action action) {
+        if (task == null || action == null) return false;
 
         Fragment fragment = MainActivity.getCurrentFragment();
         if (fragment instanceof BlueprintView blueprintView) {
@@ -73,7 +73,9 @@ public class BlueprintView extends Fragment {
             } else {
                 blueprintView.binding.cardLayout.focusCard(action.getId());
             }
+            return true;
         }
+        return false;
     }
 
     public static void tryRefreshPinView() {

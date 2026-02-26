@@ -1,6 +1,8 @@
 package top.bogey.touch_tool.ui.blueprint.picker;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -11,7 +13,8 @@ import android.graphics.Rect;
 import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
-import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListPopupWindow;
 
 import androidx.annotation.NonNull;
 
@@ -22,14 +25,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.other.NodeInfo;
+import top.bogey.touch_tool.bean.other.SavedScreenNodeInfo;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinNodePathString;
 import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.databinding.FloatPickerNodeBinding;
+import top.bogey.touch_tool.service.TaskInfoSummary;
+import top.bogey.touch_tool.ui.MainActivity;
 import top.bogey.touch_tool.ui.custom.NodeInfoFloatView;
+import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.DisplayUtil;
+import top.bogey.touch_tool.utils.GsonUtil;
 import top.bogey.touch_tool.utils.callback.ResultCallback;
+import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 import top.bogey.touch_tool.utils.listener.TextChangedListener;
 
 @SuppressLint("ViewConstructor")
@@ -101,6 +111,30 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
             }
         });
 
+        binding.leftButton.setOnClickListener(v -> {
+            if (nodeInfo != null) {
+                NodeInfo parent = nodeInfo.getParent();
+                if (parent == null) return;
+                int childCount = parent.getChildCount();
+                int nextIndex = nodeInfo.index - 2;
+                if (nextIndex < 0) nextIndex = childCount - 1;
+                NodeInfo node = parent.getChild(nextIndex);
+                if (node != null) selectNode(node);
+            }
+        });
+
+        binding.rightButton.setOnClickListener(v -> {
+            if (nodeInfo != null) {
+                NodeInfo parent = nodeInfo.getParent();
+                if (parent == null) return;
+                int childCount = parent.getChildCount();
+                int nextIndex = nodeInfo.index;
+                if (nextIndex >= childCount) nextIndex = 0;
+                NodeInfo node = parent.getChild(nextIndex);
+                if (node != null) selectNode(node);
+            }
+        });
+
         binding.infoButton.setOnClickListener(v -> {
             if (nodeInfo == null) return;
             NodeInfoFloatView.showInfo(nodeInfo, this::selectNode);
@@ -109,20 +143,79 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
         binding.searchEdit.addTextChangedListener(new TextChangedListener() {
             @Override
             public void afterTextChanged(Editable s) {
-                if (adapter == null) return;
                 adapter.searchNodes(s.toString());
             }
         });
 
-        binding.typeGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
-            if (isChecked) {
-                View view = group.findViewById(checkedId);
-                int type = group.indexOfChild(view);
-                SettingSaver.getInstance().setPickNodeType(type);
+        String[] strings = context.getResources().getStringArray(R.array.picker_node_type);
+        binding.typeButton.setOnClickListener(v -> {
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(context, R.layout.widget_textview_item, strings);
+            ListPopupWindow popup = new ListPopupWindow(context);
+            popup.setAdapter(arrayAdapter);
+            popup.setAnchorView(binding.typeButton);
+            popup.setModal(true);
+            popup.setOnItemClickListener((parent, view, position, id) -> {
+                SettingSaver.getInstance().setPickNodeType(position);
+                binding.typeButton.setText(strings[position]);
                 invalidate();
-            }
+                popup.dismiss();
+            });
+            popup.show();
         });
-        binding.typeGroup.check(binding.typeGroup.getChildAt(SettingSaver.getInstance().getPickNodeType()).getId());
+        binding.typeButton.setText(strings[SettingSaver.getInstance().getPickNodeType()]);
+
+        binding.exportButton.setOnClickListener(v -> {
+            MainActivity activity = MainApplication.getInstance().getActivity();
+            if (activity == null) return;
+
+            ActivityManager manager = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
+            try {
+                manager.moveTaskToFront(activity.getTaskId(), 0);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            FloatWindow.hide(tag);
+
+            SavedScreenNodeInfo info = new SavedScreenNodeInfo(screenInfo.getScreenShot(), roots);
+            String json = GsonUtil.toJson(info);
+
+            TaskInfoSummary.PackageActivity packageActivity = TaskInfoSummary.getInstance().getPackageActivity();
+            String appName = TaskInfoSummary.getInstance().getAppName(packageActivity.packageName());
+
+            AppUtil.exportFile(activity, appName + ".ttl", json.getBytes(), result -> {
+                FloatWindow.show(tag);
+                activity.moveTaskToBack(true);
+            });
+        });
+
+        binding.importButton.setOnClickListener(v -> {
+            MainActivity activity = MainApplication.getInstance().getActivity();
+            if (activity == null) return;
+
+            ActivityManager manager = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
+            try {
+                manager.moveTaskToFront(activity.getTaskId(), 0);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            FloatWindow.hide(tag);
+
+            activity.launcherOpenDocument(((code, intent) -> {
+                if (code == Activity.RESULT_OK && intent != null) {
+                    byte[] bytes = AppUtil.readFile(activity, intent.getData());
+                    SavedScreenNodeInfo info = GsonUtil.getAsObject(new String(bytes), SavedScreenNodeInfo.class, null);
+                    if (info != null) {
+                        screenInfo.setScreenShot(info.getImage());
+                        roots = info.getRoots();
+                        adapter.setRoots(roots);
+                    }
+                    FloatWindow.show(tag);
+                    activity.moveTaskToBack(true);
+                }
+            }), "*/*");
+        });
     }
 
     @Override
