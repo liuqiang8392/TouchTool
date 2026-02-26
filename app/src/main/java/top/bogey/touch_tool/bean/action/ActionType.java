@@ -192,6 +192,7 @@ public enum ActionType {
     LIST_CONTAIN,
     LIST_ADD,
     LIST_REMOVE,
+    LIST_REMOVE_OBJECT,
     LIST_APPEND,
     LIST_CLEAR,
     LIST_GET,

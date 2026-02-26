@@ -703,6 +703,9 @@
     <string name="list_remove_action">移除元素</string>
     <string name="list_remove_action_desc">从列表中移除元素</string>
 
+    <string name="list_remove_object_action">按对象移除</string>
+    <string name="list_remove_object_action_desc">按对象从列表中移除元素</string>
+
     <string name="list_append_action">列表拼接</string>
     <string name="list_append_action_desc">将两个列表拼接</string>
 

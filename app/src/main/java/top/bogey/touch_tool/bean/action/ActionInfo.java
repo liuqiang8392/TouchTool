@@ -53,6 +53,7 @@ import top.bogey.touch_tool.bean.action.list.ListGetAction;
 import top.bogey.touch_tool.bean.action.list.ListIndexOfAction;
 import top.bogey.touch_tool.bean.action.list.ListIsEmptyAction;
 import top.bogey.touch_tool.bean.action.list.ListRemoveAction;
+import top.bogey.touch_tool.bean.action.list.ListRemoveObjectAction;
 import top.bogey.touch_tool.bean.action.list.ListSetAction;
 import top.bogey.touch_tool.bean.action.list.ListSizeAction;
 import top.bogey.touch_tool.bean.action.list.ListSubListAction;
@@ -378,6 +379,7 @@ public class ActionInfo {
     private final static ActionInfo LIST_CONTAIN_INFO = new ActionInfo(ActionType.LIST_CONTAIN, ListContainAction.class, R.drawable.icon_check, R.string.list_contain_action, R.string.list_contain_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo LIST_ADD_INFO = new ActionInfo(ActionType.LIST_ADD, ListAddAction.class, R.drawable.icon_add, R.string.list_add_action, R.string.list_add_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo LIST_REMOVE_INFO = new ActionInfo(ActionType.LIST_REMOVE, ListRemoveAction.class, R.drawable.icon_remove, R.string.list_remove_action, R.string.list_remove_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo LIST_REMOVE_OBJECT_INFO = new ActionInfo(ActionType.LIST_REMOVE_OBJECT, ListRemoveObjectAction.class, R.drawable.icon_remove, R.string.list_remove_object_action, R.string.list_remove_object_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo LIST_APPEND_INFO = new ActionInfo(ActionType.LIST_APPEND, ListAppendAction.class, R.drawable.icon_add, R.string.list_append_action, R.string.list_append_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo LIST_CLEAR_INFO = new ActionInfo(ActionType.LIST_CLEAR, ListClearAction.class, R.drawable.icon_delete, R.string.list_clear_action, R.string.list_clear_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo LIST_GET_INFO = new ActionInfo(ActionType.LIST_GET, ListGetAction.class, R.drawable.icon_upload, R.string.list_get_action, R.string.list_get_action_desc, 0, NormalActionCard.class);
@@ -588,6 +590,7 @@ public class ActionInfo {
             case LIST_CONTAIN -> LIST_CONTAIN_INFO;
             case LIST_ADD -> LIST_ADD_INFO;
             case LIST_REMOVE -> LIST_REMOVE_INFO;
+            case LIST_REMOVE_OBJECT -> LIST_REMOVE_OBJECT_INFO;
             case LIST_APPEND -> LIST_APPEND_INFO;
             case LIST_CLEAR -> LIST_CLEAR_INFO;
             case LIST_GET -> LIST_GET_INFO;

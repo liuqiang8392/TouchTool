@@ -14,41 +14,30 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
-import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
-import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
 import top.bogey.touch_tool.service.TaskRunnable;
 
-public class ListRemoveAction extends ListExecuteAction {
+public class ListRemoveObjectAction extends ListExecuteAction {
     private final transient Pin listPin = new Pin(new PinList());
-    private final transient Pin indexPin = new Pin(new PinInteger(-1), R.string.list_action_index);
+    private final transient Pin objectPin = new Pin(new PinObject(PinSubType.DYNAMIC), R.string.pin_object);
     private final transient Pin resultPin = new Pin(new PinBoolean(), R.string.pin_boolean_result, true);
-    private final transient Pin objectPin = new Pin(new PinObject(PinSubType.DYNAMIC), R.string.pin_object, true);
 
-    public ListRemoveAction() {
-        super(ActionType.LIST_REMOVE);
-        addPins(listPin, indexPin, resultPin, objectPin);
+    public ListRemoveObjectAction() {
+        super(ActionType.LIST_REMOVE_OBJECT);
+        addPins(listPin, objectPin, resultPin);
     }
 
-    public ListRemoveAction(JsonObject jsonObject) {
+    public ListRemoveObjectAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(listPin, indexPin, resultPin);
+        reAddPin(listPin);
         reAddPin(objectPin, true);
+        reAddPin(resultPin);
     }
+
     @Override
     public void execute(TaskRunnable runnable, Pin pin) {
         PinList list = getPinValue(runnable, listPin);
-        PinNumber<?> index = getPinValue(runnable, indexPin);
-        int indexValue = index.intValue();
-        if (indexValue == 0) indexValue = 1;
-        int size = list.size();
-        boolean removed = false;
-        if (indexValue >= 1 && indexValue <= size) {
-            objectPin.setValue(list.remove(indexValue - 1));
-            removed = true;
-        } else if (indexValue < 0 && indexValue >= -size) {
-            objectPin.setValue(list.remove(size + indexValue));
-            removed = true;
-        }
+        PinObject object = getPinValue(runnable, objectPin);
+        boolean removed = list.remove(object);
         resultPin.getValue(PinBoolean.class).setValue(removed);
         executeNext(runnable, outPin);
     }
@@ -58,5 +47,4 @@ public class ListRemoveAction extends ListExecuteAction {
     public List<Pin> getDynamicTypePins() {
         return Arrays.asList(listPin, objectPin);
     }
-
 }

@@ -216,6 +216,7 @@ public class ActionMap {
                     ActionType.LIST_IS_EMPTY,
                     ActionType.LIST_CONTAIN,
                     ActionType.LIST_REMOVE,
+                    ActionType.LIST_REMOVE_OBJECT,
                     ActionType.LIST_APPEND,
                     ActionType.LIST_CLEAR,
                     ActionType.LIST_INDEX_OF,
