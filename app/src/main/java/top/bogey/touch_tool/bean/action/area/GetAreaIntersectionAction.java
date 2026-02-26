@@ -8,7 +8,7 @@ import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.parent.CalculateAction;
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinArea;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinArea;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class GetAreaIntersectionAction extends CalculateAction {

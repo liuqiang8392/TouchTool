@@ -213,8 +213,10 @@ public abstract class ActionCard extends MaterialCardView implements ActionListe
     public void setSelected(boolean selected) {
         if (selected) {
             setStrokeWidth((int) DisplayUtil.dp2px(getContext(), 1));
+            setCardBackgroundColor(DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorSecondaryContainer));
         } else {
             setStrokeWidth(1);
+            setCardBackgroundColor(DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorSurfaceVariant));
         }
     }
 

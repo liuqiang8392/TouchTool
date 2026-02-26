@@ -37,7 +37,7 @@ public class StopTaskAction extends ExecuteAction {
     public void execute(TaskRunnable runnable, Pin pin) {
         MainAccessibilityService service = MainApplication.getInstance().getService();
         if (isAllTask()) {
-            service.stopAllTask(runnable.getStartTask());
+            service.stopAllTask(runnable.getStartTask(), runnable.getStartAction());
         } else {
             Task task = getTask();
             if (task != null) {

@@ -251,6 +251,12 @@
         <item>四倍</item>
     </string-array>
 
+    <string-array name="picker_node_type">
+        <item>仅可用</item>
+        <item>顶部优先</item>
+        <item>深度优先</item>
+    </string-array>
+
     <string-array name="float_pos_type">
         <item>记忆位置</item>
         <item>手动选择</item>

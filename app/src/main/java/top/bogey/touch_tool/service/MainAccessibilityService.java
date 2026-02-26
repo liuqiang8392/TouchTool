@@ -332,10 +332,10 @@ public class MainAccessibilityService extends AccessibilityService {
         }
     }
 
-    public void stopAllTask(Task exclude) {
+    public void stopAllTask(Task excludeTask, StartAction excludeAction) {
         for (TaskRunnable runnable : tasks) {
             if (runnable.isInterrupt()) continue;
-            if (runnable.getStartTask().equals(exclude)) continue;
+            if (runnable.getStartTask().equals(excludeTask) && runnable.getStartAction().equals(excludeAction)) continue;
             runnable.stop();
         }
     }

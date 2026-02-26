@@ -14,15 +14,15 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Queue;
+import java.util.Set;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
@@ -63,11 +63,12 @@ public class SelectActionDialog extends BottomSheetDialog {
     protected SelectActionItemRecyclerViewAdapter adapter;
 
     protected GroupType groupType = GroupType.PRESET;
-    protected Map<String, List<Object>> sourceDataMap = new LinkedHashMap<>();
-    protected Map<String, List<Object>> dataMap = new LinkedHashMap<>();
+    protected Map<String, List<Object>> dataMap = new HashMap<>();
     protected String subGroupTag;
-    protected Map<String, Object> subGroupMap = new LinkedHashMap<>();
-    protected List<Object> dataList = Collections.emptyList();
+    protected Map<String, Object> subGroupMap = new HashMap<>();
+    protected List<Object> dataList = new ArrayList<>();
+
+    private String searchText = "";
 
     public SelectActionDialog(@NonNull Context context, Task task, ResultCallback<Action> callback) {
         super(context);
@@ -83,31 +84,26 @@ public class SelectActionDialog extends BottomSheetDialog {
         initAdapter(callback);
 
         binding.group.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
-            if (!isChecked) return;
-
-            View view = group.findViewById(checkedId);
-            String groupText = ((MaterialButton) view).getText().toString();
-            SettingSaver.getInstance().setLastGroup(groupText);
-
-            groupType = (GroupType) view.getTag();
-            binding.addButton.setTag(groupType);
-
-            updateGroupData(groupType);
-            refreshSubGroup(dataMap);
-            setCopyObject(copyObject);
+            if (isChecked) {
+                View view = group.findViewById(checkedId);
+                SettingSaver.getInstance().setLastGroup(((MaterialButton) view).getText().toString());
+                groupType = (GroupType) view.getTag();
+                binding.addButton.setTag(groupType);
+                dataMap = getGroupData(groupType);
+                refreshSubGroup(dataMap);
+                setCopyObject(copyObject);
+            }
         });
 
         binding.subGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
-            if (!isChecked) return;
-            View view = group.findViewById(checkedId);
-            String subText = ((MaterialButton) view).getText().toString();
-            SettingSaver.getInstance().setLastSubGroup(subText);
-            subGroupTag = (String) view.getTag();
-            List<Object> list = dataMap.get(subGroupTag);
-            dataList = (list == null) ? Collections.emptyList() : list;
-            adapter.setData(dataList, groupType != GroupType.PRESET);
-            boolean showAdd = Objects.equals(subGroupTag, GLOBAL) || Objects.equals(subGroupTag, PRIVATE);
-            binding.addButton.setVisibility(showAdd ? View.VISIBLE : View.GONE);
+            if (isChecked) {
+                View view = group.findViewById(checkedId);
+                SettingSaver.getInstance().setLastSubGroup(((MaterialButton) view).getText().toString());
+                subGroupTag = (String) view.getTag();
+                dataList = dataMap.get(subGroupTag);
+                adapter.setData(dataList, groupType != GroupType.PRESET);
+                binding.addButton.setVisibility(Objects.equals(subGroupTag, GLOBAL) || Objects.equals(subGroupTag, PRIVATE) ? View.VISIBLE : View.GONE);
+            }
         });
 
         String[] groupName = getContext().getResources().getStringArray(R.array.group_type);
@@ -115,18 +111,15 @@ public class SelectActionDialog extends BottomSheetDialog {
         int index = 0;
         GroupType[] groupTypes = getGroupTypes();
         for (int i = 0; i < groupTypes.length; i++) {
-            GroupType gt = groupTypes[i];
-            WidgetSettingSelectButtonHorizontalBinding buttonBinding =
-                    WidgetSettingSelectButtonHorizontalBinding.inflate(LayoutInflater.from(getContext()), binding.group, true);
-            MaterialButton btn = buttonBinding.getRoot();
-            btn.setId(View.generateViewId());
-            btn.setText(groupName[gt.ordinal()]);
-            btn.setTag(gt);
-            if (lastGroup.equals(groupName[gt.ordinal()])) index = i;
+            GroupType groupType = groupTypes[i];
+            WidgetSettingSelectButtonHorizontalBinding buttonBinding = WidgetSettingSelectButtonHorizontalBinding.inflate(LayoutInflater.from(getContext()), binding.group, true);
+            buttonBinding.getRoot().setId(View.generateViewId());
+            buttonBinding.getRoot().setText(groupName[groupType.ordinal()]);
+            buttonBinding.getRoot().setTag(groupType);
+            if (lastGroup.equals(groupName[groupType.ordinal()])) index = i;
         }
-        if (binding.group.getChildCount() > index) {
-            binding.group.check(binding.group.getChildAt(index).getId());
-        }
+        if (binding.group.getChildCount() > index) binding.group.check(binding.group.getChildAt(index).getId());
+
         binding.searchEdit.addTextChangedListener(new TextChangedListener() {
             @Override
             public void afterTextChanged(Editable s) {
@@ -136,19 +129,52 @@ public class SelectActionDialog extends BottomSheetDialog {
 
         binding.pasteButton.setOnClickListener(v -> {
             if (copyObject == null) return;
-            saveToSubGroup(copyObject);
+            if (groupType == GroupType.TASK && copyObject instanceof Task copy) {
+                Object o = subGroupMap.get(subGroupTag);
+                if (o instanceof Task parent) {
+                    parent.addTask(copy);
+                } else if (o instanceof String tag) {
+                    if (GLOBAL.equals(tag)) {
+                        TaskSaver.getInstance().saveTask(copy);
+                    }
+                } else if (o == null) {
+                    copy.getTags().clear();
+                    copy.addTag(subGroupTag.replace(TAG_PREFIX, ""));
+                    TaskSaver.getInstance().saveTask(copy);
+                }
+            } else if (groupType == GroupType.VARIABLE && copyObject instanceof Variable copy) {
+                Object o = subGroupMap.get(subGroupTag);
+                if (o instanceof Task parent) {
+                    parent.addVariable(copy);
+                } else if (o instanceof String tag) {
+                    if (GLOBAL.equals(tag)) {
+                        VariableSaver.getInstance().saveVar(copy);
+                    }
+                } else if (o == null) {
+                    copy.getTags().clear();
+                    copy.addTag(subGroupTag.replace(TAG_PREFIX, ""));
+                    VariableSaver.getInstance().saveVar(copy);
+                }
+            }
             adapter.addData(copyObject);
             setCopyObject(null);
         });
 
         binding.searchButton.setOnClickListener(v -> {
-            boolean showing = binding.searchBox.getVisibility() == View.VISIBLE;
-            setSearchBoxVisible(!showing);
+            if (binding.searchBox.getVisibility() == View.VISIBLE) {
+                binding.searchBox.setVisibility(View.GONE);
+                binding.searchEdit.setText("");
+            } else {
+                binding.searchBox.setVisibility(View.VISIBLE);
+                binding.searchEdit.requestFocus();
+                InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(binding.searchEdit, InputMethodManager.SHOW_IMPLICIT);
+            }
         });
 
         binding.addButton.setOnClickListener(v -> {
-            GroupType gt = (GroupType) binding.addButton.getTag();
-            switch (gt) {
+            GroupType groupType = (GroupType) binding.addButton.getTag();
+            switch (groupType) {
                 case TASK -> showNewTaskDialog();
                 case VARIABLE -> showNewVariableDialog();
             }
@@ -172,17 +198,14 @@ public class SelectActionDialog extends BottomSheetDialog {
         EditVariableDialog dialog = new EditVariableDialog(getContext(), variable);
         dialog.setTitle(R.string.variable_add);
         dialog.setCallback(result -> {
-            if (!result) return;
-
-            String tag = getCheckedSubGroupTag();
-            if (tag == null) return;
-
-            if (PRIVATE.equals(tag)) task.addVariable(variable);
-
-            variable.save();
-            if (!(dataList instanceof ArrayList)) dataList = new ArrayList<>(dataList);
-            dataList.add(0, variable);
-            adapter.notifyItemInserted(0);
+            if (result) {
+                View view = binding.subGroup.findViewById(binding.subGroup.getCheckedButtonId());
+                String tag = (String) view.getTag();
+                if (PRIVATE.equals(tag)) task.addVariable(variable);
+                variable.save();
+                dataList.add(0, variable);
+                adapter.notifyItemInserted(0);
+            }
         });
         dialog.show();
     }
@@ -192,23 +215,20 @@ public class SelectActionDialog extends BottomSheetDialog {
         EditTaskDialog dialog = new EditTaskDialog(getContext(), newTask);
         dialog.setTitle(R.string.task_add);
         dialog.setCallback(result -> {
-            if (!result) return;
-
-            String tag = getCheckedSubGroupTag();
-            if (tag == null) return;
-
-            if (PRIVATE.equals(tag)) {
-                task.addTask(newTask);
-                newTask.addAction(new CustomStartAction());
-                CustomEndAction customEndAction = new CustomEndAction();
-                customEndAction.setPos(0, 30);
-                newTask.addAction(customEndAction);
+            if (result) {
+                View view = binding.subGroup.findViewById(binding.subGroup.getCheckedButtonId());
+                String tag = (String) view.getTag();
+                if (PRIVATE.equals(tag)) {
+                    task.addTask(newTask);
+                    newTask.addAction(new CustomStartAction());
+                    CustomEndAction customEndAction = new CustomEndAction();
+                    customEndAction.setPos(0, 30);
+                    newTask.addAction(customEndAction);
+                }
+                newTask.save();
+                dataList.add(0, newTask);
+                adapter.notifyItemInserted(0);
             }
-
-            newTask.save();
-            if (!(dataList instanceof ArrayList)) dataList = new ArrayList<>(dataList);
-            dataList.add(0, newTask);
-            adapter.notifyItemInserted(0);
         });
         dialog.show();
     }
@@ -221,7 +241,8 @@ public class SelectActionDialog extends BottomSheetDialog {
                     if (o instanceof ITagManager) {
                         List<String> tags = ((ITagManager) o).getTags();
                         for (String tag : tags) {
-                            map.computeIfAbsent(tag, k -> new ArrayList<>()).add(o);
+                            List<Object> objects = map.computeIfAbsent(tag, k -> new ArrayList<>());
+                            objects.add(o);
                         }
                     }
                 }
@@ -230,48 +251,35 @@ public class SelectActionDialog extends BottomSheetDialog {
 
         ArrayList<String> keys = new ArrayList<>(map.keySet());
         AppUtil.chineseSort(keys, tag -> tag);
-
         LinkedHashMap<String, List<Object>> linkedHashMap = new LinkedHashMap<>();
         for (String key : keys) {
-            linkedHashMap.put(TAG_PREFIX + key, map.get(key));
+            List<Object> objects = map.get(key);
+            linkedHashMap.put(TAG_PREFIX + key, objects);
         }
         return linkedHashMap;
     }
 
     protected void refreshSubGroup(Map<String, List<Object>> dataMap) {
-        Map<String, List<Object>> merged = new LinkedHashMap<>(dataMap);
-        merged.putAll(calculateTagGroup(merged));
-        this.dataMap = merged;
-
-        refreshSubGroup(merged.keySet().toArray(new String[0]));
+        Map<String, List<Object>> tagGroup = calculateTagGroup(dataMap);
+        dataMap.putAll(tagGroup);
+        refreshSubGroup(dataMap.keySet().toArray(new String[0]));
     }
 
     private void refreshSubGroup(String[] chips) {
         binding.subGroup.clearChecked();
         binding.subGroup.removeAllViews();
-
-        if (chips == null || chips.length == 0) {
-            dataList = Collections.emptyList();
-            adapter.setData(dataList, groupType != GroupType.PRESET);
-            binding.addButton.setVisibility(View.GONE);
-            return;
-        }
-
         String subGroup = SettingSaver.getInstance().getLastSubGroup();
         int index = 0;
-
         for (int i = 0; i < chips.length; i++) {
             String s = chips[i];
-            WidgetSettingSelectButtonVerticalBinding buttonBinding =
-                    WidgetSettingSelectButtonVerticalBinding.inflate(LayoutInflater.from(getContext()), binding.subGroup, true);
+            WidgetSettingSelectButtonVerticalBinding buttonBinding = WidgetSettingSelectButtonVerticalBinding.inflate(LayoutInflater.from(getContext()), binding.subGroup, true);
             MaterialButton button = buttonBinding.getRoot();
             button.setId(View.generateViewId());
             button.setText(s);
             button.setTag(s);
             if (subGroup.equals(s)) index = i;
         }
-
-        binding.subGroup.check(binding.subGroup.getChildAt(index).getId());
+        if (chips.length > 0) binding.subGroup.check(binding.subGroup.getChildAt(index).getId());
     }
 
     protected GroupType[] getGroupTypes() {
@@ -292,7 +300,6 @@ public class SelectActionDialog extends BottomSheetDialog {
     protected Map<String, List<Object>> getGroupData(GroupType groupType) {
         Map<String, List<Object>> map = new LinkedHashMap<>();
         subGroupMap.clear();
-
         switch (groupType) {
             case PRESET -> {
                 for (ActionMap.ActionGroupType actionGroupType : ActionMap.ActionGroupType.values()) {
@@ -317,24 +324,21 @@ public class SelectActionDialog extends BottomSheetDialog {
                 while (parent != null) {
                     List<Object> list = new ArrayList<>(parent.getTasks());
                     if (!list.isEmpty()) {
-                        String key = PARENT_PREFIX + parent.getTitle();
-                        map.put(key, list);
-                        subGroupMap.put(key, parent);
+                        map.put(PARENT_PREFIX + parent.getTitle(), list);
+                        subGroupMap.put(PARENT_PREFIX + parent.getTitle(), parent);
                     }
                     parent = parent.getParent();
                 }
 
-                // 子任务（BFS）
+                // 子任务
                 Queue<Task> queue = new LinkedList<>(task.getTasks());
                 while (!queue.isEmpty()) {
                     Task poll = queue.poll();
                     if (poll == null) continue;
-
                     List<Task> tasks = poll.getTasks();
                     if (!tasks.isEmpty()) {
-                        String key = CHILD_PREFIX + poll.getTitle();
-                        map.put(key, new ArrayList<>(tasks));
-                        subGroupMap.put(key, poll);
+                        map.put(CHILD_PREFIX + poll.getTitle(), new ArrayList<>(tasks));
+                        subGroupMap.put(CHILD_PREFIX + poll.getTitle(), poll);
                         queue.addAll(tasks);
                     }
                 }
@@ -355,26 +359,24 @@ public class SelectActionDialog extends BottomSheetDialog {
                 while (parent != null) {
                     List<Object> list = new ArrayList<>(parent.getVariables());
                     if (!list.isEmpty()) {
-                        String key = PARENT_PREFIX + parent.getTitle();
-                        map.put(key, list);
-                        subGroupMap.put(key, parent);
+                        map.put(PARENT_PREFIX + parent.getTitle(), list);
+                        subGroupMap.put(PARENT_PREFIX + parent.getTitle(), parent);
                     }
                     parent = parent.getParent();
                 }
 
-                // 子级变量（BFS）
+                // 子级变量
                 Queue<Task> queue = new LinkedList<>(task.getTasks());
                 while (!queue.isEmpty()) {
                     Task poll = queue.poll();
                     if (poll == null) continue;
-
                     List<Object> list = new ArrayList<>(poll.getVariables());
                     if (!list.isEmpty()) {
-                        String key = CHILD_PREFIX + poll.getTitle();
-                        map.put(key, list);
-                        subGroupMap.put(key, poll);
+                        map.put(CHILD_PREFIX + poll.getTitle(), list);
+                        subGroupMap.put(CHILD_PREFIX + poll.getTitle(), poll);
                     }
-                    queue.addAll(poll.getTasks());
+                    List<Task> tasks = poll.getTasks();
+                    queue.addAll(tasks);
                 }
             }
         }
@@ -383,43 +385,30 @@ public class SelectActionDialog extends BottomSheetDialog {
 
     public void search() {
         if (adapter == null) return;
-
         Editable text = binding.searchEdit.getText();
-        String q = text == null ? "" : text.toString().trim();
-
-        if (q.isEmpty()) {
-            dataMap = new LinkedHashMap<>(sourceDataMap);
+        if (text == null || text.length() == 0) {
+            searchText = "";
+            dataMap = getGroupData(groupType);
             refreshSubGroup(dataMap);
-            return;
-        }
-
-        Map<String, List<Object>> filteredMap = new LinkedHashMap<>();
-
-        for (Map.Entry<String, List<Object>> entry : sourceDataMap.entrySet()) {
-            String groupKey = entry.getKey();
-            List<Object> list = entry.getValue();
-
-            if (list == null || list.isEmpty()) continue;
-
-            List<Object> filteredList = new ArrayList<>();
-            for (Object object : list) {
-                String name = SelectActionItemRecyclerViewAdapter.getObjectTitle(object);
-                if (AppUtil.isStringContainsWithPinyin(name, q)) {
-                    filteredList.add(object);
+        } else {
+            if (text.length() < searchText.length()) {
+                dataMap = getGroupData(groupType);
+            }
+            searchText = text.toString();
+            Set<Object> data = new HashSet<>();
+            for (Map.Entry<String, List<Object>> entry : dataMap.entrySet()) {
+                List<Object> list = entry.getValue();
+                for (Object object : list) {
+                    String name = SelectActionItemRecyclerViewAdapter.getObjectTitle(object);
+                    if (AppUtil.isStringContainsWithPinyin(name, text.toString())) {
+                        data.add(object);
+                    }
                 }
             }
-
-            if (!filteredList.isEmpty()) {
-                if (GLOBAL.equals(groupKey)) {
-                    // GLOBAL 内部去重（保序），避免“全局标签重复项”
-                    filteredList = new ArrayList<>(new LinkedHashSet<>(filteredList));
-                }
-                filteredMap.put(groupKey, filteredList);
-            }
+            dataMap = new HashMap<>();
+            dataMap.put(text.toString(), new ArrayList<>(data));
+            refreshSubGroup(dataMap);
         }
-
-        dataMap = filteredMap;
-        refreshSubGroup(dataMap);
     }
 
     public void setCopyObject(Object object) {
@@ -436,61 +425,5 @@ public class SelectActionDialog extends BottomSheetDialog {
 
     protected enum GroupType {
         PRESET, TASK, VARIABLE
-    }
-
-    private void updateGroupData(GroupType gt) {
-        sourceDataMap = getGroupData(gt);
-        dataMap = new LinkedHashMap<>(sourceDataMap);
-    }
-
-    private String getCheckedSubGroupTag() {
-        int id = binding.subGroup.getCheckedButtonId();
-        if (id == View.NO_ID) return null;
-        View view = binding.subGroup.findViewById(id);
-        if (view == null) return null;
-        Object tag = view.getTag();
-        return (tag instanceof String) ? (String) tag : null;
-    }
-
-    private void setSearchBoxVisible(boolean visible) {
-        binding.searchBox.setVisibility(visible ? View.VISIBLE : View.GONE);
-        if (!visible) {
-            binding.searchEdit.setText("");
-            return;
-        }
-        binding.searchEdit.requestFocus();
-        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm != null) {
-            imm.showSoftInput(binding.searchEdit, InputMethodManager.SHOW_IMPLICIT);
-        }
-    }
-
-    private void saveToSubGroup(Object copied) {
-        if (groupType == GroupType.TASK && copied instanceof Task copy) {
-            Object o = subGroupMap.get(subGroupTag);
-            if (o instanceof Task parent) {
-                parent.addTask(copy);
-            } else if (o instanceof String tag) {
-                if (GLOBAL.equals(tag)) TaskSaver.getInstance().saveTask(copy);
-            } else if (o == null) {
-                copy.getTags().clear();
-                copy.addTag(subGroupTag.replace(TAG_PREFIX, ""));
-                TaskSaver.getInstance().saveTask(copy);
-            }
-            return;
-        }
-
-        if (groupType == GroupType.VARIABLE && copied instanceof Variable copy) {
-            Object o = subGroupMap.get(subGroupTag);
-            if (o instanceof Task parent) {
-                parent.addVariable(copy);
-            } else if (o instanceof String tag) {
-                if (GLOBAL.equals(tag)) VariableSaver.getInstance().saveVar(copy);
-            } else if (o == null) {
-                copy.getTags().clear();
-                copy.addTag(subGroupTag.replace(TAG_PREFIX, ""));
-                VariableSaver.getInstance().saveVar(copy);
-            }
-        }
     }
 }

@@ -133,30 +133,32 @@ public class FloatWindowHelper {
             });
         }
 
-        initEditText(viewParent);
+        if (config.existEditText) initEditText(viewParent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            Rect rect = new Rect(0, 0, viewParent.getWidth(), viewParent.getHeight());
+            viewParent.setSystemGestureExclusionRects(List.of(rect));
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
     void initEditText(View view) {
-        if (config.existEditText) {
-            if (view instanceof ViewGroup viewGroup) {
-                for (int i = 0; i < viewGroup.getChildCount(); i++) {
-                    initEditText(viewGroup.getChildAt(i));
-                }
-            } else if (view instanceof EditText editText) {
-                editText.setOnTouchListener((v, event) -> {
-                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                        params.flags = FloatWindow.FOCUSABLE | config.flag;
-                        manager.updateViewLayout(viewParent, params);
-
-                        new Handler().postDelayed(() -> {
-                            InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                            if (inputMethodManager != null) inputMethodManager.showSoftInput(editText, 0);
-                        }, 100);
-                    }
-                    return false;
-                });
+        if (view instanceof ViewGroup viewGroup) {
+            for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                initEditText(viewGroup.getChildAt(i));
             }
+        } else if (view instanceof EditText editText) {
+            editText.setOnTouchListener((v, event) -> {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    params.flags = FloatWindow.FOCUSABLE | config.flag;
+                    manager.updateViewLayout(viewParent, params);
+
+                    new Handler().postDelayed(() -> {
+                        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                        if (inputMethodManager != null) inputMethodManager.showSoftInput(editText, 0);
+                    }, 100);
+                }
+                return false;
+            });
         }
     }
 

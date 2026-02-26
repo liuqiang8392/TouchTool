@@ -382,6 +382,19 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
         refreshEditView();
     }
 
+    public boolean removeSelectedCard(Action action) {
+        ActionCard card = getActionCard(action);
+        if (card != null) return removeSelectedCard(card);
+        return false;
+    }
+
+    private boolean removeSelectedCard(ActionCard card) {
+        boolean removed = selectedCards.remove(card);
+        card.setSelected(false);
+        refreshEditView();
+        return removed;
+    }
+
     public void cleanSelectedCards() {
         selectedCards.forEach(card -> card.setSelected(false));
         selectedCards.clear();
@@ -610,9 +623,10 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
                     case TOUCH_BACKGROUND -> cleanSelectedCards();
 
                     case TOUCH_CARD -> {
-                        boolean contains = selectedCards.contains(touchedCard);
-                        cleanSelectedCards();
-                        if (!contains) {
+                        if (!removeSelectedCard(touchedCard)) {
+                            if (selectedCards.size() == 1) {
+                                cleanSelectedCards();
+                            }
                             addSelectedCard(touchedCard);
                         }
                     }

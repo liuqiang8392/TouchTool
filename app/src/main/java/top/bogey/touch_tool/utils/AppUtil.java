@@ -442,6 +442,10 @@ public class AppUtil {
     }
 
     public static void exportFile(BaseActivity activity, String fileName, byte[] content) {
+        exportFile(activity, fileName, content, null);
+    }
+
+    public static void exportFile(BaseActivity activity, String fileName, byte[] content, BooleanResultCallback callback) {
         activity.launcherCreateDocument(fileName, (code, intent) -> {
             if (code == Activity.RESULT_OK) {
                 Uri uri = intent.getData();
@@ -452,6 +456,9 @@ public class AppUtil {
                     outputStream.flush();
                 } catch (IOException ignored) {
                 }
+                if (callback != null) callback.onResult(true);
+            } else {
+                if (callback != null) callback.onResult(false);
             }
         });
     }
@@ -501,7 +508,6 @@ public class AppUtil {
             return new byte[0];
         }
     }
-
 
     public static void saveImage(Context context, Bitmap image) {
         String fileName = "Picture_" + formatDateTime(context, System.currentTimeMillis(), false, true);

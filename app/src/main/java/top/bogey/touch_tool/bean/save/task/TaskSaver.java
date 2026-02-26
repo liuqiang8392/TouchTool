@@ -104,6 +104,31 @@ public class TaskSaver {
         return tasks;
     }
 
+    public List<Task> getOrderTasks(Class<? extends Action> actionClass) {
+        List<Task> tasks = new ArrayList<>();
+        TagSaver tagSaver = TagSaver.getInstance();
+        tagSaver.getTags().forEach(tag -> {
+            List<String> taskOrder = tagSaver.getTaskOrder(tag);
+            if (taskOrder == null) {
+                for (Task task : getTasks(tag)) {
+                    List<Action> actions = task.getActions(actionClass);
+                    if (actions != null && !actions.isEmpty()) {
+                        tasks.add(task);
+                    }
+                }
+            } else {
+                for (String taskId : taskOrder) {
+                    Task task = getTask(taskId);
+                    List<Action> actions = task.getActions(actionClass);
+                    if (actions != null && !actions.isEmpty()) {
+                        tasks.add(task);
+                    }
+                }
+            }
+        });
+        return tasks;
+    }
+
     public List<Task> searchTasks(String title) {
         List<Task> tasks = new ArrayList<>();
         for (Map.Entry<String, TaskSave> entry : saves.entrySet()) {

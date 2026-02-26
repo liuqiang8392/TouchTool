@@ -367,7 +367,7 @@ public class TaskInfoSummary {
         List<ManualExecuteInfo> singleShowList = new ArrayList<>();
 
         if (show) {
-            for (Task task : TaskSaver.getInstance().getTasks(ManualStartAction.class)) {
+            for (Task task : TaskSaver.getInstance().getOrderTasks(ManualStartAction.class)) {
                 for (Action action : task.getActions(ManualStartAction.class)) {
                     ManualStartAction startAction = (ManualStartAction) action;
                     if (startAction.isEnable() && startAction.ready()) {

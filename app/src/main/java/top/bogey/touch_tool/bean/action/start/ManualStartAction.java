@@ -15,7 +15,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplication;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinApplications;
-import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinPoint;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinPoint;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleSelect;
 import top.bogey.touch_tool.bean.pin.special_pin.NotLinkAblePin;
 import top.bogey.touch_tool.bean.pin.special_pin.ShowAblePin;
@@ -32,15 +32,13 @@ public class ManualStartAction extends StartAction {
 
     private final transient Pin anchorPin = new SingleShowablePin(new PinSingleSelect(R.array.anchor, 4), R.string.window_anchor, false, false, true);
     private final transient Pin gravityPin = new SingleShowablePin(new PinSingleSelect(R.array.anchor, 0), R.string.screen_anchor, false, false, true);
-    private final transient Pin showPosPin = new SingleShowablePin(new PinPoint(), R.string.screen_anchor_pos, false, false, true);
+    private final transient Pin showPosPin = new SingleShowablePin(new PinPoint(0.5f, 0.5f), R.string.screen_anchor_pos, false, false, true);
 
     private final transient Pin lockPin = new SingleShowablePin(new PinBoolean(), R.string.manual_start_action_lock, false, false, true);
     private final transient Pin appPin = new Pin(new PinApplication(), R.string.manual_start_action_app, true);
 
     public ManualStartAction() {
         super(ActionType.MANUAL_START);
-        Point size = DisplayUtil.getScreenSize(MainApplication.getInstance());
-        showPosPin.getValue(PinPoint.class).setValue(new Point(size.x / 2, size.y / 2));
         addPins(appsPin, showTypePin, expandPin, showPosPin, anchorPin, gravityPin, lockPin, appPin);
     }
 

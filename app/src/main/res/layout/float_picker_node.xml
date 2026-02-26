@@ -65,16 +65,61 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/upButton"
                 style="?attr/iconButtonFilled"
+                android:layout_width="?attr/smallIconButtonSize"
+                android:layout_height="?attr/smallIconButtonSize"
+                android:insetLeft="1dp"
+                android:insetTop="1dp"
+                android:insetRight="1dp"
+                android:insetBottom="1dp"
+                android:padding="1dp"
                 app:icon="@drawable/icon_keyboard_arrow_up" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/downButton"
                 style="?attr/iconButtonFilled"
+                android:layout_width="?attr/smallIconButtonSize"
+                android:layout_height="?attr/smallIconButtonSize"
+                android:insetLeft="1dp"
+                android:insetTop="1dp"
+                android:insetRight="1dp"
+                android:insetBottom="1dp"
+                android:padding="1dp"
                 app:icon="@drawable/icon_keyboard_arrow_down" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/leftButton"
+                style="?attr/iconButtonFilled"
+                android:layout_width="?attr/smallIconButtonSize"
+                android:layout_height="?attr/smallIconButtonSize"
+                android:insetLeft="1dp"
+                android:insetTop="1dp"
+                android:insetRight="1dp"
+                android:insetBottom="1dp"
+                android:padding="1dp"
+                app:icon="@drawable/icon_keyboard_arrow_left" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/rightButton"
+                style="?attr/iconButtonFilled"
+                android:layout_width="?attr/smallIconButtonSize"
+                android:layout_height="?attr/smallIconButtonSize"
+                android:insetLeft="1dp"
+                android:insetTop="1dp"
+                android:insetRight="1dp"
+                android:insetBottom="1dp"
+                android:padding="1dp"
+                app:icon="@drawable/icon_keyboard_arrow_right" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/infoButton"
                 style="?attr/iconButtonFilled"
+                android:layout_width="?attr/smallIconButtonSize"
+                android:layout_height="?attr/smallIconButtonSize"
+                android:insetLeft="1dp"
+                android:insetTop="1dp"
+                android:insetRight="1dp"
+                android:insetBottom="1dp"
+                android:padding="1dp"
                 app:icon="@drawable/icon_visibility" />
 
         </com.google.android.material.button.MaterialButtonGroup>
@@ -98,7 +143,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/searchBox"
@@ -121,58 +167,34 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <Space
-                android:layout_width="8dp"
-                android:layout_height="wrap_content" />
-
-            <com.google.android.material.button.MaterialButtonToggleGroup
-                android:id="@+id/typeGroup"
-                style="@style/Widget.Material3.MaterialButtonGroup.Connected"
-                android:layout_width="180dp"
+            <com.google.android.material.button.MaterialButtonGroup
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:selectionRequired="true"
-                app:singleSelection="true">
+                android:spacing="0dp">
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/topTypeButton"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="0dp"
+                    android:id="@+id/exportButton"
+                    style="?attr/materialIconButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/fill_button_background_normal_check"
-                    android:padding="0dp"
-                    android:text="@string/picker_node_type_1"
-                    android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-                    android:textColor="@color/button_container_check"
-                    app:opticalCenterEnabled="true" />
+                    app:icon="@drawable/icon_upload" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/levelTypeButton"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="0dp"
+                    android:id="@+id/importButton"
+                    style="?attr/materialIconButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/fill_button_background_normal_check"
-                    android:padding="0dp"
-                    android:text="@string/picker_node_type_2"
-                    android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-                    android:textColor="@color/button_container_check"
-                    app:opticalCenterEnabled="true" />
+                    app:icon="@drawable/icon_download" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/ignoreTypeButton"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="0dp"
+                    android:id="@+id/typeButton"
+                    style="?attr/materialIconButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/fill_button_background_normal_check"
-                    android:padding="0dp"
-                    android:text="@string/picker_node_type_3"
                     android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-                    android:textColor="@color/button_container_check"
-                    app:opticalCenterEnabled="true" />
-
-            </com.google.android.material.button.MaterialButtonToggleGroup>
+                    app:icon="@drawable/icon_keyboard_arrow_down"
+                    app:iconGravity="textEnd" />
+            </com.google.android.material.button.MaterialButtonGroup>
 
         </LinearLayout>
 

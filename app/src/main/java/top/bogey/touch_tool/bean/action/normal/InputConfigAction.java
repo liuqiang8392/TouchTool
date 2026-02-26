@@ -20,7 +20,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
-import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinPoint;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinPoint;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleSelect;
 import top.bogey.touch_tool.bean.pin.special_pin.NotLinkAblePin;
 import top.bogey.touch_tool.bean.pin.special_pin.ShowAblePin;
@@ -34,7 +34,7 @@ public class InputConfigAction extends ExecuteAction implements DynamicPinsActio
     private final transient Pin posTypePin = new NotLinkAblePin(new PinSingleSelect(R.array.float_pos_type, 0), R.string.pin_point, false, false, true);
     private final transient Pin anchorPin = new PosShowablePin(new PinSingleSelect(R.array.anchor, 4), R.string.window_anchor, false, false, true);
     private final transient Pin gravityPin = new PosShowablePin(new PinSingleSelect(R.array.anchor, 4), R.string.screen_anchor, false, false, true);
-    private final transient Pin showPosPin = new PosShowablePin(new PinPoint(0, 0), R.string.screen_anchor_pos, false, false, true);
+    private final transient Pin showPosPin = new PosShowablePin(new PinPoint(), R.string.screen_anchor_pos, false, false, true);
     private final transient Pin savePin = new NotLinkAblePin(new PinBoolean(true), R.string.input_config_action_save, false, false, true);
     private final transient Pin timeoutPin = new NotLinkAblePin(new PinInteger(0), R.string.input_config_action_timeout, false, false, true);
     private final transient Pin elsePin = new Pin(new PinExecute(), R.string.input_config_action_else, true);

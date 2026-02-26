@@ -9,7 +9,7 @@ import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.parent.CalculateAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
-import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinPoint;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinPoint;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class PointToIntegerAction extends CalculateAction {

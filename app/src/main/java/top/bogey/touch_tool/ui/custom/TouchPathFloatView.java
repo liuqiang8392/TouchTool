@@ -179,6 +179,7 @@ public class TouchPathFloatView extends AppCompatImageView implements FloatInter
                 .setAnchor(EAnchor.TOP_LEFT)
                 .setDragAble(false)
                 .setSpecial(true)
+                .setHideByScreenshot(true)
                 .setFlag(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
                 .show();
     }
