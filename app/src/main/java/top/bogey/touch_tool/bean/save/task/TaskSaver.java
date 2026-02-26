@@ -5,6 +5,8 @@ import com.tencent.mmkv.MMKV;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -105,37 +107,50 @@ public class TaskSaver {
     }
 
     public List<Task> getOrderTasks() {
-        List<Task> tasks = new ArrayList<>();
+        LinkedHashSet<Task> tasks = new LinkedHashSet<>();
         TagSaver tagSaver = TagSaver.getInstance();
         List<String> tags = new ArrayList<>(tagSaver.getTags());
-        if (tags.isEmpty()) return getTasks();
         tags.add(EMPTY_TAG);
-        tags.forEach(tag -> {
+        for (String tag : tags) {
+            List<Task> taskList = getTasks(tag);
+            AppUtil.chineseSort(taskList, Task::getTitle);
+            Map<String, Task> tagTasks = new LinkedHashMap<>();
+            for (Task task : taskList) {
+                tagTasks.put(task.getId(), task);
+            }
+
             List<String> taskOrder = tagSaver.getTaskOrder(tag);
-            if (taskOrder == null) {
-                tasks.addAll(getTasks(tag));
+            if (taskOrder == null || taskOrder.isEmpty()) {
+                tasks.addAll(tagTasks.values());
             } else {
                 for (String taskId : taskOrder) {
-                    Task task = getTask(taskId);
+                    Task task = tagTasks.remove(taskId);
                     if (task != null) {
                         tasks.add(task);
                     }
                 }
+                tasks.addAll(tagTasks.values());
             }
-        });
-        return tasks;
+        }
+        return new ArrayList<>(tasks);
     }
 
     public List<Task> getOrderTasks(Class<? extends Action> actionClass) {
-        List<Task> tasks = new ArrayList<>();
+        LinkedHashSet<Task> tasks = new LinkedHashSet<>();
         TagSaver tagSaver = TagSaver.getInstance();
         List<String> tags = new ArrayList<>(tagSaver.getTags());
-        if (tags.isEmpty()) return getTasks(actionClass);
         tags.add(EMPTY_TAG);
-        tags.forEach(tag -> {
+        for (String tag : tags) {
+            List<Task> taskList = getTasks(tag);
+            AppUtil.chineseSort(taskList, Task::getTitle);
+            Map<String, Task> tagTasks = new LinkedHashMap<>();
+            for (Task task : taskList) {
+                tagTasks.put(task.getId(), task);
+            }
+
             List<String> taskOrder = tagSaver.getTaskOrder(tag);
-            if (taskOrder == null) {
-                for (Task task : getTasks(tag)) {
+            if (taskOrder == null || taskOrder.isEmpty()) {
+                for (Task task : tagTasks.values()) {
                     List<Action> actions = task.getActions(actionClass);
                     if (actions != null && !actions.isEmpty()) {
                         tasks.add(task);
@@ -143,15 +158,22 @@ public class TaskSaver {
                 }
             } else {
                 for (String taskId : taskOrder) {
-                    Task task = getTask(taskId);
+                    Task task = tagTasks.remove(taskId);
+                    if (task == null) continue;
                     List<Action> actions = task.getActions(actionClass);
                     if (actions != null && !actions.isEmpty()) {
                         tasks.add(task);
                     }
                 }
+                tagTasks.values().forEach(task -> {
+                    List<Action> actions = task.getActions(actionClass);
+                    if (actions != null && !actions.isEmpty()) {
+                        tasks.add(task);
+                    }
+                });
             }
-        });
-        return tasks;
+        }
+        return new ArrayList<>(tasks);
     }
 
     public List<Task> searchTasks(String title) {
