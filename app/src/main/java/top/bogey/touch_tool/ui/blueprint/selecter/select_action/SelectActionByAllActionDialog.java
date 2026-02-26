@@ -41,7 +41,7 @@ public class SelectActionByAllActionDialog extends SelectActionDialog {
             subGroupMap.put(PRIVATE, task);
 
             // 公共任务
-            List<Object> publicTasks = new ArrayList<>(TaskSaver.getInstance().getTasks());
+            List<Object> publicTasks = new ArrayList<>(TaskSaver.getInstance().getOrderTasks());
             map.put(GLOBAL, publicTasks);
             subGroupMap.put(GLOBAL, GLOBAL);
 

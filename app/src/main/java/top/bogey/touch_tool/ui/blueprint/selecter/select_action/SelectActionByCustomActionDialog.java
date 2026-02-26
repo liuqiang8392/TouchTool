@@ -39,7 +39,7 @@ public class SelectActionByCustomActionDialog extends SelectActionDialog {
 
             // 公共任务
             List<Object> publicTasks = new ArrayList<>();
-            for (Task task : TaskSaver.getInstance().getTasks()) {
+            for (Task task : TaskSaver.getInstance().getOrderTasks()) {
                 if (!task.getActions(CustomStartAction.class).isEmpty()) publicTasks.add(task);
             }
             map.put(GLOBAL, publicTasks);

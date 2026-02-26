@@ -101,7 +101,7 @@ public class SelectActionDialog extends BottomSheetDialog {
                 SettingSaver.getInstance().setLastSubGroup(((MaterialButton) view).getText().toString());
                 subGroupTag = (String) view.getTag();
                 dataList = dataMap.get(subGroupTag);
-                adapter.setData(dataList, groupType != GroupType.PRESET);
+                adapter.setData(dataList);
                 binding.addButton.setVisibility(Objects.equals(subGroupTag, GLOBAL) || Objects.equals(subGroupTag, PRIVATE) ? View.VISIBLE : View.GONE);
             }
         });
@@ -315,7 +315,7 @@ public class SelectActionDialog extends BottomSheetDialog {
                 subGroupMap.put(PRIVATE, task);
 
                 // 公共任务
-                List<Object> publicTasks = new ArrayList<>(TaskSaver.getInstance().getTasks());
+                List<Object> publicTasks = new ArrayList<>(TaskSaver.getInstance().getOrderTasks());
                 map.put(GLOBAL, publicTasks);
                 subGroupMap.put(GLOBAL, GLOBAL);
 

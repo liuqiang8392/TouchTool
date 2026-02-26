@@ -185,9 +185,8 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
         return linearLayout;
     }
 
-    public void setData(List<Object> data, boolean sort) {
+    public void setData(List<Object> data) {
         this.data = data;
-        if (sort) AppUtil.chineseSort(data, SelectActionItemRecyclerViewAdapter::getObjectTitle);
         notifyDataSetChanged();
     }
 
