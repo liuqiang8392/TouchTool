@@ -4,7 +4,7 @@
     style="?attr/materialCardViewFilledStyle"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="?attr/defaultOffset">
+    android:layout_marginBottom="?attr/defaultOffset">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardLayout"

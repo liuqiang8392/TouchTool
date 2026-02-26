@@ -9,7 +9,8 @@
         style="?attr/materialCardViewFilledStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large">
+        android:visibility="visible"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full">
 
         <LinearLayout
             android:layout_width="wrap_content"

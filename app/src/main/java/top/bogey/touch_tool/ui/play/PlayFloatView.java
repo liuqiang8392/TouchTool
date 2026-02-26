@@ -40,7 +40,7 @@ import top.bogey.touch_tool.utils.float_window_manager.FloatWindowHelper;
 
 public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskListener {
     public static final int UNIT_DP_SIZE = 2;
-    public static final int BUTTON_DP_SIZE = 36;
+    public static final int BUTTON_DP_SIZE = 32;
     public static final int UNIT_GROW_DP_SIZE = 8;
 
 
@@ -89,9 +89,8 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
 
         binding.dragSpaceButton.setOnClickListener(v -> {
             if (isNotPlayHide) {
-                isNotPlayHide = false;
-                animate().alpha(1f);
-                startNotPlayHide();
+                playHide(false);
+                playHide(true);
             } else {
                 refreshExpand(true);
                 refreshCorner(false);
@@ -106,9 +105,8 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
 
         binding.closeButton.setOnClickListener(v -> {
             if (isNotPlayHide) {
-                isNotPlayHide = false;
-                animate().alpha(1f);
-                startNotPlayHide();
+                playHide(false);
+                playHide(true);
             } else {
                 refreshExpand(false);
                 refreshCorner(false);
@@ -137,7 +135,7 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
         MainAccessibilityService service = MainApplication.getInstance().getService();
         if (service != null) service.addListener(this);
 
-        startNotPlayHide();
+        playHide(true);
     }
 
     @Override
@@ -259,17 +257,6 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
         return SettingSaver.getInstance().isManualPlayingHide() && runningTaskCount > 0;
     }
 
-    private void startNotPlayHide() {
-        if (runningTaskCount == 0 && SettingSaver.getInstance().isNotPlayHide()) {
-            handler.removeCallbacksAndMessages(null);
-            handler.postDelayed(() -> {
-                int alpha = SettingSaver.getInstance().getNotPlayHideAlpha();
-                animate().alpha(alpha / 100f);
-                isNotPlayHide = true;
-            }, 10000);
-        }
-    }
-
     private boolean inLeft() {
         int[] location = new int[2];
         getLocationOnScreen(location);
@@ -324,6 +311,22 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
         }
     }
 
+    private void playHide(boolean hide) {
+        handler.removeCallbacksAndMessages(null);
+        if (hide) {
+            if (runningTaskCount == 0 && SettingSaver.getInstance().isNotPlayHide()) {
+                handler.postDelayed(() -> {
+                    int alpha = SettingSaver.getInstance().getNotPlayHideAlpha();
+                    animate().alpha(alpha / 100f);
+                    isNotPlayHide = true;
+                }, 10000);
+            }
+        } else {
+            post(() -> animate().alpha(1f));
+            isNotPlayHide = false;
+        }
+    }
+
     @Override
     public void onStart(TaskRunnable runnable) {
         StartAction startAction = runnable.getStartAction();
@@ -359,7 +362,7 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
             }
         }
 
-        startNotPlayHide();
+        playHide(true);
     }
 
     private static class PlayFloatCallback extends FloatBaseCallback {
@@ -381,6 +384,7 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
             if (view instanceof PlayFloatView playFloatView) {
                 playFloatView.refreshCorner(true);
                 playFloatView.handler.removeCallbacksAndMessages(null);
+                playFloatView.playHide(false);
             }
         }
 
@@ -391,12 +395,13 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
             if (helper != null) {
                 Point point = helper.getRelativePoint();
                 SettingSaver.getInstance().setManualPlayViewPos(point);
-                PlayFloatView view = (PlayFloatView) FloatWindow.getView(PlayFloatView.class.getName());
-                if (view != null) {
-                    view.refreshExpand(SettingSaver.getInstance().getManualPlayViewState());
-                    view.refreshCorner(false);
-                    view.startNotPlayHide();
-                }
+            }
+
+            View view = FloatWindow.getView(PlayFloatView.class.getName());
+            if (view instanceof PlayFloatView playFloatView) {
+                playFloatView.refreshExpand(SettingSaver.getInstance().getManualPlayViewState());
+                playFloatView.refreshCorner(false);
+                playFloatView.playHide(true);
             }
         }
 
