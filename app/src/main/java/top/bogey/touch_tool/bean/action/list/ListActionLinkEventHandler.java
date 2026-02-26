@@ -47,6 +47,7 @@ public class ListActionLinkEventHandler {
         } else {
             template = toValue.copy();
         }
+        template.reset();
 
         for (Pin pin : valuePins) {
             PinBase value = pin.getValue();
