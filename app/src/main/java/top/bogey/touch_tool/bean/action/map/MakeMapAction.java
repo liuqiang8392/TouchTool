@@ -57,7 +57,7 @@ public class MakeMapAction extends MapCalculateAction implements DynamicPinsActi
 
     @Override
     public void resetReturnValue(TaskRunnable runnable, Pin pin) {
-        mapPin.setValue(new PinMap());
+        mapPin.getValue().reset();
     }
 
     @Override

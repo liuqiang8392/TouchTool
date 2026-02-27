@@ -38,6 +38,7 @@ public class BasePicker<T> extends FrameLayout implements FloatInterface {
                 .setTag(tag)
                 .setDragAble(dragAble)
                 .setExistEditText(editable)
+                .setHideByScreenshot(true)
                 .setCallback(floatCallback)
                 .show();
     }

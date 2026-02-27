@@ -79,11 +79,23 @@ public abstract class ExecuteOrCalculateAction extends Action {
         }
     }
 
-    private boolean isRealtimeMode() {
+    protected boolean isRealtimeMode() {
         return realtimeModePin.getValue(PinBoolean.class).getValue();
     }
 
     protected static class ExecuteShowablePin extends ShowAblePin {
+        public ExecuteShowablePin(PinBase value) {
+            super(value);
+        }
+
+        public ExecuteShowablePin(PinBase value, int titleId) {
+            super(value, titleId);
+        }
+
+        public ExecuteShowablePin(PinBase value, boolean out) {
+            super(value, out);
+        }
+
         public ExecuteShowablePin(PinBase value, int titleId, boolean out) {
             super(value, titleId, out);
         }

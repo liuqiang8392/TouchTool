@@ -23,6 +23,7 @@ public enum ActionType {
     STOP_TASK,
     GET_VARIABLE,
     SET_VARIABLE,
+    GET_OR_SET_VARIABLE,
 
     // 逻辑
     IF_LOGIC,

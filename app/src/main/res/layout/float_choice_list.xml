@@ -40,12 +40,19 @@
             app:cardBackgroundColor="?attr/colorSurface"
             app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large">
 
-            <LinearLayout
-                android:id="@+id/flexBox"
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/scrollView"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="?attr/defaultPadding"
-                android:orientation="vertical" />
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/flexBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="?attr/defaultPadding"
+                    android:orientation="vertical" />
+
+            </androidx.core.widget.NestedScrollView>
 
         </com.google.android.material.card.MaterialCardView>
 

@@ -42,6 +42,7 @@ public class NodePickerPreview extends BasePicker<String> {
             binding.title.setText(test ? R.string.picker_test_title : R.string.picker_node_title);
             binding.pathText.setVisibility(test ? GONE : VISIBLE);
             binding.testBox.setVisibility(test ? VISIBLE : GONE);
+            if (test) matchImage();
         });
 
         binding.pathText.setText(path);
@@ -61,32 +62,11 @@ public class NodePickerPreview extends BasePicker<String> {
         binding.copyButton.setOnClickListener(v -> AppUtil.copyToClipboard(getContext(), nodePath.getValue()));
 
         binding.matchButton.setOnClickListener(v -> {
-            MainAccessibilityService service = MainApplication.getInstance().getService();
-            if (service != null && service.isEnabled()) {
-                FloatWindow.hide(tag);
-                postDelayed(() -> {
-                    Bitmap bitmap = service.tryGetScreenShot();
-                    FloatWindow.show(tag);
-                    if (bitmap != null) {
-                        NodeInfo nodeInfo = nodePath.findNode(NodeInfo.getWindows(), true);
-                        if (nodeInfo == null) return;
-                        Rect rect = nodeInfo.area;
-                        int px = (int) DisplayUtil.dp2px(getContext(), 16);
-                        Rect area = DisplayUtil.safeClipBitmapArea(bitmap, rect.left - px, rect.top - px, rect.width() + px * 2, rect.height() + px * 2);
-                        if (area == null) return;
-                        Bitmap clipBitmap = DisplayUtil.safeClipBitmap(bitmap, area.left, area.top, area.width(), area.height());
-                        if (clipBitmap == null) return;
-                        Paint paint = new Paint();
-                        paint.setColor(Color.RED);
-                        paint.setStrokeWidth(2);
-                        paint.setStyle(Paint.Style.STROKE);
-                        Canvas canvas = new Canvas(clipBitmap);
-                        canvas.translate(rect.left - area.left, rect.top - area.top);
-                        canvas.drawRect(new Rect(0, 0, rect.width(), rect.height()), paint);
-                        binding.matchedImage.setImageBitmap(clipBitmap);
-                    }
-                }, 100);
-            }
+            FloatWindow.hide(tag);
+            postDelayed(() -> {
+                matchImage();
+                FloatWindow.show(tag);
+            }, 100);
         });
 
         binding.touchButton.setOnClickListener(v -> {
@@ -95,5 +75,29 @@ public class NodePickerPreview extends BasePicker<String> {
             MarkTargetFloatView.showTargetArea(nodeInfo.area);
             nodeInfo.node.performAction(AccessibilityNodeInfo.ACTION_CLICK);
         });
+    }
+
+    private void matchImage() {
+        MainAccessibilityService service = MainApplication.getInstance().getService();
+        if (service == null || !service.isEnabled()) return;
+        Bitmap bitmap = service.tryGetScreenShot();
+        if (bitmap != null) {
+            NodeInfo nodeInfo = nodePath.findNode(NodeInfo.getWindows(), true);
+            if (nodeInfo == null) return;
+            Rect rect = nodeInfo.area;
+            int px = (int) DisplayUtil.dp2px(getContext(), 16);
+            Rect area = DisplayUtil.safeClipBitmapArea(bitmap, rect.left - px, rect.top - px, rect.width() + px * 2, rect.height() + px * 2);
+            if (area == null) return;
+            Bitmap clipBitmap = DisplayUtil.safeClipBitmap(bitmap, area.left, area.top, area.width(), area.height());
+            if (clipBitmap == null) return;
+            Paint paint = new Paint();
+            paint.setColor(Color.RED);
+            paint.setStrokeWidth(2);
+            paint.setStyle(Paint.Style.STROKE);
+            Canvas canvas = new Canvas(clipBitmap);
+            canvas.translate(rect.left - area.left, rect.top - area.top);
+            canvas.drawRect(new Rect(0, 0, rect.width(), rect.height()), paint);
+            binding.matchedImage.setImageBitmap(clipBitmap);
+        }
     }
 }

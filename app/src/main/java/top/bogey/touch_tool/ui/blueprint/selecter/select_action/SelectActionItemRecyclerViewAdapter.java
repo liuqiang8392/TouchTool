@@ -28,6 +28,7 @@ import top.bogey.touch_tool.bean.action.ActionInfo;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.task.CustomStartAction;
 import top.bogey.touch_tool.bean.action.task.ExecuteTaskAction;
+import top.bogey.touch_tool.bean.action.variable.GetOrSetVariableAction;
 import top.bogey.touch_tool.bean.action.variable.GetVariableAction;
 import top.bogey.touch_tool.bean.action.variable.SetVariableAction;
 import top.bogey.touch_tool.bean.other.Usage;
@@ -314,17 +315,6 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
             this.variableBinding = binding;
             context = binding.getRoot().getContext();
 
-            binding.setButton.setOnClickListener(v -> {
-                int index = getBindingAdapterPosition();
-                Object object = data.get(index);
-
-                if (object instanceof Variable var) {
-                    Action action = new SetVariableAction(var);
-                    if (callback != null) callback.onResult(action);
-                }
-            });
-
-
             binding.keySlot.setOnClickListener(v -> {
                 ListPopupWindow popup = new ListPopupWindow(context);
                 List<PinInfo> pinInfoList = new ArrayList<>();
@@ -459,6 +449,7 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
 
                 if (object instanceof Variable var) {
                     action = new GetVariableAction(var);
+//                    action = new GetOrSetVariableAction(var);
                 }
 
                 if (callback != null) callback.onResult(action);

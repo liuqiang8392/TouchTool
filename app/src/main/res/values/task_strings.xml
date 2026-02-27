@@ -151,6 +151,8 @@
     <string name="set_value_action">设置%s</string>
     <string name="set_value_action_save">保存值</string>
     <string name="get_value_action">获取%s</string>
+    <string name="get_or_set_value_action">设置或获取%s</string>
+    <string name="get_or_set_value_action_get_value">设置/获取</string>
 
     <!-- 动作-Normal -->
     <string name="delay_action">延时</string>
@@ -704,10 +706,10 @@
     <string name="list_add_action_desc">向列表中添加元素</string>
     <string name="list_add_action_index">元素位置</string>
 
-    <string name="list_remove_action">移除元素</string>
-    <string name="list_remove_action_desc">从列表中移除元素</string>
+    <string name="list_remove_action">移除索引元素</string>
+    <string name="list_remove_action_desc">按索引从列表中移除元素</string>
 
-    <string name="list_remove_object_action">按对象移除</string>
+    <string name="list_remove_object_action">移除元素对象</string>
     <string name="list_remove_object_action_desc">按对象从列表中移除元素</string>
 
     <string name="list_append_action">列表拼接</string>

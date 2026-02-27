@@ -1,5 +1,7 @@
 package top.bogey.touch_tool.ui.blueprint;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Point;
@@ -73,6 +75,14 @@ public class BlueprintView extends Fragment {
             } else {
                 blueprintView.binding.cardLayout.focusCard(action.getId());
             }
+
+            ActivityManager manager = (ActivityManager) blueprintView.requireActivity().getSystemService(Context.ACTIVITY_SERVICE);
+            try {
+                manager.moveTaskToFront(blueprintView.requireActivity().getTaskId(), 0);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             return true;
         }
         return false;

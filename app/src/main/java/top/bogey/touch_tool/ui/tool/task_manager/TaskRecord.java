@@ -7,8 +7,10 @@ import java.util.Set;
 
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.task.ExecuteTaskAction;
+import top.bogey.touch_tool.bean.action.variable.GetOrSetVariableAction;
 import top.bogey.touch_tool.bean.action.variable.GetVariableAction;
 import top.bogey.touch_tool.bean.action.variable.SetVariableAction;
+import top.bogey.touch_tool.bean.save.variable.VariableSaver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.bean.task.Variable;
 import top.bogey.touch_tool.utils.AppUtil;
@@ -41,6 +43,12 @@ public record TaskRecord(Set<Task> tasks, Set<Variable> variables) {
         for (Action action : task.getActions(SetVariableAction.class)) {
             SetVariableAction set = (SetVariableAction) action;
             String varId = set.getVarId();
+            Variable variable = getVariableById(varId);
+            if (variable != null) variables.add(variable);
+        }
+        for (Action action : task.getActions(GetOrSetVariableAction.class)) {
+            GetOrSetVariableAction getOrSet = (GetOrSetVariableAction) action;
+            String varId = getOrSet.getVarId();
             Variable variable = getVariableById(varId);
             if (variable != null) variables.add(variable);
         }

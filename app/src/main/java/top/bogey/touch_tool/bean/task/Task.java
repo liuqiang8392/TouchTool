@@ -23,6 +23,7 @@ import top.bogey.touch_tool.bean.action.start.InnerStartAction;
 import top.bogey.touch_tool.bean.action.start.StartAction;
 import top.bogey.touch_tool.bean.action.task.CustomStartAction;
 import top.bogey.touch_tool.bean.action.task.ExecuteTaskAction;
+import top.bogey.touch_tool.bean.action.variable.GetOrSetVariableAction;
 import top.bogey.touch_tool.bean.action.variable.GetVariableAction;
 import top.bogey.touch_tool.bean.action.variable.SetVariableAction;
 import top.bogey.touch_tool.bean.base.Identity;
@@ -207,6 +208,12 @@ public class Task extends Identity implements IActionManager, ITaskManager, IVar
             Variable variable = VariableSaver.getInstance().getVar(varId);
             if (variable != null) variables.add(variable);
         }
+        for (Action action : getActions(GetOrSetVariableAction.class)) {
+            GetOrSetVariableAction getOrSet = (GetOrSetVariableAction) action;
+            String varId = getOrSet.getVarId();
+            Variable variable = VariableSaver.getInstance().getVar(varId);
+            if (variable != null) variables.add(variable);
+        }
         for (Task task : getTasks()) {
             variables.addAll(task.getVariableReferences());
         }
@@ -307,6 +314,13 @@ public class Task extends Identity implements IActionManager, ITaskManager, IVar
         for (Action action : getActions(SetVariableAction.class)) {
             SetVariableAction set = (SetVariableAction) action;
             if (id.equals(set.getVarId())) {
+                points.add(action.getPos());
+            }
+        }
+
+        for (Action action : getActions(GetOrSetVariableAction.class)) {
+            GetOrSetVariableAction getOrSet = (GetOrSetVariableAction) action;
+            if (id.equals(getOrSet.getVarId())) {
                 points.add(action.getPos());
             }
         }

@@ -44,6 +44,8 @@ public class ColorPickerPreview extends BasePicker<PinColor.ColorInfo> {
 
     public ColorPickerPreview(@NonNull Context context, ResultCallback<PinColor.ColorInfo> callback, PinColor.ColorInfo color) {
         super(context, callback);
+        editable = true;
+
         binding = FloatPickerColorPreviewBinding.inflate(LayoutInflater.from(context), this, true);
 
         PinColor.ColorInfo colorInfo = new PinColor.ColorInfo(color.getColor(), color.getMinArea(), color.getMaxArea());
@@ -82,6 +84,13 @@ public class ColorPickerPreview extends BasePicker<PinColor.ColorInfo> {
             binding.title.setText(test ? R.string.picker_test_title : R.string.picker_color_title);
             binding.contentBox.setVisibility(test ? GONE : VISIBLE);
             binding.testBox.setVisibility(test ? VISIBLE : GONE);
+            if (test) {
+                FloatWindow.hide(tag);
+                postDelayed(() -> {
+                    matchImage(colorInfo);
+                    FloatWindow.show(tag);
+                }, 100);
+            }
         });
 
         binding.backButton.setOnClickListener(v -> dismiss());
@@ -104,35 +113,11 @@ public class ColorPickerPreview extends BasePicker<PinColor.ColorInfo> {
 
         binding.timeSlider.setLabelFormatter(value -> getContext().getString(R.string.picker_color_offset, (int) value));
         binding.matchButton.setOnClickListener(v -> {
-            MainAccessibilityService service = MainApplication.getInstance().getService();
-            if (service != null && service.isEnabled()) {
-                FloatWindow.hide(tag);
-                postDelayed(() -> {
-                    Bitmap bitmap = service.tryGetScreenShot();
-                    FloatWindow.show(tag);
-                    if (bitmap != null) {
-                        int offset = (int) binding.timeSlider.getValue();
-                        List<Rect> rectList = DisplayUtil.matchColor(bitmap, colorInfo.getColor(), null, offset);
-                        if (rectList == null || rectList.isEmpty()) binding.matchedImage.setImageDrawable(null);
-                        else {
-                            Rect rect = rectList.get(0);
-                            int px = (int) DisplayUtil.dp2px(getContext(), 16);
-                            Rect area = DisplayUtil.safeClipBitmapArea(bitmap, rect.left - px, rect.top - px, rect.width() + px * 2, rect.height() + px * 2);
-                            if (area == null) return;
-                            Bitmap clipBitmap = DisplayUtil.safeClipBitmap(bitmap, area.left, area.top, area.width(), area.height());
-                            if (clipBitmap == null) return;
-                            Paint paint = new Paint();
-                            paint.setColor(Color.RED);
-                            paint.setStrokeWidth(2);
-                            paint.setStyle(Paint.Style.STROKE);
-                            Canvas canvas = new Canvas(clipBitmap);
-                            canvas.translate(rect.left - area.left, rect.top - area.top);
-                            canvas.drawRect(new Rect(0, 0, rect.width(), rect.height()), paint);
-                            binding.matchedImage.setImageBitmap(clipBitmap);
-                        }
-                    }
-                }, 100);
-            }
+            FloatWindow.hide(tag);
+            postDelayed(() -> {
+                matchImage(colorInfo);
+                FloatWindow.show(tag);
+            }, 100);
         });
 
         binding.touchButton.setOnClickListener(v -> {
@@ -168,14 +153,31 @@ public class ColorPickerPreview extends BasePicker<PinColor.ColorInfo> {
         }
     }
 
-    @Override
-    public void show() {
-        FloatWindow.with(MainApplication.getInstance().getService())
-                .setLayout(this)
-                .setTag(tag)
-                .setDragAble(dragAble)
-                .setCallback(floatCallback)
-                .setExistEditText(true)
-                .show();
+    private void matchImage(PinColor.ColorInfo colorInfo) {
+        MainAccessibilityService service = MainApplication.getInstance().getService();
+        if (service == null || !service.isEnabled()) return;
+
+        Bitmap bitmap = service.tryGetScreenShot();
+        if (bitmap != null) {
+            int offset = (int) binding.timeSlider.getValue();
+            List<Rect> rectList = DisplayUtil.matchColor(bitmap, colorInfo.getColor(), null, offset);
+            if (rectList == null || rectList.isEmpty()) binding.matchedImage.setImageDrawable(null);
+            else {
+                Rect rect = rectList.get(0);
+                int px = (int) DisplayUtil.dp2px(getContext(), 16);
+                Rect area = DisplayUtil.safeClipBitmapArea(bitmap, rect.left - px, rect.top - px, rect.width() + px * 2, rect.height() + px * 2);
+                if (area == null) return;
+                Bitmap clipBitmap = DisplayUtil.safeClipBitmap(bitmap, area.left, area.top, area.width(), area.height());
+                if (clipBitmap == null) return;
+                Paint paint = new Paint();
+                paint.setColor(Color.RED);
+                paint.setStrokeWidth(2);
+                paint.setStyle(Paint.Style.STROKE);
+                Canvas canvas = new Canvas(clipBitmap);
+                canvas.translate(rect.left - area.left, rect.top - area.top);
+                canvas.drawRect(new Rect(0, 0, rect.width(), rect.height()), paint);
+                binding.matchedImage.setImageBitmap(clipBitmap);
+            }
+        }
     }
 }

@@ -3,9 +3,11 @@ package top.bogey.touch_tool.ui.custom;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Point;
+import android.graphics.RectF;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
@@ -67,6 +69,25 @@ public class ListChoiceFloatView extends FrameLayout implements FloatInterface {
                 dismiss();
             });
         }
+    }
+
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent event) {
+        float x = event.getRawX();
+        float y = event.getRawY();
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            int[] location = new int[2];
+            binding.scrollView.getLocationOnScreen(location);
+            if (new RectF(location[0], location[1], location[0] + binding.scrollView.getWidth(), location[1] + binding.scrollView.getHeight()).contains(x, y)) {
+                FloatWindow.setDragAble(ListChoiceFloatView.class.getName(), false);
+                return super.onInterceptTouchEvent(event);
+            }
+        } else if (event.getAction() == MotionEvent.ACTION_UP) {
+            FloatWindow.setDragAble(ListChoiceFloatView.class.getName(), true);
+            return false;
+        }
+        return super.onInterceptTouchEvent(event);
     }
 
     @Override

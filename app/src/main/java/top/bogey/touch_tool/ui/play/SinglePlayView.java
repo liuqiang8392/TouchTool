@@ -89,6 +89,7 @@ public class SinglePlayView extends PlayFloatItemView implements FloatInterface 
                 .setLocation(action.getGravity(), action.getShowPos().x, action.getShowPos().y - statusBarHeight)
                 .setDragAble(!action.isLock())
                 .setSpecial(true)
+                .setHideByScreenshot(SettingSaver.getInstance().isManualPlayHideWhenScreenshot())
                 .show();
     }
 

@@ -174,6 +174,7 @@ import top.bogey.touch_tool.bean.action.task.CustomEndAction;
 import top.bogey.touch_tool.bean.action.task.CustomStartAction;
 import top.bogey.touch_tool.bean.action.task.ExecuteTaskAction;
 import top.bogey.touch_tool.bean.action.task.StopTaskAction;
+import top.bogey.touch_tool.bean.action.variable.GetOrSetVariableAction;
 import top.bogey.touch_tool.bean.action.variable.GetVariableAction;
 import top.bogey.touch_tool.bean.action.variable.SetVariableAction;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
@@ -207,6 +208,7 @@ public class ActionInfo {
     private final static ActionInfo STOP_TASK_INFO = new ActionInfo(ActionType.STOP_TASK, StopTaskAction.class, R.drawable.icon_stop, R.string.stop_task_action, R.string.stop_task_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo GET_VARIABLE_INFO = new ActionInfo(ActionType.GET_VARIABLE, GetVariableAction.class, R.drawable.icon_upload, R.string.get_value_action, 0, 0, NormalActionCard.class);
     private final static ActionInfo SET_VARIABLE_INFO = new ActionInfo(ActionType.SET_VARIABLE, SetVariableAction.class, R.drawable.icon_download, R.string.set_value_action, 0, 0, NormalActionCard.class);
+    private final static ActionInfo GET_OR_SET_VARIABLE_INFO = new ActionInfo(ActionType.GET_OR_SET_VARIABLE, GetOrSetVariableAction.class, R.drawable.icon_shuffle, R.string.get_or_set_value_action, 0, 0, NormalActionCard.class);
 
 
     // 逻辑动作
@@ -427,6 +429,7 @@ public class ActionInfo {
             case STOP_TASK -> STOP_TASK_INFO;
             case GET_VARIABLE -> GET_VARIABLE_INFO;
             case SET_VARIABLE -> SET_VARIABLE_INFO;
+            case GET_OR_SET_VARIABLE -> GET_OR_SET_VARIABLE_INFO;
 
             case IF_LOGIC -> IF_LOGIC_INFO;
             case WAIT_IF_LOGIC -> WAIT_IF_LOGIC_INFO;

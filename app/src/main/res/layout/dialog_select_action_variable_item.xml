@@ -42,6 +42,7 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/setButton"
                 style="?attr/iconButton"
+                android:visibility="invisible"
                 app:icon="@drawable/icon_download" />
 
         </LinearLayout>

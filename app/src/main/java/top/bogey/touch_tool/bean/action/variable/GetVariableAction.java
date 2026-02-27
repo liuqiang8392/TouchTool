@@ -10,6 +10,9 @@ import top.bogey.touch_tool.bean.action.parent.CalculateAction;
 import top.bogey.touch_tool.bean.action.parent.SyncAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.PinInfo;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
 import top.bogey.touch_tool.bean.save.variable.VariableSaver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.bean.task.Variable;
@@ -66,10 +69,9 @@ public class GetVariableAction extends CalculateAction implements SyncAction {
         if (variable == null) variable = VariableSaver.getInstance().getVar(varId);
         if (variable == null) return;
         if (varPin == null) return;
-        varPin.setTitle(variable.getTitle());
-        if (!varPin.isSameClass(variable.getValue())) {
-            varPin.setValue(variable.getValue().copy());
-        }
+
+        GetOrSetVariableAction.syncVarPin(context, varPin, variable);
+
         String globalFlag = variable.getParent() == null ? SelectActionDialog.GLOBAL_FLAG : "";
         PinInfo pinInfo = PinInfo.getPinInfo(variable.getValue());
         setTitle(MainApplication.getInstance().getString(R.string.get_value_action, pinInfo.getTitle()) + " - " + globalFlag + variable.getTitle());

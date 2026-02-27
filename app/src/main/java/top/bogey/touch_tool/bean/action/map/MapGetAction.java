@@ -15,6 +15,11 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinDouble;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinFloat;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinLong;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class MapGetAction extends MapCalculateAction {
@@ -41,6 +46,14 @@ public class MapGetAction extends MapCalculateAction {
         PinMap map = getPinValue(runnable, mapPin);
         PinObject key = getPinValue(runnable, keyPin);
         PinObject object = map.get(key);
+        if (object == null && key instanceof PinNumber<?> number) {
+            switch (map.getKeyType().getSubType()) {
+                case FLOAT -> object = map.get(new PinFloat(number.floatValue()));
+                case LONG -> object = map.get(new PinLong(number.longValue()));
+                case DOUBLE -> object = map.get(new PinDouble(number.doubleValue()));
+                default -> object = map.get(new PinInteger(number.intValue()));
+            }
+        }
         if (object != null) {
             existPin.getValue(PinBoolean.class).setValue(true);
             resultPin.setValue(returnValue(object));
