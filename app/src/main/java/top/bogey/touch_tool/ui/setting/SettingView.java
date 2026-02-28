@@ -399,7 +399,7 @@ public class SettingView extends Fragment {
         binding.supportFreeFormSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setSupportFreeForm(binding.supportFreeFormSwitch.isChecked()));
         binding.supportFreeFormSwitch.setChecked(SettingSaver.getInstance().isSupportFreeForm());
 
-        // 夜间模式
+        // 暗色模式
         binding.themeSelect.setOnButtonCheckedListener((group, checkedId, isChecked) -> {
             if (isChecked) {
                 View view = group.findViewById(checkedId);

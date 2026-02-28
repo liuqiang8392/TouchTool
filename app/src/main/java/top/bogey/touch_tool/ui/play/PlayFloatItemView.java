@@ -71,11 +71,13 @@ public class PlayFloatItemView extends FrameLayout implements ITaskListener {
 
         binding.getRoot().setOnLongClickListener(v -> {
             if (playState == PLAY_STATE_STOPPED) {
-                Intent intent = new Intent(context, MainActivity.class);
-                intent.setAction(MainActivity.INTENT_KEY_OPEN_TASK);
-                intent.putExtra(InstantActivity.TASK_ID, task.getId());
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
+                if (SettingSaver.getInstance().isManualPlayGotoTask()) {
+                    Intent intent = new Intent(context, MainActivity.class);
+                    intent.setAction(MainActivity.INTENT_KEY_OPEN_TASK);
+                    intent.putExtra(InstantActivity.TASK_ID, task.getId());
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
+                }
             } else {
                 if (pauseType == 0) stop();
                 else pause();

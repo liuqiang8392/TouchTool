@@ -68,6 +68,43 @@
                             app:options="@array/manual_play_pause_type"
                             app:title="@string/preference_setting_manual_play_pause" />
 
+                        <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSwitch
+                            android:id="@+id/manualPlayGotoTaskSwitch"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:description="@string/preference_setting_manual_play_goto_task_desc"
+                            app:icon="@drawable/icon_draw"
+                            app:title="@string/preference_setting_manual_play_goto_task" />
+
+                        <top.bogey.touch_tool.ui.setting.widget.SettingWidgetNormal
+                            android:id="@+id/manualPlayReset"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:buttonText="@string/preference_setting_manual_play_reset"
+                            app:buttonVisible="button"
+                            app:description="@string/preference_setting_manual_play_reset_desc"
+                            app:icon="@drawable/icon_refresh"
+                            app:title="@string/preference_setting_manual_play_reset" />
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/defaultPadding" />
+
+                <com.google.android.material.card.MaterialCardView
+                    style="?attr/materialCardViewFilledStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
                         <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSelect
                             android:id="@+id/hideManualPlaySelect"
                             android:layout_width="match_parent"
@@ -113,16 +150,6 @@
                             app:step="10"
                             app:title="@string/preference_setting_manual_not_play_hide_alpha"
                             app:value="50" />
-
-                        <top.bogey.touch_tool.ui.setting.widget.SettingWidgetNormal
-                            android:id="@+id/manualPlayReset"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:buttonText="@string/preference_setting_manual_play_reset"
-                            app:buttonVisible="button"
-                            app:description="@string/preference_setting_manual_play_reset_desc"
-                            app:icon="@drawable/icon_refresh"
-                            app:title="@string/preference_setting_manual_play_reset" />
 
                     </LinearLayout>
 

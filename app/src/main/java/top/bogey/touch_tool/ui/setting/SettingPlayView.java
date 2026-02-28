@@ -60,6 +60,10 @@ public class SettingPlayView extends Fragment {
         });
         binding.manualPlayPauseSelect.checkIndex(SettingSaver.getInstance().getManualPlayPauseType());
 
+        // 跳转任务
+        binding.manualPlayGotoTaskSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setManualPlayGotoTask(binding.manualPlayGotoTaskSwitch.isChecked()));
+        binding.manualPlayGotoTaskSwitch.setChecked(SettingSaver.getInstance().isManualPlayGotoTask());
+
         // 隐藏悬浮窗
         binding.hideManualPlaySelect.setOnButtonCheckedListener((group, checkedId, isChecked) -> {
             if (isChecked) {

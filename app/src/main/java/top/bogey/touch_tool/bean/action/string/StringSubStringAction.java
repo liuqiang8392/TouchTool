@@ -49,7 +49,12 @@ public class StringSubStringAction extends CalculateAction {
             startPos = endPos;
             endPos = temp;
         }
-        String result = text.toString().substring(startPos - 1, endPos);
-        resultPin.getValue(PinString.class).setValue(result);
+
+        if (text.toString().isEmpty()) {
+            resultPin.getValue(PinString.class).setValue("");
+        } else {
+            String result = text.toString().substring(startPos - 1, endPos);
+            resultPin.getValue(PinString.class).setValue(result);
+        }
     }
 }

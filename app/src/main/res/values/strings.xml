@@ -376,6 +376,9 @@
     <string name="preference_setting_manual_play_pause">暂停/停止</string>
     <string name="preference_setting_manual_play_pause_desc">设置任务运行时执行按钮“短按/长按”功能</string>
 
+    <string name="preference_setting_manual_play_goto_task">长按跳转到任务</string>
+    <string name="preference_setting_manual_play_goto_task_desc">设置执行按钮空闲时长按是否跳转到任务蓝图</string>
+
     <string name="preference_setting_manual_play_hide">隐藏悬浮窗</string>
     <string name="preference_setting_manual_play_hide_desc">设置长按悬浮窗展开收起按钮默认隐藏规则</string>
 
