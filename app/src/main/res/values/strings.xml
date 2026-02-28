@@ -125,6 +125,9 @@
     <string name="check_not_exist_variable_error">引用的变量不存在</string>
     <string name="check_action_deprecated_error">动作已过期，请用其他动作替换</string>
     <string name="check_android_version_9_error">需要Android 9.0及以上版本</string>
+    <string name="check_need_fine_location_permission_error">需要精确位置权限</string>
+    <string name="check_need_exact_alarm_permission_error">需要精确定时权限</string>
+    <string name="check_need_bluetooth_permission_error">需要蓝牙监听权限</string>
 
     <!-- 警告 -->
     <string name="check_need_capture_warning">需要开启录屏动作</string>

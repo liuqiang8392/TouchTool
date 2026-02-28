@@ -3,10 +3,13 @@ package top.bogey.touch_tool.bean.action.system;
 import com.google.gson.JsonObject;
 
 import top.bogey.touch_tool.R;
+import top.bogey.touch_tool.bean.action.ActionCheckResult;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.parent.CalculateAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
+import top.bogey.touch_tool.bean.save.SettingSaver;
+import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.TaskInfoSummary;
 import top.bogey.touch_tool.service.TaskRunnable;
 
@@ -33,5 +36,13 @@ public class GetWifiInfoAction extends CalculateAction {
         wifiNamePin.getValue(PinString.class).setValue(wifiInfo.wifiName());
         gatewayPin.getValue(PinString.class).setValue(wifiInfo.gateway());
         ipPin.getValue(PinString.class).setValue(wifiInfo.ip());
+    }
+
+    @Override
+    public void check(ActionCheckResult result, Task task) {
+        super.check(result, task);
+        if (!SettingSaver.getInstance().isLocationEnabled()) {
+            result.addResult(ActionCheckResult.ResultType.ERROR, R.string.check_need_fine_location_permission_error);
+        }
     }
 }
