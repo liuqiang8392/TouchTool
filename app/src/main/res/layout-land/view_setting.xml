@@ -314,6 +314,14 @@
                             app:icon="@drawable/icon_bluetooth"
                             app:title="@string/permission_setting_bluetooth" />
 
+                        <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSwitch
+                            android:id="@+id/locationSwitch"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:description="@string/permission_setting_location_desc"
+                            app:icon="@drawable/icon_my_location"
+                            app:title="@string/permission_setting_location" />
+
                     </LinearLayout>
 
                 </com.google.android.material.card.MaterialCardView>

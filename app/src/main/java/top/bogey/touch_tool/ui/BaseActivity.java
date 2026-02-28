@@ -256,6 +256,30 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+    public void launcherFineLocation(ActivityResultCallback callback) {
+        if (permissionLauncher == null) {
+            if (callback != null) callback.onResult(Activity.RESULT_CANCELED, null);
+            return;
+        }
+
+        String permission = Manifest.permission.ACCESS_FINE_LOCATION;
+        if (checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED) {
+            if (callback != null) callback.onResult(Activity.RESULT_OK, null);
+        } else if (shouldShowRequestPermissionRationale(permission)) {
+            AppUtil.showDialog(this, R.string.permission_setting_location_desc, result -> {
+                if (result) {
+                    resultCallback = callback;
+                    permissionLauncher.launch(permission);
+                } else {
+                    if (callback != null) callback.onResult(Activity.RESULT_CANCELED, null);
+                }
+            });
+        } else {
+            resultCallback = callback;
+            permissionLauncher.launch(permission);
+        }
+    }
+
     public void restartAccessibilityServiceBySecurePermission() {
         // 界面打开时尝试恢复无障碍服务
         // 如果应用服务设置关闭了，就啥都不管

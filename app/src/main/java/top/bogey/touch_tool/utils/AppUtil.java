@@ -21,7 +21,10 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
+import android.net.DhcpInfo;
 import android.net.Uri;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -51,6 +54,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -155,6 +162,43 @@ public class AppUtil {
             else return TaskInfoSummary.PhoneState.ON;
         }
         return TaskInfoSummary.PhoneState.OFF;
+    }
+
+    public static TaskInfoSummary.WifiInfo getWifiInfo(Context context) {
+        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        if (wifiManager == null) return null;
+
+        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+        if (wifiInfo == null) return null;
+
+        DhcpInfo dhcpInfo = wifiManager.getDhcpInfo();
+        if (dhcpInfo == null) return null;
+
+        String wifiName = wifiInfo.getSSID();
+
+        String gatewayIp = "";
+        int gateway = dhcpInfo.gateway;
+        byte[] bytes = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(gateway).array();
+
+        try {
+            InetAddress address = InetAddress.getByAddress(bytes);
+            gatewayIp = address.getHostAddress();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+
+        String ip = "";
+        int ipAddress = wifiInfo.getIpAddress();
+        bytes = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(ipAddress).array();
+
+        try {
+            InetAddress address = InetAddress.getByAddress(bytes);
+            ip = address.getHostAddress();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+
+        return new TaskInfoSummary.WifiInfo(wifiName, gatewayIp, ip);
     }
 
     public static void wakePhone(Context context) {

@@ -61,6 +61,7 @@ public class SettingSaver {
     private static final String NOTIFICATION_TYPE = "NOTIFICATION_TYPE";                                // 通知来源
     private static final String EXACT_ALARM = "EXACT_ALARM";                                            // 精确定时
     private static final String BLUETOOTH = "BLUETOOTH";                                                // 蓝牙监听
+    private static final String LOCATION = "LOCATION";                                                  // 定位
 
     private static final String SHOW_GESTURE_TRACK = "SHOW_GESTURE_TRACK";                              // 显示手势轨迹
     private static final String SHOW_NODE_AREA = "SHOW_NODE_AREA";                                      // 标记目标控件区域
@@ -261,6 +262,14 @@ public class SettingSaver {
 
     public void setBluetoothEnabled(boolean enable) {
         mmkv.encode(BLUETOOTH, enable);
+    }
+
+    public boolean isLocationEnabled() {
+        return mmkv.decodeBool(LOCATION, false);
+    }
+
+    public void setLocationEnabled(boolean enable) {
+        mmkv.encode(LOCATION, enable);
     }
 
 

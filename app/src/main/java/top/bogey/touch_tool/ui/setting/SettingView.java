@@ -36,6 +36,7 @@ import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.databinding.ViewSettingBinding;
 import top.bogey.touch_tool.service.MainAccessibilityService;
+import top.bogey.touch_tool.service.TaskInfoSummary;
 import top.bogey.touch_tool.service.notification.NotificationService;
 import top.bogey.touch_tool.service.super_user.ISuperUser;
 import top.bogey.touch_tool.service.super_user.SuperUser;
@@ -313,6 +314,7 @@ public class SettingView extends Fragment {
         // 蓝牙监听
         binding.bluetoothSwitch.setOnSwitchClickListener(v -> {
             if (binding.bluetoothSwitch.isChecked()) {
+                binding.bluetoothSwitch.setChecked(false);
                 activity.launcherBluetooth((code, data) -> {
                     boolean enable = code == Activity.RESULT_OK;
                     SettingSaver.getInstance().setBluetoothEnabled(enable);
@@ -324,6 +326,24 @@ public class SettingView extends Fragment {
         });
         binding.bluetoothSwitch.setChecked(SettingSaver.getInstance().isBluetoothEnabled());
 
+        // 定位
+        binding.locationSwitch.setOnSwitchClickListener(v -> {
+            if (binding.locationSwitch.isChecked()) {
+                binding.locationSwitch.setChecked(false);
+                activity.launcherFineLocation((code, data) -> {
+                    boolean enable = code == Activity.RESULT_OK;
+                    enable &= activity.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+                    SettingSaver.getInstance().setLocationEnabled(enable);
+                    binding.locationSwitch.setChecked(enable);
+                    if (enable) {
+                        TaskInfoSummary.getInstance().setWifiInfo(AppUtil.getWifiInfo(activity));
+                    }
+                });
+            } else {
+                SettingSaver.getInstance().setLocationEnabled(false);
+            }
+        });
+        binding.locationSwitch.setChecked(SettingSaver.getInstance().isLocationEnabled());
 
         // 手势轨迹
         binding.showTouchSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setShowGestureTrack(binding.showTouchSwitch.isChecked()));

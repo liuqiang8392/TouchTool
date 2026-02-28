@@ -97,6 +97,9 @@ public class ActionMap {
                     ActionType.GET_BATTERY_STATUS,
 
                     ActionType.GET_NETWORK_STATUS,
+                    ActionType.GET_WIFI_INFO,
+
+                    ActionType.GET_BLUETOOTH_DEVICES,
 
                     ActionType.GET_CURRENT_DATE,
                     ActionType.GET_CURRENT_TIME,

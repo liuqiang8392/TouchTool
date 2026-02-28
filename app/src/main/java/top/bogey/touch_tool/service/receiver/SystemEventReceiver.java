@@ -20,6 +20,7 @@ import java.util.List;
 
 import top.bogey.touch_tool.service.TaskInfoSummary;
 import top.bogey.touch_tool.ui.InstantActivity;
+import top.bogey.touch_tool.utils.AppUtil;
 
 public class SystemEventReceiver extends BroadcastReceiver {
     private final Context context;
@@ -47,7 +48,7 @@ public class SystemEventReceiver extends BroadcastReceiver {
             case BluetoothDevice.ACTION_ACL_CONNECTED, BluetoothDevice.ACTION_ACL_DISCONNECTED -> {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 if (device == null) return;
-                TaskInfoSummary.getInstance().setBluetoothInfo(device.getAddress(), device.getName(), action.equals(BluetoothDevice.ACTION_ACL_CONNECTED));
+                TaskInfoSummary.getInstance().addBluetoothInfo(device.getAddress(), device.getName(), action.equals(BluetoothDevice.ACTION_ACL_CONNECTED));
             }
 
             case InstantActivity.INTENT_KEY_DO_ACTION -> {
@@ -103,6 +104,9 @@ public class SystemEventReceiver extends BroadcastReceiver {
                     List<TaskInfoSummary.NotworkState> state = new ArrayList<>();
                     if (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
                         state.add(TaskInfoSummary.NotworkState.WIFI);
+                        TaskInfoSummary.getInstance().setWifiInfo(AppUtil.getWifiInfo(context));
+                    } else {
+                        TaskInfoSummary.getInstance().setWifiInfo(null);
                     }
                     if (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
                         state.add(TaskInfoSummary.NotworkState.MOBILE);

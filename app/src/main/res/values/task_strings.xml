@@ -335,6 +335,16 @@
     <string name="get_network_status_action_desc">获取当前网络状态</string>
     <string name="get_network_status_action_state">状态</string>
 
+    <string name="get_wifi_info_action">获取WiFi信息</string>
+    <string name="get_wifi_info_action_desc">获取当前连接的WiFi信息</string>
+    <string name="get_wifi_info_action_wifi_name">WiFi名称</string>
+    <string name="get_wifi_info_action_gateway">网关</string>
+    <string name="get_wifi_info_action_ip">IP</string>
+
+    <string name="get_bluetooth_devices_action">获取蓝牙设备</string>
+    <string name="get_bluetooth_devices_action_desc">获取当前已连接的蓝牙设备列表</string>
+    <string name="get_bluetooth_devices_action_result">设备列表</string>
+
     <!-- 动作-Number -->
     <string name="math_expression_action">数学公式</string>
     <string name="math_expression_action_desc">支持复杂的公式计算</string>

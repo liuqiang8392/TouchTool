@@ -151,11 +151,13 @@ import top.bogey.touch_tool.bean.action.string.StringToNumberAction;
 import top.bogey.touch_tool.bean.action.system.CheckCaptureReadyAction;
 import top.bogey.touch_tool.bean.action.system.ExecuteShellAction;
 import top.bogey.touch_tool.bean.action.system.GetBatteryStatusAction;
+import top.bogey.touch_tool.bean.action.system.GetBluetoothDevicesAction;
 import top.bogey.touch_tool.bean.action.system.GetDateAction;
 import top.bogey.touch_tool.bean.action.system.GetNetworkStatusAction;
 import top.bogey.touch_tool.bean.action.system.GetScreenStatusAction;
 import top.bogey.touch_tool.bean.action.system.GetTimeAction;
 import top.bogey.touch_tool.bean.action.system.GetVolumeAction;
+import top.bogey.touch_tool.bean.action.system.GetWifiInfoAction;
 import top.bogey.touch_tool.bean.action.system.PlayRingtoneAction;
 import top.bogey.touch_tool.bean.action.system.ReadFromClipboardAction;
 import top.bogey.touch_tool.bean.action.system.SendNotificationAction;
@@ -269,6 +271,10 @@ public class ActionInfo {
     private final static ActionInfo GET_BATTERY_STATUS_INFO = new ActionInfo(ActionType.GET_BATTERY_STATUS, GetBatteryStatusAction.class, R.drawable.icon_battery_android_full, R.string.get_battery_status_action, R.string.get_battery_status_action_desc, 0, NormalActionCard.class);
 
     private final static ActionInfo GET_NETWORK_STATUS_INFO = new ActionInfo(ActionType.GET_NETWORK_STATUS, GetNetworkStatusAction.class, R.drawable.icon_globe, R.string.get_network_status_action, R.string.get_network_status_action_desc, 0, NormalActionCard.class);
+
+    private final static ActionInfo GET_WIFI_INFO_INFO = new ActionInfo(ActionType.GET_WIFI_INFO, GetWifiInfoAction.class, R.drawable.icon_globe, R.string.get_wifi_info_action, R.string.get_wifi_info_action_desc, 0, NormalActionCard.class);
+
+    private final static ActionInfo GET_BLUETOOTH_DEVICES_INFO = new ActionInfo(ActionType.GET_BLUETOOTH_DEVICES, GetBluetoothDevicesAction.class, R.drawable.icon_bluetooth, R.string.get_bluetooth_devices_action, R.string.get_bluetooth_devices_action_desc, 0, NormalActionCard.class);
 
     private final static ActionInfo GET_CURRENT_DATE_INFO = new ActionInfo(ActionType.GET_CURRENT_DATE, GetDateAction.class, R.drawable.icon_calendar_month, R.string.get_date_action, R.string.get_date_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo GET_CURRENT_TIME_INFO = new ActionInfo(ActionType.GET_CURRENT_TIME, GetTimeAction.class, R.drawable.icon_schedule, R.string.get_time_action, R.string.get_time_action_desc, 0, NormalActionCard.class);
@@ -486,6 +492,9 @@ public class ActionInfo {
             case GET_BATTERY_STATUS -> GET_BATTERY_STATUS_INFO;
 
             case GET_NETWORK_STATUS -> GET_NETWORK_STATUS_INFO;
+            case GET_WIFI_INFO -> GET_WIFI_INFO_INFO;
+
+            case GET_BLUETOOTH_DEVICES -> GET_BLUETOOTH_DEVICES_INFO;
 
             case GET_CURRENT_DATE -> GET_CURRENT_DATE_INFO;
             case GET_CURRENT_TIME -> GET_CURRENT_TIME_INFO;

@@ -318,10 +318,13 @@
     <string name="permission_setting_capture_channel_desc">点按即可关闭服务和通知</string>
 
     <string name="permission_setting_alarm">精确定时</string>
-    <string name="permission_setting_alarm_desc">启用精确定时能使用定时执行的能力</string>
+    <string name="permission_setting_alarm_desc">启用精确定时能使用“定时执行”的能力</string>
 
     <string name="permission_setting_bluetooth">蓝牙监听</string>
-    <string name="permission_setting_bluetooth_desc">启用蓝牙监听能使用蓝牙变动时执行的能力</string>
+    <string name="permission_setting_bluetooth_desc">启用蓝牙监听能使用“蓝牙变动时执行”、“获取蓝牙设备”的能力</string>
+
+    <string name="permission_setting_location">精确定位</string>
+    <string name="permission_setting_location_desc">启用精确定位能使用“获取WiFi信息”的能力</string>
 
 
     <!-- 设置-任务设置 -->

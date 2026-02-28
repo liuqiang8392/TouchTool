@@ -78,7 +78,9 @@ public class TaskInfoSummary {
 
     private Notification notification;
     private BatteryInfo batteryInfo;
-    private BluetoothInfo bluetoothInfo;
+    private final List<BluetoothInfo> bluetoothInfoList = new ArrayList<>();
+    private BluetoothInfo lastBluetoothInfo;
+    private WifiInfo wifiInfo;
     private BroadcastInfo broadcastInfo;
     private String lastClipboard;
     private List<NotworkState> networkState;
@@ -468,13 +470,30 @@ public class TaskInfoSummary {
         tryStartActions(BatteryStartAction.class);
     }
 
-    public BluetoothInfo getBluetoothInfo() {
-        return bluetoothInfo;
+    public List<BluetoothInfo> getBluetoothInfoList() {
+        return bluetoothInfoList;
     }
 
-    public void setBluetoothInfo(String bluetoothAddress, String bluetoothName, boolean active) {
-        bluetoothInfo = new BluetoothInfo(bluetoothAddress, bluetoothName, active);
+    public BluetoothInfo getBluetoothInfo() {
+        return lastBluetoothInfo;
+    }
+
+    public void addBluetoothInfo(String bluetoothAddress, String bluetoothName, boolean connected) {
+        lastBluetoothInfo = new BluetoothInfo(bluetoothAddress, bluetoothName, connected);
+        if (connected) {
+            bluetoothInfoList.add(lastBluetoothInfo);
+        } else {
+            bluetoothInfoList.removeIf(info -> info.bluetoothAddress().equals(bluetoothAddress));
+        }
         tryStartActions(BluetoothStartAction.class);
+    }
+
+    public WifiInfo getWifiInfo() {
+        return wifiInfo;
+    }
+
+    public void setWifiInfo(WifiInfo wifiInfo) {
+        this.wifiInfo = wifiInfo;
     }
 
     public BroadcastInfo getBroadcastInfo() {
@@ -539,6 +558,9 @@ public class TaskInfoSummary {
     }
 
     public record BluetoothInfo(String bluetoothAddress, String bluetoothName, boolean active) {
+    }
+
+    public record WifiInfo(String wifiName, String gateway, String ip) {
     }
 
     public record BroadcastInfo(String action, String data, Map<String, String> extras) {

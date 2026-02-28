@@ -85,6 +85,9 @@ public enum ActionType {
 
     GET_NETWORK_STATUS,
 
+    GET_WIFI_INFO,
+    GET_BLUETOOTH_DEVICES,
+
     GET_CURRENT_DATE,
     GET_CURRENT_TIME,
 
