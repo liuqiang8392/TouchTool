@@ -92,6 +92,7 @@ import top.bogey.touch_tool.bean.action.node.GetNodesInAreaAction;
 import top.bogey.touch_tool.bean.action.node.GetWindowsAction;
 import top.bogey.touch_tool.bean.action.node.IsNodeExistAction;
 import top.bogey.touch_tool.bean.action.node.NodeTouchAction;
+import top.bogey.touch_tool.bean.action.node.PickNodeAction;
 import top.bogey.touch_tool.bean.action.normal.DelayAction;
 import top.bogey.touch_tool.bean.action.normal.InputConfigAction;
 import top.bogey.touch_tool.bean.action.normal.LoggerAction;
@@ -148,6 +149,7 @@ import top.bogey.touch_tool.bean.action.string.StringReplaceAction;
 import top.bogey.touch_tool.bean.action.string.StringSplitAction;
 import top.bogey.touch_tool.bean.action.string.StringSubStringAction;
 import top.bogey.touch_tool.bean.action.string.StringToNumberAction;
+import top.bogey.touch_tool.bean.action.string.StringToSingleSelectAction;
 import top.bogey.touch_tool.bean.action.system.CheckCaptureReadyAction;
 import top.bogey.touch_tool.bean.action.system.ExecuteShellAction;
 import top.bogey.touch_tool.bean.action.system.GetBatteryStatusAction;
@@ -314,6 +316,7 @@ public class ActionInfo {
     private final static ActionInfo IS_OCR_TEXT_EXIST_INFO = new ActionInfo(ActionType.IS_OCR_TEXT_EXIST, IsOcrTextExistAction.class, R.drawable.icon_document_scanner, R.string.is_ocr_text_exist_action, R.string.is_ocr_text_exist_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo FIND_OCR_TEXT_INFO = new ActionInfo(ActionType.FIND_OCR_TEXT, FindOcrTextAction.class, R.drawable.icon_document_scanner, R.string.find_ocr_text_action, R.string.find_ocr_text_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo PARSE_JSON_INFO = new ActionInfo(ActionType.PARSE_JSON, ParseJsonAction.class, R.drawable.icon_text_fields, R.string.parse_json_action, R.string.parse_json_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo STRING_TO_SINGLE_SELECT_INFO = new ActionInfo(ActionType.STRING_TO_SINGLE_SELECT, StringToSingleSelectAction.class, R.drawable.icon_text_fields, R.string.string_to_single_select_action, R.string.string_to_single_select_action_desc, 0, NormalActionCard.class);
 
 
     // 条件判断
@@ -336,6 +339,7 @@ public class ActionInfo {
     private final static ActionInfo NODE_TOUCH_INFO = new ActionInfo(ActionType.NODE_TOUCH, NodeTouchAction.class, R.drawable.icon_touch_app, R.string.node_touch_action, R.string.node_touch_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo EDITTEXT_INPUT_INFO = new ActionInfo(ActionType.EDITTEXT_INPUT, EditTextInputAction.class, R.drawable.icon_edit, R.string.edit_text_input_action, R.string.edit_text_input_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo EDITTEXT_PASTE_INFO = new ActionInfo(ActionType.EDITTEXT_PASTE, EditTextPasteAction.class, R.drawable.icon_content_paste, R.string.edit_text_paste_action, R.string.edit_text_paste_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo PICK_NODE_INFO = new ActionInfo(ActionType.PICK_NODE, PickNodeAction.class, R.drawable.icon_widgets, R.string.pick_node_action, R.string.pick_node_action_desc, 0, NormalActionCard.class);
 
 
     // 图片与颜色操作
@@ -536,6 +540,7 @@ public class ActionInfo {
             case FIND_OCR_TEXT -> FIND_OCR_TEXT_INFO;
             case IS_OCR_TEXT_EXIST -> IS_OCR_TEXT_EXIST_INFO;
             case PARSE_JSON -> PARSE_JSON_INFO;
+            case STRING_TO_SINGLE_SELECT -> STRING_TO_SINGLE_SELECT_INFO;
 
 
             case BOOLEAN_OR -> BOOLEAN_OR_INFO;
@@ -555,6 +560,7 @@ public class ActionInfo {
             case NODE_TOUCH -> NODE_TOUCH_INFO;
             case EDITTEXT_INPUT -> EDITTEXT_INPUT_INFO;
             case EDITTEXT_PASTE -> EDITTEXT_PASTE_INFO;
+            case PICK_NODE -> PICK_NODE_INFO;
 
 
             case GET_IMAGE -> GET_IMAGE_INFO;

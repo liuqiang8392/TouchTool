@@ -142,7 +142,8 @@ public class ActionMap {
                     ActionType.FIND_OCR_TEXT,
                     ActionType.IS_OCR_TEXT_EXIST,
                     ActionType.PARSE_JSON,
-                    ActionType.STRING_FROM_OBJECT
+                    ActionType.STRING_FROM_OBJECT,
+                    ActionType.STRING_TO_SINGLE_SELECT
             ));
 
             case BOOLEAN -> list.addAll(Arrays.asList(
@@ -163,7 +164,8 @@ public class ActionMap {
 
                     ActionType.NODE_TOUCH,
                     ActionType.EDITTEXT_INPUT,
-                    ActionType.EDITTEXT_PASTE
+                    ActionType.EDITTEXT_PASTE,
+                    ActionType.PICK_NODE
             ));
 
             case IMAGE -> list.addAll(Arrays.asList(

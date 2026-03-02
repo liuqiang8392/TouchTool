@@ -465,6 +465,9 @@
     <string name="parse_json_action">JSON解析</string>
     <string name="parse_json_action_desc">解析JSON字符串</string>
 
+    <string name="string_to_single_select_action">文本转单选</string>
+    <string name="string_to_single_select_action_desc">将文本转换为单选值</string>
+
     <!-- 动作-Area -->
     <string name="area_to_integer_action">区域转数值</string>
     <string name="area_to_integer_action_desc">提取区域的上下左右数值</string>
@@ -495,6 +498,10 @@
     <string name="pick_area_action">手动选择区域</string>
     <string name="pick_area_action_desc">选择一个区域</string>
     <string name="pick_area_action_else">未达成</string>
+
+    <string name="pick_node_action">手动选择控件</string>
+    <string name="pick_node_action_desc">选择一个控件</string>
+    <string name="pick_node_action_else">未达成</string>
 
     <!-- 动作-Point -->
     <string name="point_to_integer_action">位置转数值</string>

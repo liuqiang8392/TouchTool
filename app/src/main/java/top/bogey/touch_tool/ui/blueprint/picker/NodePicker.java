@@ -10,6 +10,8 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -40,6 +42,7 @@ import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.GsonUtil;
 import top.bogey.touch_tool.utils.callback.ResultCallback;
 import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
+import top.bogey.touch_tool.ui.custom.float_view.KeepAliveFloatView;
 import top.bogey.touch_tool.utils.listener.TextChangedListener;
 
 @SuppressLint("ViewConstructor")
@@ -57,6 +60,16 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
     private NodeInfo nodeInfo = null;
 
     private List<NodeInfo> cachedFindNodes = new ArrayList<>();
+
+    public static void showPicker(ResultCallback<NodeInfo> callback) {
+        KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
+        if (keepView == null) return;
+        new Handler(Looper.getMainLooper()).post(() -> {
+            NodePicker nodePicker = new NodePicker(keepView.getThemeContext(), callback, "");
+            nodePicker.setFloatCallback(new NodePickerCallback(nodePicker));
+            nodePicker.show();
+        });
+    }
 
     public NodePicker(@NonNull Context context, ResultCallback<NodeInfo> callback, String path) {
         super(context, callback);
@@ -95,7 +108,10 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
         sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         binding.detailButton.setOnClickListener(v -> sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED));
 
-        binding.backButton.setOnClickListener(v -> dismiss());
+        binding.backButton.setOnClickListener(v -> {
+            if (callback != null) callback.onResult(null);
+            dismiss();
+        });
 
         binding.upButton.setOnClickListener(v -> {
             if (nodeInfo != null) {
@@ -395,5 +411,17 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
             }
         }
         return node;
+    }
+
+    private static class NodePickerCallback extends FullScreenPickerCallback {
+
+        public NodePickerCallback(FullScreenPicker<?> picker) {
+            super(picker);
+        }
+
+        @Override
+        public void onDismiss() {
+
+        }
     }
 }

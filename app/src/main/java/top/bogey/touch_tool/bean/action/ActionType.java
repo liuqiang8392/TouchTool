@@ -129,6 +129,7 @@ public enum ActionType {
     STRING_ENCODE,
     STRING_DECODE,
     STRING_ENCRYPT,
+    STRING_TO_SINGLE_SELECT,
 
     // 条件
     BOOLEAN_OR,
@@ -148,6 +149,7 @@ public enum ActionType {
     NODE_TOUCH,
     EDITTEXT_INPUT,
     EDITTEXT_PASTE,
+    PICK_NODE,
 
     // 图片
     GET_IMAGE,
