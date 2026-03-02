@@ -42,7 +42,7 @@ import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.bean.save.task.TaskSaver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.ui.MainActivity;
-import top.bogey.touch_tool.ui.custom.ChoiceExecuteFloatView;
+import top.bogey.touch_tool.ui.custom.float_view.ChoiceExecuteFloatView;
 import top.bogey.touch_tool.ui.play.PlayFloatView;
 import top.bogey.touch_tool.ui.play.SinglePlayView;
 import top.bogey.touch_tool.utils.AppUtil;

@@ -16,6 +16,7 @@ import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleSelect;
 import top.bogey.touch_tool.databinding.PinWidgetSelectBinding;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
+import top.bogey.touch_tool.ui.blueprint.card.InputConfigActionFloatCard;
 import top.bogey.touch_tool.ui.blueprint.pin.PinView;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.listener.TextChangedListener;
@@ -47,6 +48,10 @@ public class PinWidgetSelect extends PinWidget<PinSingleSelect> {
                 popup.dismiss();
             });
             popup.show();
+
+            if (card instanceof InputConfigActionFloatCard) {
+                post(() -> DisplayUtil.setListPopupWindowAutoHeight(popup));
+            }
         });
         binding.spinner.setText(pinBase.getValue());
     }

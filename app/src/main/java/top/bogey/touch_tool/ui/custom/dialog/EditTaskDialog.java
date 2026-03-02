@@ -1,4 +1,4 @@
-package top.bogey.touch_tool.ui.custom;
+package top.bogey.touch_tool.ui.custom.dialog;
 
 import android.content.Context;
 import android.text.Editable;
@@ -16,25 +16,25 @@ import java.util.List;
 
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.save.TagSaver;
-import top.bogey.touch_tool.bean.task.Variable;
+import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.DialogCreateTaskBinding;
 import top.bogey.touch_tool.databinding.ViewTagListItemBinding;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.callback.BooleanResultCallback;
 
-public class EditVariableDialog extends MaterialAlertDialogBuilder {
+public class EditTaskDialog extends MaterialAlertDialogBuilder {
     private final DialogCreateTaskBinding binding;
     private final List<String> selectedTags = new ArrayList<>();
     private BooleanResultCallback callback;
 
-    public EditVariableDialog(@NonNull Context context, Variable var) {
+    public EditTaskDialog(@NonNull Context context, Task task) {
         super(context);
 
         binding = DialogCreateTaskBinding.inflate(LayoutInflater.from(context), null, false);
         setView(binding.getRoot());
 
-        binding.titleEdit.setText(var.getTitle());
-        binding.desEdit.setText(var.getDescription());
+        binding.titleEdit.setText(task.getTitle());
+        binding.desEdit.setText(task.getDescription());
 
         binding.addTagBtn.setOnClickListener(v -> AppUtil.showEditDialog(context, R.string.task_tag_add, "", result -> {
             if (result != null && !result.isEmpty()) {
@@ -45,7 +45,7 @@ public class EditVariableDialog extends MaterialAlertDialogBuilder {
 
         List<String> tags = TagSaver.getInstance().getTags();
 
-        List<String> currTags = var.getTags();
+        List<String> currTags = task.getTags();
         if (currTags != null) {
             for (String tag : currTags) {
                 if (tags.contains(tag)) selectedTags.add(tag);
@@ -62,9 +62,9 @@ public class EditVariableDialog extends MaterialAlertDialogBuilder {
                 callback.onResult(false);
                 return;
             }
-            var.setTitle(getTitle());
-            var.setDescription(getDescription());
-            var.setTags(selectedTags);
+            task.setTitle(getTitle());
+            task.setDescription(getDescription());
+            task.setTags(selectedTags);
             callback.onResult(true);
         });
 
@@ -104,13 +104,6 @@ public class EditVariableDialog extends MaterialAlertDialogBuilder {
     private void createChip(String tag) {
         ViewTagListItemBinding itemBinding = ViewTagListItemBinding.inflate(LayoutInflater.from(getContext()), binding.tagBox, true);
         Chip chip = itemBinding.getRoot();
-        chip.setOnCloseIconClickListener(v -> AppUtil.showDialog(getContext(), R.string.tag_remove, result -> {
-            if (result) {
-                TagSaver.getInstance().removeTag(tag);
-                selectedTags.remove(tag);
-                binding.tagBox.removeView(chip);
-            }
-        }));
 
         chip.setText(tag);
         chip.setChecked(selectedTags.contains(tag));

@@ -21,7 +21,7 @@ import com.tencent.mmkv.MMKV;
 import java.util.List;
 
 import top.bogey.touch_tool.service.KeepAliveService;
-import top.bogey.touch_tool.ui.custom.KeepAliveFloatView;
+import top.bogey.touch_tool.ui.custom.float_view.KeepAliveFloatView;
 import top.bogey.touch_tool.utils.callback.ActivityLifecycleCallback;
 import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 

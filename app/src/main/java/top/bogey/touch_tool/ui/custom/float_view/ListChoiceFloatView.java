@@ -1,4 +1,4 @@
-package top.bogey.touch_tool.ui.custom;
+package top.bogey.touch_tool.ui.custom.float_view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -19,7 +19,7 @@ import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.databinding.FloatChoiceListBinding;
 import top.bogey.touch_tool.databinding.FloatChoiceListItemBinding;
-import top.bogey.touch_tool.ui.custom.ChoiceExecuteFloatView.Choice;
+import top.bogey.touch_tool.ui.custom.float_view.ChoiceExecuteFloatView.Choice;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.EAnchor;
 import top.bogey.touch_tool.utils.callback.StringResultCallback;

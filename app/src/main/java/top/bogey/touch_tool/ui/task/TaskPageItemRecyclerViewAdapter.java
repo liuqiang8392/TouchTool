@@ -28,7 +28,7 @@ import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.ViewTaskPageItemActionBinding;
 import top.bogey.touch_tool.databinding.ViewTaskPageItemBinding;
 import top.bogey.touch_tool.service.MainAccessibilityService;
-import top.bogey.touch_tool.ui.custom.EditTaskDialog;
+import top.bogey.touch_tool.ui.custom.dialog.EditTaskDialog;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.ui.IDragAbleRecycleViewAdapter;
 

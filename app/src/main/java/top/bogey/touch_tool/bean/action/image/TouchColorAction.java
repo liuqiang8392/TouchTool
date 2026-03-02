@@ -30,7 +30,7 @@ import top.bogey.touch_tool.bean.pin.special_pin.ShowAblePin;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskRunnable;
-import top.bogey.touch_tool.ui.custom.TouchPathFloatView;
+import top.bogey.touch_tool.ui.custom.float_view.TouchPathFloatView;
 import top.bogey.touch_tool.utils.DisplayUtil;
 
 public class TouchColorAction extends ExecuteAction {

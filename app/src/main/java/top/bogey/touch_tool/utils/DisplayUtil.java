@@ -13,6 +13,7 @@ import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +21,10 @@ import android.view.ViewParent;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
+import android.widget.ListView;
 
 import androidx.annotation.ColorInt;
+import androidx.appcompat.widget.ListPopupWindow;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -153,6 +156,33 @@ public class DisplayUtil {
         if (params == null) return;
         params.setMargins(left, top, right, bottom);
         view.setLayoutParams(params);
+    }
+
+    public static void setListPopupWindowAutoHeight(ListPopupWindow popup) {
+        if (popup == null) return;
+
+        ListView listView = popup.getListView();
+        View anchorView = popup.getAnchorView();
+        if (listView == null || anchorView == null) return;
+
+        Context context = listView.getContext();
+        int padding = 0;
+        Drawable background = popup.getBackground();
+        if (background != null) {
+            Rect rect = new Rect();
+            background.getPadding(rect);
+            padding = rect.top + rect.bottom;
+        }
+        int height = listView.getHeight() + listView.getPaddingTop() + listView.getPaddingBottom() + padding;
+
+        int[] location = new int[2];
+        anchorView.getLocationOnScreen(location);
+        Point screenSize = DisplayUtil.getScreenSize(context);
+        int maxHeight = screenSize.y - location[1] - anchorView.getHeight();
+        int minHeight = (int) DisplayUtil.dp2px(context, 32);
+        height = Math.max(Math.min(height, maxHeight), minHeight);
+        popup.setHeight(height);
+        popup.show();
     }
 
     public static Rect getPointsArea(List<Point> points) {

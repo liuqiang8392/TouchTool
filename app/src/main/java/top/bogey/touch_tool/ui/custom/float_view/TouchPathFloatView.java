@@ -1,4 +1,4 @@
-package top.bogey.touch_tool.ui.custom;
+package top.bogey.touch_tool.ui.custom.float_view;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.databinding.FloatPickerPointPreviewBinding;
 import top.bogey.touch_tool.service.MainAccessibilityService;
-import top.bogey.touch_tool.ui.custom.TouchPathFloatView;
+import top.bogey.touch_tool.ui.custom.float_view.TouchPathFloatView;
 import top.bogey.touch_tool.utils.callback.ResultCallback;
 import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 import top.bogey.touch_tool.utils.listener.TextChangedListener;

@@ -34,7 +34,7 @@ import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.databinding.FloatPickerNodeBinding;
 import top.bogey.touch_tool.service.TaskInfoSummary;
 import top.bogey.touch_tool.ui.MainActivity;
-import top.bogey.touch_tool.ui.custom.NodeInfoFloatView;
+import top.bogey.touch_tool.ui.custom.float_view.NodeInfoFloatView;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.GsonUtil;

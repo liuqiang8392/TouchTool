@@ -17,7 +17,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinTouchPath;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskRunnable;
-import top.bogey.touch_tool.ui.custom.TouchPathFloatView;
+import top.bogey.touch_tool.ui.custom.float_view.TouchPathFloatView;
 import top.bogey.touch_tool.utils.EAnchor;
 
 public class TouchAction extends ExecuteAction {

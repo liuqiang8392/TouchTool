@@ -1,4 +1,4 @@
-package top.bogey.touch_tool.ui.custom;
+package top.bogey.touch_tool.ui.custom.float_view;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -96,6 +96,7 @@ public class MarkTargetFloatView extends AppCompatImageView implements FloatInte
                 .setAnchor(EAnchor.TOP_LEFT)
                 .setDragAble(false)
                 .setSpecial(true)
+                .setHideByScreenshot(true)
                 .setFlag(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
                 .show();
     }

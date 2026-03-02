@@ -5,6 +5,6 @@
     android:layout_gravity="center"
     android:gravity="center"
     android:maxLines="1"
-    android:paddingVertical="?attr/defaultOffset"
     android:paddingHorizontal="?attr/defaultPadding"
+    android:paddingVertical="?attr/defaultOffset"
     android:textAppearance="@style/TextAppearance.Material3.BodySmall" />

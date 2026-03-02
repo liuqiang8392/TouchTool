@@ -44,7 +44,7 @@ import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.ui.MainActivity;
 import top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionItemRecyclerViewAdapter;
-import top.bogey.touch_tool.ui.custom.EditTaskDialog;
+import top.bogey.touch_tool.ui.custom.dialog.EditTaskDialog;
 import top.bogey.touch_tool.ui.tool.task_manager.ExportTaskDialog;
 import top.bogey.touch_tool.ui.tool.task_manager.ImportTaskDialog;
 import top.bogey.touch_tool.utils.AppUtil;

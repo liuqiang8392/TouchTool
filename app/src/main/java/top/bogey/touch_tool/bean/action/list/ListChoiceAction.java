@@ -25,8 +25,8 @@ import top.bogey.touch_tool.bean.pin.special_pin.NotLinkAblePin;
 import top.bogey.touch_tool.bean.pin.special_pin.ShowAblePin;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.TaskRunnable;
-import top.bogey.touch_tool.ui.custom.ChoiceExecuteFloatView.Choice;
-import top.bogey.touch_tool.ui.custom.ListChoiceFloatView;
+import top.bogey.touch_tool.ui.custom.float_view.ChoiceExecuteFloatView.Choice;
+import top.bogey.touch_tool.ui.custom.float_view.ListChoiceFloatView;
 import top.bogey.touch_tool.utils.EAnchor;
 import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 

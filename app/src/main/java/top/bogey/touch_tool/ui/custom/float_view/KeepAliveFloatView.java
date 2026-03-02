@@ -1,4 +1,4 @@
-package top.bogey.touch_tool.ui.custom;
+package top.bogey.touch_tool.ui.custom.float_view;
 
 import android.content.Context;
 import android.content.res.Configuration;

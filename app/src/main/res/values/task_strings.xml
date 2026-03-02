@@ -151,7 +151,7 @@
     <string name="set_value_action">设置%s</string>
     <string name="set_value_action_save">保存值</string>
     <string name="get_value_action">获取%s</string>
-    <string name="get_or_set_value_action">设置或获取%s</string>
+    <string name="get_or_set_value_action">%s变量-%s</string>
     <string name="get_or_set_value_action_get_value">设置/获取</string>
 
     <!-- 动作-Normal -->

@@ -36,9 +36,9 @@ public class GetOrSetVariableAction extends ExecuteOrCalculateAction implements 
         realtimeModePin.setHide(false);
 
         varId = variable.getId();
-        inVarPin = new ExecuteShowablePin(variable.getValue());
+        inVarPin = new ExecuteShowablePin(variable.getValue().copy());
         inVarPin.setUid(varId + "_in");
-        outVarPin = new NotExecuteShowablePin(variable.getValue(), true);
+        outVarPin = new NotExecuteShowablePin(variable.getValue().copy(), true);
         outVarPin.setUid(varId + "_out");
         addPins(inVarPin, outVarPin, savePin);
     }
@@ -128,7 +128,7 @@ public class GetOrSetVariableAction extends ExecuteOrCalculateAction implements 
 
         String globalFlag = variable.getParent() == null ? SelectActionDialog.GLOBAL_FLAG : "";
         PinInfo pinInfo = PinInfo.getPinInfo(variable.getValue());
-        setTitle(MainApplication.getInstance().getString(R.string.get_or_set_value_action, pinInfo.getTitle()) + " - " + globalFlag + variable.getTitle());
+        setTitle(MainApplication.getInstance().getString(R.string.get_or_set_value_action, pinInfo.getTitle(), globalFlag + variable.getTitle()));
     }
 
     public static void syncVarPin(Task context, Pin pin, Variable variable) {

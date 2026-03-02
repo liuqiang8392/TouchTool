@@ -11,7 +11,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinPoint;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleSelect;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
 import top.bogey.touch_tool.service.TaskRunnable;
-import top.bogey.touch_tool.ui.custom.StickScreenFloatView;
+import top.bogey.touch_tool.ui.custom.float_view.StickScreenFloatView;
 import top.bogey.touch_tool.utils.EAnchor;
 
 public class StickScreenAction extends ExecuteAction {

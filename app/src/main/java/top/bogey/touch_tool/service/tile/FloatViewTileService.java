@@ -7,8 +7,7 @@ import android.view.View;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.service.MainAccessibilityService;
-import top.bogey.touch_tool.ui.custom.KeepAliveFloatView;
-import top.bogey.touch_tool.ui.tool.log.LogFloatView;
+import top.bogey.touch_tool.ui.custom.float_view.KeepAliveFloatView;
 import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 
 public abstract class FloatViewTileService extends TileService {

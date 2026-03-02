@@ -6,7 +6,7 @@ import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.parent.ExecuteAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.service.TaskRunnable;
-import top.bogey.touch_tool.ui.custom.StickScreenFloatView;
+import top.bogey.touch_tool.ui.custom.float_view.StickScreenFloatView;
 import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 
 public class StickCloseAllAction extends ExecuteAction {

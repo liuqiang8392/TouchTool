@@ -8,7 +8,7 @@ import top.bogey.touch_tool.bean.action.parent.ExecuteAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinArea;
 import top.bogey.touch_tool.service.TaskRunnable;
-import top.bogey.touch_tool.ui.custom.MarkTargetFloatView;
+import top.bogey.touch_tool.ui.custom.float_view.MarkTargetFloatView;
 
 public class MarkAreaAction extends ExecuteAction {
     private final transient Pin areaPin = new Pin(new PinArea(), R.string.pin_area);

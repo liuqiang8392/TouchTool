@@ -29,8 +29,6 @@ import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.task.CustomStartAction;
 import top.bogey.touch_tool.bean.action.task.ExecuteTaskAction;
 import top.bogey.touch_tool.bean.action.variable.GetOrSetVariableAction;
-import top.bogey.touch_tool.bean.action.variable.GetVariableAction;
-import top.bogey.touch_tool.bean.action.variable.SetVariableAction;
 import top.bogey.touch_tool.bean.other.Usage;
 import top.bogey.touch_tool.bean.pin.PinInfo;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinType;
@@ -43,9 +41,8 @@ import top.bogey.touch_tool.databinding.DialogSelectActionTaskItemBinding;
 import top.bogey.touch_tool.databinding.DialogSelectActionVariableItemBinding;
 import top.bogey.touch_tool.ui.blueprint.BlueprintView;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
-import top.bogey.touch_tool.ui.custom.EditTaskDialog;
-import top.bogey.touch_tool.ui.custom.EditVariableDialog;
-import top.bogey.touch_tool.utils.AppUtil;
+import top.bogey.touch_tool.ui.custom.dialog.EditTaskDialog;
+import top.bogey.touch_tool.ui.custom.dialog.EditVariableDialog;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.callback.BooleanResultCallback;
 import top.bogey.touch_tool.utils.callback.ResultCallback;
@@ -448,8 +445,7 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
                 Action action = null;
 
                 if (object instanceof Variable var) {
-                    action = new GetVariableAction(var);
-//                    action = new GetOrSetVariableAction(var);
+                    action = new GetOrSetVariableAction(var);
                 }
 
                 if (callback != null) callback.onResult(action);

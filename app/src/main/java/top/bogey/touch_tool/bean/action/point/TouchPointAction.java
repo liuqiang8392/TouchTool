@@ -23,7 +23,7 @@ import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.service.super_user.SuperUser;
-import top.bogey.touch_tool.ui.custom.TouchPathFloatView;
+import top.bogey.touch_tool.ui.custom.float_view.TouchPathFloatView;
 
 public class TouchPointAction extends ExecuteAction implements SyncAction {
     private final transient Pin touchPin = new Pin(new PinPoint(), R.string.pin_point);
