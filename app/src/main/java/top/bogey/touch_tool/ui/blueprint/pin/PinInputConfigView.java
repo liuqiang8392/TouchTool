@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.databinding.PinInputConfigBinding;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
@@ -41,6 +42,11 @@ public class PinInputConfigView extends PinView {
     @Override
     public ViewGroup getWidgetBox() {
         return binding.pinBox;
+    }
+
+    @Override
+    public void expand(Action.ExpandType expandType) {
+
     }
 
     @Override

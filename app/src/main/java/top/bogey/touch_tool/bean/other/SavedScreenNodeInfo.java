@@ -32,6 +32,7 @@ public class SavedScreenNodeInfo {
     }
 
     public Bitmap getImage() {
+        if (image == null) return null;
         byte[] bytes = Base64.decode(image, Base64.NO_WRAP);
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
     }
@@ -42,5 +43,9 @@ public class SavedScreenNodeInfo {
             roots.add(new NodeInfo(root));
         }
         return roots;
+    }
+
+    public boolean isValid() {
+        return image != null && !image.isEmpty() && !roots.isEmpty();
     }
 }

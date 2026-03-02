@@ -62,6 +62,7 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
     private List<NodeInfo> cachedFindNodes = new ArrayList<>();
 
     public static void showPicker(ResultCallback<NodeInfo> callback) {
+        FloatWindow.dismiss(NodePicker.class.getName());
         KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
         if (keepView == null) return;
         new Handler(Looper.getMainLooper()).post(() -> {
@@ -222,7 +223,7 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
                 if (code == Activity.RESULT_OK && intent != null) {
                     byte[] bytes = AppUtil.readFile(activity, intent.getData());
                     SavedScreenNodeInfo info = GsonUtil.getAsObject(new String(bytes), SavedScreenNodeInfo.class, null);
-                    if (info != null) {
+                    if (info != null && info.isValid()) {
                         screenInfo.setScreenShot(info.getImage());
                         roots = info.getRoots();
                         adapter.setRoots(roots);
