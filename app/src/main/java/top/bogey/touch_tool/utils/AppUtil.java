@@ -449,6 +449,20 @@ public class AppUtil {
         return String.format("%.1fGB", mb / 1024.0);
     }
 
+    @SuppressLint("DefaultLocale")
+    public static String getCacheDirsSizeString(Context context) {
+        String[] dirs = new String[]{LOG_DIR_NAME, TASK_DIR_NAME, DOCUMENT_DIR_NAME};
+        long size = 0;
+        for (String dir : dirs) {
+            size += getFileSize(new File(context.getCacheDir(), dir));
+        }
+        double kb = size / 1024.0;
+        if (kb < 1024) return String.format("%.1fKB", kb);
+        double mb = kb / 1024.0;
+        if (mb < 1024) return String.format("%.1fMB", mb);
+        return String.format("%.1fGB", mb / 1024.0);
+    }
+
     public static boolean deleteFile(File file) {
         if (file == null || !file.exists()) return false;
         if (file.isFile()) return file.delete();
@@ -458,7 +472,7 @@ public class AppUtil {
                 if (!deleteFile(f)) return false;
             }
         }
-        return true;
+        return file.delete();
     }
 
     public static File writeFile(Context context, String parent, String fileName, byte[] content) {

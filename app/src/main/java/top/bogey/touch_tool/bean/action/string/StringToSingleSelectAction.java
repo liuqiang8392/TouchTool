@@ -16,7 +16,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class StringToSingleSelectAction extends CalculateAction {
-    private final transient Pin textPin = new Pin(new PinString(), R.string.pin_string);
+    private final transient Pin textPin = new Pin(new PinString(), R.string.string_to_single_select_action_select);
     private final transient Pin singleSelectPin = new Pin(new PinSingleSelect(), R.string.pin_string_select, true);
 
     public StringToSingleSelectAction() {

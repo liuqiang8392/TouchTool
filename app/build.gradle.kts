@@ -27,7 +27,7 @@ configure<ApplicationExtension> {
         @Suppress("UnstableApiUsage")
         externalNativeBuild {
             cmake {
-                cppFlags += listOf("-std=c++14", "-Wno-format")
+                cppFlags += listOf("-std=c++20", "-Wno-format")
                 arguments += listOf("-DANDROID_STL=c++_shared")
             }
         }
@@ -102,4 +102,9 @@ dependencies {
     implementation(libs.zxinglite)
     implementation(libs.tinypinyin)
     implementation(libs.hiddenapibypass)
+
+    implementation(libs.litert)
+    implementation(libs.litert.support.api) {
+        exclude(group = "com.google.ai.edge.litert", module = "litert-api")
+    }
 }

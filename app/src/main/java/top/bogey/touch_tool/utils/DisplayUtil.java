@@ -14,6 +14,7 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
@@ -351,13 +352,13 @@ public class DisplayUtil {
         return maxWidth;
     }
 
-    public static native MatchResult nativeMatchTemplate(Bitmap bitmap, Bitmap template, int speed);
+    public static native MatchResult nativeMatchTemplate(Bitmap bitmap, Bitmap template, int speed, boolean canny);
 
     public static Rect matchTemplate(Bitmap bitmap, Bitmap template, Rect area, int similarity) {
-        return matchTemplate(bitmap, template, area, similarity, 2);
+        return matchTemplate(bitmap, template, area, similarity, 2, false);
     }
 
-    public static Rect matchTemplate(Bitmap bitmap, Bitmap template, Rect area, int similarity, int speed) {
+    public static Rect matchTemplate(Bitmap bitmap, Bitmap template, Rect area, int similarity, int speed, boolean canny) {
         if (bitmap == null) return null;
         if (template == null) return null;
         // 如果图片尺寸小于模板尺寸，则不匹配
@@ -372,7 +373,10 @@ public class DisplayUtil {
             if (bitmap == null) return null;
         }
 
-        MatchResult matchResult = nativeMatchTemplate(bitmap, template, (int) Math.pow(2, speed));
+        long start = System.currentTimeMillis();
+        MatchResult matchResult = nativeMatchTemplate(bitmap, template, (int) Math.pow(2, speed), canny);
+        long time = System.currentTimeMillis() - start;
+        Log.d("TAG", "matchTemplate: " + time);
         if (tmp != null) tmp.recycle();
         if (matchResult == null) return null;
         if (matchResult.value * 100 < similarity) return null;
@@ -380,9 +384,9 @@ public class DisplayUtil {
         return matchResult.area;
     }
 
-    public static native List<MatchResult> nativeMatchAllTemplate(Bitmap bitmap, Bitmap template, int similarity, int speed);
+    public static native List<MatchResult> nativeMatchAllTemplate(Bitmap bitmap, Bitmap template, int similarity, int speed, boolean canny);
 
-    public static synchronized List<MatchResult> matchAllTemplate(Bitmap bitmap, Bitmap template, Rect area, int similarity, int speed) {
+    public static synchronized List<MatchResult> matchAllTemplate(Bitmap bitmap, Bitmap template, Rect area, int similarity, int speed, boolean canny) {
         if (bitmap == null) return null;
         if (template == null) return null;
         // 如果图片尺寸小于模板尺寸，则不匹配
@@ -397,7 +401,7 @@ public class DisplayUtil {
             if (bitmap == null) return null;
         }
 
-        List<MatchResult> matchResults = nativeMatchAllTemplate(bitmap, template, similarity, (int) Math.pow(2, speed));
+        List<MatchResult> matchResults = nativeMatchAllTemplate(bitmap, template, similarity, (int) Math.pow(2, speed), canny);
         if (tmp != null) tmp.recycle();
 
         if (matchResults == null || matchResults.isEmpty()) return null;

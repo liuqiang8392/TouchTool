@@ -243,8 +243,14 @@
     <string name="package_activity">应用信息</string>
     <string name="node_picker">控件信息</string>
     <string name="running_log">任务日志</string>
-    <string name="yolo_model">YOLO模型</string>
+    <string name="model_manager">模型管理</string>
 
+
+    <!-- 模型管理 -->
+    <string name="model_manager_importing">正在导入模型…</string>
+    <string name="model_manager_import_success">模型导入成功</string>
+    <string name="model_manager_import_failed">模型导入失败</string>
+    <string name="model_manager_model_labels">模型标签</string>
 
     <!-- 设置 -->
     <string name="setting_need_notification_desc">前台服务和录屏服务需要发送通知，请授予应用发送通知的权限</string>

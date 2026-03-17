@@ -31,11 +31,9 @@ public class FloatWindow {
         tag = checkTag(tag);
         if (tags.contains(tag)) {
             FloatWindowHelper helper = getHelper(tag);
-            if (helper != null) {
-                helper.dismissFloatWindow();
-                tags.remove(tag);
-                views.remove(tag);
-            }
+            if (helper != null) helper.dismissFloatWindow();
+            tags.remove(tag);
+            views.remove(tag);
         }
     }
 

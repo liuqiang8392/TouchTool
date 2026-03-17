@@ -23,7 +23,6 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinArea;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinImage;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleSelect;
-import top.bogey.touch_tool.bean.pin.special_pin.NotShowPin;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskRunnable;
@@ -34,19 +33,19 @@ public class TouchImageAction extends ExecuteAction {
     private final transient Pin templatePin = new Pin(new PinImage(), R.string.touch_image_action_template);
     private final transient Pin similarityPin = new Pin(new PinInteger(80), R.string.touch_image_action_similarity);
     private final transient Pin areaPin = new Pin(new PinArea(), R.string.touch_image_action_area, false, false, true);
-    private final transient Pin scalePin = new Pin(new PinSingleSelect(R.array.match_image_scale, 1), R.string.touch_image_action_scale, false, false, true);
-    private final transient Pin useAccPin = new NotShowPin(new PinBoolean(true), R.string.touch_image_action_use_accessibility, false, false, true);
+    private final transient Pin scalePin = new Pin(new PinSingleSelect(R.array.match_image_scale, 1), R.string.image_action_scale, false, false, true);
+    private final transient Pin cannyPin = new Pin(new PinBoolean(false), R.string.image_action_canny);
     private final transient Pin randomPin = new Pin(new PinBoolean(), R.string.touch_image_action_offset);
     private final transient Pin elsePin = new Pin(new PinExecute(), R.string.if_action_else, true);
 
     public TouchImageAction() {
         super(ActionType.TOUCH_IMAGE);
-        addPins(templatePin, similarityPin, areaPin, scalePin, useAccPin, randomPin, elsePin);
+        addPins(templatePin, similarityPin, areaPin, scalePin, cannyPin, randomPin, elsePin);
     }
 
     public TouchImageAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(templatePin, similarityPin, areaPin, scalePin, useAccPin, randomPin, elsePin);
+        reAddPins(templatePin, similarityPin, areaPin, scalePin, cannyPin, randomPin, elsePin);
     }
 
     @Override
@@ -59,8 +58,9 @@ public class TouchImageAction extends ExecuteAction {
         PinArea area = getPinValue(runnable, areaPin);
         PinSingleSelect scale = getPinValue(runnable, scalePin);
         PinBoolean random = getPinValue(runnable, randomPin);
+        PinBoolean canny = getPinValue(runnable, cannyPin);
 
-        Rect rect = DisplayUtil.matchTemplate(bitmap, template.getImage(), area.getValue(), similarity.intValue(), scale.getIndex() + 1);
+        Rect rect = DisplayUtil.matchTemplate(bitmap, template.getImage(), area.getValue(), similarity.intValue(), scale.getIndex() + 1, canny.getValue());
         if (rect == null || rect.isEmpty()) {
             executeNext(runnable, elsePin);
             return;

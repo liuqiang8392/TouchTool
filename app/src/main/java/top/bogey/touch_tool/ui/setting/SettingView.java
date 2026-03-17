@@ -218,13 +218,13 @@ public class SettingView extends Fragment {
                             }
                         }
                         if (flag) AppUtil.deleteFile(activity.getCacheDir());
-                        binding.cleanCacheButton.setDescription(getString(R.string.app_setting_clean_cache_desc, AppUtil.getFileSizeString(activity.getCacheDir())));
+                        binding.cleanCacheButton.setDescription(getString(R.string.app_setting_clean_cache_desc, AppUtil.getCacheDirsSizeString(activity)));
                     })
                     .setNegativeButton(R.string.cancel, null)
                     .setMultiChoiceItems(dirNames, isChecked, (dialog, which, checked) -> isChecked[which] = checked)
                     .show();
         });
-        binding.cleanCacheButton.setDescription(getString(R.string.app_setting_clean_cache_desc, AppUtil.getFileSizeString(activity.getCacheDir())));
+        binding.cleanCacheButton.setDescription(getString(R.string.app_setting_clean_cache_desc, AppUtil.getCacheDirsSizeString(activity)));
         if (!AppUtil.isRelease(activity)) {
             binding.cleanCacheButton.setOnClickListener(v -> AppUtil.crashTest());
         }

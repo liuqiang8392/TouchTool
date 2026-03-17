@@ -23,7 +23,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
-import android.os.RemoteException;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.speech.tts.TextToSpeech;
@@ -38,7 +37,6 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.MutableLiveData;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -52,8 +50,6 @@ import java.util.concurrent.Future;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import top.bogey.ocr.IOcr;
-import top.bogey.ocr.IOcrCallback;
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
@@ -77,10 +73,7 @@ import top.bogey.touch_tool.ui.custom.float_view.KeepAliveFloatView;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.ThreadUtil;
 import top.bogey.touch_tool.utils.callback.BooleanResultCallback;
-import top.bogey.touch_tool.utils.callback.ResultCallback;
 import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
-import top.bogey.yolo.IYolo;
-import top.bogey.yolo.IYoloCallback;
 
 @SuppressLint("AccessibilityPolicy")
 public class MainAccessibilityService extends AccessibilityService {
@@ -223,8 +216,6 @@ public class MainAccessibilityService extends AccessibilityService {
 
             stopAllTask();
             stopCapture();
-            stopOcrService();
-            stopYoloService();
             stopSound(null);
             cancelAllAlarm();
             cancelAllBroadcast();
@@ -674,159 +665,6 @@ public class MainAccessibilityService extends AccessibilityService {
     }
 
     // 截图 ----------------------------------------------------------------------------- end
-
-    // Ocr ----------------------------------------------------------------------------- start
-    private final Map<String, IOcr> ocrBinderMap = new HashMap<>();
-    private final Map<String, ServiceConnection> ocrConnectionMap = new HashMap<>();
-
-    private synchronized void initOcrService(String packageName, BooleanResultCallback callback) {
-        IOcr iOcr = ocrBinderMap.get(packageName);
-        if (iOcr == null || !iOcr.asBinder().isBinderAlive()) {
-            ServiceConnection connection = new ServiceConnection() {
-                @Override
-                public void onServiceConnected(ComponentName name, IBinder service) {
-                    IOcr iOcr = IOcr.Stub.asInterface(service);
-                    ocrBinderMap.put(packageName, iOcr);
-                    callback.onResult(true);
-                }
-
-                @Override
-                public void onServiceDisconnected(ComponentName name) {
-                    ocrBinderMap.remove(packageName);
-                    ocrConnectionMap.remove(packageName);
-                }
-            };
-
-            Intent intent = new Intent(TaskInfoSummary.OCR_SERVICE_ACTION);
-            intent.setPackage(packageName);
-            if (bindService(intent, connection, Context.BIND_AUTO_CREATE)) {
-
-                ocrConnectionMap.put(packageName, connection);
-            } else {
-                new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(this, R.string.bind_service_failed_tips, Toast.LENGTH_SHORT).show());
-                callback.onResult(false);
-            }
-        } else {
-            callback.onResult(true);
-        }
-    }
-
-    public synchronized void runOcr(Bitmap bitmap, String packageName, ResultCallback<List<OcrResult>> callback) {
-        if (bitmap == null || bitmap.isRecycled()) {
-            callback.onResult(new ArrayList<>());
-            return;
-        }
-
-        initOcrService(packageName, result -> {
-            if (result) {
-                IOcr iOcr = ocrBinderMap.get(packageName);
-                if (iOcr != null && iOcr.asBinder().isBinderAlive()) {
-                    try {
-                        iOcr.runOcr(bitmap, new IOcrCallback.Stub() {
-                            @Override
-                            public void onResult(List<OcrResult> result) {
-                                callback.onResult(result);
-                            }
-                        });
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
-                        callback.onResult(new ArrayList<>());
-                    }
-                } else {
-                    callback.onResult(new ArrayList<>());
-                }
-            }
-        });
-    }
-
-    private void stopOcrService() {
-        for (String packageName : ocrConnectionMap.keySet()) {
-            ServiceConnection connection = ocrConnectionMap.get(packageName);
-            if (connection != null) {
-                unbindService(connection);
-            }
-        }
-        ocrBinderMap.clear();
-        ocrConnectionMap.clear();
-    }
-
-    // Ocr ----------------------------------------------------------------------------- end
-
-    // Yolo ----------------------------------------------------------------------------- start
-    private IYolo yolo;
-    private ServiceConnection yoloConnection;
-
-    private void initYoloService(BooleanResultCallback callback) {
-        if (yolo == null || !yolo.asBinder().isBinderAlive()) {
-            yoloConnection = new ServiceConnection() {
-                @Override
-                public void onServiceConnected(ComponentName name, IBinder service) {
-                    yolo = IYolo.Stub.asInterface(service);
-                    callback.onResult(true);
-                }
-
-                @Override
-                public void onServiceDisconnected(ComponentName name) {
-                    yolo = null;
-                    yoloConnection = null;
-                }
-            };
-
-            Intent intent = new Intent();
-            intent.setComponent(new ComponentName(TaskInfoSummary.YOLO_APP_PACKAGE, TaskInfoSummary.YOLO_APP_SERVICE));
-            if (!bindService(intent, yoloConnection, Context.BIND_AUTO_CREATE)) {
-                new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(this, R.string.bind_service_failed_tips, Toast.LENGTH_SHORT).show());
-                callback.onResult(false);
-            }
-        } else {
-            callback.onResult(true);
-        }
-    }
-
-    public synchronized void runYolo(Bitmap bitmap, String modelName, int similarity, ResultCallback<List<YoloResult>> callback) {
-        if (bitmap == null || bitmap.isRecycled()) {
-            callback.onResult(new ArrayList<>());
-            return;
-        }
-
-        initYoloService(result -> {
-            if (result) {
-                try {
-                    yolo.runYolo(bitmap, modelName, similarity / 100f, new IYoloCallback.Stub() {
-                        @Override
-                        public void onResult(List<YoloResult> result) {
-                            callback.onResult(result);
-                        }
-                    });
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                    callback.onResult(new ArrayList<>());
-                }
-            }
-        });
-    }
-
-    public synchronized void getYoloModelList(ResultCallback<List<String>> callback) {
-        initYoloService(result -> {
-            if (result) {
-                try {
-                    callback.onResult(yolo.getModelList());
-                } catch (RemoteException e) {
-                    callback.onResult(new ArrayList<>());
-                }
-            }
-        });
-    }
-
-    private void stopYoloService() {
-        if (yoloConnection != null) {
-            unbindService(yoloConnection);
-            yoloConnection = null;
-        }
-        yolo = null;
-    }
-
-    // Yolo ----------------------------------------------------------------------------- end
 
     // 按键 ----------------------------------------------------------------------------- start
     private Handler handler;

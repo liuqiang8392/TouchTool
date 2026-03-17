@@ -30,17 +30,18 @@ public class IsImageExistAction extends CalculateAction {
     private final transient Pin sourcePin = new Pin(new PinImage(), R.string.pin_image_full, false, false, true);
     private final transient Pin templatePin = new Pin(new PinImage(), R.string.is_image_exist_action_template);
     private final transient Pin similarityPin = new Pin(new PinInteger(80), R.string.is_image_exist_action_similarity);
-    private final transient Pin scalePin = new Pin(new PinSingleSelect(R.array.match_image_scale, 1), R.string.is_image_exist_action_scale, false, false, true);
+    private final transient Pin scalePin = new Pin(new PinSingleSelect(R.array.match_image_scale, 1), R.string.image_action_scale, false, false, true);
     private final transient Pin resultPin = new Pin(new PinBoolean(), R.string.pin_boolean_result, true);
+    private final transient Pin cannyPin = new Pin(new PinBoolean(false), R.string.image_action_canny);
 
     public IsImageExistAction() {
         super(ActionType.IS_IMAGE_EXIST);
-        addPins(sourcePin, templatePin, similarityPin, scalePin, resultPin);
+        addPins(sourcePin, templatePin, similarityPin, scalePin, resultPin, cannyPin);
     }
 
     public IsImageExistAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(sourcePin, templatePin, similarityPin, scalePin, resultPin);
+        reAddPins(sourcePin, templatePin, similarityPin, scalePin, resultPin, cannyPin);
     }
 
     @Override
@@ -56,8 +57,9 @@ public class IsImageExistAction extends CalculateAction {
         PinImage template = getPinValue(runnable, templatePin);
         PinNumber<?> similarity = getPinValue(runnable, similarityPin);
         PinSingleSelect scale = getPinValue(runnable, scalePin);
+        PinBoolean canny = getPinValue(runnable, cannyPin);
 
-        Rect rect = DisplayUtil.matchTemplate(bitmap, template.getImage(), null, similarity.intValue(), scale.getIndex() + 1);
+        Rect rect = DisplayUtil.matchTemplate(bitmap, template.getImage(), null, similarity.intValue(), scale.getIndex() + 1, canny.getValue());
 
         resultPin.getValue(PinBoolean.class).setValue(rect != null && !rect.isEmpty());
     }

@@ -467,6 +467,7 @@
 
     <string name="string_to_single_select_action">文本转单选</string>
     <string name="string_to_single_select_action_desc">将文本转换为单选值</string>
+    <string name="string_to_single_select_action_select">单个选项值</string>
 
     <!-- 动作-Area -->
     <string name="area_to_integer_action">区域转数值</string>
@@ -498,10 +499,6 @@
     <string name="pick_area_action">手动选择区域</string>
     <string name="pick_area_action_desc">选择一个区域</string>
     <string name="pick_area_action_else">未达成</string>
-
-    <string name="pick_node_action">手动选择控件</string>
-    <string name="pick_node_action_desc">选择一个控件</string>
-    <string name="pick_node_action_else">未达成</string>
 
     <!-- 动作-Point -->
     <string name="point_to_integer_action">位置转数值</string>
@@ -608,9 +605,15 @@
     <string name="edit_text_paste_action_edit_text">输入框(默认首个)</string>
     <string name="edit_text_paste_action_enter">尝试模拟回车</string>
 
+    <string name="pick_node_action">手动选择控件</string>
+    <string name="pick_node_action_desc">选择一个控件</string>
+    <string name="pick_node_action_else">未达成</string>
+
 
     <!-- 动作-Image -->
     <string name="pin_area_first">首个区域</string>
+    <string name="image_action_scale">缩放加速</string>
+    <string name="image_action_canny">去色加速</string>
 
     <string name="get_image_action">获取屏幕界面</string>
     <string name="get_image_action_desc">获取当前屏幕指定区域图片</string>
@@ -635,26 +638,22 @@
     <string name="find_image_action_desc">识别目标图片在图片中的位置</string>
     <string name="find_image_action_template">目标</string>
     <string name="find_image_action_similarity">相似度</string>
-    <string name="find_image_action_scale">缩小倍数</string>
 
     <string name="find_images_action">识别所有匹配图片</string>
     <string name="find_images_action_desc">识别目标图片在图片中的所有区域</string>
     <string name="find_images_action_template">目标</string>
     <string name="find_images_action_similarity">相似度</string>
-    <string name="find_images_action_scale">缩小倍数</string>
 
     <string name="is_image_exist_action">图片是否存在</string>
     <string name="is_image_exist_action_desc">判断目标图片是否存在</string>
     <string name="is_image_exist_action_template">目标</string>
     <string name="is_image_exist_action_similarity">相似度</string>
-    <string name="is_image_exist_action_scale">缩小倍数</string>
 
     <string name="touch_image_action">点击图片</string>
     <string name="touch_image_action_desc">点击目标图片</string>
     <string name="touch_image_action_template">目标</string>
     <string name="touch_image_action_similarity">相似度</string>
     <string name="touch_image_action_area">区域限制</string>
-    <string name="touch_image_action_scale">缩小倍数</string>
     <string name="touch_image_action_use_accessibility">无障碍截屏</string>
     <string name="touch_image_action_offset">随机偏移</string>
 

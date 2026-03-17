@@ -49,12 +49,7 @@ import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.callback.ResultCallback;
 
 public class TaskInfoSummary {
-    public static final String YOLO_APP_PACKAGE = "top.bogey.yolo";
     public static final String YOLO_APP_ACTIVITY = "top.bogey.yolo.ui.MainActivity";
-    public static final String YOLO_APP_SERVICE = "top.bogey.yolo.service.YoloService";
-    public static final String OCR_SERVICE_ACTION = "top.bogey.ocr.OcrService";
-
-
     private static final String XMLNS_ANDROID = "http://schemas.android.com/apk/res/android";
 
     private static TaskInfoSummary instance;
@@ -69,7 +64,6 @@ public class TaskInfoSummary {
     }
 
     private final Map<String, PackageInfo> apps = new ConcurrentHashMap<>();
-    private final List<String> ocrApps = new ArrayList<>();
     private final List<String> launcherApps = new ArrayList<>();
 
     private PackageActivity packageActivity = new PackageActivity("", "");
@@ -97,18 +91,10 @@ public class TaskInfoSummary {
             }
         }
 
-        ocrApps.clear();
-        Intent intent = new Intent(OCR_SERVICE_ACTION);
-        List<ResolveInfo> resolveInfos = packageManager.queryIntentServices(intent, PackageManager.MATCH_ALL);
-        for (ResolveInfo resolveInfo : resolveInfos) {
-            ocrApps.add(resolveInfo.serviceInfo.packageName);
-        }
-        ocrApps.sort(String::compareTo);
-
         launcherApps.clear();
-        intent = new Intent(Intent.ACTION_MAIN);
+        Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
-        resolveInfos = packageManager.queryIntentActivities(intent, PackageManager.MATCH_ALL);
+        List<ResolveInfo> resolveInfos = packageManager.queryIntentActivities(intent, PackageManager.MATCH_ALL);
         for (ResolveInfo resolveInfo : resolveInfos) {
             launcherApps.add(resolveInfo.activityInfo.packageName);
         }
@@ -296,21 +282,7 @@ public class TaskInfoSummary {
         }
         return shortcutApps;
     }
-
-    public List<String> getOcrApps() {
-        return ocrApps;
-    }
-
-    public List<String> getOcrAppNames() {
-        List<String> names = new ArrayList<>();
-        for (String packageName : ocrApps) {
-            PackageInfo packageInfo = apps.get(packageName);
-            if (packageInfo == null || packageInfo.applicationInfo == null) continue;
-            names.add(packageInfo.applicationInfo.loadLabel(MainApplication.getInstance().getPackageManager()).toString());
-        }
-        return names;
-    }
-
+    
     public boolean isLauncherApp(String packageName) {
         return launcherApps.contains(packageName);
     }

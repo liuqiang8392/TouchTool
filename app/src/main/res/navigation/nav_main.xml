@@ -19,7 +19,11 @@
         android:id="@+id/tool"
         android:name="top.bogey.touch_tool.ui.tool.ToolView"
         android:label="@string/tool"
-        tools:layout="@layout/view_tool" />
+        tools:layout="@layout/view_tool" >
+        <action
+            android:id="@+id/action_tool_to_modelManagerView"
+            app:destination="@id/modelManagerView" />
+    </fragment>
 
     <fragment
         android:id="@+id/setting"
@@ -45,4 +49,8 @@
         android:name="top.bogey.touch_tool.ui.setting.SettingPlayView"
         android:label="view_setting_play_view"
         tools:layout="@layout/view_setting_play_view" />
+    <fragment
+        android:id="@+id/modelManagerView"
+        android:name="top.bogey.touch_tool.ui.tool.model_manager.ModelManagerView"
+        android:label="ModelManagerView" />
 </navigation>

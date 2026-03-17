@@ -4,6 +4,7 @@ import android.os.Build;
 
 import com.google.gson.JsonObject;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import top.bogey.touch_tool.MainApplication;
@@ -54,7 +55,10 @@ public class TouchAction extends ExecuteAction {
                 runnable.resume();
             });
         }
-        TouchPathFloatView.showGesture(path.getPathParts(EAnchor.TOP_LEFT), time.floatValue());
+
+        List<PinTouchPath.PathPart> pathParts = path.getPathParts(EAnchor.TOP_LEFT);
+        pathParts.forEach(pathPart -> pathPart.offset(offset.intValue(), offset.intValue()));
+        TouchPathFloatView.showGesture(pathParts, time.floatValue());
         if (pause.get()) runnable.await();
         executeNext(runnable, outPin);
     }

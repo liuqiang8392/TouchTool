@@ -62,10 +62,10 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
     private List<NodeInfo> cachedFindNodes = new ArrayList<>();
 
     public static void showPicker(ResultCallback<NodeInfo> callback) {
-        FloatWindow.dismiss(NodePicker.class.getName());
         KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
         if (keepView == null) return;
         new Handler(Looper.getMainLooper()).post(() -> {
+            FloatWindow.dismiss(NodePicker.class.getName());
             NodePicker nodePicker = new NodePicker(keepView.getThemeContext(), callback, "");
             nodePicker.setFloatCallback(new NodePickerCallback(nodePicker));
             nodePicker.show();

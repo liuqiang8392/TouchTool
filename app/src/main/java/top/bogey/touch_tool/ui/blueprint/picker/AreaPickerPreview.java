@@ -16,10 +16,11 @@ import java.util.List;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
+import top.bogey.touch_tool.bean.save.model.LiteRTModel;
+import top.bogey.touch_tool.bean.save.model.ModelResult;
+import top.bogey.touch_tool.bean.save.model.ModelSaver;
 import top.bogey.touch_tool.databinding.FloatPickerAreaPreviewBinding;
 import top.bogey.touch_tool.service.MainAccessibilityService;
-import top.bogey.touch_tool.service.OcrResult;
-import top.bogey.touch_tool.service.TaskInfoSummary;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.callback.ResultCallback;
 import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
@@ -80,8 +81,11 @@ public class AreaPickerPreview extends BasePicker<Rect> {
 
         binding.timeSlider.setLabelFormatter(value -> getContext().getString(R.string.picker_area_offset, (int) value));
 
-        List<String> ocrAppNames = TaskInfoSummary.getInstance().getOcrAppNames();
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, R.layout.widget_textview_item, ocrAppNames);
+        List<LiteRTModel> models = ModelSaver.getInstance().getModelList(LiteRTModel.ModelType.OCR);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, R.layout.widget_textview_item);
+        for (LiteRTModel model : models) {
+            adapter.add(model.getName());
+        }
         binding.spinner.setOnClickListener(v -> {
             ListPopupWindow popup = new ListPopupWindow(getContext());
             popup.setAdapter(adapter);
@@ -93,24 +97,23 @@ public class AreaPickerPreview extends BasePicker<Rect> {
             });
             popup.show();
         });
-        if (!ocrAppNames.isEmpty()) binding.spinner.setText(ocrAppNames.get(ocrAppIndex));
+        if (!adapter.isEmpty()) binding.spinner.setText(adapter.getItem(ocrAppIndex));
 
         binding.testButton.setOnClickListener(v -> {
-            List<String> ocrApps = TaskInfoSummary.getInstance().getOcrApps();
-            if (ocrAppIndex < ocrApps.size()) {
+            if (ocrAppIndex < models.size()) {
                 MainAccessibilityService service = MainApplication.getInstance().getService();
                 Bitmap bitmap = service.tryGetScreenShot();
                 if (bitmap != null) {
                     Bitmap clipBitmap = DisplayUtil.safeClipBitmap(bitmap, area.left, area.top, area.width(), area.height());
-                    service.runOcr(clipBitmap, ocrApps.get(ocrAppIndex), result -> {
+                    if (models.size() > ocrAppIndex) {
+                        LiteRTModel model = models.get(ocrAppIndex);
+                        List<ModelResult> results = model.execute(service, clipBitmap, binding.timeSlider.getValue() / 100);
                         StringBuilder builder = new StringBuilder();
-                        int value = (int) binding.timeSlider.getValue();
-                        for (OcrResult ocrResult : result) {
-                            if (ocrResult.getSimilar() < value) continue;
-                            builder.append(ocrResult.getText()).append("\n");
+                        for (ModelResult result : results) {
+                            builder.append(result.getText()).append("\n");
                         }
                         post(() -> Toast.makeText(context, builder.toString().trim(), Toast.LENGTH_SHORT).show());
-                    });
+                    }
                 }
             }
         });

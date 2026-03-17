@@ -16,6 +16,7 @@ import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.parent.FindExecuteAction;
 import top.bogey.touch_tool.bean.action.system.SwitchCaptureAction;
 import top.bogey.touch_tool.bean.pin.Pin;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinArea;
@@ -30,18 +31,19 @@ public class FindImageAction extends FindExecuteAction {
     private final transient Pin sourcePin = new Pin(new PinImage(), R.string.pin_image_full, false, false, true);
     private final transient Pin templatePin = new Pin(new PinImage(), R.string.find_image_action_template);
     private final transient Pin similarityPin = new Pin(new PinInteger(80), R.string.find_image_action_similarity);
-    private final transient Pin scalePin = new Pin(new PinSingleSelect(R.array.match_image_scale, 1), R.string.find_image_action_scale, false, false, true);
+    private final transient Pin scalePin = new Pin(new PinSingleSelect(R.array.match_image_scale, 1), R.string.image_action_scale, false, false, true);
+    private final transient Pin cannyPin = new Pin(new PinBoolean(false), R.string.image_action_canny);
     private final transient Pin areaPin = new Pin(new PinArea(), R.string.pin_area, true);
 
     public FindImageAction() {
         super(ActionType.FIND_IMAGE);
         intervalPin.getValue(PinInteger.class).setValue(200);
-        addPins(sourcePin, templatePin, similarityPin, scalePin, areaPin);
+        addPins(sourcePin, templatePin, similarityPin, scalePin, cannyPin, areaPin);
     }
 
     public FindImageAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(sourcePin, templatePin, similarityPin, scalePin, areaPin);
+        reAddPins(sourcePin, templatePin, similarityPin, scalePin, cannyPin, areaPin);
     }
 
     @Override
@@ -57,8 +59,9 @@ public class FindImageAction extends FindExecuteAction {
         PinImage template = getPinValue(runnable, templatePin);
         PinNumber<?> similarity = getPinValue(runnable, similarityPin);
         PinSingleSelect scale = getPinValue(runnable, scalePin);
+        PinBoolean canny = getPinValue(runnable, cannyPin);
 
-        Rect rect = DisplayUtil.matchTemplate(bitmap, template.getImage(), null, similarity.intValue(), scale.getIndex() + 1);
+        Rect rect = DisplayUtil.matchTemplate(bitmap, template.getImage(), null, similarity.intValue(), scale.getIndex() + 1, canny.getValue());
         if (rect == null || rect.isEmpty()) {
             return false;
         }
