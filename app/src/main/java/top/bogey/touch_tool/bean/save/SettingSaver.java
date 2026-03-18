@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -250,6 +251,7 @@ public class SettingSaver {
     }
 
     public boolean isExactAlarmEnabled() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return true;
         return mmkv.decodeBool(EXACT_ALARM, false);
     }
 

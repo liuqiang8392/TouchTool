@@ -310,6 +310,7 @@ public class SettingView extends Fragment {
             }
         });
         binding.alarmSwitch.setChecked(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && alarmManager.canScheduleExactAlarms() && SettingSaver.getInstance().isExactAlarmEnabled());
+        binding.alarmSwitch.setVisibility(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ? View.VISIBLE : View.GONE);
 
         // 蓝牙监听
         binding.bluetoothSwitch.setOnSwitchClickListener(v -> {

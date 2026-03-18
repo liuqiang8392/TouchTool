@@ -461,6 +461,8 @@ Java_top_bogey_touch_1tool_bean_save_model_OcrModel_detPostProcess(JNIEnv *env, 
             }
         }
         int realWidth = padWidths[index];
+        if(realWidth < cropWidth) continue;
+
         Mat pad(cropHeight, realWidth, CV_32FC3, Scalar(0, 0, 0));
         crop.convertTo(pad(Rect(0, 0, crop.cols, crop.rows)), CV_32FC3, 1.0 / 255);
 

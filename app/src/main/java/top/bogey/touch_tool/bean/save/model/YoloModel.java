@@ -89,7 +89,12 @@ public class YoloModel extends LiteRTModel {
         if (executor == null || !executor.isValid()) {
             String modelPath = getModelDirPath(context) + File.separator + modelConfig.getModelName() + MODEL_SUFFIX;
             executor = new LiteRTModelExecutor(modelPath);
-            return executor.isValid();
+            if (!executor.isValid()) {
+                executor.release();
+                executor = null;
+                return false;
+            }
+            return true;
         }
         return true;
     }

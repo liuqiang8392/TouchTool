@@ -1,6 +1,7 @@
 package top.bogey.touch_tool;
 
 import android.app.Application;
+import android.content.pm.PackageManager;
 
 import androidx.annotation.NonNull;
 
@@ -26,6 +27,8 @@ public class MainApplication extends Application implements Thread.UncaughtExcep
 
     private Thread.UncaughtExceptionHandler handler;
 
+    private String version;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -37,6 +40,12 @@ public class MainApplication extends Application implements Thread.UncaughtExcep
 
         handler = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler(this);
+
+        PackageManager packageManager = getPackageManager();
+        try {
+            version = packageManager.getPackageInfo(getPackageName(), 0).versionName;
+        } catch (Exception ignored) {
+        }
     }
 
     public void setActivity(MainActivity activity) {
@@ -65,7 +74,8 @@ public class MainApplication extends Application implements Thread.UncaughtExcep
             errorInfo = stringWriter.toString();
         } catch (Exception ignored) {
         }
-        SettingSaver.getInstance().setRunningError(errorInfo);
+
+        SettingSaver.getInstance().setRunningError(version + "\n" + errorInfo);
         handler.uncaughtException(t, e);
     }
 }

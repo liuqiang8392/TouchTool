@@ -22,6 +22,8 @@ public class SearchHistorySaver {
     private final MMKV mmkv = MMKV.mmkvWithID("SEARCH_HISTORY_DB", MMKV.SINGLE_PROCESS_MODE);
 
     public void addSearchHistory(String history) {
+        // 先移除，再添加，保证添加的在最前面
+        mmkv.remove(history);
         mmkv.encode(history, true);
     }
 

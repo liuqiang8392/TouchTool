@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.RectF;
 import android.net.Uri;
-import android.util.Log;
 
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -108,18 +107,19 @@ public class OcrModel extends LiteRTModel {
 
     private boolean initModel(Context context) {
         if (detExecutor == null || !detExecutor.isValid() || recExecutors == null || recExecutors.size() != recConfigs.size()) {
+            boolean result = true;
+
             String detModelPath = getModelDirPath(context) + File.separator + detConfig.getModelName() + MODEL_SUFFIX;
             detExecutor = new LiteRTModelExecutor(detModelPath);
-            if (!detExecutor.isValid()) {
-                return false;
-            }
+            result &= detExecutor.isValid();
 
             recExecutors = new ArrayList<>();
             for (int i = 0; i < recConfigs.size(); i++) {
                 OcrModelConfig recConfig = recConfigs.get(i);
                 String recModelPath = getModelDirPath(context) + File.separator + recConfig.getModelName() + MODEL_SUFFIX;
                 LiteRTModelExecutor recExecutor = new LiteRTModelExecutor(recModelPath);
-                if (recExecutor.isValid()) {
+                result &= recExecutor.isValid();
+                if (result) {
                     recExecutors.add(recExecutor);
                 }
             }
@@ -129,9 +129,21 @@ public class OcrModel extends LiteRTModel {
             for (int i = 0; i < recExecutors.size(); i++) {
                 LiteRTModelExecutor recExecutor = recExecutors.get(i);
                 widths[i] = recExecutor.getInputShape()[2];
+                result &= widths[i] > 0;
             }
 
-            return recExecutors.size() == recConfigs.size();
+            if (!result) {
+                detExecutor.release();
+                detExecutor = null;
+
+                for (LiteRTModelExecutor recExecutor : recExecutors) {
+                    recExecutor.release();
+                }
+                recExecutors = null;
+                return false;
+            }
+
+            return true;
         }
         return true;
     }
