@@ -63,6 +63,7 @@ import top.bogey.touch_tool.bean.save.log.LogSaver;
 import top.bogey.touch_tool.bean.save.task.TaskSaver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.capture.CaptureService;
+import top.bogey.touch_tool.service.receiver.BootCompletedReceiver;
 import top.bogey.touch_tool.service.receiver.SystemEventReceiver;
 import top.bogey.touch_tool.service.super_user.SuperUser;
 import top.bogey.touch_tool.ui.FloatViewActivity;
@@ -199,14 +200,7 @@ public class MainAccessibilityService extends AccessibilityService {
             resetAllAlarm();
             resetAllBroadcast();
             SuperUser.getInstance().tryInit();
-
-            MainActivity activity = MainApplication.getInstance().getActivity();
-            if (activity == null) {
-                Intent intent = new Intent(this, FloatViewActivity.class);
-                intent.setAction(FloatViewActivity.INTENT_KEY_AUTO_START);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-            }
+            tryStartMainActivity();
         } else {
             if (systemEventReceiver != null) systemEventReceiver.unregister();
             systemEventReceiver = null;
@@ -222,6 +216,27 @@ public class MainAccessibilityService extends AccessibilityService {
             SuperUser.getInstance().exit();
             FloatWindow.dismiss(KeepAliveFloatView.class.getName());
         }
+    }
+
+    public void tryStartMainActivity() {
+        ThreadUtil.execute(() -> {
+            while (!BootCompletedReceiver.isBootCompleted()) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ignored) {
+                    return;
+                }
+            }
+            MainActivity activity = MainApplication.getInstance().getActivity();
+            if (activity == null) {
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    Intent intent = new Intent(this, FloatViewActivity.class);
+                    intent.setAction(FloatViewActivity.INTENT_KEY_AUTO_START);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                });
+            }
+        });
     }
 
     // 任务 ----------------------------------------------------------------------------- start
@@ -409,7 +424,8 @@ public class MainAccessibilityService extends AccessibilityService {
                 manager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, nextStartTime, pendingIntent);
             }
         } else {
-            manager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, nextStartTime, pendingIntent);
+            AlarmManager.AlarmClockInfo clockInfo = new AlarmManager.AlarmClockInfo(nextStartTime, null);
+            manager.setAlarmClock(clockInfo, pendingIntent);
         }
         LogSaver.getInstance().addLog(task.getId(), new LogInfo(new NormalLog(getString(R.string.time_start_action_set_tips, AppUtil.formatDateTime(this, nextStartTime, false, true)))), true);
     }
