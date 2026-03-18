@@ -352,6 +352,11 @@ public class BlueprintView extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+
+        while (!taskStack.empty()) {
+            taskStack.pop().save();
+        }
+
         Window window = requireActivity().getWindow();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.setDecorFitsSystemWindows(true);
