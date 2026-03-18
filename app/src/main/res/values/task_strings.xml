@@ -465,9 +465,10 @@
     <string name="parse_json_action">JSON解析</string>
     <string name="parse_json_action_desc">解析JSON字符串</string>
 
-    <string name="string_to_single_select_action">文本转单选</string>
-    <string name="string_to_single_select_action_desc">将文本转换为单选值</string>
-    <string name="string_to_single_select_action_select">单个选项值</string>
+    <string name="string_to_single_select_action">新建单选</string>
+    <string name="string_to_single_select_action_desc">创建一个自定义单选</string>
+    <string name="string_to_single_select_action_options">选项(可为空)</string>
+    <string name="string_to_single_select_action_select">选中项</string>
 
     <!-- 动作-Area -->
     <string name="area_to_integer_action">区域转数值</string>
