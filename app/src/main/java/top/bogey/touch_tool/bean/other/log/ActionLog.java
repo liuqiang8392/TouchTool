@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import top.bogey.touch_tool.bean.action.Action;
@@ -25,7 +26,7 @@ public class ActionLog extends Log {
     private final String taskId;
     private final String actionId;
     private final boolean execute;
-    private final Map<String, PinObject> values = new HashMap<>();
+    private final Map<String, PinObject> values = new LinkedHashMap<>();
 
     public ActionLog(int index, Task task, Action action, boolean execute) {
         super(LogType.ACTION);
@@ -66,7 +67,7 @@ public class ActionLog extends Log {
         taskId = GsonUtil.getAsString(jsonObject, "taskId", "");
         actionId = GsonUtil.getAsString(jsonObject, "actionId", "");
         execute = GsonUtil.getAsBoolean(jsonObject, "execute", true);
-        values.putAll(GsonUtil.getAsObject(jsonObject, "values", TypeToken.getParameterized(HashMap.class, String.class, PinBase.class).getType(), new HashMap<>()));
+        values.putAll(GsonUtil.getAsObject(jsonObject, "values", TypeToken.getParameterized(LinkedHashMap.class, String.class, PinBase.class).getType(), new HashMap<>()));
     }
 
     public void syncLog(ActionLog log) {

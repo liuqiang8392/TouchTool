@@ -106,7 +106,11 @@ public class LogFloatView extends FrameLayout implements FloatInterface, LogSave
                 if (log.getLogObject() instanceof ActionLog actionLog) {
                     builder.append("[").append(actionLog.isExecute() ? "->" : "<-").append("] ");
                 }
-                builder.append(log.getLog()).append("\n");
+                builder.append(log.getLog());
+                if (log.getLogObject() instanceof ActionLog actionLog) {
+                    builder.append(" ").append(actionLog.getValues().values());
+                }
+                builder.append("\n");
             }
             AppUtil.shareText(context, builder.toString());
         });
