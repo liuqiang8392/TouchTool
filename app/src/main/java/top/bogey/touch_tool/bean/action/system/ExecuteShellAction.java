@@ -36,7 +36,7 @@ public class ExecuteShellAction extends ExecuteAction {
         PinObject cmd = getPinValue(runnable, cmdPin);
 
         ISuperUser superUser = SuperUser.getInstance();
-        if (superUser.isValid()) {
+        if (superUser.isValid() && superUser.init()) {
             CmdResult cmdResult = superUser.runCommand(cmd.toString());
             if (cmdResult != null) {
                 outputPin.getValue(PinString.class).setValue(cmdResult.getOutput());
