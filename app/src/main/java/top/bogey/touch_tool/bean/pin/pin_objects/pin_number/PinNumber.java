@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.JsonObject;
 
+import java.math.BigDecimal;
+
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
@@ -11,15 +13,6 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinType;
 
 public abstract class PinNumber<T extends Number> extends PinObject {
     protected T value;
-
-    protected PinNumber() {
-        super(PinType.NUMBER);
-    }
-
-    protected PinNumber(T value) {
-        this();
-        this.value = value;
-    }
 
     protected PinNumber(PinSubType subType) {
         super(PinType.NUMBER, subType);
@@ -75,6 +68,10 @@ public abstract class PinNumber<T extends Number> extends PinObject {
         return value.doubleValue();
     }
 
+    private BigDecimal bigDecimalValue() {
+        return new BigDecimal(value.toString());
+    }
+
     @NonNull
     @Override
     public String toString() {
@@ -93,15 +90,14 @@ public abstract class PinNumber<T extends Number> extends PinObject {
     public final boolean equals(Object object) {
         if (this == object) return true;
         if (!(object instanceof PinNumber<?> pinNumber)) return false;
-        if (!super.equals(object)) return false;
 
-        return getValue().equals(pinNumber.getValue());
+        return bigDecimalValue().compareTo(pinNumber.bigDecimalValue()) == 0;
     }
 
     @Override
     public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + getValue().hashCode();
+        int result = getType().hashCode();
+        result = 31 * result + bigDecimalValue().stripTrailingZeros().hashCode();
         return result;
     }
 }

@@ -46,14 +46,6 @@ public class MapGetAction extends MapCalculateAction {
         PinMap map = getPinValue(runnable, mapPin);
         PinObject key = getPinValue(runnable, keyPin);
         PinObject object = map.get(key);
-        if (object == null && key instanceof PinNumber<?> number) {
-            switch (map.getKeyType().getSubType()) {
-                case FLOAT -> object = map.get(new PinFloat(number.floatValue()));
-                case LONG -> object = map.get(new PinLong(number.longValue()));
-                case DOUBLE -> object = map.get(new PinDouble(number.doubleValue()));
-                default -> object = map.get(new PinInteger(number.intValue()));
-            }
-        }
         if (object != null) {
             existPin.getValue(PinBoolean.class).setValue(true);
             resultPin.setValue(returnValue(object));
