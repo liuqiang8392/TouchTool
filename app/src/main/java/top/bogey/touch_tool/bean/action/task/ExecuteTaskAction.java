@@ -9,6 +9,7 @@ import java.util.Map;
 
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
+import top.bogey.touch_tool.bean.action.ActionCheckResult;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.parent.DynamicPinsAction;
 import top.bogey.touch_tool.bean.action.parent.SyncAction;
@@ -50,6 +51,14 @@ public class ExecuteTaskAction extends Action implements DynamicPinsAction, Sync
             }
         });
         tmpPins.clear();
+    }
+
+    @Override
+    public void check(ActionCheckResult result, Task task) {
+        super.check(result, task);
+        Task executeTask = getTask(task);
+        if (executeTask == null) return;
+        executeTask.check(result);
     }
 
     @Override
