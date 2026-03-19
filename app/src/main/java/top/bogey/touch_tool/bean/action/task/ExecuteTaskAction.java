@@ -33,6 +33,8 @@ public class ExecuteTaskAction extends Action implements DynamicPinsAction, Sync
 
     private transient boolean synced = false;
 
+    private transient boolean checking = false;
+
     public ExecuteTaskAction() {
         super(ActionType.EXECUTE_TASK);
         addPin(taskPin);
@@ -55,10 +57,16 @@ public class ExecuteTaskAction extends Action implements DynamicPinsAction, Sync
 
     @Override
     public void check(ActionCheckResult result, Task task) {
+        if (checking) return;
+        checking = true;
         super.check(result, task);
         Task executeTask = getTask(task);
-        if (executeTask == null) return;
+        if (executeTask == null) {
+            checking = false;
+            return;
+        }
         executeTask.check(result);
+        checking = false;
     }
 
     @Override
