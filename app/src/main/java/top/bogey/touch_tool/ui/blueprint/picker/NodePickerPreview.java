@@ -54,13 +54,10 @@ public class NodePickerPreview extends BasePicker<String> {
             dismiss();
         });
 
-        binding.pickerButton.setOnClickListener(v -> {
-            FloatWindow.dismiss(NodePicker.class.getName());
-            new NodePicker(context, result -> {
-                nodePath.setValue(result);
-                binding.pathText.setText(nodePath.getSimpleValue(10, true));
-            }, nodePath.getValue()).show();
-        });
+        binding.pickerButton.setOnClickListener(v -> new NodePicker(context, result -> {
+            nodePath.setValue(result);
+            binding.pathText.setText(nodePath.getSimpleValue(10, true));
+        }, nodePath.getValue()).show());
 
         binding.copyButton.setOnClickListener(v -> AppUtil.copyToClipboard(getContext(), nodePath.getValue()));
 

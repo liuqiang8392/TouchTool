@@ -51,7 +51,7 @@
             android:id="@+id/textBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:boxBackgroundColor="?attr/colorTertiaryContainer"
+            app:boxBackgroundColor="?attr/colorPrimary"
             app:boxStrokeWidth="0dp"
             app:boxStrokeWidthFocused="0dp"
             app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.None">
@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="?attr/defaultPadding"
                 android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
-                android:textColor="?attr/colorOnTertiaryContainer" />
+                android:textColor="?attr/colorOnPrimary" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

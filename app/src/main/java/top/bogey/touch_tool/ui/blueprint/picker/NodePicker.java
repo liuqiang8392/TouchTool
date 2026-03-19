@@ -65,7 +65,6 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
         KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
         if (keepView == null) return;
         new Handler(Looper.getMainLooper()).post(() -> {
-            FloatWindow.dismiss(NodePicker.class.getName());
             NodePicker nodePicker = new NodePicker(keepView.getThemeContext(), callback, "");
             nodePicker.setFloatCallback(new NodePickerCallback(nodePicker));
             nodePicker.show();
@@ -182,6 +181,8 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
         binding.typeButton.setText(strings[SettingSaver.getInstance().getPickNodeType()]);
 
         binding.exportButton.setOnClickListener(v -> {
+            if (screenInfo == null) return;
+
             MainActivity activity = MainApplication.getInstance().getActivity();
             if (activity == null) return;
 
@@ -207,6 +208,8 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
         });
 
         binding.importButton.setOnClickListener(v -> {
+            if (screenInfo == null) return;
+
             MainActivity activity = MainApplication.getInstance().getActivity();
             if (activity == null) return;
 
@@ -228,9 +231,9 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
                         roots = info.getRoots();
                         adapter.setRoots(roots);
                     }
-                    FloatWindow.show(tag);
-                    activity.moveTaskToBack(true);
                 }
+                FloatWindow.show(tag);
+                activity.moveTaskToBack(true);
             }), "*/*");
         });
     }
@@ -301,8 +304,10 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
 
     @Override
     protected void dispatchDraw(@NonNull Canvas canvas) {
-        Bitmap screenShot = screenInfo.getScreenShot();
-        if (screenShot != null) canvas.drawBitmap(screenShot, 0, 0, bitmapPaint);
+        if (screenInfo != null) {
+            Bitmap screenShot = screenInfo.getScreenShot();
+            if (screenShot != null) canvas.drawBitmap(screenShot, 0, 0, bitmapPaint);
+        }
 
         canvas.saveLayer(getLeft(), getTop(), getRight(), getBottom(), bitmapPaint);
         super.dispatchDraw(canvas);

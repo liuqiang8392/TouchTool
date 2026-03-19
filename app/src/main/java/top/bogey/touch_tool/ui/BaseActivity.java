@@ -59,36 +59,46 @@ public class BaseActivity extends AppCompatActivity {
         }
 
         intentLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-            if (resultCallback != null) {
-                resultCallback.onResult(result.getResultCode(), result.getData());
-            }
+            if (resultCallback == null) return;
+            resultCallback.onResult(result.getResultCode(), result.getData());
         });
 
         permissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), result -> {
-            if (result && resultCallback != null) resultCallback.onResult(RESULT_OK, null);
+            if (resultCallback == null) return;
+            if (result) resultCallback.onResult(RESULT_OK, null);
+            else resultCallback.onResult(RESULT_CANCELED, null);
         });
 
         openDocumentLauncher = registerForActivityResult(new ActivityResultContracts.OpenDocument(), result -> {
-            if (result != null && resultCallback != null) {
+            if (resultCallback == null) return;
+            if (result != null) {
                 Intent intent = new Intent();
                 intent.setData(result);
                 resultCallback.onResult(RESULT_OK, intent);
+            } else {
+                resultCallback.onResult(RESULT_CANCELED, null);
             }
         });
 
         createDocumentLauncher = registerForActivityResult(new ActivityResultContracts.CreateDocument("text/*"), result -> {
-            if (result != null && resultCallback != null) {
+            if (resultCallback == null) return;
+            if (result != null) {
                 Intent intent = new Intent();
                 intent.setData(result);
                 resultCallback.onResult(RESULT_OK, intent);
+            } else {
+                resultCallback.onResult(RESULT_CANCELED, null);
             }
         });
 
         pickMediaLauncher = registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), result -> {
-            if (result != null && resultCallback != null) {
+            if (resultCallback == null) return;
+            if (result != null) {
                 Intent intent = new Intent();
                 intent.setData(result);
                 resultCallback.onResult(RESULT_OK, intent);
+            } else {
+                resultCallback.onResult(RESULT_CANCELED, null);
             }
         });
     }
