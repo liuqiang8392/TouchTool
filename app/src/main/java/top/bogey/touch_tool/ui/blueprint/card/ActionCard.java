@@ -319,6 +319,11 @@ public abstract class ActionCard extends MaterialCardView implements ActionListe
         super.onMeasure(widthSpec, heightSpec);
     }
 
+    @SuppressLint("WrongCall")
+    protected void originOnMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    }
+
     @Override
     public void onPinAdded(Pin pin, int index) {
         List<Pin> pins = new ArrayList<>();
