@@ -84,7 +84,7 @@ public class TouchColorAction extends ExecuteAction {
                 while (index < validList.size()) {
                     Rect rect = validList.get(index);
                     touch(runnable, rect);
-                    runnable.await(interval.intValue());
+                    runnable.sleep(interval.intValue());
                     index++;
                 }
             } else {

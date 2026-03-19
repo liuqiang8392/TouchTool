@@ -7,7 +7,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.parent.ExecuteAction;
-import top.bogey.touch_tool.bean.other.NodeInfo;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinNode;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;

@@ -33,9 +33,8 @@ public class TaskRunnable implements Runnable {
     private int progress = 0;
 
     private Future<?> future;
-    private boolean interrupt = false;
-    private boolean paused;
-    private long pauseTime = -1;
+    private volatile boolean interrupt = false;
+    private volatile long pauseTime = -1;
 
     private boolean cacheLog = false;
     private final List<LogInfo> cacheLogList = new ArrayList<>();
@@ -178,11 +177,11 @@ public class TaskRunnable implements Runnable {
         return progress;
     }
 
-    public void stop() {
-        if (paused) resume();
+    public synchronized void stop() {
+        interrupt = true;
+        if (pauseTime >= 0) resume();
         if (future != null) future.cancel(true);
         taskContextStack.forEach(taskContext -> taskContext.setInterrupt(true));
-        interrupt = true;
     }
 
     public void stopCurrent() {
@@ -198,11 +197,13 @@ public class TaskRunnable implements Runnable {
     }
 
     private synchronized void checkStatus() {
-        if (pauseTime >= 0) {
+        while (pauseTime >= 0 && !interrupt) {
             try {
-                paused = true;
-                wait(pauseTime);
-                pauseTime = -1;
+                long currentPauseTime = pauseTime;
+                wait(currentPauseTime);
+                if (pauseTime == currentPauseTime) {
+                    pauseTime = -1;
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -220,38 +221,39 @@ public class TaskRunnable implements Runnable {
                 sleepTime = Math.min(remainTime, 100);
                 checkStatus();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                stop();
                 break;
             }
         }
     }
 
     public void await() {
-        if (paused) return;
         await(0);
     }
 
-    public void await(long ms) {
-        if (paused) return;
-        pauseTime = ms;
-        checkStatus();
+    public synchronized void await(long ms) {
+        if (pauseTime >= 0) {
+            // 当前正处于暂停状态，则跳过当前暂停，执行新的暂停
+            pauseTime = ms;
+            notifyAll();
+        } else {
+            // 处于正常状态，则暂停并等待
+            pauseTime = ms;
+            checkStatus();
+        }
     }
 
-    public void pause() {
-        pause(0);
-    }
-
-    public void pause(long ms) {
-        pauseTime = ms;
+    // 其他线程告诉当前任务要暂停了
+    public synchronized boolean pause() {
+        if (pauseTime >= 0) return false;
+        pauseTime = 0;
+        notifyAll();
+        return true;
     }
 
     public synchronized void resume() {
-        if (paused) {
-            paused = false;
-            this.notifyAll();
-        } else {
-            pauseTime = -1;
-        }
+        pauseTime = -1;
+        notifyAll();
     }
 
     public boolean isDebug() {

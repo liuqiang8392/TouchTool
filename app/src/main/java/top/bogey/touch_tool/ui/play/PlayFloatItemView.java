@@ -116,7 +116,7 @@ public class PlayFloatItemView extends FrameLayout implements ITaskListener {
 
     private void pause() {
         if (runnable == null) return;
-        runnable.pause();
+        if (!runnable.pause()) return;
         playState = PLAY_STATE_PAUSED;
 
         binding.circleProgress.setIndeterminate(false);
