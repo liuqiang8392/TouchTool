@@ -359,6 +359,16 @@ public class DisplayUtil {
     }
 
     public static Rect matchTemplate(Bitmap bitmap, Bitmap template, Rect area, int similarity, int speed, boolean canny) {
+        MatchResult matchResult = matchTemplateResult(bitmap, template, area, similarity, speed, canny);
+        if (matchResult == null) return null;
+        return matchResult.area;
+    }
+
+    public static MatchResult matchTemplateResult(Bitmap bitmap, Bitmap template, Rect area, int similarity) {
+        return matchTemplateResult(bitmap, template, area, similarity, 2, false);
+    }
+
+    public static MatchResult matchTemplateResult(Bitmap bitmap, Bitmap template, Rect area, int similarity, int speed, boolean canny) {
         if (bitmap == null) return null;
         if (template == null) return null;
         // 如果图片尺寸小于模板尺寸，则不匹配
@@ -381,7 +391,7 @@ public class DisplayUtil {
         if (matchResult == null) return null;
         if (matchResult.value * 100 < similarity) return null;
         matchResult.area.offset(area.left, area.top);
-        return matchResult.area;
+        return matchResult;
     }
 
     public static native List<MatchResult> nativeMatchAllTemplate(Bitmap bitmap, Bitmap template, int similarity, int speed, boolean canny);

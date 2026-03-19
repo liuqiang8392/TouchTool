@@ -26,6 +26,7 @@ import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.utils.DisplayUtil;
+import top.bogey.touch_tool.utils.MatchResult;
 
 public class FindImageAction extends FindExecuteAction {
     private final transient Pin sourcePin = new Pin(new PinImage(), R.string.pin_image_full, false, false, true);
@@ -34,16 +35,17 @@ public class FindImageAction extends FindExecuteAction {
     private final transient Pin scalePin = new Pin(new PinSingleSelect(R.array.match_image_scale, 1), R.string.image_action_scale, false, false, true);
     private final transient Pin cannyPin = new Pin(new PinBoolean(false), R.string.image_action_canny);
     private final transient Pin areaPin = new Pin(new PinArea(), R.string.pin_area, true);
+    private final transient Pin resultSimilarityPin = new Pin(new PinInteger(), R.string.find_image_action_result_similarity, true);
 
     public FindImageAction() {
         super(ActionType.FIND_IMAGE);
         intervalPin.getValue(PinInteger.class).setValue(200);
-        addPins(sourcePin, templatePin, similarityPin, scalePin, cannyPin, areaPin);
+        addPins(sourcePin, templatePin, similarityPin, scalePin, cannyPin, areaPin, resultSimilarityPin);
     }
 
     public FindImageAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(sourcePin, templatePin, similarityPin, scalePin, cannyPin, areaPin);
+        reAddPins(sourcePin, templatePin, similarityPin, scalePin, cannyPin, areaPin, resultSimilarityPin);
     }
 
     @Override
@@ -61,11 +63,12 @@ public class FindImageAction extends FindExecuteAction {
         PinSingleSelect scale = getPinValue(runnable, scalePin);
         PinBoolean canny = getPinValue(runnable, cannyPin);
 
-        Rect rect = DisplayUtil.matchTemplate(bitmap, template.getImage(), null, similarity.intValue(), scale.getIndex() + 1, canny.getValue());
-        if (rect == null || rect.isEmpty()) {
+        MatchResult matchResult = DisplayUtil.matchTemplateResult(bitmap, template.getImage(), null, similarity.intValue(), scale.getIndex() + 1, canny.getValue());
+        if (matchResult == null || matchResult.area.isEmpty()) {
             return false;
         }
-        areaPin.getValue(PinArea.class).setValue(rect);
+        areaPin.getValue(PinArea.class).setValue(matchResult.area);
+        resultSimilarityPin.getValue(PinInteger.class).setValue((int) (matchResult.value * 100));
         return true;
     }
 

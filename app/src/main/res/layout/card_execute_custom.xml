@@ -55,11 +55,11 @@
             android:id="@+id/des"
             android:layout_width="match_parent"
             android:layout_height="?attr/smallIconButtonSize"
-            android:background="?attr/colorTertiaryContainer"
+            android:background="?attr/colorPrimary"
             android:gravity="center"
             android:paddingHorizontal="?attr/defaultPadding"
             android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-            android:textColor="?attr/colorOnTertiaryContainer"
+            android:textColor="?attr/colorOnPrimary"
             android:visibility="gone" />
 
         <LinearLayout

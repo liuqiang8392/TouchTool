@@ -62,7 +62,7 @@ public class NormalActionCard extends ActionCard {
         if (importantResult != null) {
             binding.errorText.setVisibility(VISIBLE);
             binding.errorText.setText(importantResult.msg());
-            binding.errorText.setBackgroundColor(DisplayUtil.getAttrColor(getContext(), importantResult.type() == ActionCheckResult.ResultType.ERROR ? androidx.appcompat.R.attr.colorPrimary : com.google.android.material.R.attr.colorTertiary));
+            binding.errorText.setBackgroundColor(DisplayUtil.getAttrColor(getContext(), importantResult.type() == ActionCheckResult.ResultType.ERROR ? androidx.appcompat.R.attr.colorError : com.google.android.material.R.attr.colorTertiary));
             binding.errorText.setTextColor(DisplayUtil.getAttrColor(getContext(), importantResult.type() == ActionCheckResult.ResultType.ERROR ? com.google.android.material.R.attr.colorOnError : com.google.android.material.R.attr.colorOnTertiary));
         } else {
             binding.errorText.setVisibility(GONE);

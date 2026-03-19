@@ -426,6 +426,7 @@
     <string name="string_equal_action">文本比较</string>
     <string name="string_equal_action_desc">判断两个文本是否相等</string>
     <string name="string_equal_action_ignore_case">忽略大小写</string>
+    <string name="string_equal_action_regex">正则模式</string>
 
     <string name="string_replace_action">文本替换</string>
     <string name="string_replace_action_desc">将文本中的特定文本替换为另一个文本</string>
@@ -456,6 +457,7 @@
     <string name="find_ocr_text_action_desc">在图片中查找指定文字</string>
     <string name="find_ocr_text_action_similar">置信度</string>
     <string name="find_ocr_text_action_type">模型</string>
+    <string name="find_ocr_text_action_result_confidence">匹配置信度</string>
 
     <string name="is_ocr_text_exist_action">OCR文本是否存在</string>
     <string name="is_ocr_text_exist_action_desc">判断图片中是否存在指定文字</string>
@@ -645,6 +647,7 @@
     <string name="find_image_action_desc">识别目标图片在图片中的位置</string>
     <string name="find_image_action_template">目标</string>
     <string name="find_image_action_similarity">相似度</string>
+    <string name="find_image_action_result_similarity">匹配相似度</string>
 
     <string name="find_images_action">识别所有匹配图片</string>
     <string name="find_images_action_desc">识别目标图片在图片中的所有区域</string>

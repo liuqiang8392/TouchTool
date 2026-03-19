@@ -39,15 +39,16 @@ public class FindOcrTextAction extends FindExecuteAction implements SyncAction {
     private final transient Pin typePin = new Pin(new PinSingleSelect(), R.string.find_ocr_text_action_type);
     private final transient Pin resultAreaPin = new Pin(new PinArea(), R.string.pin_area, true);
     private final transient Pin resultTextPin = new Pin(new PinString(), R.string.pin_string, true);
+    private final transient Pin resultConfidencePin = new Pin(new PinInteger(), R.string.find_ocr_text_action_result_confidence, true);
 
     public FindOcrTextAction() {
         super(ActionType.FIND_OCR_TEXT);
-        addPins(sourcePin, textPin, similarPin, typePin, resultAreaPin, resultTextPin);
+        addPins(sourcePin, textPin, similarPin, typePin, resultAreaPin, resultTextPin, resultConfidencePin);
     }
 
     public FindOcrTextAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(sourcePin, textPin, similarPin, typePin, resultAreaPin, resultTextPin);
+        reAddPins(sourcePin, textPin, similarPin, typePin, resultAreaPin, resultTextPin, resultConfidencePin);
     }
 
     @Override
@@ -79,6 +80,7 @@ public class FindOcrTextAction extends FindExecuteAction implements SyncAction {
                 Rect rect = new Rect((int) area.left, (int) area.top, (int) area.right, (int) area.bottom);
                 resultAreaPin.getValue(PinArea.class).setValue(rect);
                 resultTextPin.getValue(PinString.class).setValue(result.getText());
+                resultConfidencePin.getValue(PinInteger.class).setValue((int) (result.getValue() * 100));
                 return true;
             }
         }
