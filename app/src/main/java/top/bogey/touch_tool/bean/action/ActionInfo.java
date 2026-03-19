@@ -25,8 +25,10 @@ import top.bogey.touch_tool.bean.action.area.GetAreaIntersectionAction;
 import top.bogey.touch_tool.bean.action.area.GetAreaRandomAction;
 import top.bogey.touch_tool.bean.action.area.PickAreaAction;
 import top.bogey.touch_tool.bean.action.bool.BooleanAndAction;
+import top.bogey.touch_tool.bean.action.bool.BooleanAndShortCircuitAction;
 import top.bogey.touch_tool.bean.action.bool.BooleanNotAction;
 import top.bogey.touch_tool.bean.action.bool.BooleanOrAction;
+import top.bogey.touch_tool.bean.action.bool.BooleanOrShortCircuitAction;
 import top.bogey.touch_tool.bean.action.image.ColorEqualAction;
 import top.bogey.touch_tool.bean.action.image.CreateQRCodeAction;
 import top.bogey.touch_tool.bean.action.image.CropImageAction;
@@ -322,7 +324,9 @@ public class ActionInfo {
     // 条件判断
     private final static ActionInfo BOOLEAN_OR_INFO = new ActionInfo(ActionType.BOOLEAN_OR, BooleanOrAction.class, R.drawable.icon_repeat_one, R.string.boolean_or_action, R.string.boolean_or_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo BOOLEAN_AND_INFO = new ActionInfo(ActionType.BOOLEAN_AND, BooleanAndAction.class, R.drawable.icon_repeat, R.string.boolean_and_action, R.string.boolean_and_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo BOOLEAN_NOT_INFO = new ActionInfo(ActionType.BOOLEAN_NOT, BooleanNotAction.class, R.drawable.icon_swap_horiz, R.string.boolean_not_action, R.string.boolean_not_action_desc, 0, NormalActionCard.class);
+     private final static ActionInfo BOOLEAN_NOT_INFO = new ActionInfo(ActionType.BOOLEAN_NOT, BooleanNotAction.class, R.drawable.icon_swap_horiz, R.string.boolean_not_action, R.string.boolean_not_action_desc, 0, NormalActionCard.class);
+     private final static ActionInfo BOOLEAN_AND_SHORT_INFO = new ActionInfo(ActionType.BOOLEAN_AND_SHORT, BooleanAndShortCircuitAction.class, R.drawable.icon_repeat, R.string.boolean_and_short_action, R.string.boolean_and_short_action_desc, 0, NormalActionCard.class);
+     private final static ActionInfo BOOLEAN_OR_SHORT_INFO = new ActionInfo(ActionType.BOOLEAN_OR_SHORT, BooleanOrShortCircuitAction.class, R.drawable.icon_repeat_one, R.string.boolean_or_short_action, R.string.boolean_or_short_action_desc, 0, NormalActionCard.class);
 
 
     // 控件操作
@@ -545,6 +549,8 @@ public class ActionInfo {
 
             case BOOLEAN_OR -> BOOLEAN_OR_INFO;
             case BOOLEAN_AND -> BOOLEAN_AND_INFO;
+            case BOOLEAN_OR_SHORT -> BOOLEAN_OR_SHORT_INFO;
+            case BOOLEAN_AND_SHORT -> BOOLEAN_AND_SHORT_INFO;
             case BOOLEAN_NOT -> BOOLEAN_NOT_INFO;
 
 
@@ -619,6 +625,7 @@ public class ActionInfo {
             case LIST_INDEX_OF -> LIST_INDEX_OF_INFO;
             case LIST_SUBLIST -> LIST_SUBLIST_INFO;
             case LIST_FOREACH -> LIST_FOREACH_INFO;
+
 
             case MAP_MAKE -> MAP_MAKE_INFO;
             case MAP_SIZE -> MAP_SIZE_INFO;

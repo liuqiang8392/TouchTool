@@ -146,11 +146,13 @@ public class ActionMap {
                     ActionType.STRING_TO_SINGLE_SELECT
             ));
 
-            case BOOLEAN -> list.addAll(Arrays.asList(
-                    ActionType.BOOLEAN_OR,
-                    ActionType.BOOLEAN_AND,
-                    ActionType.BOOLEAN_NOT
-            ));
+             case BOOLEAN -> list.addAll(Arrays.asList(
+                     ActionType.BOOLEAN_OR,
+                     ActionType.BOOLEAN_AND,
+                     ActionType.BOOLEAN_OR_SHORT,
+                     ActionType.BOOLEAN_AND_SHORT,
+                     ActionType.BOOLEAN_NOT
+             ));
 
             case NODE -> list.addAll(Arrays.asList(
                     ActionType.FIND_NODE,

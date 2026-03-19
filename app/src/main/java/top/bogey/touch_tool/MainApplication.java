@@ -64,18 +64,32 @@ public class MainApplication extends Application implements Thread.UncaughtExcep
         return service.get();
     }
 
-    @Override
-    public void uncaughtException(@NonNull Thread t, @NonNull Throwable e) {
-        String errorInfo = e.toString();
-        try {
-            StringWriter stringWriter = new StringWriter();
-            PrintWriter printWriter = new PrintWriter(stringWriter);
-            e.printStackTrace(printWriter);
-            errorInfo = stringWriter.toString();
-        } catch (Exception ignored) {
-        }
+     @Override
+     public void uncaughtException(@NonNull Thread t, @NonNull Throwable e) {
+         String errorInfo = e.toString();
+         try {
+             StringWriter stringWriter = new StringWriter();
+             PrintWriter printWriter = new PrintWriter(stringWriter);
+             e.printStackTrace(printWriter);
+             errorInfo = stringWriter.toString();
+         } catch (Exception ignored) {
+         }
 
-        SettingSaver.getInstance().setRunningError(version + "\n" + errorInfo);
-        handler.uncaughtException(t, e);
-    }
+         String fullError = version + "\n" + errorInfo;
+         String[] lines = fullError.split("\n");
+         if (lines.length > 100) {
+             StringBuilder limitedError = new StringBuilder();
+             for (int i = 0; i < 50; i++) {
+                 limitedError.append(lines[i]).append("\n");
+             }
+             limitedError.append("... 省略中间 ").append(lines.length - 100).append(" 行 ...\n");
+             for (int i = lines.length - 50; i < lines.length; i++) {
+                 limitedError.append(lines[i]).append("\n");
+             }
+             fullError = limitedError.toString();
+         }
+
+         SettingSaver.getInstance().setRunningError(fullError);
+         handler.uncaughtException(t, e);
+     }
 }

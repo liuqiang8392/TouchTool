@@ -134,6 +134,8 @@ public enum ActionType {
     // 条件
     BOOLEAN_OR,
     BOOLEAN_AND,
+    BOOLEAN_OR_SHORT,
+    BOOLEAN_AND_SHORT,
     BOOLEAN_NOT,
 
     // 控件

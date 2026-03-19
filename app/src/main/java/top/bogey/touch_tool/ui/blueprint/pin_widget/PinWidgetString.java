@@ -168,8 +168,10 @@ public class PinWidgetString extends PinWidget<PinString> {
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 intent.putExtra(InstantActivity.TASK_ID, card.getTask().getId());
                                 intent.putExtra(InstantActivity.ACTION_ID, card.getAction().getId());
+                                String shortcutName = card.getAction().getDescription();
+                                if (shortcutName == null || shortcutName.isEmpty()) shortcutName = card.getTask().getTitle();
                                 ShortcutInfo info = new ShortcutInfo.Builder(getContext(), card.getAction().getId())
-                                        .setShortLabel(card.getTask().getTitle())
+                                        .setShortLabel(shortcutName)
                                         .setIcon(Icon.createWithBitmap(icon))
                                         .setIntent(intent)
                                         .build();
