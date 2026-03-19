@@ -68,6 +68,7 @@ public class SendNotificationAction extends ExecuteAction {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CUSTOM_NOTIFICATION_CHANNEL);
         builder.setContentTitle(title.toString());
         builder.setContentText(content.toString());
+        builder.setStyle(new NotificationCompat.BigTextStyle().bigText(content.toString()));
         builder.setAutoCancel(autoCancel.getValue());
         if (icon.getImage() != null) {
             builder.setSmallIcon(IconCompat.createWithBitmap(icon.getImage()));

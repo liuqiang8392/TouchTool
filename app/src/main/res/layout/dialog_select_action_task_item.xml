@@ -51,7 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="?attr/defaultPadding"
-            android:layout_marginTop="?attr/defaultOffset"
+            android:layout_marginVertical="?attr/defaultOffset"
             android:alpha="0.75"
             android:textAppearance="@style/TextAppearance.Material3.BodySmall"
             android:visibility="gone" />
@@ -91,6 +91,17 @@
                 app:iconTint="@color/button_container_check" />
 
         </LinearLayout>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/taskError"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="?attr/defaultOffset"
+            android:background="?attr/colorError"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+            android:textColor="?attr/colorOnError"
+            android:visibility="visible" />
 
     </LinearLayout>
 

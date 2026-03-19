@@ -33,9 +33,9 @@ public class TouchPickerPreview extends BasePicker<PinTouchPath> {
             MainAccessibilityService service = MainApplication.getInstance().getService();
             if (service != null && service.isEnabled()) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    service.runGesture(touchPath.getStrokesList(1, 0), null);
+                    service.runGesture(touchPath.getStrokesList(1, 0, 0), null);
                 } else {
-                    service.runGesture(touchPath.getStrokes(1, 0), null);
+                    service.runGesture(touchPath.getStrokes(1, 0, 0), null);
                 }
                 TouchPathFloatView.showGesture(touchPath.getPathParts(EAnchor.TOP_LEFT), 1);
             }

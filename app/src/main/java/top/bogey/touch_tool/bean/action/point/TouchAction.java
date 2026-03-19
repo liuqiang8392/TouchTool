@@ -42,22 +42,26 @@ public class TouchAction extends ExecuteAction {
         PinNumber<?> time = getPinValue(runnable, timePin);
         PinNumber<?> offset = getPinValue(runnable, offsetPin);
 
+        int offsetValue = offset.intValue();
+        int offsetX = (int) (Math.random() * offsetValue * 2 - offsetValue);
+        int offsetY = (int) (Math.random() * offsetValue * 2 - offsetValue);
+
         AtomicBoolean pause = new AtomicBoolean(true);
         MainAccessibilityService service = MainApplication.getInstance().getService();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            service.runGesture(path.getStrokesList(time.floatValue(), offset.intValue()), result -> {
+            service.runGesture(path.getStrokesList(time.floatValue(), offsetX, offsetY), result -> {
                 pause.set(false);
                 runnable.resume();
             });
         } else {
-            service.runGesture(path.getStrokes(time.floatValue(), offset.intValue()), result -> {
+            service.runGesture(path.getStrokes(time.floatValue(), offsetX, offsetY), result -> {
                 pause.set(false);
                 runnable.resume();
             });
         }
 
         List<PinTouchPath.PathPart> pathParts = path.getPathParts(EAnchor.TOP_LEFT);
-        pathParts.forEach(pathPart -> pathPart.offset(offset.intValue(), offset.intValue()));
+        pathParts.forEach(pathPart -> pathPart.offset(offsetX, offsetY));
         TouchPathFloatView.showGesture(pathParts, time.floatValue());
         if (pause.get()) runnable.await();
         executeNext(runnable, outPin);

@@ -180,6 +180,8 @@ public class OcrModel extends LiteRTModel {
         for (OcrRecInput ocrRecInput : list) {
             LiteRTModelExecutor executor = recExecutors.get(ocrRecInput.index);
             float[] recOutput = executor.execute(ocrRecInput.input);
+            if (recOutput == null) continue;
+
             OcrRecOutput ocrRecOutput = ctcDecode(recOutput, executor.getInputShape(), executor.getOutputShape());
             if (ocrRecOutput.getValue() < confThreshold) continue;
 

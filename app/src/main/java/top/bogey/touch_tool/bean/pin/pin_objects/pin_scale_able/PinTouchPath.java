@@ -41,11 +41,8 @@ public class PinTouchPath extends PinScaleAble<String> {
     }
 
     // 返回手势路径，这个手势是平滑的，不会出现突然跳变的情况
-    public Set<GestureDescription.StrokeDescription> getStrokes(float timeScale, int offset) {
+    public Set<GestureDescription.StrokeDescription> getStrokes(float timeScale, int offsetX, int offsetY) {
         List<PathPart> paths = getPathParts(EAnchor.TOP_LEFT);
-
-        int offsetX = (int) (Math.random() * 2 * offset - offset);
-        int offsetY = (int) (Math.random() * 2 * offset - offset);
 
         List<Path> pathList = new ArrayList<>();
         List<Integer> times = new ArrayList<>();
@@ -90,15 +87,12 @@ public class PinTouchPath extends PinScaleAble<String> {
 
     // 返回手势路径，这个手势是不平滑的，会出现突然跳变的情况，能更好的模拟真人手势
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public List<Set<GestureDescription.StrokeDescription>> getStrokesList(float timeScale, int offset) {
+    public List<Set<GestureDescription.StrokeDescription>> getStrokesList(float timeScale, int offsetX, int offsetY) {
         List<PathPart> paths = getPathParts(EAnchor.TOP_LEFT);
 
         List<Set<GestureDescription.StrokeDescription>> strokes = new ArrayList<>();
         Map<Integer, Point> prePointMap = new HashMap<>();
         Map<Integer, GestureDescription.StrokeDescription> preStrokeMap = new HashMap<>();
-
-        int offsetX = (int) (Math.random() * 2 * offset - offset);
-        int offsetY = (int) (Math.random() * 2 * offset - offset);
 
         for (int i = 0; i < paths.size(); i++) {
             boolean end = paths.size() - 1 == i;

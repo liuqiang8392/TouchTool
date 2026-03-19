@@ -24,6 +24,7 @@ import java.util.Map;
 
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
+import top.bogey.touch_tool.bean.action.ActionCheckResult;
 import top.bogey.touch_tool.bean.action.ActionInfo;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.task.CustomStartAction;
@@ -479,6 +480,16 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
                     taskBinding.taskDesc.setText(desc);
                 } else {
                     taskBinding.taskDesc.setVisibility(View.GONE);
+                }
+
+                ActionCheckResult result = new ActionCheckResult();
+                task.check(result);
+                ActionCheckResult.Result error = result.getError();
+                if (error != null) {
+                    taskBinding.taskError.setVisibility(View.VISIBLE);
+                    taskBinding.taskError.setText(error.msg());
+                } else {
+                    taskBinding.taskError.setVisibility(View.GONE);
                 }
 
                 Task parentTask = dialog.task.upFindTask(task.getId());
