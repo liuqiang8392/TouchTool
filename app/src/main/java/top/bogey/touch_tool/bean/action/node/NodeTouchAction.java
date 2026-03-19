@@ -18,15 +18,16 @@ public class NodeTouchAction extends ExecuteAction {
     private final transient Pin nodePin = new Pin(new PinNode(), R.string.pin_node);
     private final transient Pin ltPin = new Pin(new PinBoolean(), R.string.node_touch_action_long);
     private final transient Pin elsePin = new Pin(new PinExecute(), R.string.node_touch_action_else, true);
+    private final transient Pin precisePin = new Pin(new PinBoolean(), R.string.node_touch_action_precise);
 
     public NodeTouchAction() {
         super(ActionType.NODE_TOUCH);
-        addPins(nodePin, ltPin, elsePin);
+        addPins(nodePin, ltPin, elsePin, precisePin);
     }
 
     public NodeTouchAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(nodePin, ltPin, elsePin);
+        reAddPins(nodePin, ltPin, elsePin, precisePin);
     }
 
     @Override
@@ -34,17 +35,24 @@ public class NodeTouchAction extends ExecuteAction {
         PinNode node = getPinValue(runnable, nodePin);
         if (node != null) {
             PinBoolean longTouch = getPinValue(runnable, ltPin);
+            PinBoolean precise = getPinValue(runnable, precisePin);
             NodeInfo nodeInfo = node.getNodeInfo();
             if (nodeInfo != null) {
-                NodeInfo usableParent = nodeInfo.findUsableParent();
-                if (usableParent != null) {
+                AccessibilityNodeInfo targetNode;
+                if (precise.getValue()) {
+                    targetNode = nodeInfo.node;
+                } else {
+                    NodeInfo usableParent = nodeInfo.findUsableParent();
+                    targetNode = usableParent != null ? usableParent.node : null;
+                }
+                if (targetNode != null) {
                     if (longTouch.getValue()) {
-                        if (usableParent.node.performAction(AccessibilityNodeInfo.ACTION_LONG_CLICK)) {
+                        if (targetNode.performAction(AccessibilityNodeInfo.ACTION_LONG_CLICK)) {
                             executeNext(runnable, outPin);
                             return;
                         }
                     } else {
-                        if (usableParent.node.performAction(AccessibilityNodeInfo.ACTION_CLICK)) {
+                        if (targetNode.performAction(AccessibilityNodeInfo.ACTION_CLICK)) {
                             executeNext(runnable, outPin);
                             return;
                         }
