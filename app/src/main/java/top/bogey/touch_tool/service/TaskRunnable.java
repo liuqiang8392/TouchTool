@@ -232,13 +232,14 @@ public class TaskRunnable implements Runnable {
     }
 
     public synchronized void await(long ms) {
-        if (pauseTime >= 0) {
-            // 当前正处于暂停状态，则跳过当前暂停，执行新的暂停
-            pauseTime = ms;
+        long currPauseTime = pauseTime;
+        pauseTime = ms;
+
+        if (currPauseTime > 0) {
+            // 当前正处于短暂停状态，则跳过当前暂停，执行新的暂停
             notifyAll();
-        } else {
+        } else if (currPauseTime < 0) {
             // 处于正常状态，则暂停并等待
-            pauseTime = ms;
             checkStatus();
         }
     }

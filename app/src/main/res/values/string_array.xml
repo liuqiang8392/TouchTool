@@ -72,6 +72,7 @@
     </string-array>
 
     <string-array name="charging_state">
+        <item>未知</item>
         <item>充电中</item>
         <item>放电中</item>
         <item>未充电</item>

@@ -61,8 +61,9 @@ public class LiteRTModelExecutor {
             inputs.get(0).writeFloat(input);
             model.run(inputs, outputs);
             return outputs.get(0).readFloat();
-        } catch (LiteRtException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            release();
         }
         return null;
     }
