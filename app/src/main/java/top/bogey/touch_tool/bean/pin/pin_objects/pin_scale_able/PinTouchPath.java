@@ -34,6 +34,12 @@ public class PinTouchPath extends PinScaleAble<String> {
         pathParts = paths;
         value = serialize(pathParts);
     }
+
+    public PinTouchPath(PinTouchPath pinTouchPath) {
+        super(PinType.TOUCH);
+        setPathParts(pinTouchPath.getAnchor(), pinTouchPath.getPathParts());
+    }
+
     public PinTouchPath(JsonObject jsonObject) {
         super(jsonObject);
         value = GsonUtil.getAsString(jsonObject, "value", null);

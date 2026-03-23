@@ -22,8 +22,7 @@ public class TouchPickerPreview extends BasePicker<PinTouchPath> {
 
     public TouchPickerPreview(@NonNull Context context, ResultCallback<PinTouchPath> callback, PinTouchPath path) {
         super(context, callback);
-        touchPath = new PinTouchPath(path.getPathParts());
-        touchPath.setAnchor(path.getAnchor());
+        touchPath = new PinTouchPath(path);
 
         binding = FloatPickerTouchPreviewBinding.inflate(LayoutInflater.from(context), this, true);
 
