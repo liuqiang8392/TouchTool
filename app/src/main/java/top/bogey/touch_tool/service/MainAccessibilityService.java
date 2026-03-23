@@ -266,7 +266,7 @@ public class MainAccessibilityService extends AccessibilityService {
         TaskRunnable runnable = new TaskRunnable(task, startAction);
         if (listener != null) runnable.addListener(listener);
 
-        runnable.addListener(new TaskListener() {
+        runnable.addListener(new ITaskListener() {
             @Override
             public void onFinish(TaskRunnable runnable) {
                 tasks.remove(runnable);

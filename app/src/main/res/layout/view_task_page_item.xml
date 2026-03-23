@@ -26,12 +26,6 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/stopButton"
-                    style="?attr/iconButtonFilled"
-                    android:visibility="gone"
-                    app:icon="@drawable/icon_stop" />
-
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/taskName"
                     android:layout_width="0dp"

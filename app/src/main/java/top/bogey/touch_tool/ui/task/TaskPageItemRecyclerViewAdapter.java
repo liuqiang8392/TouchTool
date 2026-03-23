@@ -199,16 +199,6 @@ public class TaskPageItemRecyclerViewAdapter extends RecyclerView.Adapter<TaskPa
                 task.setEnable(isChecked);
                 task.save();
             });
-
-            binding.stopButton.setOnClickListener(v -> {
-                int position = getBindingAdapterPosition();
-                Task task = tasks.get(position);
-
-                MainAccessibilityService service = MainApplication.getInstance().getService();
-                if (service != null && service.isEnabled()) {
-                    service.stopTask(task);
-                }
-            });
         }
 
         public void refresh(Task task) {

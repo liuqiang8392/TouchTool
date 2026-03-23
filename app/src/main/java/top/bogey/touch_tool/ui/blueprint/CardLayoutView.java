@@ -351,6 +351,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
 
         cleanSelectedCards();
         addSelectedCard(card);
+        card.bringToFront();
         Action action = card.getAction();
         Point pos = action.getPos();
         float x = -pos.x * getScaleGridSize() + (getWidth() - card.getWidth() * scale) / 2f;

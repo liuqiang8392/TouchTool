@@ -25,8 +25,8 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
 import top.bogey.touch_tool.bean.pin.special_pin.AlwaysShowPin;
 import top.bogey.touch_tool.bean.save.log.LogSaver;
 import top.bogey.touch_tool.bean.task.Task;
+import top.bogey.touch_tool.service.ITaskListener;
 import top.bogey.touch_tool.service.MainAccessibilityService;
-import top.bogey.touch_tool.service.TaskListener;
 import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.utils.tree.ITreeNodeData;
 
@@ -75,7 +75,7 @@ public class ParallelExecuteAction extends ExecuteAction implements DynamicPinsA
         if (runnable.isDebug()) currTask.addFlag(Task.FLAG_DEBUG);
 
         for (Pin dynamicPin : validPins) {
-            TaskRunnable taskRunnable = service.runTask(currTask, new InnerStartAction(dynamicPin), new TaskListener() {
+            TaskRunnable taskRunnable = service.runTask(currTask, new InnerStartAction(dynamicPin), new ITaskListener() {
                 @Override
                 public void onExecute(TaskRunnable run, Action action, int progress) {
                     if (runnable.isCurrentInterrupt()) run.stop();
@@ -98,6 +98,18 @@ public class ParallelExecuteAction extends ExecuteAction implements DynamicPinsA
             });
             runnableList.add(taskRunnable);
         }
+
+        ITaskListener listener = new ITaskListener() {
+            @Override
+            public void onPauseChanged(TaskRunnable runnable, boolean paused) {
+                for (TaskRunnable taskRunnable : runnableList) {
+                    if (paused) taskRunnable.forcePause();
+                    else taskRunnable.forceResume();
+                }
+            }
+        };
+        runnable.addListener(listener);
+
         try {
             if (timeout.intValue() <= 0) {
                 latch.await();
@@ -108,6 +120,8 @@ public class ParallelExecuteAction extends ExecuteAction implements DynamicPinsA
             e.printStackTrace();
             resultPin.getValue(PinBoolean.class).setValue(false);
         }
+        runnable.removeListener(listener);
+
         executeNext(runnable, completePin);
     }
 

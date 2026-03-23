@@ -31,7 +31,6 @@ import java.util.Set;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
-import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.other.Usage;
 import top.bogey.touch_tool.bean.save.SearchHistorySaver;
 import top.bogey.touch_tool.bean.save.task.TaskSaveListener;
@@ -39,9 +38,6 @@ import top.bogey.touch_tool.bean.save.task.TaskSaver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.ViewTagListItemBinding;
 import top.bogey.touch_tool.databinding.ViewTaskBinding;
-import top.bogey.touch_tool.service.ITaskListener;
-import top.bogey.touch_tool.service.MainAccessibilityService;
-import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.ui.MainActivity;
 import top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionItemRecyclerViewAdapter;
 import top.bogey.touch_tool.ui.custom.dialog.EditTaskDialog;
@@ -51,7 +47,7 @@ import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.listener.TextChangedListener;
 
-public class TaskView extends Fragment implements ITaskListener, TaskSaveListener {
+public class TaskView extends Fragment implements TaskSaveListener {
     private ViewTaskBinding binding;
     private MenuItem searchMenuItem = null;
 
@@ -115,8 +111,6 @@ public class TaskView extends Fragment implements ITaskListener, TaskSaveListene
     @Override
     public void onDestroyView() {
         TaskSaver.getInstance().removeListener(this);
-        MainAccessibilityService service = MainApplication.getInstance().getService();
-        if (service != null && service.isEnabled()) service.removeListener(this);
         binding.tasksBox.setAdapter(null);
         super.onDestroyView();
     }
@@ -138,8 +132,6 @@ public class TaskView extends Fragment implements ITaskListener, TaskSaveListene
         binding.searchBar.addMenuProvider(menuProvider, getViewLifecycleOwner());
 
         TaskSaver.getInstance().addListener(this);
-        MainAccessibilityService service = MainApplication.getInstance().getService();
-        if (service != null && service.isEnabled()) service.addListener(this);
 
         TaskSearchItemAdapter searchAdapter = new TaskSearchItemAdapter(this);
         binding.searchBox.setAdapter(searchAdapter);
@@ -375,25 +367,5 @@ public class TaskView extends Fragment implements ITaskListener, TaskSaveListene
     @Override
     public void onRemove(Task task) {
         AppUtil.runOnUiThread(this::resetTags);
-    }
-
-    @Override
-    public void onStart(TaskRunnable runnable) {
-
-    }
-
-    @Override
-    public void onExecute(TaskRunnable runnable, Action action, int progress) {
-
-    }
-
-    @Override
-    public void onCalculate(TaskRunnable runnable, Action action) {
-
-    }
-
-    @Override
-    public void onFinish(TaskRunnable runnable) {
-
     }
 }

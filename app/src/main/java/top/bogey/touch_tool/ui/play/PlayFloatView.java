@@ -343,16 +343,6 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
     }
 
     @Override
-    public void onExecute(TaskRunnable runnable, Action action, int progress) {
-
-    }
-
-    @Override
-    public void onCalculate(TaskRunnable runnable, Action action) {
-
-    }
-
-    @Override
     public void onFinish(TaskRunnable runnable) {
         StartAction startAction = runnable.getStartAction();
         if (startAction instanceof ManualStartAction manualStartAction) {

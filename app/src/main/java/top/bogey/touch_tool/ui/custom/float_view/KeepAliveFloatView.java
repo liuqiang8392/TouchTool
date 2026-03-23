@@ -69,21 +69,6 @@ public class KeepAliveFloatView extends FrameLayout implements FloatInterface, I
     }
 
     @Override
-    public void onExecute(TaskRunnable runnable, Action action, int progress) {
-
-    }
-
-    @Override
-    public void onCalculate(TaskRunnable runnable, Action action) {
-
-    }
-
-    @Override
-    public void onFinish(TaskRunnable runnable) {
-
-    }
-
-    @Override
     public void show() {
         MainAccessibilityService service = MainApplication.getInstance().getService();
 

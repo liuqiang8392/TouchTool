@@ -116,7 +116,7 @@ public class PlayFloatItemView extends FrameLayout implements ITaskListener {
 
     private void pause() {
         if (runnable == null) return;
-        if (!runnable.pause()) return;
+        runnable.forcePause();
         playState = PLAY_STATE_PAUSED;
 
         binding.circleProgress.setIndeterminate(false);
@@ -138,7 +138,7 @@ public class PlayFloatItemView extends FrameLayout implements ITaskListener {
 
     private boolean resume() {
         if (runnable == null) return false;
-        runnable.resume();
+        runnable.forceResume();
         setPlaying();
         return true;
     }
@@ -188,10 +188,6 @@ public class PlayFloatItemView extends FrameLayout implements ITaskListener {
         post(() -> {
             if (playState == PLAY_STATE_RUNNING) binding.title.setText(String.valueOf(progress));
         });
-    }
-
-    @Override
-    public void onCalculate(TaskRunnable runnable, Action action) {
     }
 
     @Override

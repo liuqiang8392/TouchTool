@@ -35,6 +35,7 @@ public class TaskRunnable implements Runnable {
     private Future<?> future;
     private volatile boolean interrupt = false;
     private volatile long pauseTime = -1;
+    private volatile boolean forcePaused = false;
 
     private boolean cacheLog = false;
     private final List<LogInfo> cacheLogList = new ArrayList<>();
@@ -120,6 +121,10 @@ public class TaskRunnable implements Runnable {
         listeners.add(listener);
     }
 
+    public void removeListener(ITaskListener listener) {
+        listeners.remove(listener);
+    }
+
     public void addExecuteProgress(Action action) {
         progress++;
         listeners.stream().filter(Objects::nonNull).forEach(listener -> listener.onExecute(this, action, progress));
@@ -179,6 +184,7 @@ public class TaskRunnable implements Runnable {
 
     public synchronized void stop() {
         interrupt = true;
+        forceResume();
         if (pauseTime >= 0) resume();
         if (future != null) future.cancel(true);
         taskContextStack.forEach(taskContext -> taskContext.setInterrupt(true));
@@ -197,12 +203,16 @@ public class TaskRunnable implements Runnable {
     }
 
     private synchronized void checkStatus() {
-        while (pauseTime >= 0 && !interrupt) {
+        while ((pauseTime >= 0 || forcePaused) && !interrupt) {
             try {
-                long currentPauseTime = pauseTime;
-                wait(currentPauseTime);
-                if (pauseTime == currentPauseTime) {
-                    pauseTime = -1;
+                if (forcePaused) {
+                    wait();
+                } else {
+                    long currentPauseTime = pauseTime;
+                    wait(currentPauseTime);
+                    if (pauseTime == currentPauseTime) {
+                        pauseTime = -1;
+                    }
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -244,18 +254,25 @@ public class TaskRunnable implements Runnable {
         }
     }
 
-    // 其他线程告诉当前任务要暂停了
-    public synchronized boolean pause() {
-        if (pauseTime >= 0) return false;
-        pauseTime = 0;
-        notifyAll();
-        return true;
-    }
-
     public synchronized void resume() {
         pauseTime = -1;
         notifyAll();
     }
+
+    // 其他线程告诉当前任务要暂停了
+    public synchronized void forcePause() {
+        if (forcePaused) return;
+        forcePaused = true;
+        listeners.stream().filter(Objects::nonNull).forEach(listener -> listener.onPauseChanged(this, true));
+    }
+
+    public synchronized void forceResume() {
+        if (!forcePaused) return;
+        forcePaused = false;
+        notifyAll();
+        listeners.stream().filter(Objects::nonNull).forEach(listener -> listener.onPauseChanged(this, false));
+    }
+
 
     public boolean isDebug() {
         return debug;
