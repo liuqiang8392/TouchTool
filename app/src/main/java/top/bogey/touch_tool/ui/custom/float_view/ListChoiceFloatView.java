@@ -83,9 +83,7 @@ public class ListChoiceFloatView extends FrameLayout implements FloatInterface {
                 FloatWindow.setDragAble(ListChoiceFloatView.class.getName(), false);
                 return super.onInterceptTouchEvent(event);
             }
-        } else if (event.getAction() == MotionEvent.ACTION_UP) {
             FloatWindow.setDragAble(ListChoiceFloatView.class.getName(), true);
-            return false;
         }
         return super.onInterceptTouchEvent(event);
     }

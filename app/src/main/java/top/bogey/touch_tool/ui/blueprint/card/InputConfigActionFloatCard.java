@@ -9,8 +9,6 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 
-import com.google.android.material.card.MaterialCardView;
-
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.pin.Pin;
@@ -22,7 +20,6 @@ import top.bogey.touch_tool.ui.blueprint.pin.PinInputConfigView;
 import top.bogey.touch_tool.ui.blueprint.pin.PinView;
 import top.bogey.touch_tool.ui.custom.float_view.ActionFloatViewCallback;
 import top.bogey.touch_tool.ui.custom.float_view.KeepAliveFloatView;
-import top.bogey.touch_tool.ui.custom.float_view.ListChoiceFloatView;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.EAnchor;
 import top.bogey.touch_tool.utils.callback.BooleanResultCallback;
@@ -137,9 +134,7 @@ public class InputConfigActionFloatCard extends ActionCard implements FloatInter
                 FloatWindow.setDragAble(InputConfigActionFloatCard.class.getName(), false);
                 return super.onInterceptTouchEvent(event);
             }
-        } else if (event.getAction() == MotionEvent.ACTION_UP) {
             FloatWindow.setDragAble(InputConfigActionFloatCard.class.getName(), true);
-            return false;
         }
         return super.onInterceptTouchEvent(event);
     }
