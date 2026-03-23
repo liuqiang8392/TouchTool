@@ -52,6 +52,14 @@ public class PinSingleSelect extends PinString {
     }
 
     @Override
+    public void sync(PinBase value) {
+        super.sync(value);
+        if (value instanceof PinSingleSelect pinSingleSelect) {
+            this.options = new ArrayList<>(pinSingleSelect.options);
+        }
+    }
+
+    @Override
     public boolean isDynamic() {
         return options.isEmpty();
     }
