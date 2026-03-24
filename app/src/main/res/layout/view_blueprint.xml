@@ -38,6 +38,57 @@
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/searchBox"
+        style="?attr/materialCardViewFilledStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="?attr/iconButtonSize"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone"
+        app:cardBackgroundColor="?attr/colorSurface"
+        app:cardElevation="5dp"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/preButton"
+                style="?attr/iconButton"
+                app:icon="@drawable/icon_keyboard_arrow_left" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="?attr/textInputFilledStyle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginVertical="?attr/defaultOffset"
+                android:layout_weight="1"
+                app:boxBackgroundColor="?attr/colorSurfaceBright"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/searchEdit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:paddingVertical="0dp"
+                    android:singleLine="true" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/nextButton"
+                style="?attr/iconButton"
+                app:icon="@drawable/icon_keyboard_arrow_right" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/saveBox"
         style="?attr/materialCardViewFilledStyle"
         android:layout_width="wrap_content"
@@ -51,6 +102,14 @@
             android:layout_width="wrap_content"
             android:layout_height="?attr/iconButtonSize"
             android:spacing="?attr/defaultOffset">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/searchButton"
+                style="?attr/iconButton"
+                android:backgroundTint="@color/fill_button_background_check"
+                android:checkable="true"
+                app:icon="@drawable/icon_search"
+                app:iconTint="@color/button_container_check" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/saveButton"

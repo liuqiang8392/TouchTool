@@ -8,6 +8,7 @@ import android.graphics.Point;
 import android.graphics.PointF;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +29,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Stack;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
@@ -45,6 +47,7 @@ import top.bogey.touch_tool.ui.tool.log.LogFloatView;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.ThreadUtil;
+import top.bogey.touch_tool.utils.listener.TextChangedListener;
 
 public class BlueprintView extends Fragment {
 
@@ -161,6 +164,7 @@ public class BlueprintView extends Fragment {
         float statusBarHeight = DisplayUtil.getStatusBarHeight(requireContext());
         DisplayUtil.setViewMargin(binding.backBox, (int) offset, (int) (offset + statusBarHeight), 0, 0);
         DisplayUtil.setViewMargin(binding.saveBox, 0, (int) (offset + statusBarHeight), (int) offset, 0);
+        DisplayUtil.setViewMargin(binding.searchBox, 0, (int) (offset + statusBarHeight), 0, 0);
 
         binding.backButton.setOnClickListener(v -> {
             if (taskStack.size() > 1) {
@@ -173,6 +177,66 @@ public class BlueprintView extends Fragment {
         binding.saveButton.setOnClickListener(v -> {
             Task currTask = taskStack.peek();
             currTask.save();
+        });
+
+        binding.searchButton.addOnCheckedChangeListener((buttonView, isChecked) -> {
+            binding.searchBox.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+            binding.searchEdit.setText("");
+        });
+
+        List<Action> searchActions = new ArrayList<>();
+        AtomicInteger index = new AtomicInteger();
+        binding.searchEdit.addTextChangedListener(new TextChangedListener() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                searchActions.clear();
+            }
+        });
+
+        binding.nextButton.setOnClickListener(v -> {
+            if (searchActions.isEmpty()) {
+                Editable text = binding.searchEdit.getText();
+                if (text == null || text.length() == 0) return;
+                String searchString = text.toString();
+                Task currTask = taskStack.peek();
+                for (Action action : currTask.getActions()) {
+                    if (AppUtil.isStringContainsWithPinyin(action.getFullDescription(), searchString)) {
+                        searchActions.add(action);
+                    }
+                }
+                index.set(0);
+                if (searchActions.isEmpty()) return;
+                tryFocusAction(currTask, searchActions.get(index.get()));
+            } else {
+                index.getAndIncrement();
+                if (index.get() >= searchActions.size()) {
+                    index.set(0);
+                }
+                tryFocusAction(taskStack.peek(), searchActions.get(index.get()));
+            }
+        });
+
+        binding.preButton.setOnClickListener(v -> {
+            if (searchActions.isEmpty()) {
+                Editable text = binding.searchEdit.getText();
+                if (text == null || text.length() == 0) return;
+                String searchString = text.toString();
+                Task currTask = taskStack.peek();
+                for (Action action : currTask.getActions()) {
+                    if (AppUtil.isStringContainsWithPinyin(action.getFullDescription(), searchString)) {
+                        searchActions.add(action);
+                    }
+                }
+                index.set(searchActions.size() - 1);
+                if (searchActions.isEmpty()) return;
+                tryFocusAction(currTask, searchActions.get(index.get()));
+            } else {
+                index.getAndDecrement();
+                if (index.get() <= 0) {
+                    index.set(searchActions.size() - 1);
+                }
+                tryFocusAction(taskStack.peek(), searchActions.get(index.get()));
+            }
         });
 
         binding.moreButton.setOnClickListener(v -> {
