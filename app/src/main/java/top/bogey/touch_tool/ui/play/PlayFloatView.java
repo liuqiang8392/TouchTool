@@ -19,7 +19,6 @@ import java.util.Set;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
-import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.start.ManualStartAction;
 import top.bogey.touch_tool.bean.action.start.StartAction;
 import top.bogey.touch_tool.bean.save.SettingSaver;
@@ -46,6 +45,7 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
 
     private static String HIDE_PACKAGE = null;
     private static long HIDE_TIME = 0;
+    private static boolean NOT_PLAY_HIDE = false;
 
     private final FloatPlayBinding binding;
 
@@ -53,7 +53,6 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
     private final int padding = SettingSaver.getInstance().getManualPlayViewPadding() * UNIT_DP_SIZE;
 
     private int runningTaskCount = 0;
-    private boolean isNotPlayHide = false;
 
     public static void showActions(List<TaskInfoSummary.ManualExecuteInfo> actions) {
         TaskInfoSummary.PackageActivity packageActivity = TaskInfoSummary.getInstance().getPackageActivity();
@@ -79,6 +78,9 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
         binding = FloatPlayBinding.inflate(LayoutInflater.from(context), this, true);
         DisplayUtil.setViewMargin(binding.playButtonBox, padding, 0, padding, 0);
 
+        int alpha = SettingSaver.getInstance().getNotPlayHideAlpha();
+        setAlpha(NOT_PLAY_HIDE ? alpha / 100f : 1f);
+
         handler = new Handler(Looper.getMainLooper());
 
         int size = SettingSaver.getInstance().getManualPlayViewCloseSize();
@@ -88,7 +90,7 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
         DisplayUtil.setViewWidth(binding.dragSpaceButton, px);
 
         binding.dragSpaceButton.setOnClickListener(v -> {
-            if (isNotPlayHide) {
+            if (NOT_PLAY_HIDE) {
                 playHide(false);
                 playHide(true);
             } else {
@@ -104,7 +106,7 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
         });
 
         binding.closeButton.setOnClickListener(v -> {
-            if (isNotPlayHide) {
+            if (NOT_PLAY_HIDE) {
                 playHide(false);
                 playHide(true);
             } else {
@@ -318,12 +320,12 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
                 handler.postDelayed(() -> {
                     int alpha = SettingSaver.getInstance().getNotPlayHideAlpha();
                     animate().alpha(alpha / 100f);
-                    isNotPlayHide = true;
+                    NOT_PLAY_HIDE = true;
                 }, 10000);
             }
         } else {
             post(() -> animate().alpha(1f));
-            isNotPlayHide = false;
+            NOT_PLAY_HIDE = false;
         }
     }
 
@@ -339,7 +341,7 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
 
         handler.removeCallbacksAndMessages(null);
         post(() -> animate().alpha(1f));
-        isNotPlayHide = false;
+        NOT_PLAY_HIDE = false;
     }
 
     @Override
