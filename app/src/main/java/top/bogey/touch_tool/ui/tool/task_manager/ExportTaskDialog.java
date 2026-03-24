@@ -16,16 +16,21 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.save.task.TaskSaver;
+import top.bogey.touch_tool.bean.save.variable.VariableSaver;
 import top.bogey.touch_tool.bean.task.Task;
+import top.bogey.touch_tool.bean.task.Variable;
 import top.bogey.touch_tool.databinding.DialogTaskManagerBinding;
 import top.bogey.touch_tool.ui.MainActivity;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.GsonUtil;
+import top.bogey.touch_tool.utils.ThreadUtil;
 import top.bogey.touch_tool.utils.listener.TextChangedListener;
 
 @SuppressLint("ViewConstructor")
@@ -49,6 +54,17 @@ public class ExportTaskDialog extends FrameLayout {
     public static void showDialog(Context context, List<Task> tasks) {
         ExportTaskDialog view = new ExportTaskDialog(context, tasks, true);
         showDialog(context, view);
+    }
+
+    public static void autoBackup(Context context) {
+        ThreadUtil.execute(() -> {
+            Set<Task> tasks = new HashSet<>(TaskSaver.getInstance().getTasks());
+            Set<Variable> vars = new HashSet<>(VariableSaver.getInstance().getVars());
+            TaskRecord record = new TaskRecord(tasks, vars);
+            String json = GsonUtil.toJson(record);
+            String fileName = record.getDefaultName(context) + ".tt";
+            AppUtil.writeFile(context, fileName, json.getBytes());
+        });
     }
 
     private final ExportTaskDialogAdapter adapter;

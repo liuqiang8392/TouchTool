@@ -301,6 +301,9 @@
     <string name="app_setting_auto_start">开机自启</string>
     <string name="app_setting_auto_start_desc">手机开机后就能立即使用点击助手，无需打开软件</string>
 
+    <string name="app_setting_auto_backup">自动备份</string>
+    <string name="app_setting_auto_backup_desc">设置自动备份所有任务的间隔时间</string>
+
     <string name="app_setting_clean_cache">清理缓存</string>
     <string name="app_setting_clean_cache_desc">点击清理任务日志、分享任务、分享文件产生的缓存。当前: %s</string>
     <string name="app_setting_clean_cache_button_text">清理</string>

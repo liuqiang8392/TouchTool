@@ -643,6 +643,7 @@
     <string name="save_image_action">保存图片</string>
     <string name="save_image_action_desc">静默保存图片到图片文件夹</string>
     <string name="save_image_action_name">文件名(默认当前时间)</string>
+    <string name="save_image_action_delay_delete">延迟删除</string>
 
     <string name="find_image_action">识别图片</string>
     <string name="find_image_action_desc">识别目标图片在图片中的位置</string>

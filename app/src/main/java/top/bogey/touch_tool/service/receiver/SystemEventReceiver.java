@@ -9,7 +9,9 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
+import android.net.Uri;
 import android.os.BatteryManager;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -18,8 +20,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import top.bogey.touch_tool.MainApplication;
+import top.bogey.touch_tool.bean.save.SettingSaver;
+import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskInfoSummary;
 import top.bogey.touch_tool.ui.InstantActivity;
+import top.bogey.touch_tool.ui.tool.task_manager.ExportTaskDialog;
 import top.bogey.touch_tool.utils.AppUtil;
 
 public class SystemEventReceiver extends BroadcastReceiver {
@@ -57,6 +63,35 @@ public class SystemEventReceiver extends BroadcastReceiver {
                 String pinId = intent.getStringExtra(InstantActivity.PIN_ID);
                 InstantActivity.doAction(taskId, actionId, pinId, null);
             }
+
+            case MainAccessibilityService.INTENT_KEY_DELETE_URI -> {
+                Uri uri = intent.getParcelableExtra(MainAccessibilityService.URI);
+                Log.d("TAG", "onReceive: " + uri);
+                if (uri == null) return;
+                context.getContentResolver().delete(uri, null, null);
+            }
+
+            case MainAccessibilityService.INTENT_KEY_AUTO_BACKUP -> {
+                MainAccessibilityService service = MainApplication.getInstance().getService();
+                if (service != null && service.isEnabled()) {
+                    service.addAlarm();
+                }
+
+                int times = SettingSaver.getInstance().getAutoBackupTimes();
+                times++;
+
+                int index = SettingSaver.getInstance().getAutoBackup();
+                int[] timesArray = new int[]{0, 1, 3, 7};
+                if (timesArray[index] == 0) return;
+
+                if (times < timesArray[index]) {
+                    SettingSaver.getInstance().setAutoBackupTimes(times);
+                    return;
+                }
+                SettingSaver.getInstance().setAutoBackupTimes(0);
+
+                ExportTaskDialog.autoBackup(context);
+            }
         }
     }
 
@@ -73,6 +108,8 @@ public class SystemEventReceiver extends BroadcastReceiver {
         filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
         // 动作执行
         filter.addAction(InstantActivity.INTENT_KEY_DO_ACTION);
+        filter.addAction(MainAccessibilityService.INTENT_KEY_DELETE_URI);
+        filter.addAction(MainAccessibilityService.INTENT_KEY_AUTO_BACKUP);
 
         return filter;
     }

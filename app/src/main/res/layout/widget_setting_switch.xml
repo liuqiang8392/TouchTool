@@ -34,6 +34,14 @@
 
     </LinearLayout>
 
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/divider"
+        android:layout_width="1dp"
+        android:layout_height="?attr/minTouchTargetSize"
+        android:layout_gravity="center_vertical"
+        android:layout_marginHorizontal="?attr/defaultPadding"
+        android:visibility="gone" />
+
     <com.google.android.material.materialswitch.MaterialSwitch
         android:id="@+id/switchButton"
         android:layout_width="wrap_content"

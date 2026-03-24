@@ -499,6 +499,39 @@ public class AppUtil {
         return file;
     }
 
+    public static Uri writeFile(Context context, String fileName, byte[] content) {
+        if (content == null) return null;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, fileName);
+            contentValues.put(MediaStore.Images.Media.MIME_TYPE, "*/*");
+            contentValues.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + File.separator + context.getString(R.string.app_name));
+
+            try {
+                Uri uri = context.getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues);
+                if (uri == null) return null;
+
+                try (OutputStream outputStream = context.getContentResolver().openOutputStream(uri)) {
+                    if (outputStream == null) return null;
+                    outputStream.write(content);
+                    outputStream.flush();
+                }
+                return uri;
+            } catch (IOException ignored) {
+            }
+        } else {
+            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName);
+            try (OutputStream outputStream = new FileOutputStream(file)) {
+                outputStream.write(content);
+                outputStream.flush();
+            } catch (IOException ignored) {
+            }
+            return Uri.fromFile(file);
+        }
+        return null;
+    }
+
     public static void exportFile(BaseActivity activity, String fileName, byte[] content) {
         exportFile(activity, fileName, content, null);
     }
@@ -567,13 +600,13 @@ public class AppUtil {
         }
     }
 
-    public static void saveImage(Context context, Bitmap image) {
+    public static Uri saveImage(Context context, Bitmap image) {
         String fileName = "Picture_" + formatDateTime(context, System.currentTimeMillis(), false, true);
-        saveImage(context, image, fileName);
+        return saveImage(context, image, fileName);
     }
 
-    public static void saveImage(Context context, Bitmap image, String fileName) {
-        if (image == null) return;
+    public static Uri saveImage(Context context, Bitmap image, String fileName) {
+        if (image == null) return null;
 
         fileName = fileName + ".jpg";
 
@@ -581,18 +614,18 @@ public class AppUtil {
             ContentValues contentValues = new ContentValues();
             contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, fileName);
             contentValues.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
-            contentValues.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/" + context.getString(R.string.app_name));
+            contentValues.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + File.separator + context.getString(R.string.app_name));
 
             try {
                 Uri uri = context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
-                if (uri == null) return;
+                if (uri == null) return null;
 
                 try (OutputStream outputStream = context.getContentResolver().openOutputStream(uri)) {
-                    if (outputStream == null) return;
+                    if (outputStream == null) return null;
                     image.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
                 }
+                return uri;
             } catch (IOException ignored) {
-
             }
         } else {
             File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), fileName);
@@ -601,7 +634,9 @@ public class AppUtil {
                 MediaScannerConnection.scanFile(context, new String[]{file.getAbsolutePath()}, new String[]{"image/jpeg"}, null);
             } catch (IOException ignored) {
             }
+            return Uri.fromFile(file);
         }
+        return null;
     }
 
     public static List<AccessibilityNodeInfo> getWindows(AccessibilityService service) {

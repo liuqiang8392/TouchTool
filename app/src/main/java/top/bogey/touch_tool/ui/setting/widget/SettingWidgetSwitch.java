@@ -36,6 +36,7 @@ public class SettingWidgetSwitch extends FrameLayout {
 
     @Override
     public void setOnClickListener(OnClickListener listener) {
+        binding.divider.setVisibility(listener == null ? GONE : VISIBLE);
         binding.getRoot().setOnClickListener(listener);
     }
 
@@ -50,5 +51,9 @@ public class SettingWidgetSwitch extends FrameLayout {
 
     public boolean isChecked() {
         return binding.switchButton.isChecked();
+    }
+
+    public void setDescription(String description) {
+        binding.description.setText(description);
     }
 }

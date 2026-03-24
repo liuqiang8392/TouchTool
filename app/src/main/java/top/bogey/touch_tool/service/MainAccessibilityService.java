@@ -37,6 +37,7 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.MutableLiveData;
 
 import java.lang.ref.WeakReference;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -84,6 +85,10 @@ public class MainAccessibilityService extends AccessibilityService {
 
     public static final MutableLiveData<Boolean> enabled = new MutableLiveData<>(false);
     public static final MutableLiveData<Boolean> connected = new MutableLiveData<>(false);
+
+    public static final String INTENT_KEY_DELETE_URI = "INTENT_KEY_DELETE_URI";
+    public static final String URI = "URI";
+    public static final String INTENT_KEY_AUTO_BACKUP = "INTENT_KEY_AUTO_BACKUP";
 
     private SystemEventReceiver systemEventReceiver;
     private final TaskInfoSummary taskInfoSummary = TaskInfoSummary.getInstance();
@@ -356,6 +361,17 @@ public class MainAccessibilityService extends AccessibilityService {
         return PendingIntent.getBroadcast(this, Objects.hashCode(taskId + actionId), intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
+    private PendingIntent getAlarmPendingIntent(Uri uri) {
+        Intent intent = new Intent(INTENT_KEY_DELETE_URI);
+        intent.putExtra(URI, uri);
+        return PendingIntent.getBroadcast(this, Objects.hashCode(uri.toString()), intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    private PendingIntent getAlarmPendingIntent() {
+        Intent intent = new Intent(INTENT_KEY_AUTO_BACKUP);
+        return PendingIntent.getBroadcast(this, Objects.hashCode(INTENT_KEY_AUTO_BACKUP), intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
     public void resetAllAlarm() {
         List<Task> tasks = TaskSaver.getInstance().getTasks(TimeStartAction.class);
         for (Task task : tasks) {
@@ -367,6 +383,7 @@ public class MainAccessibilityService extends AccessibilityService {
                 }
             }
         }
+        addAlarm();
     }
 
     public void cancelAllAlarm() {
@@ -377,6 +394,7 @@ public class MainAccessibilityService extends AccessibilityService {
                 cancelAlarm(task, timeStartAction);
             }
         }
+        cancelAlarm();
     }
 
     public void cancelAlarm(Task task, TimeStartAction timeStartAction) {
@@ -385,6 +403,63 @@ public class MainAccessibilityService extends AccessibilityService {
         if (intent == null) return;
         AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         manager.cancel(intent);
+    }
+
+    public void cancelAlarm() {
+        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        PendingIntent pendingIntent = getAlarmPendingIntent();
+        if (pendingIntent != null) manager.cancel(pendingIntent);
+    }
+
+    public void addAlarm(Uri uri, long periodic) {
+        if (uri == null) return;
+        if (periodic <= 0) return;
+
+        PendingIntent pendingIntent = getAlarmPendingIntent(uri);
+        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        long nextStartTime = System.currentTimeMillis() + periodic;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (manager.canScheduleExactAlarms()) {
+                AlarmManager.AlarmClockInfo clockInfo = new AlarmManager.AlarmClockInfo(nextStartTime, null);
+                manager.setAlarmClock(clockInfo, pendingIntent);
+            } else {
+                manager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, nextStartTime, pendingIntent);
+            }
+        } else {
+            AlarmManager.AlarmClockInfo clockInfo = new AlarmManager.AlarmClockInfo(nextStartTime, null);
+            manager.setAlarmClock(clockInfo, pendingIntent);
+        }
+    }
+
+    public void addAlarm() {
+        if (SettingSaver.getInstance().getAutoBackup() == 0) {
+            cancelAlarm();
+            return;
+        }
+
+        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        PendingIntent pendingIntent = getAlarmPendingIntent();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
+
+        long nextStartTime = calendar.getTimeInMillis();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (manager.canScheduleExactAlarms()) {
+                AlarmManager.AlarmClockInfo clockInfo = new AlarmManager.AlarmClockInfo(nextStartTime, null);
+                manager.setAlarmClock(clockInfo, pendingIntent);
+            } else {
+                manager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, nextStartTime, pendingIntent);
+            }
+        } else {
+            AlarmManager.AlarmClockInfo clockInfo = new AlarmManager.AlarmClockInfo(nextStartTime, null);
+            manager.setAlarmClock(clockInfo, pendingIntent);
+        }
     }
 
     public void addAlarm(Task task, TimeStartAction timeStartAction) {

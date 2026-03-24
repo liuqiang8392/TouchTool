@@ -57,6 +57,8 @@ public class SettingSaver {
     private static final String SERVICE_ENABLED = "SERVICE_ENABLED";                                    // 功能是否开启
     private static final String HIDE_APP_BACKGROUND = "HIDE_APP_BACKGROUND";                            // 隐藏后台
     private static final String KEEP_ALIVE_FOREGROUND_SERVICE = "KEEP_ALIVE_FOREGROUND_SERVICE";        // 前台保活服务
+    private static final String AUTO_BACKUP = "AUTO_BACKUP";                                            // 自动备份间隔
+    private static final String AUTO_BACKUP_TIMES = "AUTO_BACKUP_TIMES";                                // 自动备份触发次数，每天一次
 
     private static final String SUPER_USER_TYPE = "SUPER_USER_TYPE";                                    // 超级用户
     private static final String NOTIFICATION_TYPE = "NOTIFICATION_TYPE";                                // 通知来源
@@ -232,6 +234,22 @@ public class SettingSaver {
         Intent intent = new Intent(context, KeepAliveService.class);
         if (enable) context.startService(intent);
         else context.stopService(intent);
+    }
+
+    public int getAutoBackup() {
+        return mmkv.decodeInt(AUTO_BACKUP, 0);
+    }
+
+    public void setAutoBackup(int type) {
+        mmkv.encode(AUTO_BACKUP, type);
+    }
+
+    public int getAutoBackupTimes() {
+        return mmkv.decodeInt(AUTO_BACKUP_TIMES, 0);
+    }
+
+    public void setAutoBackupTimes(int times) {
+        mmkv.encode(AUTO_BACKUP_TIMES, times);
     }
 
     public int getSuperUserType() {

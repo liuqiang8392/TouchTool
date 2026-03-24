@@ -122,6 +122,15 @@
                         app:icon="@drawable/icon_notifications"
                         app:title="@string/app_setting_forge_service" />
 
+                    <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSelect
+                        android:id="@+id/autoBackupSelect"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:description="@string/app_setting_auto_backup_desc"
+                        app:icon="@drawable/icon_save"
+                        app:options="@array/auto_backup_days"
+                        app:title="@string/app_setting_auto_backup" />
+
                     <top.bogey.touch_tool.ui.setting.widget.SettingWidgetNormal
                         android:id="@+id/cleanCacheButton"
                         android:layout_width="match_parent"

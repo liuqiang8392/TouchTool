@@ -23,6 +23,7 @@ import androidx.annotation.NonNull;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,13 +37,13 @@ import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.databinding.FloatPickerNodeBinding;
 import top.bogey.touch_tool.service.TaskInfoSummary;
 import top.bogey.touch_tool.ui.MainActivity;
+import top.bogey.touch_tool.ui.custom.float_view.KeepAliveFloatView;
 import top.bogey.touch_tool.ui.custom.float_view.NodeInfoFloatView;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.GsonUtil;
 import top.bogey.touch_tool.utils.callback.ResultCallback;
 import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
-import top.bogey.touch_tool.ui.custom.float_view.KeepAliveFloatView;
 import top.bogey.touch_tool.utils.listener.TextChangedListener;
 
 @SuppressLint("ViewConstructor")
@@ -389,7 +390,7 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
         for (NodeInfo root : roots) {
             List<NodeInfo> children = root.findChildren(new Rect(x, y, x, y), justUsable);
             if (children.isEmpty()) continue;
-            if (justUsable && cachedFindNodes.equals(children)) {
+            if (cachedFindNodes.equals(children)) {
                 int index = children.indexOf(nodeInfo);
                 if (index <= 0) return children.get(children.size() - 1);
                 return children.get(index - 1);
@@ -407,16 +408,25 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
             root.mapChildrenDepth(map, new Rect(x, y, x, y), (roots.size() - i) * Byte.MAX_VALUE);
         }
 
-        int depth = 0;
-        NodeInfo node = null;
+        List<NodeInfo> children = new ArrayList<>();
         for (Map.Entry<NodeInfo, Integer> entry : map.entrySet()) {
             if (!entry.getKey().visible) continue;
-            if (depth < entry.getValue() && (!justUsable || entry.getKey().usable)) {
-                depth = entry.getValue();
-                node = entry.getKey();
+            if (!justUsable || entry.getKey().usable) {
+                children.add(entry.getKey());
             }
         }
-        return node;
+
+        if (children.isEmpty()) return null;
+
+        children.sort(Comparator.comparingInt(map::get));
+
+        if (cachedFindNodes.equals(children)) {
+            int index = children.indexOf(nodeInfo);
+            if (index <= 0) return children.get(children.size() - 1);
+            return children.get(index - 1);
+        }
+        cachedFindNodes = children;
+        return children.get(children.size() - 1);
     }
 
     private static class NodePickerCallback extends FullScreenPickerCallback {

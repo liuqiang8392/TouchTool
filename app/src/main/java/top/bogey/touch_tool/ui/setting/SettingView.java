@@ -48,6 +48,7 @@ import top.bogey.touch_tool.utils.AppUtil;
 
 public class SettingView extends Fragment {
     private ViewSettingBinding binding;
+    private final SettingSaver saver = SettingSaver.getInstance();
 
     private final MenuProvider menuProvider = new MenuProvider() {
 
@@ -122,7 +123,7 @@ public class SettingView extends Fragment {
                 }
             }
 
-            SettingSaver.getInstance().setServiceEnabled(enable);
+            saver.setServiceEnabled(enable);
         });
 
         MainAccessibilityService serv = MainApplication.getInstance().getService();
@@ -135,7 +136,7 @@ public class SettingView extends Fragment {
 
             if (activity.stopAccessibilityServiceBySecurePermission()) {
                 binding.getRoot().postDelayed(() -> {
-                    SettingSaver.getInstance().setServiceEnabled(true);
+                    saver.setServiceEnabled(true);
                     binding.enableSwitch.setChecked(true);
                     activity.restartAccessibilityServiceBySecurePermission();
                     Toast.makeText(activity, R.string.app_setting_reload_success, Toast.LENGTH_SHORT).show();
@@ -167,8 +168,8 @@ public class SettingView extends Fragment {
         refreshAutoReloadService();
 
         // 隐藏后台
-        binding.hideBackSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setHideAppBackground(activity, binding.hideBackSwitch.isChecked()));
-        binding.hideBackSwitch.setChecked(SettingSaver.getInstance().isHideAppBackground());
+        binding.hideBackSwitch.setOnSwitchClickListener(v -> saver.setHideAppBackground(activity, binding.hideBackSwitch.isChecked()));
+        binding.hideBackSwitch.setChecked(saver.isHideAppBackground());
 
         // 忽略电量限制
         binding.ignoreBatterySwitch.setOnSwitchClickListener(v -> {
@@ -187,8 +188,22 @@ public class SettingView extends Fragment {
         binding.ignoreBatterySwitch.setChecked(AppUtil.isIgnoredBattery(activity));
 
         // 前台服务
-        binding.forgeServiceSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setKeepAliveForegroundServiceEnabled(activity, binding.forgeServiceSwitch.isChecked()));
-        binding.forgeServiceSwitch.setChecked(SettingSaver.getInstance().isKeepAliveForegroundServiceEnabled());
+        binding.forgeServiceSwitch.setOnSwitchClickListener(v -> saver.setKeepAliveForegroundServiceEnabled(activity, binding.forgeServiceSwitch.isChecked()));
+        binding.forgeServiceSwitch.setChecked(saver.isKeepAliveForegroundServiceEnabled());
+
+        // 自动备份
+        binding.autoBackupSelect.setOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            if (isChecked) {
+                View view = group.findViewById(checkedId);
+                int index = group.indexOfChild(view);
+                saver.setAutoBackup(index);
+                MainAccessibilityService service = MainApplication.getInstance().getService();
+                if (service != null && service.isEnabled()) {
+                    service.addAlarm();
+                }
+            }
+        });
+        binding.autoBackupSelect.checkIndex(saver.getAutoBackup());
 
         // 清理缓存
         binding.cleanCacheButton.setOnButtonClickListener(v -> {
@@ -234,12 +249,12 @@ public class SettingView extends Fragment {
             if (isChecked) {
                 View view = group.findViewById(checkedId);
                 int index = group.indexOfChild(view);
-                SettingSaver.getInstance().setSuperUserType(index);
+                saver.setSuperUserType(index);
 
                 // 尝试超级用户
                 ISuperUser instance = SuperUser.getInstance();
                 if (instance == null || !instance.init()) {
-                    SettingSaver.getInstance().setSuperUserType(0);
+                    saver.setSuperUserType(0);
                     binding.superUserSelect.checkIndex(0);
 
                     if (instance instanceof ShizukuSuperUser) Toast.makeText(activity, R.string.permission_setting_super_user_no_shizuku, Toast.LENGTH_SHORT).show();
@@ -249,23 +264,23 @@ public class SettingView extends Fragment {
                 refreshAutoReloadService();
             }
         });
-        binding.superUserSelect.checkIndex(SettingSaver.getInstance().getSuperUserType());
+        binding.superUserSelect.checkIndex(saver.getSuperUserType());
 
         // 通知来源
-        binding.notificationTypeSelect.checkIndex(SettingSaver.getInstance().getNotificationType());
+        binding.notificationTypeSelect.checkIndex(saver.getNotificationType());
         binding.notificationTypeSelect.setOnButtonCheckedListener((group, checkedId, isChecked) -> {
             if (isChecked) {
                 View view = group.findViewById(checkedId);
                 int index = group.indexOfChild(view);
                 if (index == 0) {
-                    SettingSaver.getInstance().setNotificationType(0);
+                    saver.setNotificationType(0);
                     activity.stopService(new Intent(activity, NotificationService.class));
                 } else {
                     if (NotificationService.isEnabled()) {
-                        SettingSaver.getInstance().setNotificationType(1);
+                        saver.setNotificationType(1);
                     } else {
                         NotificationService.requestConnect(activity);
-                        SettingSaver.getInstance().setNotificationType(0);
+                        saver.setNotificationType(0);
                         binding.notificationTypeSelect.checkIndex(0);
                     }
                 }
@@ -290,7 +305,7 @@ public class SettingView extends Fragment {
             if (binding.alarmSwitch.isChecked()) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     if (alarmManager.canScheduleExactAlarms()) {
-                        SettingSaver.getInstance().setExactAlarmEnabled(true);
+                        saver.setExactAlarmEnabled(true);
                     } else {
                         Intent intent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
                         startActivity(intent);
@@ -300,7 +315,7 @@ public class SettingView extends Fragment {
                     binding.alarmSwitch.setChecked(true);
                 }
             } else {
-                SettingSaver.getInstance().setExactAlarmEnabled(false);
+                saver.setExactAlarmEnabled(false);
             }
             if (binding.alarmSwitch.isChecked()) {
                 MainAccessibilityService service = MainApplication.getInstance().getService();
@@ -309,7 +324,7 @@ public class SettingView extends Fragment {
                 }
             }
         });
-        binding.alarmSwitch.setChecked(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && alarmManager.canScheduleExactAlarms() && SettingSaver.getInstance().isExactAlarmEnabled());
+        binding.alarmSwitch.setChecked(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && alarmManager.canScheduleExactAlarms() && saver.isExactAlarmEnabled());
         binding.alarmSwitch.setVisibility(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ? View.VISIBLE : View.GONE);
 
         // 蓝牙监听
@@ -318,14 +333,14 @@ public class SettingView extends Fragment {
                 binding.bluetoothSwitch.setChecked(false);
                 activity.launcherBluetooth((code, data) -> {
                     boolean enable = code == Activity.RESULT_OK;
-                    SettingSaver.getInstance().setBluetoothEnabled(enable);
+                    saver.setBluetoothEnabled(enable);
                     binding.bluetoothSwitch.setChecked(enable);
                 });
             } else {
-                SettingSaver.getInstance().setBluetoothEnabled(false);
+                saver.setBluetoothEnabled(false);
             }
         });
-        binding.bluetoothSwitch.setChecked(SettingSaver.getInstance().isBluetoothEnabled());
+        binding.bluetoothSwitch.setChecked(saver.isBluetoothEnabled());
 
         // 定位
         binding.locationSwitch.setOnSwitchClickListener(v -> {
@@ -334,41 +349,41 @@ public class SettingView extends Fragment {
                 activity.launcherFineLocation((code, data) -> {
                     boolean enable = code == Activity.RESULT_OK;
                     enable &= activity.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
-                    SettingSaver.getInstance().setLocationEnabled(enable);
+                    saver.setLocationEnabled(enable);
                     binding.locationSwitch.setChecked(enable);
                     if (enable) {
                         TaskInfoSummary.getInstance().setWifiInfo(AppUtil.getWifiInfo(activity));
                     }
                 });
             } else {
-                SettingSaver.getInstance().setLocationEnabled(false);
+                saver.setLocationEnabled(false);
             }
         });
-        binding.locationSwitch.setChecked(SettingSaver.getInstance().isLocationEnabled());
+        binding.locationSwitch.setChecked(saver.isLocationEnabled());
 
         // 手势轨迹
-        binding.showTouchSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setShowGestureTrack(binding.showTouchSwitch.isChecked()));
-        binding.showTouchSwitch.setChecked(SettingSaver.getInstance().isShowGestureTrack());
+        binding.showTouchSwitch.setOnSwitchClickListener(v -> saver.setShowGestureTrack(binding.showTouchSwitch.isChecked()));
+        binding.showTouchSwitch.setChecked(saver.isShowGestureTrack());
 
         // 标记目标区域
-        binding.showTargetAreaSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setShowNodeArea(binding.showTargetAreaSwitch.isChecked()));
-        binding.showTargetAreaSwitch.setChecked(SettingSaver.getInstance().isShowNodeArea());
+        binding.showTargetAreaSwitch.setOnSwitchClickListener(v -> saver.setShowNodeArea(binding.showTargetAreaSwitch.isChecked()));
+        binding.showTargetAreaSwitch.setChecked(saver.isShowNodeArea());
 
         // 任务提示
-        binding.taskTipsSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setShowTaskStartTips(binding.taskTipsSwitch.isChecked()));
-        binding.taskTipsSwitch.setChecked(SettingSaver.getInstance().isShowTaskStartTips());
+        binding.taskTipsSwitch.setOnSwitchClickListener(v -> saver.setShowTaskStartTips(binding.taskTipsSwitch.isChecked()));
+        binding.taskTipsSwitch.setChecked(saver.isShowTaskStartTips());
 
         // 详细日志
-        binding.detailLogSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setDetailLog(binding.detailLogSwitch.isChecked()));
-        binding.detailLogSwitch.setChecked(SettingSaver.getInstance().isDetailLog());
+        binding.detailLogSwitch.setOnSwitchClickListener(v -> saver.setDetailLog(binding.detailLogSwitch.isChecked()));
+        binding.detailLogSwitch.setChecked(saver.isDetailLog());
 
         // 日志重置
-        binding.resetLogSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setLogResetOnStart(binding.resetLogSwitch.isChecked()));
-        binding.resetLogSwitch.setChecked(SettingSaver.getInstance().isLogResetOnStart());
+        binding.resetLogSwitch.setOnSwitchClickListener(v -> saver.setLogResetOnStart(binding.resetLogSwitch.isChecked()));
+        binding.resetLogSwitch.setChecked(saver.isLogResetOnStart());
 
         // 音量键退出
-        binding.volumeButtonExitSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setVolumeButtonExit(binding.volumeButtonExitSwitch.isChecked()));
-        binding.volumeButtonExitSwitch.setChecked(SettingSaver.getInstance().isVolumeButtonExit());
+        binding.volumeButtonExitSwitch.setOnSwitchClickListener(v -> saver.setVolumeButtonExit(binding.volumeButtonExitSwitch.isChecked()));
+        binding.volumeButtonExitSwitch.setChecked(saver.isVolumeButtonExit());
 
 
         // 卡片默认展开状态
@@ -376,14 +391,14 @@ public class SettingView extends Fragment {
             if (isChecked) {
                 View view = group.findViewById(checkedId);
                 int index = group.indexOfChild(view);
-                SettingSaver.getInstance().setDefaultCardExpandType(index);
+                saver.setDefaultCardExpandType(index);
             }
         });
-        binding.cardTypeSelect.checkIndex(SettingSaver.getInstance().getDefaultCardExpandType());
+        binding.cardTypeSelect.checkIndex(saver.getDefaultCardExpandType());
 
         // 卡片整理时的间隔
-        binding.arrangeCardOffset.setSliderOnChangeListener((slider, value, fromUser) -> SettingSaver.getInstance().setArrangeCardOffset((int) value));
-        binding.arrangeCardOffset.setValue(SettingSaver.getInstance().getArrangeCardOffset());
+        binding.arrangeCardOffset.setSliderOnChangeListener((slider, value, fromUser) -> saver.setArrangeCardOffset((int) value));
+        binding.arrangeCardOffset.setValue(saver.getArrangeCardOffset());
 
 
         // 手动执行悬浮窗
@@ -397,23 +412,23 @@ public class SettingView extends Fragment {
         });
 
         // 小窗优化
-        binding.supportFreeFormSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setSupportFreeForm(binding.supportFreeFormSwitch.isChecked()));
-        binding.supportFreeFormSwitch.setChecked(SettingSaver.getInstance().isSupportFreeForm());
+        binding.supportFreeFormSwitch.setOnSwitchClickListener(v -> saver.setSupportFreeForm(binding.supportFreeFormSwitch.isChecked()));
+        binding.supportFreeFormSwitch.setChecked(saver.isSupportFreeForm());
 
         // 暗色模式
         binding.themeSelect.setOnButtonCheckedListener((group, checkedId, isChecked) -> {
             if (isChecked) {
                 View view = group.findViewById(checkedId);
                 int index = group.indexOfChild(view);
-                SettingSaver.getInstance().setNightModeType(index);
+                saver.setNightModeType(index);
             }
         });
-        binding.themeSelect.checkIndex(SettingSaver.getInstance().getNightModeType());
+        binding.themeSelect.checkIndex(saver.getNightModeType());
 
         // 动态颜色
-        binding.dynamicColorSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setDynamicColorTheme(activity, binding.dynamicColorSwitch.isChecked()));
-        binding.dynamicColorSwitch.setOnClickListener(v -> ColorPickerPreview.showPicker(result -> SettingSaver.getInstance().setDynamicColorValue(activity, result.getColor()), SettingSaver.getInstance().getDynamicColorValue()));
-        binding.dynamicColorSwitch.setChecked(SettingSaver.getInstance().isDynamicColorTheme());
+        binding.dynamicColorSwitch.setOnSwitchClickListener(v -> saver.setDynamicColorTheme(activity, binding.dynamicColorSwitch.isChecked()));
+        binding.dynamicColorSwitch.setOnClickListener(v -> ColorPickerPreview.showPicker(result -> saver.setDynamicColorValue(activity, result.getColor()), saver.getDynamicColorValue()));
+        binding.dynamicColorSwitch.setChecked(saver.isDynamicColorTheme());
 
         PackageManager packageManager = activity.getPackageManager();
         try {
@@ -427,7 +442,7 @@ public class SettingView extends Fragment {
     }
 
     private void refreshNotificationCmd() {
-        int notificationType = SettingSaver.getInstance().getNotificationType();
+        int notificationType = saver.getNotificationType();
         boolean version = Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM;
         binding.notificationTypeCmd.setVisibility(notificationType == 1 && version ? View.VISIBLE : View.GONE);
         binding.notificationTypeCmd.setButtonText(getString(SuperUser.getInstance().isValid() ? R.string.setting_execute_shell : R.string.setting_copy_shell));

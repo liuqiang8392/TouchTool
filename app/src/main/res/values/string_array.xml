@@ -263,6 +263,13 @@
         <item>手动选择</item>
     </string-array>
 
+    <string-array name="auto_backup_days">
+        <item>不备份</item>
+        <item>1天</item>
+        <item>3天</item>
+        <item>7天</item>
+    </string-array>
+
     <string-array name="activity_flag" translatable="false">
         <item>FLAG_ACTIVITY_NEW_TASK *</item>
         <item>FLAG_ACTIVITY_NO_HISTORY</item>
