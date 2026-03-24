@@ -31,7 +31,10 @@ public class SaveImageAction extends ExecuteAction {
     public void execute(TaskRunnable runnable, Pin pin) {
         PinImage image = getPinValue(runnable, sourcePin);
         PinObject name = getPinValue(runnable, namePin);
-        AppUtil.saveImage(MainApplication.getInstance(), image.getImage(), name.toString());
+        String nameString = name.toString();
+        if (nameString.isEmpty()) nameString = AppUtil.formatDateTime(MainApplication.getInstance(), System.currentTimeMillis(), false, false);
+
+        AppUtil.saveImage(MainApplication.getInstance(), image.getImage(), nameString);
         executeNext(runnable, outPin);
     }
 }
