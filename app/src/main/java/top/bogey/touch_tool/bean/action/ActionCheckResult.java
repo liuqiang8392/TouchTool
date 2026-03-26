@@ -1,5 +1,6 @@
 package top.bogey.touch_tool.bean.action;
 
+import androidx.annotation.AttrRes;
 import androidx.annotation.StringRes;
 
 import java.util.ArrayList;
@@ -37,18 +38,35 @@ public class ActionCheckResult {
     }
 
     public Result getImportantResult() {
-        Result error = getError();
-        if (error == null) {
-            return getWarning();
-        }
-        return error;
+        Result result = getError();
+        if (result == null) result = getWarning();
+        if (result == null) result = getResult();
+        return result;
     }
 
     public record Result(ResultType type, @StringRes int msg) {
     }
 
     public enum ResultType {
+        INFO,
         WARNING,
-        ERROR
+        ERROR;
+
+
+        public @AttrRes int getBackgroundColor() {
+            return switch (this) {
+                case WARNING -> com.google.android.material.R.attr.colorTertiary;
+                case ERROR -> androidx.appcompat.R.attr.colorError;
+                default -> androidx.appcompat.R.attr.colorPrimary;
+            };
+        }
+
+        public @AttrRes int getTextColor() {
+            return switch (this) {
+                case WARNING -> com.google.android.material.R.attr.colorOnTertiary;
+                case ERROR -> com.google.android.material.R.attr.colorOnError;
+                default -> com.google.android.material.R.attr.colorOnPrimary;
+            };
+        }
     }
 }

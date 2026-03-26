@@ -16,7 +16,7 @@ import top.bogey.touch_tool.service.TaskRunnable;
 public class AreaOffsetAction extends CalculateAction {
     private final transient Pin areaPin = new Pin(new PinArea(), R.string.pin_area);
     private final transient Pin offsetPin = new Pin(new PinPoint(), R.string.point_offset_action_offset);
-    private final transient Pin resultPin = new Pin(new PinArea(), R.string.pin_area, true);
+    private final transient Pin resultPin = new Pin(new PinArea(), R.string.pin_boolean_result, true);
 
     public AreaOffsetAction() {
         super(ActionType.AREA_OFFSET);

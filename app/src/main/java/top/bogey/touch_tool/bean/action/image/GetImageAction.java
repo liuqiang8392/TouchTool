@@ -6,7 +6,10 @@ import android.os.Build;
 
 import com.google.gson.JsonObject;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
@@ -64,6 +67,17 @@ public class GetImageAction extends ExecuteOrCalculateAction {
             if (actions.isEmpty()) {
                 result.addResult(ActionCheckResult.ResultType.WARNING, R.string.check_need_capture_warning);
             }
+        }
+
+        Pin linkedPin = imagePin.getLinkedPin(task);
+        if (linkedPin == null) return;
+
+        Action action = task.getAction(linkedPin.getOwnerId());
+        if (action == null) return;
+
+        Set<ActionType> types = new HashSet<>(Arrays.asList(ActionType.FIND_IMAGE, ActionType.FIND_IMAGES, ActionType.FIND_COLORS, ActionType.FIND_OCR_TEXT, ActionType.GET_OCR_TEXT, ActionType.YOLO_DETECT));
+        if (types.contains(action.getType()) && !posPin.isLinked()) {
+            result.addResult(ActionCheckResult.ResultType.INFO, R.string.check_may_need_use_pos_pin_warning);
         }
     }
 }

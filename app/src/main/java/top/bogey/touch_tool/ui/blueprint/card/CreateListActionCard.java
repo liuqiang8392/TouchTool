@@ -167,8 +167,8 @@ public class CreateListActionCard extends ActionCard {
         if (importantResult != null) {
             binding.errorText.setVisibility(VISIBLE);
             binding.errorText.setText(importantResult.msg());
-            binding.errorText.setBackgroundColor(DisplayUtil.getAttrColor(getContext(), importantResult.type() == ActionCheckResult.ResultType.ERROR ? androidx.appcompat.R.attr.colorError : com.google.android.material.R.attr.colorTertiary));
-            binding.errorText.setTextColor(DisplayUtil.getAttrColor(getContext(), importantResult.type() == ActionCheckResult.ResultType.ERROR ? com.google.android.material.R.attr.colorOnError : com.google.android.material.R.attr.colorOnTertiary));
+            binding.errorText.setBackgroundColor(DisplayUtil.getAttrColor(getContext(), importantResult.type().getBackgroundColor()));
+            binding.errorText.setTextColor(DisplayUtil.getAttrColor(getContext(), importantResult.type().getTextColor()));
         } else {
             binding.errorText.setVisibility(GONE);
         }
