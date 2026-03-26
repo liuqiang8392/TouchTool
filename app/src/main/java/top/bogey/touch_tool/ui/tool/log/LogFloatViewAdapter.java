@@ -3,6 +3,7 @@ package top.bogey.touch_tool.ui.tool.log;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -145,10 +146,14 @@ public class LogFloatViewAdapter extends TreeAdapter {
                 if (log instanceof ActionLog actionLog) {
                     Action action = task.getAction(actionLog.getActionId());
                     if (action == null) continue;
+                    Point pos = action.getPos();
+                    String posString = pos.x + "," + pos.y;
                     if (pattern == null) {
                         if (action.getFullDescription().contains(text)) return treeNode;
+                        if (posString.contains(text)) return treeNode;
                     } else {
                         if (pattern.matcher(action.getFullDescription()).find()) return treeNode;
+                        if (pattern.matcher(posString).find()) return treeNode;
                     }
                 }
 
@@ -177,10 +182,14 @@ public class LogFloatViewAdapter extends TreeAdapter {
                 if (log instanceof ActionLog actionLog) {
                     Action action = task.getAction(actionLog.getActionId());
                     if (action == null) continue;
+                    Point pos = action.getPos();
+                    String posString = pos.x + "," + pos.y;
                     if (pattern == null) {
                         if (action.getFullDescription().contains(text)) return treeNode;
+                        if (posString.contains(text)) return treeNode;
                     } else {
                         if (pattern.matcher(action.getFullDescription()).find()) return treeNode;
+                        if (pattern.matcher(posString).find()) return treeNode;
                     }
                 }
             }
@@ -299,6 +308,8 @@ public class LogFloatViewAdapter extends TreeAdapter {
 
                 if (action != null) {
                     actionBinding.valueBox.removeAllViews();
+                    Point pos = action.getPos();
+                    actionBinding.time.setText(logInfo.getTime(context) + " " + pos.x + "," + pos.y);
                     Action currentAction = action;
                     actionLog.getValues().forEach((key, value) -> {
                         Pin pinById = currentAction.getPinById(key);

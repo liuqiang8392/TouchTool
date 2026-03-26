@@ -195,17 +195,11 @@ public class BlueprintView extends Fragment {
 
         binding.nextButton.setOnClickListener(v -> {
             if (searchActions.isEmpty()) {
-                Editable text = binding.searchEdit.getText();
-                if (text == null || text.length() == 0) return;
-                String searchString = text.toString();
-                Task currTask = taskStack.peek();
-                for (Action action : currTask.getActions()) {
-                    if (AppUtil.isStringContainsWithPinyin(action.getFullDescription(), searchString)) {
-                        searchActions.add(action);
-                    }
-                }
-                index.set(0);
+                searchActions.addAll(searchActions());
                 if (searchActions.isEmpty()) return;
+
+                index.set(0);
+                Task currTask = taskStack.peek();
                 tryFocusAction(currTask, searchActions.get(index.get()));
             } else {
                 index.getAndIncrement();
@@ -218,17 +212,11 @@ public class BlueprintView extends Fragment {
 
         binding.preButton.setOnClickListener(v -> {
             if (searchActions.isEmpty()) {
-                Editable text = binding.searchEdit.getText();
-                if (text == null || text.length() == 0) return;
-                String searchString = text.toString();
-                Task currTask = taskStack.peek();
-                for (Action action : currTask.getActions()) {
-                    if (AppUtil.isStringContainsWithPinyin(action.getFullDescription(), searchString)) {
-                        searchActions.add(action);
-                    }
-                }
-                index.set(searchActions.size() - 1);
+                searchActions.addAll(searchActions());
                 if (searchActions.isEmpty()) return;
+
+                index.set(searchActions.size() - 1);
+                Task currTask = taskStack.peek();
                 tryFocusAction(currTask, searchActions.get(index.get()));
             } else {
                 index.getAndDecrement();
@@ -455,5 +443,25 @@ public class BlueprintView extends Fragment {
         binding.cardLayout.setTask(task);
         binding.title.setText(task.getTitle());
         callback.setEnabled(taskStack.size() > 1);
+    }
+
+    private List<Action> searchActions() {
+        List<Action> searchActions = new ArrayList<>();
+        Editable text = binding.searchEdit.getText();
+        if (text == null || text.length() == 0) return searchActions;
+        String searchString = text.toString();
+        Task currTask = taskStack.peek();
+        for (Action action : currTask.getActions()) {
+            if (AppUtil.isStringContainsWithPinyin(action.getFullDescription(), searchString)) {
+                searchActions.add(action);
+            } else {
+                Point pos = action.getPos();
+                String posString = pos.x + "," + pos.y;
+                if (posString.contains(searchString)) {
+                    searchActions.add(action);
+                }
+            }
+        }
+        return searchActions;
     }
 }

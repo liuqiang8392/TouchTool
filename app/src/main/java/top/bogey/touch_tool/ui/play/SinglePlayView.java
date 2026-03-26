@@ -30,6 +30,7 @@ public class SinglePlayView extends PlayFloatItemView implements FloatInterface 
     public static void showActions(List<TaskInfoSummary.ManualExecuteInfo> actions) {
         KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
         if (keepView == null) return;
+
         new Handler(Looper.getMainLooper()).post(() -> {
             for (View singleShowView : FloatWindow.getViews(SinglePlayView.class)) {
                 SinglePlayView itemView = (SinglePlayView) singleShowView;

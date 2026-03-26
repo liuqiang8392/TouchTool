@@ -92,6 +92,7 @@ public class NodePickerTreeAdapter extends TreeAdapter {
     private TreeNode createTree(NodeInfo node, @NonNull Pattern pattern) {
         boolean found = false;
         if (node.text != null && pattern.matcher(node.text).find()) found = true;
+        else if (node.desc != null && pattern.matcher(node.desc).find()) found = true;
         else if (node.id != null && pattern.matcher(node.id).find()) found = true;
         else if (node.clazz != null && pattern.matcher(node.clazz).find()) found = true;
 

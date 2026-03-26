@@ -54,8 +54,7 @@
                 <FrameLayout
                     android:layout_width="192dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:paddingHorizontal="-12dp">
+                    android:layout_gravity="center">
 
                     <com.google.android.material.slider.Slider
                         android:id="@+id/timeSlider"
