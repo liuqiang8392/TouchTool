@@ -279,7 +279,22 @@ public class LogFloatViewAdapter extends TreeAdapter {
             super.refresh(node);
 
             LogInfo logInfo = (LogInfo) node.getData();
-            if (logInfo == null) return;
+            if (logInfo == null) {
+                String error = context.getString(R.string.task_running_log_load_error);
+
+                if (normalBinding != null) {
+                    normalBinding.title.setText(error);
+                    normalBinding.time.setText("");
+                }
+                if (actionBinding != null) {
+                    actionBinding.title.setText(error);
+                    actionBinding.time.setText("");
+                }
+                if (dateTimeBinding != null) {
+                    dateTimeBinding.title.setText("");
+                }
+                return;
+            }
 
             Log log = logInfo.getLogObject();
             this.node = node;
