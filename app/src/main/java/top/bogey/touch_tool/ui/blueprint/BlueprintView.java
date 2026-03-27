@@ -220,7 +220,7 @@ public class BlueprintView extends Fragment {
                 tryFocusAction(currTask, searchActions.get(index.get()));
             } else {
                 index.getAndDecrement();
-                if (index.get() <= 0) {
+                if (index.get() < 0) {
                     index.set(searchActions.size() - 1);
                 }
                 tryFocusAction(taskStack.peek(), searchActions.get(index.get()));
@@ -345,7 +345,20 @@ public class BlueprintView extends Fragment {
 
             Task currTask = taskStack.peek();
             Task innerTask = new Task();
-            binding.cardLayout.getSelectedActionsCopy().forEach(innerTask::addAction);
+            List<Action> selectedActionsCopy = binding.cardLayout.getSelectedActionsCopy();
+            int offsetX = Integer.MAX_VALUE, offsetY = Integer.MAX_VALUE;
+            for (Action action : selectedActionsCopy) {
+                Point pos = action.getPos();
+                offsetX = Math.min(offsetX, pos.x);
+                offsetY = Math.min(offsetY, pos.y);
+            }
+            for (Action action : selectedActionsCopy) {
+                action.getPos().offset(-offsetX, -offsetY);
+                // 避免与已有的action重叠
+                action.getPos().offset(20, 0);
+            }
+            selectedActionsCopy.forEach(innerTask::addAction);
+
             innerTask.addAction(new CustomStartAction());
             innerTask.addAction(new CustomEndAction());
             innerTask.setTitle(result);
