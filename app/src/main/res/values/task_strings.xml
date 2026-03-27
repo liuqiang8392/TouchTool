@@ -9,6 +9,7 @@
     <string name="start_action_enable">启用</string>
     <string name="start_action_restart">重入策略</string>
     <string name="start_action_break">中断条件</string>
+    <string name="start_action_show">执行时显示</string>
 
     <string name="manual_start_action">手动执行</string>
     <string name="manual_start_action_desc">在选中应用内显示执行悬浮窗</string>

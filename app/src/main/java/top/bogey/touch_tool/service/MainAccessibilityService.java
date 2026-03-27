@@ -54,6 +54,7 @@ import java.util.regex.Pattern;
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
+import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.start.BroadcastStartAction;
 import top.bogey.touch_tool.bean.action.start.StartAction;
 import top.bogey.touch_tool.bean.action.start.TimeStartAction;
@@ -72,6 +73,7 @@ import top.bogey.touch_tool.ui.InstantActivity;
 import top.bogey.touch_tool.ui.MainActivity;
 import top.bogey.touch_tool.ui.PermissionActivity;
 import top.bogey.touch_tool.ui.custom.float_view.KeepAliveFloatView;
+import top.bogey.touch_tool.ui.play.PlayFloatView;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.ThreadUtil;
 import top.bogey.touch_tool.utils.callback.BooleanResultCallback;
@@ -272,6 +274,18 @@ public class MainAccessibilityService extends AccessibilityService {
         if (listener != null) runnable.addListener(listener);
 
         runnable.addListener(new ITaskListener() {
+
+            @Override
+            public void onStart(TaskRunnable runnable) {
+                StartAction action = runnable.getStartAction();
+                if (!action.isShow()) return;
+
+                ActionType actionType = action.getType();
+                if (actionType == ActionType.MANUAL_START) return;
+                if (actionType == ActionType.INNER_START) return;
+                PlayFloatView.addRunningAction(runnable);
+            }
+
             @Override
             public void onFinish(TaskRunnable runnable) {
                 tasks.remove(runnable);

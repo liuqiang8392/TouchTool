@@ -44,6 +44,7 @@ import top.bogey.touch_tool.service.super_user.root.RootSuperUser;
 import top.bogey.touch_tool.service.super_user.shizuku.ShizukuSuperUser;
 import top.bogey.touch_tool.ui.MainActivity;
 import top.bogey.touch_tool.ui.blueprint.picker.ColorPickerPreview;
+import top.bogey.touch_tool.ui.tool.task_manager.ExportTaskDialog;
 import top.bogey.touch_tool.utils.AppUtil;
 
 public class SettingView extends Fragment {
@@ -204,6 +205,10 @@ public class SettingView extends Fragment {
             }
         });
         binding.autoBackupSelect.checkIndex(saver.getAutoBackup());
+        binding.autoBackupSelect.setOnClickListener(v -> {
+            ExportTaskDialog.autoBackup(activity);
+            Toast.makeText(activity, R.string.app_setting_auto_backup_tips, Toast.LENGTH_SHORT).show();
+        });
 
         // 清理缓存
         binding.cleanCacheButton.setOnButtonClickListener(v -> {

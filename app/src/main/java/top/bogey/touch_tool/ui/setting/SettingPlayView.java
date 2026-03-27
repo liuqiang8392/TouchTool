@@ -22,6 +22,7 @@ import top.bogey.touch_tool.utils.DisplayUtil;
 public class SettingPlayView extends Fragment {
     private ViewSettingPlayViewBinding binding;
     private String testText;
+    private final SettingSaver saver = SettingSaver.getInstance();
 
 
     @Override
@@ -45,94 +46,94 @@ public class SettingPlayView extends Fragment {
             if (isChecked) {
                 View view = group.findViewById(checkedId);
                 int index = group.indexOfChild(view);
-                SettingSaver.getInstance().setManualPlayShowType(index);
+                saver.setManualPlayShowType(index);
             }
         });
-        binding.manualPlaySelect.checkIndex(SettingSaver.getInstance().getManualPlayShowType());
+        binding.manualPlaySelect.checkIndex(saver.getManualPlayShowType());
 
         // 暂停/停止
         binding.manualPlayPauseSelect.setOnButtonCheckedListener((group, checkedId, isChecked) -> {
             if (isChecked) {
                 View view = group.findViewById(checkedId);
                 int index = group.indexOfChild(view);
-                SettingSaver.getInstance().setManualPlayPauseType(index);
+                saver.setManualPlayPauseType(index);
             }
         });
-        binding.manualPlayPauseSelect.checkIndex(SettingSaver.getInstance().getManualPlayPauseType());
+        binding.manualPlayPauseSelect.checkIndex(saver.getManualPlayPauseType());
 
         // 跳转任务
-        binding.manualPlayGotoTaskSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setManualPlayGotoTask(binding.manualPlayGotoTaskSwitch.isChecked()));
-        binding.manualPlayGotoTaskSwitch.setChecked(SettingSaver.getInstance().isManualPlayGotoTask());
+        binding.manualPlayGotoTaskSwitch.setOnSwitchClickListener(v -> saver.setManualPlayGotoTask(binding.manualPlayGotoTaskSwitch.isChecked()));
+        binding.manualPlayGotoTaskSwitch.setChecked(saver.isManualPlayGotoTask());
 
         // 隐藏悬浮窗
         binding.hideManualPlaySelect.setOnButtonCheckedListener((group, checkedId, isChecked) -> {
             if (isChecked) {
                 View view = group.findViewById(checkedId);
                 int index = group.indexOfChild(view);
-                SettingSaver.getInstance().setManualPlayHideType(index);
+                saver.setManualPlayHideType(index);
             }
         });
-        binding.hideManualPlaySelect.checkIndex(SettingSaver.getInstance().getManualPlayHideType());
+        binding.hideManualPlaySelect.checkIndex(saver.getManualPlayHideType());
 
         // 对截图录屏隐藏
-        binding.hideManualPlaySelectWhenScreenShot.setOnSwitchClickListener(v -> SettingSaver.getInstance().setManualPlayHideWhenScreenshot(binding.hideManualPlaySelectWhenScreenShot.isChecked()));
-        binding.hideManualPlaySelectWhenScreenShot.setChecked(SettingSaver.getInstance().isManualPlayHideWhenScreenshot());
+        binding.hideManualPlaySelectWhenScreenShot.setOnSwitchClickListener(v -> saver.setManualPlayHideWhenScreenshot(binding.hideManualPlaySelectWhenScreenShot.isChecked()));
+        binding.hideManualPlaySelectWhenScreenShot.setChecked(saver.isManualPlayHideWhenScreenshot());
 
         // 执行时隐藏悬浮窗
-        binding.manualPlayingHideSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setManualPlayingHide(binding.manualPlayingHideSwitch.isChecked()));
-        binding.manualPlayingHideSwitch.setChecked(SettingSaver.getInstance().isManualPlayingHide());
+        binding.manualPlayingHideSwitch.setOnSwitchClickListener(v -> saver.setManualPlayingHide(binding.manualPlayingHideSwitch.isChecked()));
+        binding.manualPlayingHideSwitch.setChecked(saver.isManualPlayingHide());
 
         // 未使用时淡化
-        binding.notPlayHideSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setNotPlayHide(binding.notPlayHideSwitch.isChecked()));
-        binding.notPlayHideSwitch.setChecked(SettingSaver.getInstance().isNotPlayHide());
+        binding.notPlayHideSwitch.setOnSwitchClickListener(v -> saver.setNotPlayHide(binding.notPlayHideSwitch.isChecked()));
+        binding.notPlayHideSwitch.setChecked(saver.isNotPlayHide());
 
         // 未使用时淡化透明度
         binding.notPlayHideAlpha.setValueFormat("%d%%");
-        binding.notPlayHideAlpha.setSliderOnChangeListener((slider, value, fromUser) -> SettingSaver.getInstance().setNotPlayHideAlpha((int) value));
-        binding.notPlayHideAlpha.setValue(SettingSaver.getInstance().getNotPlayHideAlpha());
+        binding.notPlayHideAlpha.setSliderOnChangeListener((slider, value, fromUser) -> saver.setNotPlayHideAlpha((int) value));
+        binding.notPlayHideAlpha.setValue(saver.getNotPlayHideAlpha());
 
         // 重置位置
         binding.manualPlayReset.setOnButtonClickListener(v -> {
-            SettingSaver.getInstance().setManualPlayViewPos(new Point());
-            SettingSaver.getInstance().setManualPlayViewState(true);
+            saver.setManualPlayViewPos(new Point());
+            saver.setManualPlayViewState(true);
             Toast.makeText(activity, R.string.preference_setting_manual_play_reset_tips, Toast.LENGTH_SHORT).show();
         });
 
         // 手动执行悬浮窗偏移
         binding.manualPlayPadding.setSliderOnChangeListener((slider, value, fromUser) -> {
-            SettingSaver.getInstance().setManualPlayViewPadding((int) value);
+            saver.setManualPlayViewPadding((int) value);
             refreshExpandView();
             refreshCloseView();
         });
-        binding.manualPlayPadding.setValue(SettingSaver.getInstance().getManualPlayViewPadding());
+        binding.manualPlayPadding.setValue(saver.getManualPlayViewPadding());
 
         // 手动执行悬浮窗展开宽度
         binding.manualPlaySize.setSliderOnChangeListener((slider, value, fromUser) -> {
-            SettingSaver.getInstance().setManualPlayViewExpandSize((int) value);
+            saver.setManualPlayViewExpandSize((int) value);
             refreshExpandView();
         });
-        binding.manualPlaySize.setValue(SettingSaver.getInstance().getManualPlayViewExpandSize());
+        binding.manualPlaySize.setValue(saver.getManualPlayViewExpandSize());
 
         // 手动执行悬浮窗关闭宽度
         binding.manualPlayCloseSize.setSliderOnChangeListener((slider, value, fromUser) -> {
-            SettingSaver.getInstance().setManualPlayViewCloseSize((int) value);
+            saver.setManualPlayViewCloseSize((int) value);
             refreshCloseView();
         });
-        binding.manualPlayCloseSize.setValue(SettingSaver.getInstance().getManualPlayViewCloseSize());
+        binding.manualPlayCloseSize.setValue(saver.getManualPlayViewCloseSize());
 
         // 手动执行悬浮窗按钮高度
         binding.manualPlayHeight.setSliderOnChangeListener((slider, value, fromUser) -> {
-            SettingSaver.getInstance().setManualPlayViewButtonHeight((int) value);
+            saver.setManualPlayViewButtonHeight((int) value);
             refreshExpandView();
         });
-        binding.manualPlayHeight.setValue(SettingSaver.getInstance().getManualPlayViewButtonHeight());
+        binding.manualPlayHeight.setValue(saver.getManualPlayViewButtonHeight());
 
         // 手动执行悬浮窗独立按钮大小
         binding.manualPlaySingleSize.setSliderOnChangeListener((slider, value, fromUser) -> {
-            SettingSaver.getInstance().setManualPlayViewSingleSize((int) value);
+            saver.setManualPlayViewSingleSize((int) value);
             refreshSingleView();
         });
-        binding.manualPlaySingleSize.setValue(SettingSaver.getInstance().getManualPlayViewSingleSize());
+        binding.manualPlaySingleSize.setValue(saver.getManualPlayViewSingleSize());
 
         refreshExpandView();
         refreshSingleView();
@@ -142,9 +143,9 @@ public class SettingPlayView extends Fragment {
     }
 
     private void refreshExpandView() {
-        int padding = SettingSaver.getInstance().getManualPlayViewPadding();
-        int size = SettingSaver.getInstance().getManualPlayViewExpandSize();
-        int height = SettingSaver.getInstance().getManualPlayViewButtonHeight();
+        int padding = saver.getManualPlayViewPadding();
+        int size = saver.getManualPlayViewExpandSize();
+        int height = saver.getManualPlayViewButtonHeight();
 
         int px = (int) DisplayUtil.dp2px(requireContext(), PlayFloatView.UNIT_DP_SIZE * padding);
         DisplayUtil.setViewMargin(binding.playButtonBox, px, 0, px, 0);
@@ -165,7 +166,7 @@ public class SettingPlayView extends Fragment {
     }
 
     private void refreshCloseView() {
-        int size = SettingSaver.getInstance().getManualPlayViewCloseSize();
+        int size = saver.getManualPlayViewCloseSize();
         int buttonDpSize = PlayFloatView.BUTTON_DP_SIZE * 2 / 3;
         int growDpSize = (PlayFloatView.BUTTON_DP_SIZE - buttonDpSize) / 2;
         int px = (int) DisplayUtil.dp2px(requireContext(), buttonDpSize + growDpSize * (size - 1));
@@ -173,7 +174,7 @@ public class SettingPlayView extends Fragment {
     }
 
     private void refreshSingleView() {
-        int size = SettingSaver.getInstance().getManualPlayViewSingleSize();
+        int size = saver.getManualPlayViewSingleSize();
 
         String testText = this.testText.substring(0, Math.min(this.testText.length(), size));
         binding.singleTitle.setText(testText);

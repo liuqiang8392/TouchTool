@@ -17,18 +17,19 @@ public abstract class StartAction extends Action {
     private final transient Pin enablePin = new NotLinkAblePin(new PinBoolean(true), R.string.start_action_enable);
     private final transient Pin restartPin = new NotLinkAblePin(new PinSingleSelect(R.array.restart_type), R.string.start_action_restart);
     private final transient Pin breakPin = new Pin(new PinBoolean(false), R.string.start_action_break);
+    protected final transient Pin showPin = new NotLinkAblePin(new PinBoolean(false), R.string.start_action_show);
     protected final transient Pin executePin = new Pin(new PinExecute(), R.string.pin_execute, true);
 
     private transient boolean checking;
 
     protected StartAction(ActionType type) {
         super(type);
-        addPins(enablePin, restartPin, breakPin, executePin);
+        addPins(enablePin, restartPin, breakPin, showPin, executePin);
     }
 
     protected StartAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(enablePin, restartPin, breakPin, executePin);
+        reAddPins(enablePin, restartPin, breakPin, showPin, executePin);
     }
 
     public boolean ready() {
@@ -49,6 +50,10 @@ public abstract class StartAction extends Action {
 
     public void setEnable(boolean enable) {
         enablePin.getValue(PinBoolean.class).setValue(enable);
+    }
+
+    public boolean isShow() {
+        return showPin.getValue(PinBoolean.class).getValue();
     }
 
     public RestartType getRestartType() {

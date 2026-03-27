@@ -39,6 +39,8 @@ public class ManualStartAction extends StartAction {
 
     public ManualStartAction() {
         super(ActionType.MANUAL_START);
+        showPin.setHide(true);
+
         Point size = DisplayUtil.getScreenSize(MainApplication.getInstance());
         showPosPin.getValue(PinPoint.class).setValue(new Point(size.x / 2, size.y / 2));
         addPins(appsPin, showTypePin, expandPin, showPosPin, anchorPin, gravityPin, lockPin, appPin);
@@ -52,6 +54,8 @@ public class ManualStartAction extends StartAction {
     @Override
     public void execute(TaskRunnable runnable, Pin pin) {
         super.execute(runnable, pin);
+        showPin.setHide(true);
+
         TaskInfoSummary handler = TaskInfoSummary.getInstance();
         TaskInfoSummary.PackageActivity packageActivity = handler.getPackageActivity();
 

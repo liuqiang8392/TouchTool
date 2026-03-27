@@ -73,6 +73,25 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
         });
     }
 
+    public static void addRunningAction(TaskRunnable runnable) {
+        TaskInfoSummary.PackageActivity packageActivity = TaskInfoSummary.getInstance().getPackageActivity();
+        if (packageActivity != null && packageActivity.packageName().equals(HIDE_PACKAGE)) return;
+        if (System.currentTimeMillis() < HIDE_TIME) return;
+        HIDE_PACKAGE = null;
+        HIDE_TIME = 0;
+
+        KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
+        if (keepView == null) return;
+        new Handler(Looper.getMainLooper()).post(() -> {
+            PlayFloatView playFloatView = (PlayFloatView) FloatWindow.getView(PlayFloatView.class.getName());
+            if (playFloatView == null) {
+                playFloatView = new PlayFloatView(keepView.getThemeContext());
+                playFloatView.show();
+            }
+            playFloatView.addAction(runnable);
+        });
+    }
+
     public PlayFloatView(@NonNull Context context) {
         super(context);
         binding = FloatPlayBinding.inflate(LayoutInflater.from(context), this, true);
@@ -150,6 +169,16 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
     public PlayFloatView(Context context, List<TaskInfoSummary.ManualExecuteInfo> actions) {
         this(context);
         setActions(actions);
+    }
+
+    public void addAction(TaskRunnable runnable) {
+        Task task = runnable.getStartTask();
+        StartAction action = runnable.getStartAction();
+        PlayFloatItemView itemView = new PlayFloatItemView(getContext(), task, action);
+        itemView.setNeedRemove(true);
+        itemView.onStart(runnable);
+        runnable.addListener(itemView);
+        binding.buttonBox.addView(itemView);
     }
 
     public void setActions(List<TaskInfoSummary.ManualExecuteInfo> actions) {

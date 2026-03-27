@@ -38,6 +38,43 @@
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/saveBox"
+        style="?attr/materialCardViewFilledStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        app:cardBackgroundColor="?attr/colorSurface"
+        app:cardElevation="5dp"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full">
+
+        <com.google.android.material.button.MaterialButtonGroup
+            android:layout_width="wrap_content"
+            android:layout_height="?attr/iconButtonSize"
+            android:spacing="?attr/defaultOffset">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/searchButton"
+                style="?attr/iconButton"
+                android:backgroundTint="@color/fill_button_background_check"
+                android:checkable="true"
+                app:icon="@drawable/icon_search"
+                app:iconTint="@color/button_container_check" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/saveButton"
+                style="?attr/iconButton"
+                app:icon="@drawable/icon_save" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/moreButton"
+                style="?attr/iconButton"
+                app:icon="@drawable/icon_more_horiz" />
+
+        </com.google.android.material.button.MaterialButtonGroup>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/searchBox"
         style="?attr/materialCardViewFilledStyle"
         android:layout_width="wrap_content"
@@ -45,7 +82,7 @@
         android:layout_gravity="center_horizontal"
         android:visibility="gone"
         app:cardBackgroundColor="?attr/colorSurface"
-        app:cardElevation="5dp"
+        app:cardElevation="10dp"
         app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full">
 
         <LinearLayout
@@ -85,43 +122,6 @@
                 app:icon="@drawable/icon_keyboard_arrow_right" />
 
         </LinearLayout>
-
-    </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/saveBox"
-        style="?attr/materialCardViewFilledStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        app:cardBackgroundColor="?attr/colorSurface"
-        app:cardElevation="5dp"
-        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full">
-
-        <com.google.android.material.button.MaterialButtonGroup
-            android:layout_width="wrap_content"
-            android:layout_height="?attr/iconButtonSize"
-            android:spacing="?attr/defaultOffset">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/searchButton"
-                style="?attr/iconButton"
-                android:backgroundTint="@color/fill_button_background_check"
-                android:checkable="true"
-                app:icon="@drawable/icon_search"
-                app:iconTint="@color/button_container_check" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/saveButton"
-                style="?attr/iconButton"
-                app:icon="@drawable/icon_save" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/moreButton"
-                style="?attr/iconButton"
-                app:icon="@drawable/icon_more_horiz" />
-
-        </com.google.android.material.button.MaterialButtonGroup>
 
     </com.google.android.material.card.MaterialCardView>
 
@@ -176,8 +176,10 @@
                 style="?attr/materialIconButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:padding="4dp"
                 android:visibility="gone"
-                app:icon="@drawable/icon_content_paste" />
+                app:icon="@drawable/icon_content_paste_more"
+                app:iconSize="32dp" />
         </com.google.android.material.button.MaterialButtonGroup>
 
     </com.google.android.material.card.MaterialCardView>
@@ -189,7 +191,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"
         android:layout_marginBottom="48dp"
-        android:visibility="gone"
+        android:visibility="visible"
         app:cardBackgroundColor="?attr/colorSurface"
         app:cardElevation="5dp"
         app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full">
@@ -221,14 +223,9 @@
                 style="?attr/materialIconButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:icon="@drawable/icon_content_copy" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/copyContentButton"
-                style="?attr/materialIconButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:icon="@drawable/icon_copy" />
+                android:padding="4dp"
+                app:icon="@drawable/icon_content_copy_more"
+                app:iconSize="32dp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/deleteButton"

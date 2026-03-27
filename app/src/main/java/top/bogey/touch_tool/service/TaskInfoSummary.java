@@ -49,7 +49,6 @@ import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.callback.ResultCallback;
 
 public class TaskInfoSummary {
-    public static final String YOLO_APP_ACTIVITY = "top.bogey.yolo.ui.MainActivity";
     private static final String XMLNS_ANDROID = "http://schemas.android.com/apk/res/android";
 
     private static TaskInfoSummary instance;

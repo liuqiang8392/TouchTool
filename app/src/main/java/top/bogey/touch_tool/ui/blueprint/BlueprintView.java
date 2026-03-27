@@ -334,6 +334,12 @@ public class BlueprintView extends Fragment {
         });
         binding.pasteButton.setVisibility(copyActions.isEmpty() ? View.GONE : View.VISIBLE);
 
+        binding.pasteButton.setOnLongClickListener(v -> {
+            copyActions.clear();
+            binding.pasteButton.setVisibility(View.GONE);
+            return true;
+        });
+
         binding.exchangeButton.setOnClickListener(v -> AppUtil.showEditDialog(getContext(), R.string.task_exchange_to_custom, "", result -> {
             if (result.isEmpty()) return;
 
@@ -369,11 +375,12 @@ public class BlueprintView extends Fragment {
             });
         });
 
-        binding.copyContentButton.setOnClickListener(v -> {
+        binding.copyButton.setOnLongClickListener(v -> {
             copyActions.clear();
             copyActions.addAll(binding.cardLayout.getSelectedActionsCopy());
             binding.pasteButton.setVisibility(copyActions.isEmpty() ? View.GONE : View.VISIBLE);
             binding.cardLayout.cleanSelectedCards();
+            return true;
         });
 
         binding.deleteButton.setOnClickListener(v -> {
