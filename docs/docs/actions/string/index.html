@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="zh-Hans" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-actions/string" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.9.2">
+<title data-rh="true">文本 | 点击助手文档</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://mr-bogey.github.io/TouchTool/docs/actions/string"><meta data-rh="true" property="og:locale" content="zh_Hans"><meta data-rh="true" name="docusaurus_locale" content="zh-Hans"><meta data-rh="true" name="docsearch:language" content="zh-Hans"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="文本 | 点击助手文档"><meta data-rh="true" name="description" content="文本处理类动作用于对文本进行各种操作，包括拼接、截取、匹配、替换等。"><meta data-rh="true" property="og:description" content="文本处理类动作用于对文本进行各种操作，包括拼接、截取、匹配、替换等。"><link data-rh="true" rel="icon" href="/TouchTool/icon.svg"><link data-rh="true" rel="canonical" href="https://mr-bogey.github.io/TouchTool/docs/actions/string"><link data-rh="true" rel="alternate" href="https://mr-bogey.github.io/TouchTool/docs/actions/string" hreflang="zh-Hans"><link data-rh="true" rel="alternate" href="https://mr-bogey.github.io/TouchTool/docs/actions/string" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"文本","item":"https://mr-bogey.github.io/TouchTool/docs/actions/string"}]}</script><link rel="stylesheet" href="/TouchTool/assets/css/styles.4a572f82.css">
+<script src="/TouchTool/assets/js/runtime~main.2ae15beb.js" defer="defer"></script>
+<script src="/TouchTool/assets/js/main.d556d3b1.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>document.documentElement.setAttribute("data-theme","dark"),document.documentElement.setAttribute("data-theme-choice","dark"),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="跳到主要内容"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">跳到主要内容</a></div><nav aria-label="主导航" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="切换导航栏" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/TouchTool/"><div class="navbar__logo"><img src="/TouchTool/icon.svg" alt="TouchTool Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/TouchTool/icon.svg" alt="TouchTool Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">点击助手</b></a><a class="navbar__item navbar__link" href="/TouchTool/docs/getting-started">快速开始</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://github.com/mr-bogey/TouchTool" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link github-link">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="回到顶部" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="文档侧边栏" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/TouchTool/docs/getting-started"><span title="快速开始" class="linkLabel_WmDU">快速开始</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" href="/TouchTool/docs/actions/start"><span title="预设动作" class="categoryLinkLabel_W154">预设动作</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/start"><span title="开始" class="linkLabel_WmDU">开始</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/logic"><span title="逻辑" class="linkLabel_WmDU">逻辑</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/normal"><span title="通用" class="linkLabel_WmDU">通用</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/click"><span title="点击" class="linkLabel_WmDU">点击</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/app"><span title="应用" class="linkLabel_WmDU">应用</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/system"><span title="系统" class="linkLabel_WmDU">系统</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/number"><span title="数值" class="linkLabel_WmDU">数值</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/TouchTool/docs/actions/string"><span title="文本" class="linkLabel_WmDU">文本</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/bool"><span title="条件" class="linkLabel_WmDU">条件</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/node"><span title="控件" class="linkLabel_WmDU">控件</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/image"><span title="图像" class="linkLabel_WmDU">图像</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/color"><span title="颜色" class="linkLabel_WmDU">颜色</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/area"><span title="区域" class="linkLabel_WmDU">区域</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/point"><span title="位置" class="linkLabel_WmDU">位置</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/list"><span title="列表" class="linkLabel_WmDU">列表</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/map"><span title="字典" class="linkLabel_WmDU">字典</span></a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="true" href="/TouchTool/docs/custom/task"><span title="自定义" class="categoryLinkLabel_W154">自定义</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/custom/task"><span title="任务" class="linkLabel_WmDU">任务</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/custom/variable"><span title="变量" class="linkLabel_WmDU">变量</span></a></li></ul></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="页面路径"><ul class="breadcrumbs"><li class="breadcrumbs__item"><a aria-label="主页面" class="breadcrumbs__link" href="/TouchTool/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">预设动作</span></li><li class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link">文本</span></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">本页总览</button></div><div class="theme-doc-markdown markdown"><header><h1>文本</h1></header>
+<p>文本处理类动作用于对文本进行各种操作，包括拼接、截取、匹配、替换等。</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="动作列表">动作列表<a href="#动作列表" class="hash-link" aria-label="动作列表的直接链接" title="动作列表的直接链接" translate="no">​</a></h2>
+<table><thead><tr><th>动作类型</th><th>功能说明</th></tr></thead><tbody><tr><td>转换为文本</td><td>将任意对象转换为文本</td></tr><tr><td>文本转数值</td><td>提取文本中的第一个数值</td></tr><tr><td>文本拼接</td><td>将多个文本拼接成一个文本</td></tr><tr><td>文本截取</td><td>将文本截取为指定范围的文本</td></tr><tr><td>文本正则匹配</td><td>执行正则匹配，判断是否包含特定文本</td></tr><tr><td>文本分割</td><td>将文本按特定字符分割为多个文本</td></tr><tr><td>文本比较</td><td>判断两个文本是否相等</td></tr><tr><td>文本替换</td><td>将文本中的特定文本替换为另一个文本</td></tr><tr><td>文本编码</td><td>将文本编码为指定编码</td></tr><tr><td>文本解码</td><td>将文本解码为指定编码</td></tr><tr><td>文本加密</td><td>将文本加密为指定编码</td></tr><tr><td>OCR识别文本</td><td>识别图片中指定区域文字</td></tr><tr><td>OCR查找文本</td><td>在图片中查找指定文字</td></tr><tr><td>OCR文本是否存在</td><td>判断图片中是否存在指定文字</td></tr><tr><td>JSON解析</td><td>解析JSON字符串</td></tr><tr><td>新建单选</td><td>创建一个自定义单选</td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="详细说明">详细说明<a href="#详细  说明" class="hash-link" aria-label="详细说明的直接链接" title="详细说明的直接链接" translate="no">​</a></h2>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="转换为文本">转换为文本<a href="#转换为文本" class="hash-link" aria-label="转换为文本的直接链接" title="转换为文本的直接链接" translate="no">​</a></h3>
+<p>将任意类型的对象转换为文本格式。</p>
+<blockquote>
+<p>使用场景：数据格式转换、日志输出等。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="转换为文本" src="/TouchTool/assets/images/转换为文本-ce9ec7f331297662af90f3161c322398.jpg" width="3029" height="2005" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><strong>对象</strong>：要转换的对象。</li>
+<li class=""><em><strong>文本</strong></em>：输出的文本结果。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="文本转数值">文本转数值<a href="#文本转数值" class="hash-link" aria-label="文本转数值的直接链接" title="文本转数值的直接链接" translate="no">​</a></h3>
+<p>从文本中提取数值。</p>
+<blockquote>
+<p>使用场景：从字符串中提取数字进行计算。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="文本转数值" src="/TouchTool/assets/images/文本转数值-f6e02fb404698111db2b6cbf818790de.jpg" width="3347" height="1982" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><strong>文本</strong>：要提取数值的文本。</li>
+<li class=""><em><strong>数值</strong></em>：首个可用数值。</li>
+<li class=""><em><strong>数值列表</strong></em>：所有可用的数值。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="文本拼接">文本拼接<a href="#文本拼接" class="hash-link" aria-label="文本拼接的直接链接" title="文本拼接的直接链接" translate="no">​</a></h3>
+<p>将多个文本片段拼接成一个完整的  文本。</p>
+<blockquote>
+<p>使用场景：组合多个变量为完整字符串。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="文本拼接" src="/TouchTool/assets/images/文本拼接-422fdd7c4fbd7ec5545992cc89ecc18a.jpg" width="3274" height="2619" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><strong>文本(1)</strong>：要拼接的多个文本之一。</li>
+<li class=""><strong>文本(2)</strong>：要拼接的多个文本之一。</li>
+<li class=""><strong>添加针脚</strong>：添加新的文本片段。</li>
+<li class=""><em><strong>文本(右)</strong></em>：拼接后的完整文本。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="文本截取">文本截取<a href="#文本截取" class="hash-link" aria-label="文本截取的直接链接" title="文本截取的直接链接" translate="no">​</a></h3>
+<p>从文本中截取指定范围的子串。</p>
+<blockquote>
+<p>使用场景：提取文本中的部分内容。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="文本截取" src="/TouchTool/assets/images/文本截取-33663342955fe7aeab841027087f9d88.jpg" width="3347" height="2437" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><strong>文本</strong>：要截取的源文本。</li>
+<li class=""><strong>起始位置</strong>：截取的起始索引，支持负数索引。</li>
+<li class=""><strong>结束位置</strong>：截取的结束索引，支持负数索引。</li>
+<li class=""><em><strong>结果</strong></em>：截取后的子串。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="文本正则匹配">文本正则匹配<a href="#文本正则匹配" class="hash-link" aria-label="文本正则匹配的直接链接" title="文本正则匹配的直接链接" translate="no">​</a></h3>
+<p>使用正则表达式匹配文本，判断是否包含特定模式。</p>
+<blockquote>
+<p>使用场景：复杂文本匹配、数据提取等。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="文本正则匹配" src="/TouchTool/assets/images/文本正则匹配-711d9dd3d133c3d50dccc6593a700c63.jpg" width="3410" height="2714" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><strong>文本</strong>：要匹配的源文本。</li>
+<li class=""><strong>匹配文本</strong>：用于匹配的正则表达式。</li>
+<li class=""><em><strong>匹配结果</strong></em>：输出所有匹配到的内容段。</li>
+<li class=""><em><strong>捕获结果</strong></em>：输出所有捕获到的内容。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="文本分割">文本分割<a href="#文本分割" class="hash-link" aria-label="文本分割的直接链接" title="文本分割的直接链接" translate="no">​</a></h3>
+<p>按指定分隔符将文本分割成多个部分。</p>
+<blockquote>
+<p>使用场景：解析CSV数据、拆分字符串等。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="文本分割" src="/TouchTool/assets/images/文本分割-d4d26da49c4da1e1283022c6ccbfd5df.jpg" width="3438" height="2619" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><strong>文本</strong>：要分割的源文本。</li>
+<li class=""><strong>分隔符</strong>：用于分割的字符或字符串。</li>
+<li class=""><strong>剔除空字符</strong>：是否剔除空字符。</li>
+<li class=""><strong>正则模式</strong>：是否使用正则模式匹配。</li>
+<li class=""><em><strong>文本列表</strong></em>：输出分割后的文本列表。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="文本比较">文本比较<a href="#文本比较" class="hash-link" aria-label="文本比较的直接链接" title="文本比较的直接链接" translate="no">​</a></h3>
+<p>判断两个文本是否相等。</p>
+<blockquote>
+<p>使用场景：条件判断、文本验证等。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="文本比较" src="/TouchTool/assets/images/文本比较-1b40da6bd9338a2efc390c022896c3cf.jpg" width="3347" height="2892" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><strong>文本(1)</strong>：要比较的文本。</li>
+<li class=""><strong>文本(2)</strong>：要比较的文本。</li>
+<li class=""><strong>忽略大小写</strong>：是否区分大小写。</li>
+<li class=""><strong>正则模式</strong>：是否使用正则模式匹配。</li>
+<li class=""><em><strong>结果</strong></em>：比较结果。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="文本替换">文本替换<a href="#文本替换" class="hash-link" aria-label="文本替换的直接链接" title="文本替换的直接链接" translate="no">​</a></h3>
+<p>将文本中的指定内容替换为新内容。</p>
+<blockquote>
+<p>使用场景：文本修正、模板替换等。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="文本替换" src="/TouchTool/assets/images/文本替换-02a1a73c38c6132476cc44ac0dbf5192.jpg" width="3410" height="2704" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><strong>文本</strong>：要操作的源文本。</li>
+<li class=""><strong>查找文本</strong>：要替换的文本。</li>
+<li class=""><strong>替换文本</strong>：替换后的新文本。</li>
+<li class=""><strong>正则模式</strong>：是否使用正则模式匹配。</li>
+<li class=""><em><strong>替换结果</strong></em>：输出替换后的文本。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="文本编码">文本编码<a href="#文本编码" class="hash-link" aria-label="文本编码的直接链接" title="文本编码的直接链接" translate="no">​</a></h3>
+<p>将文本编码为指定格式（如Base64、URL编码等）。</p>
+<blockquote>
+<p>使用场景：数据传输、安全存储等。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="文本编码" src="/TouchTool/assets/images/文本编码-df6d9b62901e95d7cf907a952bc1b35a.jpg" width="3347" height="1982" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><strong>编码方式</strong>：选择编码方式。<!-- -->
+<ul>
+<li class=""><strong>URL</strong>：将文本编码为URL编码格式。</li>
+<li class=""><strong>Base64</strong>：将文本编码为Base64格式。</li>
+</ul>
+</li>
+<li class=""><strong>文本</strong>：要编码的文本。</li>
+<li class=""><em><strong>结果</strong></em>：输出编码后的文本。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="文本解码">文本解码<a href="#文本解码" class="hash-link" aria-label="文本解码的直接链接" title="文本解码的直接链接" translate="no">​</a></h3>
+<p>将编码的文本解码为原始文本。</p>
+<blockquote>
+<p>使用场景：还原编码数据。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="文本解码" src="/TouchTool/assets/images/文本解码-c313d8385cc764aa8a5a89956c2ab999.jpg" width="3347" height="1982" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><strong>解码方式</strong>：选择解码方式。<!-- -->
+<ul>
+<li class=""><strong>URL</strong>：将文本解码为URL编码格式。</li>
+<li class=""><strong>Base64</strong>：将文本解码为Base64格式。</li>
+</ul>
+</li>
+<li class=""><strong>文本</strong>：要解码的文本。</li>
+<li class=""><em><strong>结果</strong></em>：输出解码后的原始文本。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="文本加密">文本加密<a href="#文本加密" class="hash-link" aria-label="文本加密的直接链接" title="文本加密的直接链接" translate="no">​</a></h3>
+<p>使用指定算法加密文本。</p>
+<blockquote>
+<p>使用场景：敏感数据加密、安全传输等。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="文本加密" src="/TouchTool/assets/images/文本加密-b87494bc950f3fc909797cc34b264006.jpg" width="3347" height="1982" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><strong>加密方式</strong>：选择加密算法。<!-- -->
+<ul>
+<li class=""><strong>MD5</strong>：使用MD5算法加密。</li>
+<li class=""><strong>SHA-1</strong>：使用SHA1算法加密。</li>
+<li class=""><strong>SHA-256</strong>：使用SHA256算法加密。</li>
+</ul>
+</li>
+<li class=""><strong>文本</strong>：要加密的文本。</li>
+<li class=""><em><strong>结果</strong></em>：输出加密后的文本。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="ocr识别文本">OCR识别文本<a href="#ocr识别文本" class="hash-link" aria-label="OCR识别文本的直接链接" title="OCR识别文本的直接链接" translate="no">​</a></h3>
+<p>使用OCR技术识别图片中指定区域的文字。</p>
+<blockquote>
+<p>使用场景：屏幕文字识别、图片内容提取等。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="OCR识别文本" src="/TouchTool/assets/images/OCR识别文本-db8c51c615b009fd6a9ed12add8278af.jpg" width="3430" height="3440" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><strong>实时模式</strong>：是否启用实时模式，实时模式下每次获取输出值都会进行一次OCR。</li>
+<li class=""><strong>图片</strong>：要识别的图片。</li>
+<li class=""><strong>置信度(左)</strong>：识别结果的置信度，范围0-100。</li>
+<li class=""><strong>模型</strong>：选择使用的OCR模型。</li>
+<li class=""><em><strong>所有文字</strong></em>：输出识别出的文字内容。</li>
+<li class=""><em><strong>文本列表</strong></em>：输出识别出的文字块列表。</li>
+<li class=""><em><strong>区域列表</strong></em>：输出识别出的文字块区域列表。</li>
+<li class=""><em><strong>置信度(右)</strong></em>：输出识别出的文字块的置信度。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="ocr查找文本">OCR查找文本<a href="#ocr查找文本" class="hash-link" aria-label="OCR查找文本的直接链接" title="OCR查找文本的直接链接" translate="no">​</a></h3>
+<p>在图片中查找指定的文字并返回区域。</p>
+<blockquote>
+<p>使用场景：定位特定文字位置、精准点击等。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="OCR查找文本" src="/TouchTool/assets/images/OCR查找文本-ece2e3ae7dd6725621f18657657a6831.jpg" width="3114" height="3576" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><strong>超时</strong>：等 待超时时间（毫秒）。</li>
+<li class=""><strong>检查间隔</strong>：检查OCR间隔时间（毫秒）。</li>
+<li class=""><strong>图片</strong>：要搜索的图片。</li>
+<li class=""><strong>文本(左)</strong>：要查找的文字内容。</li>
+<li class=""><strong>置信度</strong>：识别结果的置信度，范围0-100。</li>
+<li class=""><strong>模型</strong>：选择使用的OCR模型。</li>
+<li class=""><em><strong>区域</strong></em>：输出匹配到的区域。</li>
+<li class=""><em><strong>文本(右)</strong></em>：输出匹配到的文字内容。</li>
+<li class=""><em><strong>匹配置信度</strong></em>：输出匹配到的文字的置信度。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="ocr文本是否存在">OCR文本是否存在<a href="#ocr文本是否存在" class="hash-link" aria-label="OCR文本是否存在的直接链接" title="OCR文本是否存在的直接链接" translate="no">​</a></h3>
+<p>判断图片中是否存在指定的文字。</p>
+<blockquote>
+<p>使用场景：界面状态判断、条件分支等。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="OCR文本是否存在" src="/TouchTool/assets/images/OCR文本是否存在-7f9e09ddd89da8a5641d8b5860cb8818.jpg" width="3380" height="2795" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><strong>图片</strong>：要搜索的图片。</li>
+<li class=""><strong>文本</strong>：要查找的文字内容。</li>
+<li class=""><strong>置信度</strong>：识别结果的置信度，范围0-100。</li>
+<li class=""><strong>模型</strong>：选择使用的OCR模型。</li>
+<li class=""><em><strong>结果</strong></em>：输出是否找到匹配的文字。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="json解析">JSON解析<a href="#json解析" class="hash-link" aria-label="JSON解析的直接链接" title="JSON解析的直接链接" translate="no">​</a></h3>
+<p>解析JSON字符串，提取其中的数据。</p>
+<blockquote>
+<p>使用场景：API响应解析、配置文件读取等。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="JSON解析" src="/TouchTool/assets/images/JSON解析-3be04ed60417586c499b214ac0a91f34.jpg" width="3380" height="1478" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><strong>文本</strong>：要解析的JSON字符串。</li>
+<li class=""><em><strong>结果</strong></em>：输出解析后的数据。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="新建单选">新建单选<a href="#新建单选" class="hash-link" aria-label="新建单选的直接链接" title="新建单选的直接链接" translate="no">​</a></h3>
+<p>创建一个自定义的单选选项。</p>
+<blockquote>
+<p>使用场景：用户交互选择、参数配置等。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="新建单选" src="/TouchTool/assets/images/新建单选-95c4a58251ff4abb89c5936c5292dde3.jpg" width="3312" height="2052" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><strong>选项</strong>：可供选择的选项文本列表。</li>
+<li class=""><strong>选中项</strong>：默认选中的选项。</li>
+<li class=""><em><strong>单选</strong></em>：输出单选对象。</li>
+</ul></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="文件选项卡"><a class="pagination-nav__link pagination-nav__link--prev" href="/TouchTool/docs/actions/number"><div class="pagination-nav__sublabel">上一页</div><div class="pagination-nav__label">数值</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/TouchTool/docs/actions/bool"><div class="pagination-nav__sublabel">下一页</div><div class="pagination-nav__label">条件</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#动作列表" class="table-of-contents__link toc-highlight">动作列表</a></li><li><a href="#详细说明" class="table-of-contents__link toc-highlight">详细说明</a><ul><li><a href="#转换为文本" class="table-of-contents__link toc-highlight">转换为文本</a></li><li><a href="#文本转数值" class="table-of-contents__link toc-highlight">文本转数值</a></li><li><a href="#文本拼接" class="table-of-contents__link toc-highlight">文本拼接</a></li><li><a href="#文本截取" class="table-of-contents__link toc-highlight">文本截取</a></li><li><a href="#文本正则匹配" class="table-of-contents__link toc-highlight">文本正则匹配</a></li><li><a href="#文本分割" class="table-of-contents__link toc-highlight">文本分割</a></li><li><a href="#文本比较" class="table-of-contents__link toc-highlight">文本比较</a></li><li><a href="#文本替换" class="table-of-contents__link toc-highlight">文本替换</a></li><li><a href="#文本编码" class="table-of-contents__link toc-highlight">文本编码</a></li><li><a href="#文本解码" class="table-of-contents__link toc-highlight">文本解码</a></li><li><a href="#文本加密" class="table-of-contents__link toc-highlight">文本加密</a></li><li><a href="#ocr识别文本" class="table-of-contents__link toc-highlight">OCR识别文本</a></li><li><a href="#ocr查找文本" class="table-of-contents__link toc-highlight">OCR查找文本</a></li><li><a href="#ocr文本是否存在" class="table-of-contents__link toc-highlight">OCR文本 是否存在</a></li><li><a href="#json解析" class="table-of-contents__link toc-highlight">JSON解析</a></li><li><a href="#新建单选" class="table-of-contents__link toc-highlight">新建单选</a></li></ul></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">文档</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/TouchTool/docs/getting-started">快速开始</a></li><li class="footer__item"><a class="footer__link-item" href="/TouchTool/docs/actions/start">动作参考</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">更多</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/mr-bogey/TouchTool" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2026 TouchTool. Built with Docusaurus.</div></div></div></footer></div>
+</body>
+</html>

@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="zh-Hans" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-actions/system" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.9.2">
+<title data-rh="true">系统 | 点击助手文档</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://mr-bogey.github.io/TouchTool/docs/actions/system"><meta data-rh="true" property="og:locale" content="zh_Hans"><meta data-rh="true" name="docusaurus_locale" content="zh-Hans"><meta data-rh="true" name="docsearch:language" content="zh-Hans"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="系统 | 点击助手文档"><meta data-rh="true" name="description" content="系统类动作用于执行各种系统级操作，如Shell命令、按键模拟、音量控制等。"><meta data-rh="true" property="og:description" content="系统类动作用于执行各种系统级操作，如Shell命令、按键模拟、音量控制等。"><link data-rh="true" rel="icon" href="/TouchTool/icon.svg"><link data-rh="true" rel="canonical" href="https://mr-bogey.github.io/TouchTool/docs/actions/system"><link data-rh="true" rel="alternate" href="https://mr-bogey.github.io/TouchTool/docs/actions/system" hreflang="zh-Hans"><link data-rh="true" rel="alternate" href="https://mr-bogey.github.io/TouchTool/docs/actions/system" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"系统","item":"https://mr-bogey.github.io/TouchTool/docs/actions/system"}]}</script><link rel="stylesheet" href="/TouchTool/assets/css/styles.4a572f82.css">
+<script src="/TouchTool/assets/js/runtime~main.2ae15beb.js" defer="defer"></script>
+<script src="/TouchTool/assets/js/main.d556d3b1.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>document.documentElement.setAttribute("data-theme","dark"),document.documentElement.setAttribute("data-theme-choice","dark"),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="跳到主要内容"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">跳到主要内容</a></div><nav aria-label="主导航" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="切换导航栏" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/TouchTool/"><div class="navbar__logo"><img src="/TouchTool/icon.svg" alt="TouchTool Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/TouchTool/icon.svg" alt="TouchTool Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">点击助手</b></a><a class="navbar__item navbar__link" href="/TouchTool/docs/getting-started">快速开始</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://github.com/mr-bogey/TouchTool" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link github-link">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="回到顶部" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="文档侧边栏" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/TouchTool/docs/getting-started"><span title="快速开始" class="linkLabel_WmDU">快速开始</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" href="/TouchTool/docs/actions/start"><span title="预设动作" class="categoryLinkLabel_W154">预设动作</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/start"><span title="开始" class="linkLabel_WmDU">开始</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/logic"><span title="逻辑" class="linkLabel_WmDU">逻辑</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/normal"><span title="通用" class="linkLabel_WmDU">通用</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/click"><span title="点击" class="linkLabel_WmDU">点击</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/app"><span title="应用" class="linkLabel_WmDU">应用</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/TouchTool/docs/actions/system"><span title="系统" class="linkLabel_WmDU">系统</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/number"><span title="数值" class="linkLabel_WmDU">数值</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/string"><span title="文本" class="linkLabel_WmDU">文本</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/bool"><span title="条件" class="linkLabel_WmDU">条件</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/node"><span title="控件" class="linkLabel_WmDU">控件</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/image"><span title="图像" class="linkLabel_WmDU">图像</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/color"><span title="颜色" class="linkLabel_WmDU">颜色</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/area"><span title="区域" class="linkLabel_WmDU">区域</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/point"><span title="位置" class="linkLabel_WmDU">位置</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/list"><span title="列表" class="linkLabel_WmDU">列表</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/map"><span title="字典" class="linkLabel_WmDU">字典</span></a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="true" href="/TouchTool/docs/custom/task"><span title="自定义" class="categoryLinkLabel_W154">自定义</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/custom/task"><span title="任务" class="linkLabel_WmDU">任务</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/custom/variable"><span title="变量" class="linkLabel_WmDU">变量</span></a></li></ul></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="页面路径"><ul class="breadcrumbs"><li class="breadcrumbs__item"><a aria-label="主页面" class="breadcrumbs__link" href="/TouchTool/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">预设动作</span></li><li class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link">系统</span></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">本页总览</button></div><div class="theme-doc-markdown markdown"><header><h1>系统</h1></header>
+<p>系统类动作用于执行各种系统级操作，如Shell命令、按键模拟、音量控制等。</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="动作列表">动作列表<a href="#动作列表" class="hash-link" aria-label="动作列表的直接链接" title="动作列表的直接链接" translate="no">​</a></h2>
+<table><thead><tr><th>动作类型</th><th>功能说明</th></tr></thead><tbody><tr><td>执行Shell命令</td><td>执行Shell命令</td></tr><tr><td>模拟按键</td><td>模拟系统按键功能</td></tr><tr><td>播放铃声</td><td>播放选定的铃声</td></tr><tr><td>停止铃声</td><td>停止播放铃声</td></tr><tr><td>文本转语音</td><td>将文本转为语音并播放</td></tr><tr><td>震动</td><td>震动手机</td></tr><tr><td>获取音量</td><td>获取音量大小</td></tr><tr><td>设置音量</td><td>设置音量大小</td></tr><tr><td>发送通知</td><td>发送自定义通知到通知栏</td></tr><tr><td>发送广播</td><td>发送自定义广播</td></tr><tr><td>弹出提示</td><td>弹出自定义提示文本</td></tr><tr><td>复制到剪贴板</td><td>将针脚值复制到剪贴板</td></tr><tr><td>从剪贴板读取</td><td>将剪贴板中的内容复制到针脚</td></tr><tr><td>分享到</td><td>将针脚值分享到选定的应用</td></tr><tr><td>屏幕录制开关</td><td>打开或关闭屏幕录制</td></tr><tr><td>屏幕录制状态</td><td>判断屏幕录制是否开启</td></tr><tr><td>开关屏幕</td><td>打开或关闭屏幕</td></tr><tr><td>获取屏幕状态</td><td>获取屏幕当前开关或锁定状态</td></tr><tr><td>获取电池状态</td><td>获取电池电量与充放电状态</td></tr><tr><td>获取网络状态</td><td>获取当前网络状态</td></tr><tr><td>获取WiFi信息</td><td>获取当前连接的WiFi信息</td></tr><tr><td>获取蓝牙设备</td><td>获取当前已连接的蓝牙设备列表</td></tr><tr><td>获取日期</td><td>获取当前日期</td></tr><tr><td>获取时间</td><td>获取当前时间</td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="详细说明">详细说明<a href="#详细说明" class="hash-link" aria-label="详细说明的直接链接" title="详细说明的直接链接" translate="no">​</a></h2>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="执行shell命令">执行Shell命令<a href="#执行shell命令" class="hash-link" aria-label="执行Shell命令的直接链接" title="执行Shell命令的直接链接" translate="no">​</a></h3>
+<p>执行Linux Shell命令，需要root权限。</p>
+<blockquote>
+<p>使用场景：系统级操作、文件操作等。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="执行Shell命令" src="/TouchTool/assets/images/执行Shell命令-d400796c3b7c6179edb8b292549c2d43.jpg" width="3274" height="2631" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><strong>命令</strong>：要执行的命令字符串。</li>
+<li class=""><em><strong>输出</strong></em>：命令执行的输出结果。</li>
+<li class=""><em><strong>执行(底部)</strong></em>：命令执行成功后的分支。</li>
+<li class=""><em><strong>未达成</strong></em>：命令执行失败后的分支。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="模拟按键">模拟按键<a href="#模拟按键" class="hash-link" aria-label="模拟按键的直接链接" title="模拟按键的直接链接" translate="no">​</a></h3>
+<p>模拟按下系统按键，如返回、主页、音量等。</p>
+<blockquote>
+<p>使用场景：返回上一页、回到主页等。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="模拟按键" src="/TouchTool/assets/images/模拟按键-5c0ff327049d50a6a962c869be2aa97a.jpg" width="2883" height="3091" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><strong>按键</strong>：要模拟的按键或功能。<!-- -->
+<ul>
+<li class=""><strong>返回</strong>：返回键。</li>
+<li class=""><strong>主页</strong>：主页键。</li>
+<li class=""><strong>最近列表</strong>：打开最近列表。</li>
+<li class=""><strong>打开通知</strong>：打开通知中心。</li>
+<li class=""><strong>打开快捷设置</strong>：打开快捷设置。</li>
+<li class=""><strong>打开电源菜单</strong>：打开电源菜单。</li>
+<li class=""><strong>锁屏</strong>：锁定屏幕。</li>
+<li class=""><strong>截图</strong>：调用系统截图。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="播放铃声">播放铃声<a href="#播放铃声" class="hash-link" aria-label="播放铃声的直接链接" title="播放铃声的直接链接" translate="no">​</a></h3>
+<p>播放指定类型的铃声。</p>
+<blockquote>
+<p>使用场景：任务完成提醒、错误提示等。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="播放铃声" src="/TouchTool/assets/images/播放铃声-46f492f62296916ca7f9e631ffe8a0c5.jpg" width="3054" height="3237" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><strong>铃声</strong>：要播放的铃声。</li>
+<li class=""><strong>通道</strong>：指定播放铃声的通道。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="停止铃声">停止铃声<a href="#停止铃声" class="hash-link" aria-label="停止铃声的直接链接" title="停止铃声的直接链接" translate="no">​</a></h3>
+<p>停止当前正在播放的铃声。</p>
+<blockquote>
+<p>使用场景：取消提醒。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="停止铃声" src="/TouchTool/assets/images/停止铃声-f301405aa0a412d603e264f67474a81d.jpg" width="3189" height="2846" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><strong>铃声</strong>：要停止的铃声。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="文本转语音">文本转语音<a href="#文本转语音" class="hash-link" aria-label="文本转语音的直接链接" title="文本转语音的直接链接" translate="no">​</a></h3>
+<p>将文本内容转换为语音并播放。</p>
+<blockquote>
+<p>使用场景：语音播报、无障碍功能等。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="文本转语音" src="/TouchTool/assets/images/文本转语音-274b802c03bdb1ba1b8aca30584b7102.jpg" width="2883" height="3091" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><strong>文本</strong>：要转换为语音的文本。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="震动">震动<a href="#震动" class="hash-link" aria-label="震动的直接链接" title="震动的直接链接" translate="no">​</a></h3>
+<p>让手机震动。</p>
+<blockquote>
+<p>使用场景：触觉反馈、提醒等。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="震动" src="/TouchTool/assets/images/震动-df4a61154c4a66ce8a581d5daafb24b2.jpg" width="3140" height="2968" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><strong>时长</strong>：震动持续时间（毫秒）。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="获取音量">获取音量<a href="#获取音量" class="hash-link" aria-label="获取音量的直接链接" title="获取音量的直接链接" translate="no">​</a></h3>
+<p>获取当前系统的音量大小。</p>
+<blockquote>
+<p>使用场景：条件判断、音量调节等。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="获取音量" src="/TouchTool/assets/images/获取音量-3862214d342aacbebcd5a7561502bf16.jpg" width="3490" height="1698" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><strong>获取音量</strong>：要获取的音量流类型（媒体、铃声音量等）。</li>
+<li class=""><em><strong>当前音量值</strong></em>：当前音量大小。</li>
+<li class=""><em><strong>最大音量值</strong></em>：最大音量大小。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="设置音量">设置音量<a href="#设置音量" class="hash-link" aria-label="设置音量的直接链接" title="设置音量的直接链接" translate="no">​</a></h3>
+<p>设置系统音量大小。</p>
+<blockquote>
+<p>使用场景：静音操作、音量调节等。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="设置音量" src="/TouchTool/assets/images/设置音量-b52281de36c80f5c114e406c07467126.jpg" width="3224" height="3237" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><strong>设置音量</strong>：要设置的音量流类型（媒体、铃声音量等）。</li>
+<li class=""><strong>音量值</strong>：要设置的音量大小。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="发送通知">发送通知<a href="#发送通知" class="hash-link" aria-label="发送通知的直接链接" title="发送通知的直接链接" translate="no">​</a></h3>
+<p>发送自定义通知到系统通知栏。</p>
+<blockquote>
+<p>使用场景：任务提醒、信息推送等。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="发送通知" src="/TouchTool/assets/images/发送通知-073548e349ba9ca8b38ed763ed894093.jpg" width="2204" height="3440" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><strong>标题</strong>：通知的标题文本。</li>
+<li class=""><strong>内容</strong>：通知的详细内容。</li>
+<li class=""><strong>图标</strong>：自定义通知图标。</li>
+<li class=""><strong>自动取消</strong>：点按后是否自动取消通知。</li>
+<li class=""><em><strong>点按执行</strong></em>：通知被点击后执行的连接的逻辑，这段逻辑是完全独立的，相当  于执行一个新任务。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="发送广播">发送广播<a href="#发送广播" class="hash-link" aria-label="发送广播的直接链接" title="发送广播的直接链接" translate="no">​</a></h3>
+<p>发送自定义系统广播。</p>
+<blockquote>
+<p>使用场景：与其他应用通信。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="发送广播" src="/TouchTool/assets/images/发送广播-44b31a1bb34980aaef7bc2fc968542b5.jpg" width="2267" height="3514" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><strong>应用或界面</strong>：指定要发送广播的应用与界面。</li>
+<li class=""><strong>广播动作</strong>：广播的Action字符串。</li>
+<li class=""><strong>分类(category)</strong>：广播的分类字符串。</li>
+<li class=""><strong>Uri数据</strong>：广播的Uri数据。</li>
+<li class=""><strong>参数</strong>：广播的数据。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="弹出提示">弹出提示<a href="#弹出提示" class="hash-link" aria-label="弹出提示的直接链接" title="弹出提示的直接链接" translate="no">​</a></h3>
+<p>弹出Toast提示文本。</p>
+<blockquote>
+<p>使用场景：临时提示信息。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="弹出提示" src="/TouchTool/assets/images/弹出提示-4827b77b65f1d198a10b661d65ccc6c3.jpg" width="2543" height="3237" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><strong>内容</strong>：要显示的提示文本。</li>
+<li class=""><strong>时长</strong>：Toast显示的时间（毫秒）。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="复制到剪贴板">复制到剪贴板<a href="#复制到剪贴板" class="hash-link" aria-label="复制到剪贴板的直接链接" title="复制到剪贴板的直接链接" translate="no">​</a></h3>
+<p>将指定内容复制到系统剪贴板  。</p>
+<blockquote>
+<p>使用场景：数据传递、文本复制等。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="复制到剪贴板" src="/TouchTool/assets/images/复制到剪贴板-a798a8fafb9612899cd9bd5b3d73f0fa.jpg" width="2883" height="3091" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><strong>文本</strong>：要复制到剪贴板的内容，支持文本与图片。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="从剪贴板读取">从剪贴板读取<a href="#从剪贴板读取" class="hash-link" aria-label="从剪贴板读取的直接链接" title="从剪贴板读取的直接链接" translate="no">​</a></h3>
+<p>读取系统剪贴板中的内容。</p>
+<blockquote>
+<p>使用场景：获取复制的文本。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="从剪贴板读取" src="/TouchTool/assets/images/从剪贴板读取-f62bdbd66d88547949479da71ac4d90f.jpg" width="2203" height="3237" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><em><strong>文本</strong></em>：输出剪贴板中的文本内容。</li>
+<li class=""><em><strong>图片</strong></em>：输出剪贴板中的图片内容。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="分享到">分享到<a href="#分享到" class="hash-link" aria-label="分享到的直接链接" title="分享到的直接链接" translate="no">​</a></h3>
+<p>将内容分享到指定的应用。</p>
+<blockquote>
+<p>使用场景：内容分享。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="分享到" src="/TouchTool/assets/images/分享到-4329fb83d92fa51a0956d1833867d206.jpg" width="2431" height="3350" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><strong>应用或界面</strong>：要分享到的应用或界面。</li>
+<li class=""><strong>对象</strong>：要分享的内容，支持文本与图片。</li>
+<li class=""><strong>作为</strong>：指定分享方式。<!-- -->
+<ul>
+<li class=""><strong>文字</strong>：分享文本内容。</li>
+<li class=""><strong>文件</strong>：分享文件。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="屏幕录制开关">屏幕录制开关<a href="#屏幕录制开关" class="hash-link" aria-label="屏幕录制开关的直接链接" title="屏幕录制开关的直接链接" translate="no">​</a></h3>
+<p>打开或关闭屏幕录制功能。</p>
+<blockquote>
+<p>使用场景：增强对屏幕变化敏感的任务。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="屏幕录制开关" src="/TouchTool/assets/images/屏幕录制开关-0ffe54bee66f4df4e2f49d8e59fd6d45.jpg" width="2714" height="3237" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><strong>关/开</strong>：开关屏幕录制服务。</li>
+<li class=""><strong>等待授权</strong>：等待屏幕录制服务授权。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="屏幕录制状态">屏幕录制状态<a href="#屏幕录制状态" class="hash-link" aria-label="屏幕录制状态的直接链接" title="屏幕录制状态的直接链接" translate="no">​</a></h3>
+<p>获取当前屏幕录制是否开启。</p>
+<blockquote>
+<p>使用场景：条件判断。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="屏幕录制状态" src="/TouchTool/assets/images/屏幕录制状态-1759b02739c594d748fc87a9790a824f.jpg" width="2892" height="2210" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><em><strong>结果</strong></em>：是否开启屏幕录制服务。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="开关屏幕">开关屏幕<a href="#开关屏幕" class="hash-link" aria-label="开关屏幕的直接链接" title="开关屏幕的直接链接" translate="no">​</a></h3>
+<p>打开或关闭设备屏幕。</p>
+<blockquote>
+<p>使用场景：省电、自动锁屏等。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="开关屏幕" src="/TouchTool/assets/images/开关屏幕-479a621d55f2c03e67a2dff501aecd7c.jpg" width="2688" height="3091" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><strong>开关</strong>：点亮或关闭屏幕。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="获取屏幕状态">获取屏幕状态<a href="#获取屏幕状态" class="hash-link" aria-label="获取屏幕状态的直接链接" title="获取屏幕状态的直接链接" translate="no">​</a></h3>
+<p>获取屏幕当前是亮屏、灭屏还是锁定状态。</p>
+<blockquote>
+<p>使用场景：条件判断。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="获取屏幕状态" src="/TouchTool/assets/images/获取屏幕状态-545e83ba2dd6fd83828987dfe4620be6.jpg" width="2502" height="3087" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><em><strong>锁屏状态</strong></em>：输出屏幕当前状态。<!-- -->
+<ul>
+<li class=""><em><strong>息屏</strong></em>：息屏状态。</li>
+<li class=""><em><strong>锁屏</strong></em>：亮屏但未解锁。</li>
+<li class=""><em><strong>解锁</strong></em>：已解锁状态。</li>
+</ul>
+</li>
+<li class=""><em><strong>分辨率</strong></em>：输出当前屏幕分辨率。</li>
+<li class=""><em><strong>是否竖屏</strong></em>：输出当前屏幕是否为竖屏。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="获取电池状态">获取电池状态<a href="#获取电池状态" class="hash-link" aria-label="获取电池状态的直接链接" title="获取电池状态的直接链接" translate="no">​</a></h3>
+<p>获取当前电池电量和充放电状态。</p>
+<blockquote>
+<p>使用场景：低电量处理、充电判断等。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="获取电池状态" src="/TouchTool/assets/images/获取电池状态-e1bd92760e016185ceaddfa6c75b8c3c.jpg" width="2892" height="2892" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><em><strong>状态</strong></em>：输出当前充电状态。<!-- -->
+<ul>
+<li class=""><em><strong>未知</strong></em>：未知状态。</li>
+<li class=""><em><strong>充电中</strong></em>：正在充电。</li>
+<li class=""><em><strong>放电中</strong></em>：正在充电，但是充电小于放电的速度。</li>
+<li class=""><em><strong>未充电</strong></em>：未充电。</li>
+<li class=""><em><strong>充满了</strong></em>：充电完成。</li>
+</ul>
+</li>
+<li class=""><em><strong>电量</strong></em>：输出当前电量百分比。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="获取网络状态">获取网络状态<a href="#获取网络状态" class="hash-link" aria-label="获取网络状态的直接链接" title="获取网络状态的直接链接" translate="no">​</a></h3>
+<p>获取当前网络连接状态。</p>
+<blockquote>
+<p>使用场景：网络条件判断。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="获取网络状态" src="/TouchTool/assets/images/获取网络状态-ec852af9c03f454b34f98d192ca00d40.jpg" width="2892" height="2210" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><em><strong>状态</strong></em>：网络类型，可选值如下。<!-- -->
+<ul>
+<li class=""><em><strong>无网络</strong></em>：无网络连接。</li>
+<li class=""><em><strong>移动数据</strong></em>：移动数据连接。</li>
+<li class=""><em><strong>WIFI</strong></em>：WIFI连接。</li>
+<li class=""><em><strong>VPN</strong></em>：VPN连接。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="获取wifi信息">获取WiFi信息<a href="#获取wifi信息" class="hash-link" aria-label="获取WiFi信息的直接链接" title="获取WiFi信息的直接链接" translate="no">​</a></h3>
+<p>获取当前连接的WiFi信息。</p>
+<blockquote>
+<p>使用场景：WiFi环境判断。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt=" 获取WiFi信息" src="/TouchTool/assets/images/获取WiFi信息-edf45514bc14b6d9b27939062600c23c.jpg" width="2502" height="3087" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><em><strong>WiFi名称</strong></em>：输出当前连接的WiFi名称。</li>
+<li class=""><em><strong>网关</strong></em>：输出当前连接的WiFi网关。</li>
+<li class=""><em><strong>IP</strong></em>：输出设备当前IP地址。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="获取蓝牙-设备">获取蓝牙 设备<a href="#获取蓝牙-设备" class="hash-link" aria-label="获取蓝牙 设备的直接链接" title="获取蓝牙 设备的直接链接" translate="no">​</a></h3>
+<p>获取当前已连接的蓝牙设备列表。</p>
+<blockquote>
+<p>使用场景：蓝牙设备判断。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="获取蓝牙设备" src="/TouchTool/assets/images/获取蓝牙设备-cadb3bb98b4aa38be8020908edc66275.jpg" width="2892" height="2210" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><em><strong>设备列表</strong></em>：输出已连接的蓝牙设备名称列表。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="获取日期">获取日期<a href="#获取日期" class="hash-link" aria-label="获取日期的直接链接" title="获取日期的直接链接" translate="no">​</a></h3>
+<p>获取当前日期。</p>
+<blockquote>
+<p>使用场景：日期判断、日期记录等。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="获取日期" src="/TouchTool/assets/images/获取日期-2ff44528b5c3fefc5a26a9bb057d9120.jpg" width="2210" height="3234" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><em><strong>年</strong></em>：当前年份。</li>
+<li class=""><em><strong>月</strong></em>：当前月份。</li>
+<li class=""><em><strong>日</strong></em>：当前日期。</li>
+<li class=""><em><strong>星期</strong></em>：当前星  期。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="获取时间">获取时间<a href="#获取时间" class="hash-link" aria-label="获取时间的直接链接" title="获取时间的直接链接" translate="no">​</a></h3>
+<p>获取当前时间。</p>
+<blockquote>
+<p>使用场景：时间判断、时间记录等。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="获取时间" src="/TouchTool/assets/images/获取时间-9f38dbf0e6d70804ce924a5072933510.jpg" width="1982" height="3347" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><em><strong>时</strong></em>：当前小时（24小时制）。</li>
+<li class=""><em><strong>分</strong></em>：当前分钟。</li>
+<li class=""><em><strong>秒</strong></em>：当前秒钟。</li>
+<li class=""><em><strong>毫秒</strong></em>：当前毫秒。</li>
+<li class=""><em><strong>时间戳</strong></em>：当前时间戳。</li>
+</ul></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="文件选项卡"><a class="pagination-nav__link pagination-nav__link--prev" href="/TouchTool/docs/actions/app"><div class="pagination-nav__sublabel">上一页</div><div class="pagination-nav__label">应用</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/TouchTool/docs/actions/number"><div class="pagination-nav__sublabel">下一页</div><div class="pagination-nav__label">数值</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#动作列表" class="table-of-contents__link toc-highlight">动作列表</a></li><li><a href="#详细说明" class="table-of-contents__link toc-highlight">详细说明</a><ul><li><a href="#执行shell命令" class="table-of-contents__link toc-highlight">执行Shell命令</a></li><li><a href="#模拟按键" class="table-of-contents__link toc-highlight">模拟按键</a></li><li><a href="#播放铃声" class="table-of-contents__link toc-highlight">播放铃声</a></li><li><a href="#停止铃声" class="table-of-contents__link toc-highlight">停止铃声</a></li><li><a href="#文本转语音" class="table-of-contents__link toc-highlight">文本转语音</a></li><li><a href="#震动" class="table-of-contents__link toc-highlight">震动</a></li><li><a href="#获取音量" class="table-of-contents__link toc-highlight">获取音量</a></li><li><a href="#设置音量" class="table-of-contents__link toc-highlight">设置音量</a></li><li><a href="#发送通知" class="table-of-contents__link toc-highlight">发送通知</a></li><li><a href="#发送广播" class="table-of-contents__link toc-highlight">发送广播</a></li><li><a href="#弹出提示" class="table-of-contents__link toc-highlight">弹出提示</a></li><li><a href="#复制到剪贴板" class="table-of-contents__link toc-highlight">复制到剪贴板</a></li><li><a href="#从剪贴板读取" class="table-of-contents__link toc-highlight">从剪贴板读取</a></li><li><a href="#分享到" class="table-of-contents__link toc-highlight">分享到</a></li><li><a href="#屏幕录制开关" class="table-of-contents__link toc-highlight">屏幕录制开关</a></li><li><a href="#屏幕录制状态" class="table-of-contents__link toc-highlight">屏幕录制状态</a></li><li><a href="#开关屏幕" class="table-of-contents__link toc-highlight">开关屏幕</a></li><li><a href="#获取屏幕状态" class="table-of-contents__link toc-highlight">获取屏幕状态</a></li><li><a href="#获取电池状态" class="table-of-contents__link toc-highlight">获取电池状态</a></li><li><a href="#获取网络状态" class="table-of-contents__link toc-highlight">获取网络状态</a></li><li><a href="#获取wifi信息" class="table-of-contents__link toc-highlight">获取WiFi信息</a></li><li><a href="#获取蓝牙-设备" class="table-of-contents__link toc-highlight">获取蓝牙 设备</a></li><li><a href="#获取日期" class="table-of-contents__link toc-highlight">获取日期</a></li><li><a href="#获取时间" class="table-of-contents__link toc-highlight">获取时间</a></li></ul></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">文档</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/TouchTool/docs/getting-started">快速开始</a></li><li class="footer__item"><a class="footer__link-item" href="/TouchTool/docs/actions/start">动作参考</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">更多</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/mr-bogey/TouchTool" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2026 TouchTool. Built with Docusaurus.</div></div></div></footer></div>
+</body>
+</html>

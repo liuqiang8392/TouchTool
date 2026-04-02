@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunktouch_tool_docs=globalThis.webpackChunktouch_tool_docs||[]).push([[647],{7121(o,s,e){e.r(s),e.d(s,{default:()=>h});e(6540);var c=e(4164),r=e(7559),t=e(5500),u=e(2831),a=e(1656),l=e(4848);function h(o){return(0,l.jsx)(t.e3,{className:(0,c.A)(r.G.wrapper.docsPages),children:(0,l.jsx)(a.A,{children:(0,u.v)(o.route.routes)})})}}}]);

@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunktouch_tool_docs=globalThis.webpackChunktouch_tool_docs||[]).push([[235],{8552(o){o.exports=JSON.parse('{"name":"docusaurus-plugin-content-pages","id":"default"}')}}]);

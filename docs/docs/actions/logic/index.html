@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="zh-Hans" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-actions/logic" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.9.2">
+<title data-rh="true">逻辑 | 点击助手文档</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://mr-bogey.github.io/TouchTool/docs/actions/logic"><meta data-rh="true" property="og:locale" content="zh_Hans"><meta data-rh="true" name="docusaurus_locale" content="zh-Hans"><meta data-rh="true" name="docsearch:language" content="zh-Hans"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="逻辑 | 点击助手文档"><meta data-rh="true" name="description" content="逻辑类动作用于控制任务的执行流程，实现条件判断、循环、分支等逻辑结构。"><meta data-rh="true" property="og:description" content="逻辑类动作用于控制任务的执行流程，实现条件判断、循环、分支等逻辑结构。"><link data-rh="true" rel="icon" href="/TouchTool/icon.svg"><link data-rh="true" rel="canonical" href="https://mr-bogey.github.io/TouchTool/docs/actions/logic"><link data-rh="true" rel="alternate" href="https://mr-bogey.github.io/TouchTool/docs/actions/logic" hreflang="zh-Hans"><link data-rh="true" rel="alternate" href="https://mr-bogey.github.io/TouchTool/docs/actions/logic" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"逻辑","item":"https://mr-bogey.github.io/TouchTool/docs/actions/logic"}]}</script><link rel="stylesheet" href="/TouchTool/assets/css/styles.4a572f82.css">
+<script src="/TouchTool/assets/js/runtime~main.2ae15beb.js" defer="defer"></script>
+<script src="/TouchTool/assets/js/main.d556d3b1.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>document.documentElement.setAttribute("data-theme","dark"),document.documentElement.setAttribute("data-theme-choice","dark"),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="跳到主要内容"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">跳到主要内容</a></div><nav aria-label="主导航" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="切换导航栏" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/TouchTool/"><div class="navbar__logo"><img src="/TouchTool/icon.svg" alt="TouchTool Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/TouchTool/icon.svg" alt="TouchTool Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">点击助手</b></a><a class="navbar__item navbar__link" href="/TouchTool/docs/getting-started">快速开始</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://github.com/mr-bogey/TouchTool" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link github-link">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="回到顶部" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="文档侧边栏" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/TouchTool/docs/getting-started"><span title="快速开始" class="linkLabel_WmDU">快速开始</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" href="/TouchTool/docs/actions/start"><span title="预设动作" class="categoryLinkLabel_W154">预设动作</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/start"><span title="开始" class="linkLabel_WmDU">开始</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/TouchTool/docs/actions/logic"><span title="逻辑" class="linkLabel_WmDU">逻辑</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/normal"><span title="通用" class="linkLabel_WmDU">通用</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/click"><span title="点击" class="linkLabel_WmDU">点击</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/app"><span title="应用" class="linkLabel_WmDU">应用</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/system"><span title="系统" class="linkLabel_WmDU">系统</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/number"><span title="数值" class="linkLabel_WmDU">数值</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/string"><span title="文本" class="linkLabel_WmDU">文本</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/bool"><span title="条件" class="linkLabel_WmDU">条件</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/node"><span title="控件" class="linkLabel_WmDU">控件</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/image"><span title="图像" class="linkLabel_WmDU">图像</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/color"><span title="颜色" class="linkLabel_WmDU">颜色</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/area"><span title="区域" class="linkLabel_WmDU">区域</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/point"><span title="位置" class="linkLabel_WmDU">位置</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/list"><span title="列表" class="linkLabel_WmDU">列表</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/actions/map"><span title="字典" class="linkLabel_WmDU">字典</span></a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="true" href="/TouchTool/docs/custom/task"><span title="自定义" class="categoryLinkLabel_W154">自定义</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/custom/task"><span title="任务" class="linkLabel_WmDU">任务</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/TouchTool/docs/custom/variable"><span title="变量" class="linkLabel_WmDU">变量</span></a></li></ul></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="页面路径"><ul class="breadcrumbs"><li class="breadcrumbs__item"><a aria-label="主页面" class="breadcrumbs__link" href="/TouchTool/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">预设动作</span></li><li class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link">逻辑</span></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">本页总览</button></div><div class="theme-doc-markdown markdown"><header><h1>逻辑</h1></header>
+<p>逻辑类动作用于控制任务的执行流程，实现条件判断、循环、分支等逻辑结构。</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="动作列表">动作列表<a href="#动作列表" class="hash-link" aria-label="动作列表的直接链接" title="动作列表的直接链接" translate="no">​</a></h2>
+<table><thead><tr><th>动作类型</th><th>功能说明</th></tr></thead><tbody><tr><td>如果…就…</td><td>满足条件时执行，否则执行未达成节点</td></tr><tr><td>等待条件成立</td><td>在一定时间内满足条件就执行，否则执行未达成节点</td></tr><tr><td>选择执行</td><td>根据文本值执行对应针脚</td></tr><tr><td>手动选择执行</td><td>弹出选择窗口供使用者手动选择</td></tr><tr><td>循环执行…次</td><td>循环多次执行节点</td></tr><tr><td>条件循环执行</td><td>满足条件时执行，否则执行完成节点</td></tr><tr><td>顺序执行</td><td>执行针脚从左到右顺序执行</td></tr><tr><td>随机执行</td><td>从所有执行针脚中随机一个执行</td></tr><tr><td>并行执行</td><td>多条执行并行执行，直到超时或者达成指定完成数量</td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="详细说明">详细说明<a href="#详细说明" class="hash-link" aria-label="详细说明的直接链接" title="详细说明的直接链接" translate="no">​</a></h2>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="如果就">如果…就…<a href="#如果就" class="hash-link" aria-label="如果…就…的直接链接" title="如果…就…的直接链接" translate="no">​</a></h3>
+<p>基础的条件判断节点，当条件 满足时执行&quot;执行&quot;分支，否则执行&quot;未达成&quot;分支。</p>
+<blockquote>
+<p>使用场景：根据不同条件执行不同操作。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="如果…就…" src="/TouchTool/assets/images/如果…就…-e00a2da6ee13e89a15746296f1a99b18.jpg" width="2688" height="3091" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><strong>条件</strong>：判断条件。</li>
+<li class=""><em><strong>执行(底部)</strong></em>：条件为真 时执行的分支。</li>
+<li class=""><em><strong>未达成</strong></em>：条件为假时执行的分支。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="等待条件成立">等待条件成立<a href="#等待条件成立" class="hash-link" aria-label="等待条件成立的直接链接" title="等待条件成立的直接链接" translate="no">​</a></h3>
+<p>在指定时间内等待条件成立，如果条件成立则继续“执行”，否则执行“未达成”分支。</p>
+<blockquote>
+<p>使用场景：等待某个界面出现、等待某个控件出现等。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="等待条件成立" src="/TouchTool/assets/images/等待条件成立-9aaf710a92f7105503ebd94844778430.jpg" width="2885" height="3350" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><strong>超时</strong>：等待超时时间（毫秒）。</li>
+<li class=""><strong>检查间隔</strong>：检查条件成立间隔时间（毫秒）。</li>
+<li class=""><strong>条件</strong>：等待的条件。</li>
+<li class=""><em><strong>执行(底部)</strong></em>：条件成立时执行的分支。</li>
+<li class=""><em><strong>未达成</strong></em>：超时后执行的分支。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="选择执行">选择执行<a href="#选择执行" class="hash-link" aria-label="选择执行的直接链接" title="选择执行的直接链接" translate="no">​</a></h3>
+<p>类似于switch语句，根据输入的文本值选择执行对应的分支。</p>
+<blockquote>
+<p>使用场景：多条件分支处理。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="选择执行" src="/TouchTool/assets/images/选择执行-6ae087cfd1ee0d65582f9d230c8e1368.jpg" width="3438" height="2220" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><strong>文本</strong>：选择条件值。</li>
+<li class=""><em><strong>默认</strong></em>：没有匹配到任何选项时执行的分支。</li>
+<li class=""><em><strong>添加执行</strong></em>：添加一个执行分支，每个选项对应一个执行分支。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="手动选择执行">手动选择执行<a href="#手动选择执行" class="hash-link" aria-label="手动选择执行的直接链接" title="手动选择执行的直接链接" translate="no">​</a></h3>
+<p>弹出选择窗口，让用户手动选择要执行的分支。</p>
+<blockquote>
+<p>使用场景：需要用户参与决策的场景。</p>
+</blockquote>
+<table><thead><tr><th>记忆位置</th><th>手动选择</th></tr></thead><tbody><tr><td><img decoding="async" loading="lazy" alt="手动选择执行" src="/TouchTool/assets/images/手动选择执行-370f3d6ff1f3e670ea8e9c160db6183e.jpg" width="3490" height="3049" class="img_ev3q"></td><td><img decoding="async" loading="lazy" alt="手动选择执行" src="/TouchTool/assets/images/手动选择执行2-ad5c195d5a6b4d56e69ed1619c80f687.jpg" width="3672" height="3239" class="img_ev3q"></td></tr></tbody></table>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><strong>超时</strong>：选择超时时间（毫秒），超时后执行&quot;默认&quot;分支，0为无限等待。</li>
+<li class=""><strong>位置</strong>：选择窗口显示位置。<!-- -->
+<ul>
+<li class=""><strong>记忆位置</strong>：显示在记忆位置的窗口，用户选择后记住位置。</li>
+<li class=""><strong>手动 选择</strong>：设置自定义位置。<!-- -->
+<ul>
+<li class=""><strong>窗相对屏位置</strong>：指定悬浮窗锚点的相对屏幕锚点的位置。</li>
+<li class=""><strong>悬浮窗锚点</strong>：指定悬浮窗锚点。</li>
+<li class=""><strong>屏幕锚点</strong>：指定屏幕锚点。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class=""><em><strong>添加执行</strong></em>：添加一个执行分支，每个选项对应一个执行分支。</li>
+<li class=""><em><strong>默认</strong></em>：没有选择任何选项时执行 的分支。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="循环执行次">循环执行…次<a href="#循环执行次" class="hash-link" aria-label="循环执行…次的直接链接" title="循环执行…次的直接链接" translate="no">​</a></h3>
+<p>指定循环次数，重复执行某个操作。</p>
+<blockquote>
+<p>使用场景：批量操作、重复点击等。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="循环执行…次" src="/TouchTool/assets/images/循环执行…次-f3ba2abf448248472f58bf271743e4ba.jpg" width="3339" height="3350" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><strong>跳出循环</strong>：执行后在下一轮结束循环。</li>
+<li class=""><strong>开始值</strong>：指定循环开始值。</li>
+<li class=""><strong>结束值</strong>：指定循环结束值，结束值可以小于开始值，这时为倒序循环。</li>
+<li class=""><strong>步长</strong>：循环步长，正数。</li>
+<li class=""><em><strong>当前值</strong></em>：当前循环值。</li>
+<li class=""><em><strong>执行(底部)</strong></em>：连接要循环执行的逻辑。</li>
+<li class=""><em><strong>完成</strong></em>：循环完成后执行的分支。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="条件循环执行">条件循环执行<a href="#条件循环执行" class="hash-link" aria-label="条件循环执行的直接链接" title="条件循环  执行的直接链接" translate="no">​</a></h3>
+<p>当条件满足时持续循环执行，条件不满足时退出循环。</p>
+<blockquote>
+<p>使用场景：持续滚动直到找到目标、持续刷新直到数据更新等。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="条件循环执行" src="/TouchTool/assets/images/条件循环执行-21f27cb8837e4e536ef129d4b16df883.jpg" width="2688" height="3091" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><strong>条件</strong>：循环条件，条件为真时继续循环，否则退出循环。</li>
+<li class=""><em><strong>执行(底部)</strong></em>：连接要循环执行的逻辑。</li>
+<li class=""><strong>完成</strong>：循环完成后执行的分支。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="顺序执行">顺序执行<a href="#顺序执行" class="hash-link" aria-label="顺序执行的直接链接" title="顺序执行的直接链接" translate="no">​</a></h3>
+<p>将多个执行分支按从左到右的顺序依次执行。</p>
+<blockquote>
+<p>使用场景：需要依次执行多个步骤的场景。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="顺序执行" src="/TouchTool/assets/images/顺序执行-beea445276eb3e5029cf63448e59d680.jpg" width="2494" height="3091" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><em><strong>添加执行</strong></em>：添加一个执行分支。</li>
+<li class=""><em><strong>完成</strong></em>：顺序执行完成后执行的分支。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="随机执行">随机执行<a href="#随机执行" class="hash-link" aria-label="随机执行的直接链接" title="随机执行的直接链接" translate="no">​</a></h3>
+<p>从多个执行分支中随机选择一个执行。</p>
+<blockquote>
+<p>使用场景：随机操作、模拟人类行为等。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="随机执行" src="/TouchTool/assets/images/随机执行-9923ccc2576226e182481a72ab93a939.jpg" width="3490" height="2475" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><strong>执行次数</strong>：随机执行分支数量。</li>
+<li class=""><strong>允许重复</strong>：是否允许执行已执行过的分支，开启后可能导致执行次数少于指定次数。</li>
+<li class=""><em><strong>添加执行</strong></em>：添加一个执行分支。</li>
+<li class=""><em><strong>完成</strong></em>：随机执行完成后执行的分支。</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="并行执行">并行执行<a href="#并行执行" class="hash-link" aria-label="并行执行的直接链接" title="并行执行的直接链接" translate="no">​</a></h3>
+<p>同时执行多个分支，可以设置超时时间和完成数量条件。</p>
+<blockquote>
+<p>使用场景：同时监控多个条件、并行处理多个任务等。</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="并行执行" src="/TouchTool/assets/images/并行执行-1012ec470b8443bff584a2fc505139f6.jpg" width="3490" height="2475" class="img_ev3q"></p>
+<p><strong>针脚说明</strong>：</p>
+<ul>
+<li class=""><strong>超时</strong>：并行执行的超时时间（毫秒），超时后结束所有分支并执行&quot;完成&quot;分支。</li>
+<li class=""><strong>完成数</strong>：需要完成的执行数量，达到此数量后停止其他执行。</li>
+<li class=""><em><strong>添加执行</strong></em>：添加一个执行分支。</li>
+<li class=""><em><strong>完成</strong></em>：并行执行完成后执行的分支。</li>
+</ul></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="文件选项卡"><a class="pagination-nav__link pagination-nav__link--prev" href="/TouchTool/docs/actions/start"><div class="pagination-nav__sublabel">上一页</div><div class="pagination-nav__label">开始</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/TouchTool/docs/actions/normal"><div class="pagination-nav__sublabel">下一页</div><div class="pagination-nav__label">通用</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#动作列表" class="table-of-contents__link toc-highlight">动作列表</a></li><li><a href="#详细说明" class="table-of-contents__link toc-highlight">详细说明</a><ul><li><a href="#如果就" class="table-of-contents__link toc-highlight">如果…就…</a></li><li><a href="#等待条件成立" class="table-of-contents__link toc-highlight">等待条件成立</a></li><li><a href="#选择执行" class="table-of-contents__link toc-highlight">选择执行</a></li><li><a href="#手动选择执行" class="table-of-contents__link toc-highlight">手动选择执行</a></li><li><a href="#循环执行次" class="table-of-contents__link toc-highlight">循环执行…次</a></li><li><a href="#条件循环执行" class="table-of-contents__link toc-highlight">条件循环执行</a></li><li><a href="#顺序执行" class="table-of-contents__link toc-highlight">顺序执行</a></li><li><a href="#随机执行" class="table-of-contents__link toc-highlight">随机执行</a></li><li><a href="#并行执行" class="table-of-contents__link toc-highlight">并行执行</a></li></ul></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">文档</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/TouchTool/docs/getting-started">快速开始</a></li><li class="footer__item"><a class="footer__link-item" href="/TouchTool/docs/actions/start">动作参考</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">更多</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/mr-bogey/TouchTool" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2026 TouchTool. Built with Docusaurus.</div></div></div></footer></div>
+</body>
+</html>
