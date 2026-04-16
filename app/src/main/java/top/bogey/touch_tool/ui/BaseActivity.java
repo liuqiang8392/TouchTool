@@ -29,7 +29,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import top.bogey.touch_tool.R;
-import top.bogey.touch_tool.bean.save.SettingSaver;
+import top.bogey.touch_tool.bean.save.setting.SettingSaver;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.callback.ActivityResultCallback;
 
@@ -293,7 +293,7 @@ public class BaseActivity extends AppCompatActivity {
     public void restartAccessibilityServiceBySecurePermission() {
         // 界面打开时尝试恢复无障碍服务
         // 如果应用服务设置关闭了，就啥都不管
-        if (!SettingSaver.getInstance().isServiceEnabled()) return;
+        if (!SettingSaver.APP_SERVICE.get()) return;
 
         // 是否有权限去重启无障碍服务
         if (checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) != PackageManager.PERMISSION_GRANTED) return;

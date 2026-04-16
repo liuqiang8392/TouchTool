@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import top.bogey.touch_tool.R;
-import top.bogey.touch_tool.bean.save.SettingSaver;
+import top.bogey.touch_tool.bean.save.setting.SettingSaver;
 import top.bogey.touch_tool.service.TaskInfoSummary;
 
 public class NotificationService extends NotificationListenerService {
@@ -22,7 +22,7 @@ public class NotificationService extends NotificationListenerService {
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
         super.onNotificationPosted(sbn);
-        if (SettingSaver.getInstance().getNotificationType() != 1) return;
+        if (SettingSaver.PERMISSION_NOTIFICATION.get() != 1) return;
         String packageName = sbn.getPackageName();
         Map<String, String> content = new HashMap<>();
         Bundle extras = sbn.getNotification().extras;

@@ -21,7 +21,7 @@ import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.start.ManualStartAction;
 import top.bogey.touch_tool.bean.action.start.StartAction;
-import top.bogey.touch_tool.bean.save.SettingSaver;
+import top.bogey.touch_tool.bean.save.setting.SettingSaver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.FloatPlayBinding;
 import top.bogey.touch_tool.service.ITaskListener;
@@ -50,7 +50,7 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
     private final FloatPlayBinding binding;
 
     private final Handler handler;
-    private final int padding = SettingSaver.getInstance().getManualPlayViewPadding() * UNIT_DP_SIZE;
+    private final int padding = SettingSaver.MANUAL_PLAY_VIEW_PADDING.get() * UNIT_DP_SIZE;
 
     private int runningTaskCount = 0;
 
@@ -97,12 +97,12 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
         binding = FloatPlayBinding.inflate(LayoutInflater.from(context), this, true);
         DisplayUtil.setViewMargin(binding.playButtonBox, padding, 0, padding, 0);
 
-        int alpha = SettingSaver.getInstance().getNotPlayHideAlpha();
+        int alpha = SettingSaver.MANUAL_PLAY_VIEW_NOT_USED_FADE_LEVEL.get();
         setAlpha(NOT_PLAY_HIDE ? alpha / 100f : 1f);
 
         handler = new Handler(Looper.getMainLooper());
 
-        int size = SettingSaver.getInstance().getManualPlayViewCloseSize();
+        int size = SettingSaver.MANUAL_PLAY_VIEW_ZOOM_SIZE.get();
         int buttonDpSize = BUTTON_DP_SIZE * 2 / 3;
         int growDpSize = (BUTTON_DP_SIZE - buttonDpSize) / 2;
         int px = (int) DisplayUtil.dp2px(context, buttonDpSize + growDpSize * (size - 1));
@@ -120,7 +120,7 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
         });
 
         binding.dragSpaceButton.setOnLongClickListener(v -> {
-            hide(SettingSaver.getInstance().getManualPlayHideType());
+            hide(SettingSaver.MANUAL_PLAY_VIEW_HIDE_TYPE.get());
             return true;
         });
 
@@ -136,7 +136,7 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
         });
 
         binding.closeButton.setOnLongClickListener(v -> {
-            hide(SettingSaver.getInstance().getManualPlayHideType());
+            hide(SettingSaver.MANUAL_PLAY_VIEW_HIDE_TYPE.get());
             return true;
         });
 
@@ -219,14 +219,14 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
     }
 
     private void refreshExpand(boolean expand) {
-        SettingSaver.getInstance().setManualPlayViewState(expand);
+        SettingSaver.MANUAL_PLAY_VIEW_EXPAND_STATE.set(expand);
         binding.playButtonBox.setVisibility(expand ? VISIBLE : GONE);
         binding.dragSpace.setVisibility(expand ? GONE : VISIBLE);
         binding.dragSpaceButton.setIconResource(inLeft() ? R.drawable.icon_keyboard_arrow_right : R.drawable.icon_keyboard_arrow_left);
     }
 
     private void refreshCorner(boolean dragging) {
-        boolean expand = SettingSaver.getInstance().getManualPlayViewState();
+        boolean expand = SettingSaver.MANUAL_PLAY_VIEW_EXPAND_STATE.get();
         int buttonDpSize = BUTTON_DP_SIZE * 2 / 3;
         float cornerSize = DisplayUtil.dp2px(getContext(), expand ? BUTTON_DP_SIZE / 2f : buttonDpSize / 2f);
         if (dragging) {
@@ -285,7 +285,7 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
     }
 
     private boolean isHideNotRunningPlayItem() {
-        return SettingSaver.getInstance().isManualPlayingHide() && runningTaskCount > 0;
+        return SettingSaver.MANUAL_PLAY_VIEW_BUTTON_HIDE_WHEN_EXECUTE.get() && runningTaskCount > 0;
     }
 
     private boolean inLeft() {
@@ -299,14 +299,14 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         if (changed) {
-            refreshExpand(SettingSaver.getInstance().getManualPlayViewState());
+            refreshExpand(SettingSaver.MANUAL_PLAY_VIEW_EXPAND_STATE.get());
             toDockSide();
         }
     }
 
     @Override
     public void show() {
-        Point pos = SettingSaver.getInstance().getManualPlayViewPos();
+        Point pos = SettingSaver.MANUAL_PLAY_VIEW_POS.get();
         FloatWindow.with(MainApplication.getInstance().getService())
                 .setTag(PlayFloatView.class.getName())
                 .setLayout(this)
@@ -315,7 +315,7 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
                 .setLocation(EAnchor.CENTER_RIGHT, pos.x, pos.y)
                 .setCallback(new PlayFloatCallback())
                 .setSpecial(true)
-                .setHideByScreenshot(SettingSaver.getInstance().isManualPlayHideWhenScreenshot())
+                .setHideByScreenshot(SettingSaver.MANUAL_PLAY_VIEW_HIDE_WHEN_SCREENSHOT.get())
                 .show();
     }
 
@@ -345,9 +345,9 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
     private void playHide(boolean hide) {
         handler.removeCallbacksAndMessages(null);
         if (hide) {
-            if (runningTaskCount == 0 && SettingSaver.getInstance().isNotPlayHide()) {
+            if (runningTaskCount == 0 && SettingSaver.MANUAL_PLAY_VIEW_NOT_USED_FADE.get()) {
                 handler.postDelayed(() -> {
-                    int alpha = SettingSaver.getInstance().getNotPlayHideAlpha();
+                    int alpha = SettingSaver.MANUAL_PLAY_VIEW_NOT_USED_FADE_LEVEL.get();
                     animate().alpha(alpha / 100f);
                     NOT_PLAY_HIDE = true;
                 }, 10000);
@@ -415,12 +415,12 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
             FloatWindowHelper helper = FloatWindow.getHelper(PlayFloatView.class.getName());
             if (helper != null) {
                 Point point = helper.getRelativePoint();
-                SettingSaver.getInstance().setManualPlayViewPos(point);
+                SettingSaver.MANUAL_PLAY_VIEW_POS.set(point);
             }
 
             View view = FloatWindow.getView(PlayFloatView.class.getName());
             if (view instanceof PlayFloatView playFloatView) {
-                playFloatView.refreshExpand(SettingSaver.getInstance().getManualPlayViewState());
+                playFloatView.refreshExpand(SettingSaver.MANUAL_PLAY_VIEW_EXPAND_STATE.get());
                 playFloatView.refreshCorner(false);
                 playFloatView.playHide(true);
             }

@@ -14,11 +14,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
-import top.bogey.touch_tool.bean.save.SettingSaver;
+import top.bogey.touch_tool.bean.save.setting.SettingSaver;
 import top.bogey.touch_tool.bean.save.task.TaskSaver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.ActivityMainBinding;
-import top.bogey.touch_tool.service.TaskInfoSummary;
 import top.bogey.touch_tool.ui.blueprint.BlueprintView;
 import top.bogey.touch_tool.ui.task.TaskViewDirections;
 import top.bogey.touch_tool.ui.tool.task_manager.ImportTaskDialog;
@@ -66,7 +65,7 @@ public class MainActivity extends FloatViewActivity {
             }
         });
 
-        String runningError = SettingSaver.getInstance().getRunningError();
+        String runningError = SettingSaver.APP_RUNNING_ERROR.get();
         if (runningError != null && !runningError.isEmpty()) {
             new MaterialAlertDialogBuilder(this)
                     .setTitle(R.string.dialog_title)
@@ -82,7 +81,7 @@ public class MainActivity extends FloatViewActivity {
                     })
                     .setNeutralButton(R.string.cancel, null)
                     .show();
-            SettingSaver.getInstance().setRunningError(null);
+            SettingSaver.APP_RUNNING_ERROR.set("");
         }
 
         handleIntent(getIntent());

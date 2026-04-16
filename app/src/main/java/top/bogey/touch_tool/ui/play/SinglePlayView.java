@@ -14,7 +14,7 @@ import java.util.UUID;
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.bean.action.start.ManualStartAction;
 import top.bogey.touch_tool.bean.action.start.StartAction;
-import top.bogey.touch_tool.bean.save.SettingSaver;
+import top.bogey.touch_tool.bean.save.setting.SettingSaver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.TaskInfoSummary;
 import top.bogey.touch_tool.service.TaskRunnable;
@@ -55,9 +55,9 @@ public class SinglePlayView extends PlayFloatItemView implements FloatInterface 
 
     public SinglePlayView(@NonNull Context context, Task task, StartAction action) {
         super(context, task, action);
-        size = SettingSaver.getInstance().getManualPlayViewSingleSize();
+        width = SettingSaver.MANUAL_PLAY_VIEW_SINGLE_BUTTON_SIZE.get();
 
-        int px = (int) DisplayUtil.dp2px(context, PlayFloatView.BUTTON_DP_SIZE + PlayFloatView.UNIT_GROW_DP_SIZE * (size - 1));
+        int px = (int) DisplayUtil.dp2px(context, PlayFloatView.BUTTON_DP_SIZE + PlayFloatView.UNIT_GROW_DP_SIZE * (width - 1));
         DisplayUtil.setViewWidth(binding.cardLayout, px);
         DisplayUtil.setViewHeight(binding.cardLayout, px);
         binding.circleProgress.setIndicatorSize(px);
@@ -90,7 +90,7 @@ public class SinglePlayView extends PlayFloatItemView implements FloatInterface 
                 .setLocation(action.getGravity(), action.getShowPos().x, action.getShowPos().y - statusBarHeight)
                 .setDragAble(!action.isLock())
                 .setSpecial(true)
-                .setHideByScreenshot(SettingSaver.getInstance().isManualPlayHideWhenScreenshot())
+                .setHideByScreenshot(SettingSaver.MANUAL_PLAY_VIEW_HIDE_WHEN_SCREENSHOT.get())
                 .show();
     }
 

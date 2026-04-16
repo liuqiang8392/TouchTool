@@ -30,13 +30,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Stack;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Pattern;
 
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.start.StartAction;
 import top.bogey.touch_tool.bean.action.task.CustomEndAction;
 import top.bogey.touch_tool.bean.action.task.CustomStartAction;
-import top.bogey.touch_tool.bean.save.SettingSaver;
+import top.bogey.touch_tool.bean.save.setting.SettingSaver;
 import top.bogey.touch_tool.bean.save.task.TaskSaver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.ViewBlueprintBinding;
@@ -165,6 +166,7 @@ public class BlueprintView extends Fragment {
         DisplayUtil.setViewMargin(binding.backBox, (int) offset, (int) (offset + statusBarHeight), 0, 0);
         DisplayUtil.setViewMargin(binding.saveBox, 0, (int) (offset + statusBarHeight), (int) offset, 0);
         DisplayUtil.setViewMargin(binding.searchBox, 0, (int) (offset + statusBarHeight), 0, 0);
+        DisplayUtil.setViewMargin(binding.searchOptionBox, 0, (int) (offset * 6 + statusBarHeight), 0, 0);
 
         binding.backButton.setOnClickListener(v -> {
             if (taskStack.size() > 1) {
@@ -181,6 +183,7 @@ public class BlueprintView extends Fragment {
 
         binding.searchButton.addOnCheckedChangeListener((buttonView, isChecked) -> {
             binding.searchBox.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+            binding.searchOptionBox.setVisibility(isChecked ? View.VISIBLE : View.GONE);
             binding.searchEdit.setText("");
         });
 
@@ -190,42 +193,77 @@ public class BlueprintView extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 searchActions.clear();
+                binding.resultCount.setText("");
             }
         });
 
         binding.nextButton.setOnClickListener(v -> {
             if (searchActions.isEmpty()) {
                 searchActions.addAll(searchActions());
+                binding.resultCount.setText(getString(R.string.search_card_count, 0, 0));
                 if (searchActions.isEmpty()) return;
 
                 index.set(0);
                 Task currTask = taskStack.peek();
                 tryFocusAction(currTask, searchActions.get(index.get()));
+                binding.resultCount.setText(getString(R.string.search_card_count, index.get() + 1, searchActions.size()));
             } else {
                 index.getAndIncrement();
                 if (index.get() >= searchActions.size()) {
                     index.set(0);
                 }
                 tryFocusAction(taskStack.peek(), searchActions.get(index.get()));
+                binding.resultCount.setText(getString(R.string.search_card_count, index.get() + 1, searchActions.size()));
             }
         });
 
         binding.preButton.setOnClickListener(v -> {
             if (searchActions.isEmpty()) {
                 searchActions.addAll(searchActions());
+                binding.resultCount.setText(getString(R.string.search_card_count, 0, 0));
                 if (searchActions.isEmpty()) return;
 
                 index.set(searchActions.size() - 1);
                 Task currTask = taskStack.peek();
                 tryFocusAction(currTask, searchActions.get(index.get()));
+                binding.resultCount.setText(getString(R.string.search_card_count, index.get() + 1, searchActions.size()));
             } else {
                 index.getAndDecrement();
                 if (index.get() < 0) {
                     index.set(searchActions.size() - 1);
                 }
                 tryFocusAction(taskStack.peek(), searchActions.get(index.get()));
+                binding.resultCount.setText(getString(R.string.search_card_count, index.get() + 1, searchActions.size()));
             }
         });
+
+        binding.pinyinCheck.addOnCheckedChangeListener((buttonView, isChecked) -> {
+            SettingSaver.BLUEPRINT_SEARCH_WITH_PINYIN.set(isChecked);
+            searchActions.clear();
+            binding.resultCount.setText("");
+        });
+        binding.pinyinCheck.setChecked(SettingSaver.BLUEPRINT_SEARCH_WITH_PINYIN.get());
+
+        binding.posCheck.addOnCheckedChangeListener((buttonView, isChecked) -> {
+            SettingSaver.BLUEPRINT_SEARCH_WITH_POSITION.set(isChecked);
+            searchActions.clear();
+            binding.resultCount.setText("");
+        });
+        binding.posCheck.setChecked(SettingSaver.BLUEPRINT_SEARCH_WITH_POSITION.get());
+
+        binding.caseCheck.addOnCheckedChangeListener((buttonView, isChecked) -> {
+            SettingSaver.BLUEPRINT_SEARCH_WITH_CASE.set(isChecked);
+            searchActions.clear();
+            binding.resultCount.setText("");
+        });
+        binding.caseCheck.setChecked(SettingSaver.BLUEPRINT_SEARCH_WITH_CASE.get());
+
+        binding.regCheck.addOnCheckedChangeListener((buttonView, isChecked) -> {
+            SettingSaver.BLUEPRINT_SEARCH_WITH_REGEX.set(isChecked);
+            searchActions.clear();
+            binding.resultCount.setText("");
+        });
+        binding.regCheck.setChecked(SettingSaver.BLUEPRINT_SEARCH_WITH_REGEX.get());
 
         binding.moreButton.setOnClickListener(v -> {
             PopupMenu popupMenu = new PopupMenu(requireContext(), binding.saveBox);
@@ -300,11 +338,11 @@ public class BlueprintView extends Fragment {
 
         binding.editButton.setOnClickListener(v -> {
             boolean editable = !binding.editButton.isChecked();
-            SettingSaver.getInstance().setBlueprintEditable(editable);
+            SettingSaver.BLUEPRINT_EDITABLE.set(editable);
             binding.cardLayout.setEditable(editable);
         });
-        binding.editButton.setChecked(!SettingSaver.getInstance().isBlueprintEditable());
-        binding.cardLayout.setEditable(SettingSaver.getInstance().isBlueprintEditable());
+        binding.editButton.setChecked(!SettingSaver.BLUEPRINT_EDITABLE.get());
+        binding.cardLayout.setEditable(SettingSaver.BLUEPRINT_EDITABLE.get());
 
         binding.pasteButton.setOnClickListener(v -> {
             binding.cardLayout.cleanSelectedCards();
@@ -469,15 +507,54 @@ public class BlueprintView extends Fragment {
         List<Action> searchActions = new ArrayList<>();
         Editable text = binding.searchEdit.getText();
         if (text == null || text.length() == 0) return searchActions;
+
+        boolean pinyin = binding.pinyinCheck.isChecked();
+        boolean matchPos = binding.posCheck.isChecked();
+        boolean matchCase = binding.caseCheck.isChecked();
+        boolean regex = binding.regCheck.isChecked();
+
         String searchString = text.toString();
         Task currTask = taskStack.peek();
         for (Action action : currTask.getActions()) {
-            if (AppUtil.isStringContainsWithPinyin(action.getFullDescription(), searchString)) {
-                searchActions.add(action);
-            } else {
+            boolean matched = false;
+            if (matchPos) {
                 Point pos = action.getPos();
                 String posString = pos.x + "," + pos.y;
-                if (posString.contains(searchString)) {
+                if (regex) {
+                    Pattern pattern = AppUtil.getPattern(searchString);
+                    if (pattern != null && pattern.matcher(posString).find()) {
+                        searchActions.add(action);
+                        matched = true;
+                    }
+                } else {
+                    if (posString.contains(searchString)) {
+                        searchActions.add(action);
+                        matched = true;
+                    }
+                }
+            }
+            if (!matched) {
+                String actionString = action.getFullDescription();
+                if (!matchCase) {
+                    searchString = searchString.toLowerCase();
+                    actionString = actionString.toLowerCase();
+                }
+                if (regex) {
+                    Pattern pattern = AppUtil.getPattern(searchString);
+                    if (pattern != null && pattern.matcher(actionString).find()) {
+                        searchActions.add(action);
+                        matched = true;
+                    }
+                } else {
+                    if (actionString.contains(searchString)) {
+                        searchActions.add(action);
+                        matched = true;
+                    }
+                }
+            }
+
+            if (!matched && pinyin) {
+                if (AppUtil.isPinyinContains(action.getFullDescription(), searchString)) {
                     searchActions.add(action);
                 }
             }

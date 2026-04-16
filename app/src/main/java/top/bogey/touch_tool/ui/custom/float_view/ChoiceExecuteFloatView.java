@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import java.util.List;
 
 import top.bogey.touch_tool.MainApplication;
-import top.bogey.touch_tool.bean.save.SettingSaver;
+import top.bogey.touch_tool.bean.save.setting.SettingSaver;
 import top.bogey.touch_tool.databinding.FloatChoiceExecuteBinding;
 import top.bogey.touch_tool.databinding.FloatChoiceExecuteItemBinding;
 import top.bogey.touch_tool.utils.EAnchor;
@@ -28,7 +28,7 @@ public class ChoiceExecuteFloatView extends FrameLayout implements FloatInterfac
     private StringResultCallback callback;
 
     public static void showChoice(String title, List<Choice> choices, StringResultCallback callback) {
-        showChoice(title, choices, callback, EAnchor.CENTER, EAnchor.CENTER, SettingSaver.getInstance().getManualChoiceViewPos());
+        showChoice(title, choices, callback, EAnchor.CENTER, EAnchor.CENTER, SettingSaver.FLOAT_VIEW_POS.get());
     }
 
     public static void showChoice(String title, List<Choice> choices, StringResultCallback callback, EAnchor anchor, EAnchor gravity, Point location) {
@@ -70,7 +70,7 @@ public class ChoiceExecuteFloatView extends FrameLayout implements FloatInterfac
 
     @Override
     public void show() {
-        Point point = SettingSaver.getInstance().getManualChoiceViewPos();
+        Point point = SettingSaver.FLOAT_VIEW_POS.get();
         FloatWindow.with(MainApplication.getInstance().getService())
                 .setLayout(this)
                 .setTag(ChoiceExecuteFloatView.class.getName())

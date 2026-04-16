@@ -11,7 +11,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.ref.WeakReference;
 
-import top.bogey.touch_tool.bean.save.SettingSaver;
+import top.bogey.touch_tool.bean.save.setting.SettingSaver;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.ui.MainActivity;
 
@@ -35,8 +35,8 @@ public class MainApplication extends Application implements Thread.UncaughtExcep
         instance = this;
 
         MMKV.initialize(this);
-        SettingSaver.getInstance().addRunTimes();
-        SettingSaver.getInstance().initColor(this);
+        SettingSaver.APP_RUN_TIMES.add();
+        SettingSaver.getInstance().init(this);
 
         handler = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler(this);
@@ -89,7 +89,7 @@ public class MainApplication extends Application implements Thread.UncaughtExcep
              fullError = limitedError.toString();
          }
 
-         SettingSaver.getInstance().setRunningError(fullError);
+         SettingSaver.APP_RUNNING_ERROR.set(fullError);
          handler.uncaughtException(t, e);
      }
 }

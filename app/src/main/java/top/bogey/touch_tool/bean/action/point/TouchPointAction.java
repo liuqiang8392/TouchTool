@@ -18,7 +18,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinPoint;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleSelect;
-import top.bogey.touch_tool.bean.save.SettingSaver;
+import top.bogey.touch_tool.bean.save.setting.SettingSaver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskRunnable;
@@ -72,7 +72,7 @@ public class TouchPointAction extends ExecuteAction implements SyncAction {
     @Override
     public void sync(Task context) {
         String[] types = MainApplication.getInstance().getResources().getStringArray(R.array.touch_point_type);
-        if (SettingSaver.getInstance().getSuperUserType() == 0) {
+        if (SettingSaver.PERMISSION_SUPER_USER.get() == 0) {
             typePin.getValue(PinSingleSelect.class).setOptions(Collections.singletonList(types[0]));
         } else {
             typePin.getValue(PinSingleSelect.class).setOptions(List.of(types));

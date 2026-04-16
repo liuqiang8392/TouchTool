@@ -33,7 +33,7 @@ import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.other.NodeInfo;
 import top.bogey.touch_tool.bean.other.SavedScreenNodeInfo;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinNodePathString;
-import top.bogey.touch_tool.bean.save.SettingSaver;
+import top.bogey.touch_tool.bean.save.setting.SettingSaver;
 import top.bogey.touch_tool.databinding.FloatPickerNodeBinding;
 import top.bogey.touch_tool.service.TaskInfoSummary;
 import top.bogey.touch_tool.ui.MainActivity;
@@ -172,14 +172,14 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
             popup.setAnchorView(binding.typeButton);
             popup.setModal(true);
             popup.setOnItemClickListener((parent, view, position, id) -> {
-                SettingSaver.getInstance().setPickNodeType(position);
+                SettingSaver.NODE_PICKER_PICK_TYPE.set(position);
                 binding.typeButton.setText(strings[position]);
                 invalidate();
                 popup.dismiss();
             });
             popup.show();
         });
-        binding.typeButton.setText(strings[SettingSaver.getInstance().getPickNodeType()]);
+        binding.typeButton.setText(strings[SettingSaver.NODE_PICKER_PICK_TYPE.get()]);
 
         binding.exportButton.setOnClickListener(v -> {
             if (screenInfo == null) return;
@@ -343,7 +343,7 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
         Rect area = new Rect(node.area);
         area.offset(-location[0], -location[1]);
 
-        int type = SettingSaver.getInstance().getPickNodeType();
+        int type = SettingSaver.NODE_PICKER_PICK_TYPE.get();
         if (type != 0 && !node.usable) {
             gridPaint.setColor(DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorSecondary));
             gridPaint.setStrokeWidth(1);
@@ -371,7 +371,7 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
         float y = event.getRawY();
 
         if (event.getAction() == MotionEvent.ACTION_UP) {
-            int type = SettingSaver.getInstance().getPickNodeType();
+            int type = SettingSaver.NODE_PICKER_PICK_TYPE.get();
             NodeInfo node = null;
             switch (type) {
                 case 0 -> node = findNodeByTop(Math.round(x), Math.round(y), true);

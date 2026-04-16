@@ -13,7 +13,7 @@ import java.util.Set;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
-import top.bogey.touch_tool.bean.save.SettingSaver;
+import top.bogey.touch_tool.bean.save.setting.SettingSaver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 
@@ -220,7 +220,7 @@ public class CardLayoutHelper {
     }
 
     public static class ActionArea {
-        private final int ORIGIN_OFFSET = SettingSaver.getInstance().getArrangeCardOffset();
+        private final int ORIGIN_OFFSET = SettingSaver.BLUEPRINT_CARD_ARRANGE_PADDING.get();
         private final int OFFSET = ORIGIN_OFFSET * 2;
 
         public Action action;

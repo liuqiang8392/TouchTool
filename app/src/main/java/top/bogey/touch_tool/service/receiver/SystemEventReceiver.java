@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.List;
 
 import top.bogey.touch_tool.MainApplication;
-import top.bogey.touch_tool.bean.save.SettingSaver;
+import top.bogey.touch_tool.bean.save.setting.SettingSaver;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskInfoSummary;
 import top.bogey.touch_tool.ui.InstantActivity;
@@ -77,18 +77,18 @@ public class SystemEventReceiver extends BroadcastReceiver {
                     service.addAlarm();
                 }
 
-                int times = SettingSaver.getInstance().getAutoBackupTimes();
+                int times = SettingSaver.TASK_AUTO_BACKUP_TIMES.get();
                 times++;
 
-                int index = SettingSaver.getInstance().getAutoBackup();
+                int index = SettingSaver.TASK_AUTO_BACKUP.get();
                 int[] timesArray = new int[]{0, 1, 3, 7};
                 if (timesArray[index] == 0) return;
 
                 if (times < timesArray[index]) {
-                    SettingSaver.getInstance().setAutoBackupTimes(times);
+                    SettingSaver.TASK_AUTO_BACKUP_TIMES.set(times);
                     return;
                 }
-                SettingSaver.getInstance().setAutoBackupTimes(0);
+                SettingSaver.TASK_AUTO_BACKUP_TIMES.set(0);
 
                 ExportTaskDialog.autoBackup(context);
             }

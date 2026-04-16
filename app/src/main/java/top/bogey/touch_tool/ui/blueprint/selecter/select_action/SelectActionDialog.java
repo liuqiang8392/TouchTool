@@ -31,7 +31,7 @@ import top.bogey.touch_tool.bean.action.ActionMap;
 import top.bogey.touch_tool.bean.action.task.CustomEndAction;
 import top.bogey.touch_tool.bean.action.task.CustomStartAction;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
-import top.bogey.touch_tool.bean.save.SettingSaver;
+import top.bogey.touch_tool.bean.save.setting.SettingSaver;
 import top.bogey.touch_tool.bean.save.task.TaskSaver;
 import top.bogey.touch_tool.bean.save.variable.VariableSaver;
 import top.bogey.touch_tool.bean.task.ITagManager;
@@ -86,7 +86,7 @@ public class SelectActionDialog extends BottomSheetDialog {
         binding.group.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
             if (isChecked) {
                 View view = group.findViewById(checkedId);
-                SettingSaver.getInstance().setLastGroup(((MaterialButton) view).getText().toString());
+                SettingSaver.BLUEPRINT_LAST_GROUP.set(((MaterialButton) view).getText().toString());
                 groupType = (GroupType) view.getTag();
                 binding.addButton.setTag(groupType);
                 dataMap = getGroupData(groupType);
@@ -98,7 +98,7 @@ public class SelectActionDialog extends BottomSheetDialog {
         binding.subGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
             if (isChecked) {
                 View view = group.findViewById(checkedId);
-                SettingSaver.getInstance().setLastSubGroup(((MaterialButton) view).getText().toString());
+                SettingSaver.BLUEPRINT_LAST_SUB_GROUP.set(((MaterialButton) view).getText().toString());
                 subGroupTag = (String) view.getTag();
                 dataList = dataMap.get(subGroupTag);
                 adapter.setData(dataList);
@@ -107,7 +107,7 @@ public class SelectActionDialog extends BottomSheetDialog {
         });
 
         String[] groupName = getContext().getResources().getStringArray(R.array.group_type);
-        String lastGroup = SettingSaver.getInstance().getLastGroup();
+        String lastGroup = SettingSaver.BLUEPRINT_LAST_GROUP.get();
         int index = 0;
         GroupType[] groupTypes = getGroupTypes();
         for (int i = 0; i < groupTypes.length; i++) {
@@ -268,7 +268,7 @@ public class SelectActionDialog extends BottomSheetDialog {
     private void refreshSubGroup(String[] chips) {
         binding.subGroup.clearChecked();
         binding.subGroup.removeAllViews();
-        String subGroup = SettingSaver.getInstance().getLastSubGroup();
+        String subGroup = SettingSaver.BLUEPRINT_LAST_SUB_GROUP.get();
         int index = 0;
         for (int i = 0; i < chips.length; i++) {
             String s = chips[i];

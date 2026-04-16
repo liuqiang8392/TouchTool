@@ -38,7 +38,7 @@ import top.bogey.touch_tool.bean.action.start.ScreenStartAction;
 import top.bogey.touch_tool.bean.action.start.StartAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
-import top.bogey.touch_tool.bean.save.SettingSaver;
+import top.bogey.touch_tool.bean.save.setting.SettingSaver;
 import top.bogey.touch_tool.bean.save.task.TaskSaver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.ui.MainActivity;
@@ -355,7 +355,7 @@ public class TaskInfoSummary {
         }
 
         // 手动悬浮窗显示限制
-        int playType = SettingSaver.getInstance().getManualPlayShowType();
+        int playType = SettingSaver.MANUAL_PLAY_VIEW_SHOW_TYPE.get();
         if (playType == 0 || (playType == 1 && getPhoneState() != PhoneState.ON)) {
             normalList.clear();
             singleShowList.clear();

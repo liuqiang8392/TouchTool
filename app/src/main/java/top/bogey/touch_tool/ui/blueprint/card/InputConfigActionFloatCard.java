@@ -12,7 +12,7 @@ import android.view.MotionEvent;
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.save.SettingSaver;
+import top.bogey.touch_tool.bean.save.setting.SettingSaver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.FloatInputConfigCardBinding;
 import top.bogey.touch_tool.ui.blueprint.picker.FloatBaseCallback;
@@ -30,7 +30,7 @@ import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 public class InputConfigActionFloatCard extends ActionCard implements FloatInterface {
 
     public static void showInputConfig(Task task, Action action, int timeout, BooleanResultCallback callback) {
-        showInputConfig(task, action, timeout, callback, EAnchor.CENTER, EAnchor.CENTER, SettingSaver.getInstance().getManualChoiceViewPos());
+        showInputConfig(task, action, timeout, callback, EAnchor.CENTER, EAnchor.CENTER, SettingSaver.FLOAT_VIEW_POS.get());
     }
 
     public static void showInputConfig(Task task, Action action, int timeout, BooleanResultCallback callback, EAnchor anchor, EAnchor gravity, Point location) {
@@ -141,7 +141,7 @@ public class InputConfigActionFloatCard extends ActionCard implements FloatInter
 
     @Override
     public void show() {
-        Point point = SettingSaver.getInstance().getManualChoiceViewPos();
+        Point point = SettingSaver.FLOAT_VIEW_POS.get();
         FloatWindow.with(MainApplication.getInstance().getService())
                 .setLayout(this)
                 .setTag(InputConfigActionFloatCard.class.getName())

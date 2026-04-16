@@ -60,7 +60,7 @@ import top.bogey.touch_tool.bean.action.start.StartAction;
 import top.bogey.touch_tool.bean.action.start.TimeStartAction;
 import top.bogey.touch_tool.bean.other.log.LogInfo;
 import top.bogey.touch_tool.bean.other.log.NormalLog;
-import top.bogey.touch_tool.bean.save.SettingSaver;
+import top.bogey.touch_tool.bean.save.setting.SettingSaver;
 import top.bogey.touch_tool.bean.save.log.LogSaver;
 import top.bogey.touch_tool.bean.save.task.TaskSaver;
 import top.bogey.touch_tool.bean.task.Task;
@@ -125,7 +125,7 @@ public class MainAccessibilityService extends AccessibilityService {
             List<CharSequence> textList = event.getText();
 
             if (className.contains(Notification.class.getSimpleName())) {
-                if (SettingSaver.getInstance().getNotificationType() != 0) return;
+                if (SettingSaver.PERMISSION_NOTIFICATION.get() != 0) return;
 
                 Notification notification = (Notification) event.getParcelableData();
                 if (notification != null && notification.extras != null) {
@@ -164,7 +164,7 @@ public class MainAccessibilityService extends AccessibilityService {
     protected void onServiceConnected() {
         super.onServiceConnected();
         connected.setValue(true);
-        setEnabled(SettingSaver.getInstance().isServiceEnabled());
+        setEnabled(SettingSaver.APP_SERVICE.get());
     }
 
     @Override
@@ -447,7 +447,7 @@ public class MainAccessibilityService extends AccessibilityService {
     }
 
     public void addAlarm() {
-        if (SettingSaver.getInstance().getAutoBackup() == 0) {
+        if (SettingSaver.TASK_AUTO_BACKUP.get() == 0) {
             cancelAlarm();
             return;
         }
@@ -480,7 +480,7 @@ public class MainAccessibilityService extends AccessibilityService {
         if (task == null || timeStartAction == null) return;
         if (!timeStartAction.isEnable()) return;
         if (!isEnabled()) return;
-        if (!SettingSaver.getInstance().isExactAlarmEnabled()) return;
+        if (!SettingSaver.PERMISSION_EXACT_ALARM.get()) return;
 
         PendingIntent pendingIntent = getAlarmPendingIntent(task.getId(), timeStartAction.getId());
         AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
@@ -776,7 +776,7 @@ public class MainAccessibilityService extends AccessibilityService {
 
     @Override
     protected boolean onKeyEvent(KeyEvent event) {
-        if (!SettingSaver.getInstance().isVolumeButtonExit()) return super.onKeyEvent(event);
+        if (!SettingSaver.TASK_VOLUME_KEY_STOP.get()) return super.onKeyEvent(event);
         if (handler == null) handler = new Handler();
 
         if (event != null && event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN) {

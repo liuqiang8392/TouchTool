@@ -4,7 +4,7 @@ import androidx.annotation.Keep;
 
 import java.lang.reflect.Constructor;
 
-import top.bogey.touch_tool.bean.save.SettingSaver;
+import top.bogey.touch_tool.bean.save.setting.SettingSaver;
 import top.bogey.touch_tool.service.super_user.root.RootSuperUser;
 import top.bogey.touch_tool.service.super_user.shizuku.ShizukuSuperUser;
 
@@ -33,9 +33,9 @@ public class SuperUser implements ISuperUser {
     }
 
     public static ISuperUser getInstance() {
-        if (SettingSaver.getInstance().getSuperUserType() == 1) {
+        if (SettingSaver.PERMISSION_SUPER_USER.get() == 1) {
             return getInstance(ShizukuSuperUser.class);
-        } else if (SettingSaver.getInstance().getSuperUserType() == 2) {
+        } else if (SettingSaver.PERMISSION_SUPER_USER.get() == 2) {
             return getInstance(RootSuperUser.class);
         } else {
             return getInstance(SuperUser.class);

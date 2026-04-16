@@ -26,7 +26,7 @@ import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinTouchPath;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinTouchPath.PathPart;
-import top.bogey.touch_tool.bean.save.SettingSaver;
+import top.bogey.touch_tool.bean.save.setting.SettingSaver;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.EAnchor;
 import top.bogey.touch_tool.utils.float_window_manager.FloatInterface;
@@ -54,7 +54,7 @@ public class TouchPathFloatView extends AppCompatImageView implements FloatInter
     }
 
     public static void showGesture(List<PathPart> pathParts, float timeScale) {
-        boolean showTouch = SettingSaver.getInstance().isShowGestureTrack();
+        boolean showTouch = SettingSaver.TASK_GESTURE_TRACE.get();
         if (!showTouch) return;
 
         KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());

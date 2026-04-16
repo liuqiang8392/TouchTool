@@ -17,7 +17,7 @@ import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.start.StartAction;
-import top.bogey.touch_tool.bean.save.SettingSaver;
+import top.bogey.touch_tool.bean.save.setting.SettingSaver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.FloatPlayItemBinding;
 import top.bogey.touch_tool.service.ITaskListener;
@@ -34,7 +34,7 @@ public class PlayFloatItemView extends FrameLayout implements ITaskListener {
     protected static final int PLAY_STATE_PAUSED = 2;
 
     protected final FloatPlayItemBinding binding;
-    protected int size;
+    protected int width;
     protected int height;
 
     protected Task task;
@@ -47,9 +47,9 @@ public class PlayFloatItemView extends FrameLayout implements ITaskListener {
     public PlayFloatItemView(@NonNull Context context, Task task, StartAction action) {
         super(context);
         binding = FloatPlayItemBinding.inflate(LayoutInflater.from(context), this, true);
-        size = SettingSaver.getInstance().getManualPlayViewExpandSize();
-        height = SettingSaver.getInstance().getManualPlayViewButtonHeight();
-        int pauseType = SettingSaver.getInstance().getManualPlayPauseType();
+        width = SettingSaver.MANUAL_PLAY_VIEW_BUTTON_WIDTH.get();
+        height = SettingSaver.MANUAL_PLAY_VIEW_BUTTON_HEIGHT.get();
+        int pauseType = SettingSaver.MANUAL_PLAY_VIEW_BUTTON_PAUSE_TYPE.get();
 
         this.task = task;
         this.startAction = action;
@@ -71,7 +71,7 @@ public class PlayFloatItemView extends FrameLayout implements ITaskListener {
 
         binding.getRoot().setOnLongClickListener(v -> {
             if (playState == PLAY_STATE_STOPPED) {
-                if (SettingSaver.getInstance().isManualPlayGotoTask()) {
+                if (SettingSaver.MANUAL_PLAY_VIEW_BUTTON_LONG_PRESS_JUMP.get()) {
                     Intent intent = new Intent(context, MainActivity.class);
                     intent.setAction(MainActivity.INTENT_KEY_OPEN_TASK);
                     intent.putExtra(InstantActivity.TASK_ID, task.getId());
@@ -89,7 +89,7 @@ public class PlayFloatItemView extends FrameLayout implements ITaskListener {
         binding.lineProgress.setVisibility(View.GONE);
 
 
-        int sizePx = (int) DisplayUtil.dp2px(context, PlayFloatView.BUTTON_DP_SIZE + PlayFloatView.UNIT_GROW_DP_SIZE * (size - 1));
+        int sizePx = (int) DisplayUtil.dp2px(context, PlayFloatView.BUTTON_DP_SIZE + PlayFloatView.UNIT_GROW_DP_SIZE * (width - 1));
         int heightPx = (int) DisplayUtil.dp2px(context, PlayFloatView.BUTTON_DP_SIZE + PlayFloatView.UNIT_GROW_DP_SIZE * (height - 1));
         binding.circleProgress.setIndicatorSize(sizePx);
         DisplayUtil.setViewWidth(binding.lineProgress, sizePx);
@@ -131,8 +131,8 @@ public class PlayFloatItemView extends FrameLayout implements ITaskListener {
 
         binding.circleProgress.setIndeterminate(true);
         binding.lineProgress.setIndeterminate(true);
-        binding.circleProgress.setVisibility(size == height ? View.VISIBLE : View.GONE);
-        binding.lineProgress.setVisibility(size == height ? View.GONE : View.VISIBLE);
+        binding.circleProgress.setVisibility(width == height ? View.VISIBLE : View.GONE);
+        binding.lineProgress.setVisibility(width == height ? View.GONE : View.VISIBLE);
         binding.icon.setImageResource(R.drawable.icon_pause);
     }
 
@@ -165,7 +165,7 @@ public class PlayFloatItemView extends FrameLayout implements ITaskListener {
         Matcher matcher = pattern.matcher(description);
         if (matcher.find()) description = matcher.group(1);
         if (description == null || description.isEmpty()) return "?";
-        description = description.substring(0, Math.min(size, description.length()));
+        description = description.substring(0, Math.min(width, description.length()));
         return description;
     }
 

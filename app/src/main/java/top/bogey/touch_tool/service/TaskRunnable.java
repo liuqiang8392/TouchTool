@@ -17,7 +17,7 @@ import top.bogey.touch_tool.bean.other.log.ActionLog;
 import top.bogey.touch_tool.bean.other.log.DateTimeLog;
 import top.bogey.touch_tool.bean.other.log.LogInfo;
 import top.bogey.touch_tool.bean.other.log.NormalLog;
-import top.bogey.touch_tool.bean.save.SettingSaver;
+import top.bogey.touch_tool.bean.save.setting.SettingSaver;
 import top.bogey.touch_tool.bean.save.log.LogSaver;
 import top.bogey.touch_tool.bean.task.Task;
 
@@ -47,7 +47,7 @@ public class TaskRunnable implements Runnable {
     public TaskRunnable(Task task, StartAction startAction) {
         this.task = task;
         this.startAction = startAction;
-        this.debug = task.hasFlag(Task.FLAG_DEBUG) && SettingSaver.getInstance().isDetailLog();
+        this.debug = task.hasFlag(Task.FLAG_DEBUG) && SettingSaver.TASK_DETAIL_LOG.get();
     }
 
     @Override
@@ -56,7 +56,7 @@ public class TaskRunnable implements Runnable {
             cacheLog = true;
         }
         try {
-            if (SettingSaver.getInstance().isLogResetOnStart()) {
+            if (SettingSaver.TASK_RESET_DETAIL_LOG.get()) {
                 LogSaver.getInstance().clearLog(task.getId());
             }
 

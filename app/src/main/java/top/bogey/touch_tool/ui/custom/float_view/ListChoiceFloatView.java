@@ -16,7 +16,7 @@ import java.util.List;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
-import top.bogey.touch_tool.bean.save.SettingSaver;
+import top.bogey.touch_tool.bean.save.setting.SettingSaver;
 import top.bogey.touch_tool.databinding.FloatChoiceListBinding;
 import top.bogey.touch_tool.databinding.FloatChoiceListItemBinding;
 import top.bogey.touch_tool.ui.custom.float_view.ChoiceExecuteFloatView.Choice;
@@ -32,7 +32,7 @@ public class ListChoiceFloatView extends FrameLayout implements FloatInterface {
     private StringResultCallback callback;
 
     public static void showChoice(String title, List<Choice> choices, StringResultCallback callback) {
-        showChoice(title, choices, callback, EAnchor.CENTER, EAnchor.CENTER, SettingSaver.getInstance().getManualChoiceViewPos());
+        showChoice(title, choices, callback, EAnchor.CENTER, EAnchor.CENTER, SettingSaver.FLOAT_VIEW_POS.get());
     }
 
     public static void showChoice(String title, List<Choice> choices, StringResultCallback callback, EAnchor anchor, EAnchor gravity, Point location) {
@@ -90,7 +90,7 @@ public class ListChoiceFloatView extends FrameLayout implements FloatInterface {
 
     @Override
     public void show() {
-        Point point = SettingSaver.getInstance().getManualChoiceViewPos();
+        Point point = SettingSaver.FLOAT_VIEW_POS.get();
         FloatWindow.with(MainApplication.getInstance().getService())
                 .setLayout(this)
                 .setTag(ListChoiceFloatView.class.getName())

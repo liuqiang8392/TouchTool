@@ -17,7 +17,7 @@ import java.util.UUID;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
-import top.bogey.touch_tool.bean.save.SettingSaver;
+import top.bogey.touch_tool.bean.save.setting.SettingSaver;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.EAnchor;
 import top.bogey.touch_tool.utils.float_window_manager.FloatInterface;
@@ -33,7 +33,7 @@ public class MarkTargetFloatView extends AppCompatImageView implements FloatInte
     private Rect targetArea;
 
     public static void showTargetArea(Rect targetArea) {
-        boolean showTargetArea = SettingSaver.getInstance().isShowNodeArea();
+        boolean showTargetArea = SettingSaver.TASK_TARGET_MARK.get();
         if (!showTargetArea) return;
 
         showMarkArea(targetArea);

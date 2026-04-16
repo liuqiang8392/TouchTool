@@ -29,7 +29,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
-import top.bogey.touch_tool.bean.save.SettingSaver;
+import top.bogey.touch_tool.bean.save.setting.SettingSaver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.utils.GsonUtil;
@@ -55,7 +55,7 @@ public abstract class Action extends Identity implements PinListener {
 
     protected Action(ActionType type) {
         this.type = type;
-        expandType = ExpandType.values()[SettingSaver.getInstance().getDefaultCardExpandType()];
+        expandType = ExpandType.values()[SettingSaver.BLUEPRINT_CARD_EXPAND_STATE.get()];
     }
 
     protected Action(JsonObject jsonObject) {

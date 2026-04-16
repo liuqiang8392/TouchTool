@@ -8,7 +8,7 @@ import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
-import top.bogey.touch_tool.bean.save.SettingSaver;
+import top.bogey.touch_tool.bean.save.setting.SettingSaver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.TaskInfoSummary;
 import top.bogey.touch_tool.service.TaskRunnable;
@@ -39,7 +39,7 @@ public class BluetoothStartAction extends StartAction {
     @Override
     public void check(ActionCheckResult result, Task task) {
         super.check(result, task);
-        if (!SettingSaver.getInstance().isBluetoothEnabled()) {
+        if (!SettingSaver.PERMISSION_BLUETOOTH.get()) {
             result.addResult(ActionCheckResult.ResultType.ERROR, R.string.check_need_bluetooth_permission_error);
         }
     }
