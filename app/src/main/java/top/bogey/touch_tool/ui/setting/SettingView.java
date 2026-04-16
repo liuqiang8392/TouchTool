@@ -76,6 +76,8 @@ public class SettingView extends Fragment {
                             .show();
                 }
                 return true;
+            } else if (menuItem.getItemId() == R.id.helpDoc) {
+                AppUtil.gotoUrl(requireContext(), getString(R.string.setting_help_doc_url));
             }
             return false;
         }

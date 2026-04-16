@@ -49,26 +49,73 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="visible">
 
-                <FrameLayout
-                    android:layout_width="192dp"
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center">
+                    android:layout_gravity="center_horizontal"
+                    android:baselineAligned="false">
 
-                    <com.google.android.material.slider.Slider
-                        android:id="@+id/timeSlider"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:stepSize="1"
-                        android:value="80"
-                        android:valueFrom="1"
-                        android:valueTo="100"
-                        app:thumbHeight="?attr/iconButtonSize"
-                        app:trackColorInactive="?attr/colorSurface" />
+                        android:layout_marginEnd="?attr/defaultPadding"
+                        android:gravity="center_vertical">
 
-                </FrameLayout>
+                        <com.google.android.material.textview.MaterialTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/image_action_scale"
+                            android:textAppearance="@style/TextAppearance.Material3.LabelSmall" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/spinner"
+                            style="?attr/materialButtonOutlinedStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="?attr/smallIconButtonSize"
+                            android:insetTop="?attr/defaultOffset"
+                            android:insetBottom="?attr/defaultOffset"
+                            android:minWidth="?attr/iconButtonSize"
+                            android:paddingHorizontal="?attr/iconButtonPadding"
+                            android:paddingVertical="0dp"
+                            android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
+                            app:icon="@drawable/icon_keyboard_arrow_down"
+                            app:iconGravity="textEnd"
+                            app:iconPadding="?attr/defaultOffset" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical">
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/image_action_canny"
+                            android:textAppearance="@style/TextAppearance.Material3.LabelSmall" />
+
+                        <FrameLayout
+                            android:layout_width="?attr/iconButtonSize"
+                            android:layout_height="?attr/smallIconButtonSize">
+
+                            <com.google.android.material.materialswitch.MaterialSwitch
+                                android:id="@+id/cannySwitch"
+                                android:layout_width="52dp"
+                                android:layout_height="?attr/iconButtonSize"
+                                android:layout_gravity="center"
+                                android:scaleX="0.5"
+                                android:scaleY="0.5" />
+
+                        </FrameLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
 
                 <FrameLayout
                     android:layout_width="match_parent"
@@ -81,6 +128,13 @@
                         android:layout_gravity="center"
                         android:scaleType="fitCenter"
                         app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/similarity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end|bottom"
+                        android:textAppearance="@style/TextAppearance.Material3.LabelSmall" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"

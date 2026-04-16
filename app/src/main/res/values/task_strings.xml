@@ -398,7 +398,7 @@
 
     <!-- 动作-String -->
     <string name="string_to_number_action">文本转数值</string>
-    <string name="string_to_number_action_desc">提取文本中的第一个数值</string>
+    <string name="string_to_number_action_desc">提取文本中的数值</string>
 
     <string name="string_match_action">文本正则匹配</string>
     <string name="string_match_action_desc">执行正则匹配，判断是否包含特定文本</string>
@@ -417,7 +417,7 @@
 
     <string name="string_split_action">文本分割</string>
     <string name="string_split_action_desc">将文本按特定字符分割为多个文本</string>
-    <string name="string_split_action_split">分割符(支持正则)</string>
+    <string name="string_split_action_split">分割符</string>
     <string name="string_split_action_empty">剔除空字符</string>
     <string name="string_split_action_regex">正则模式</string>
 
@@ -431,7 +431,7 @@
 
     <string name="string_replace_action">文本替换</string>
     <string name="string_replace_action_desc">将文本中的特定文本替换为另一个文本</string>
-    <string name="string_replace_action_find">查找文本(支持正则)</string>
+    <string name="string_replace_action_find">查找文本</string>
     <string name="string_replace_action_replace">替换文本</string>
     <string name="string_replace_action_regex">正则模式</string>
     <string name="string_replace_action_result">替换结果</string>
@@ -811,10 +811,10 @@
     <string name="map_set_action_desc">向字典中添加或替换值</string>
     <string name="map_set_action_pre_value">替换前的值</string>
 
-    <string name="map_keys_action">获取键</string>
+    <string name="map_keys_action">获取所有键</string>
     <string name="map_keys_action_desc">获取字典中的所有键</string>
 
-    <string name="map_values_action">获取值</string>
+    <string name="map_values_action">获取所有值</string>
     <string name="map_values_action_desc">获取字典中的所有值</string>
 
     <string name="map_foreach_action">遍历字典</string>

@@ -59,7 +59,7 @@ public class IsImageExistAction extends CalculateAction {
         PinSingleSelect scale = getPinValue(runnable, scalePin);
         PinBoolean canny = getPinValue(runnable, cannyPin);
 
-        Rect rect = DisplayUtil.matchTemplate(bitmap, template.getImage(), null, similarity.intValue(), scale.getIndex() + 1, canny.getValue());
+        Rect rect = DisplayUtil.matchTemplate(bitmap, template.getImage(), null, similarity.intValue(), scale.getIndex(), canny.getValue());
 
         resultPin.getValue(PinBoolean.class).setValue(rect != null && !rect.isEmpty());
     }

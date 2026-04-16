@@ -17,6 +17,13 @@ public class ActionCheckResult {
         results.addAll(result.results);
     }
 
+    public void merge(ActionCheckResult checkResult, ResultType minType) {
+        for (Result result : checkResult.results) {
+            if (result.type.ordinal() < minType.ordinal()) continue;
+            results.add(result);
+        }
+    }
+
     public boolean hasError() {
         return results.stream().anyMatch(result -> result.type == ResultType.ERROR);
     }

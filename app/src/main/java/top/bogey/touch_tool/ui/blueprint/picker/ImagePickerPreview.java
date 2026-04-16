@@ -8,8 +8,10 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.LayoutInflater;
+import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.ListPopupWindow;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
@@ -17,6 +19,7 @@ import top.bogey.touch_tool.databinding.FloatPickerImagePreviewBinding;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.ui.custom.float_view.TouchPathFloatView;
 import top.bogey.touch_tool.utils.DisplayUtil;
+import top.bogey.touch_tool.utils.MatchResult;
 import top.bogey.touch_tool.utils.callback.ResultCallback;
 import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 
@@ -25,6 +28,7 @@ public class ImagePickerPreview extends BasePicker<Bitmap> {
     private final FloatPickerImagePreviewBinding binding;
     private Bitmap template;
     private boolean test;
+    private int scale = 0;
 
     public ImagePickerPreview(@NonNull Context context, ResultCallback<Bitmap> callback, Bitmap image) {
         super(context, callback);
@@ -60,7 +64,24 @@ public class ImagePickerPreview extends BasePicker<Bitmap> {
             binding.current.setImageBitmap(template);
         }, template).show());
 
-        binding.timeSlider.setLabelFormatter(value -> getContext().getString(R.string.picker_image_offset, (int) value));
+        String[] array = getResources().getStringArray(R.array.match_image_scale);
+        binding.spinner.setOnClickListener(v -> {
+            ListPopupWindow popup = new ListPopupWindow(getContext());
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.widget_textview_item);
+            adapter.addAll(array);
+            popup.setAdapter(adapter);
+            popup.setAnchorView(binding.spinner);
+            popup.setModal(true);
+            popup.setWidth(DisplayUtil.measureArrayAdapterContentWidth(getContext(), adapter));
+            popup.setOnItemClickListener((parent, view, position, id) -> {
+                scale = position;
+                binding.spinner.setText(array[scale]);
+                popup.dismiss();
+            });
+            popup.show();
+        });
+        binding.spinner.setText(array[scale]);
+
         binding.matchButton.setOnClickListener(v -> {
             FloatWindow.hide(tag);
             postDelayed(() -> {
@@ -77,8 +98,7 @@ public class ImagePickerPreview extends BasePicker<Bitmap> {
                     Bitmap bitmap = service.tryGetScreenShot();
                     FloatWindow.show(tag);
                     if (bitmap != null) {
-                        int similar = (int) binding.timeSlider.getValue();
-                        Rect rect = DisplayUtil.matchTemplate(bitmap, template, null, similar);
+                        Rect rect = DisplayUtil.matchTemplate(bitmap, template, null, 0, scale, binding.cannySwitch.isChecked());
                         if (rect == null || rect.isEmpty()) return;
                         int x = rect.left + rect.width() / 2;
                         int y = rect.top + rect.height() / 2;
@@ -91,15 +111,16 @@ public class ImagePickerPreview extends BasePicker<Bitmap> {
         });
     }
 
+    @SuppressLint("SetTextI18n")
     private void matchImage() {
         MainAccessibilityService service = MainApplication.getInstance().getService();
         if (service == null || !service.isEnabled()) return;
         Bitmap bitmap = service.tryGetScreenShot();
         if (bitmap != null) {
-            int similar = (int) binding.timeSlider.getValue();
-            Rect rect = DisplayUtil.matchTemplate(bitmap, template, null, similar);
-            if (rect == null || rect.isEmpty()) binding.matchedImage.setImageDrawable(null);
+            MatchResult matchResult = DisplayUtil.matchTemplateResult(bitmap, template, null, 0, scale, binding.cannySwitch.isChecked());
+            if (matchResult == null) binding.matchedImage.setImageDrawable(null);
             else {
+                Rect rect = matchResult.area;
                 int px = (int) DisplayUtil.dp2px(getContext(), 16);
                 Rect area = DisplayUtil.safeClipBitmapArea(bitmap, rect.left - px, rect.top - px, rect.width() + px * 2, rect.height() + px * 2);
                 if (area == null) return;
@@ -113,6 +134,7 @@ public class ImagePickerPreview extends BasePicker<Bitmap> {
                 canvas.translate(rect.left - area.left, rect.top - area.top);
                 canvas.drawRect(new Rect(0, 0, rect.width(), rect.height()), paint);
                 binding.matchedImage.setImageBitmap(clipBitmap);
+                binding.similarity.setText(service.getString(R.string.picker_image_offset, (int) (matchResult.value * 100)));
             }
         }
     }

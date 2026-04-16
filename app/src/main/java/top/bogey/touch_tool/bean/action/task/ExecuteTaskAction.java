@@ -65,7 +65,9 @@ public class ExecuteTaskAction extends Action implements DynamicPinsAction, Sync
             checking = false;
             return;
         }
-        executeTask.check(result);
+        ActionCheckResult filterResult = new ActionCheckResult();
+        executeTask.check(filterResult);
+        result.merge(filterResult, ActionCheckResult.ResultType.WARNING);
         checking = false;
     }
 

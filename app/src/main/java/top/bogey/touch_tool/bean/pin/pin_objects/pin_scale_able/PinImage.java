@@ -72,6 +72,7 @@ public class PinImage extends PinScaleAble<String> {
     }
 
     public void setImage(Bitmap image) {
+        setScale();
         this.image = image;
         if (image == null) {
             value = null;

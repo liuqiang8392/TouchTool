@@ -355,7 +355,7 @@ public class DisplayUtil {
     public static native MatchResult nativeMatchTemplate(Bitmap bitmap, Bitmap template, int speed, boolean canny);
 
     public static Rect matchTemplate(Bitmap bitmap, Bitmap template, Rect area, int similarity) {
-        return matchTemplate(bitmap, template, area, similarity, 2, false);
+        return matchTemplate(bitmap, template, area, similarity, 0, false);
     }
 
     public static Rect matchTemplate(Bitmap bitmap, Bitmap template, Rect area, int similarity, int speed, boolean canny) {
@@ -365,7 +365,7 @@ public class DisplayUtil {
     }
 
     public static MatchResult matchTemplateResult(Bitmap bitmap, Bitmap template, Rect area, int similarity) {
-        return matchTemplateResult(bitmap, template, area, similarity, 2, false);
+        return matchTemplateResult(bitmap, template, area, similarity, 0, false);
     }
 
     public static MatchResult matchTemplateResult(Bitmap bitmap, Bitmap template, Rect area, int similarity, int speed, boolean canny) {
@@ -383,12 +383,10 @@ public class DisplayUtil {
             if (bitmap == null) return null;
         }
 
-        long start = System.currentTimeMillis();
         MatchResult matchResult = nativeMatchTemplate(bitmap, template, (int) Math.pow(2, speed), canny);
-        long time = System.currentTimeMillis() - start;
-        Log.d("TAG", "matchTemplate: " + time);
         if (tmp != null) tmp.recycle();
         if (matchResult == null) return null;
+        Log.d("TAG", "matchTemplateResult: value = " + matchResult.value);
         if (matchResult.value * 100 < similarity) return null;
         matchResult.area.offset(area.left, area.top);
         return matchResult;

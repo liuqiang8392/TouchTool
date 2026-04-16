@@ -63,8 +63,8 @@ public class FindImageAction extends FindExecuteAction {
         PinSingleSelect scale = getPinValue(runnable, scalePin);
         PinBoolean canny = getPinValue(runnable, cannyPin);
 
-        MatchResult matchResult = DisplayUtil.matchTemplateResult(bitmap, template.getImage(), null, similarity.intValue(), scale.getIndex() + 1, canny.getValue());
-        if (matchResult == null || matchResult.area.isEmpty()) {
+        MatchResult matchResult = DisplayUtil.matchTemplateResult(bitmap, template.getImage(), null, similarity.intValue(), scale.getIndex(), canny.getValue());
+        if (matchResult == null) {
             return false;
         }
         areaPin.getValue(PinArea.class).setValue(matchResult.area);

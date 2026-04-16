@@ -265,7 +265,7 @@
     <string name="setting_execute_shell">执行指令</string>
 
     <string name="setting_help_doc">帮助文档</string>
-    <string name="setting_help_doc_url">1</string>
+    <string name="setting_help_doc_url">https://mr-bogey.github.io/TouchTool/</string>
     <string name="setting_help_video">视频教程</string>
     <string name="setting_help_video_url">2</string>
     <string name="setting_qq_group_url">https://jq.qq.com/?_wv=1027&amp;k=c1HOe3Gk</string>

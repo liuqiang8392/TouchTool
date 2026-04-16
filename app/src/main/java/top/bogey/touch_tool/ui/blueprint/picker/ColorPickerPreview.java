@@ -164,6 +164,14 @@ public class ColorPickerPreview extends BasePicker<PinColor.ColorInfo> {
             if (rectList == null || rectList.isEmpty()) binding.matchedImage.setImageDrawable(null);
             else {
                 Rect rect = rectList.get(0);
+                for (Rect r : rectList) {
+                    int areaSize = r.width() * r.height();
+                    if (areaSize >= colorInfo.getMinArea() && areaSize <= colorInfo.getMaxArea()) {
+                        rect = r;
+                        break;
+                    }
+                }
+
                 int px = (int) DisplayUtil.dp2px(getContext(), 16);
                 Rect area = DisplayUtil.safeClipBitmapArea(bitmap, rect.left - px, rect.top - px, rect.width() + px * 2, rect.height() + px * 2);
                 if (area == null) return;
