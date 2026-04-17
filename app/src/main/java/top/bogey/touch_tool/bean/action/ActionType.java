@@ -210,6 +210,7 @@ public enum ActionType {
     LIST_INDEX_OF,
     LIST_SUBLIST,
     LIST_FOREACH,
+    LIST_SORT,
 
     // 字典
     MAP_MAKE,

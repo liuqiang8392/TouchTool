@@ -228,7 +228,8 @@ public class ActionMap {
                     ActionType.LIST_APPEND,
                     ActionType.LIST_CLEAR,
                     ActionType.LIST_INDEX_OF,
-                    ActionType.LIST_SUBLIST
+                    ActionType.LIST_SUBLIST,
+                    ActionType.LIST_SORT
             ));
 
             case MAP -> list.addAll(Arrays.asList(

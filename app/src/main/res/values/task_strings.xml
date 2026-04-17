@@ -771,6 +771,11 @@
     <string name="list_foreach_action_desc">遍历列表中的每个元素</string>
     <string name="list_foreach_action_break">跳出循环</string>
 
+    <string name="list_sort_action">列表排序</string>
+    <string name="list_sort_action_desc">对列表中的元素进行排序</string>
+    <string name="list_sort_action_compare">比较</string>
+    <string name="list_sort_action_result">比较结果</string>
+
 
     <!-- 动作-Map -->
     <string name="map_action_key">键</string>
