@@ -270,6 +270,7 @@
     <string name="send_notification_action_icon">图标</string>
     <string name="send_notification_action_auto_cancel">自动取消</string>
     <string name="send_notification_action_execute">点按执行</string>
+    <string name="send_notification_action_override">覆盖</string>
 
     <string name="send_broadcast_action">发送广播</string>
     <string name="send_broadcast_action_desc">发送自定义广播</string>
@@ -428,6 +429,7 @@
     <string name="string_equal_action_desc">判断两个文本是否相等</string>
     <string name="string_equal_action_ignore_case">忽略大小写</string>
     <string name="string_equal_action_regex">正则模式</string>
+    <string name="string_equal_action_value">比较值</string>
 
     <string name="string_replace_action">文本替换</string>
     <string name="string_replace_action_desc">将文本中的特定文本替换为另一个文本</string>

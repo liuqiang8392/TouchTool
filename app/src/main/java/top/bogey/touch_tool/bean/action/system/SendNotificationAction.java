@@ -15,6 +15,8 @@ import androidx.core.graphics.drawable.IconCompat;
 
 import com.google.gson.JsonObject;
 
+import java.util.UUID;
+
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionCheckResult;
@@ -39,15 +41,16 @@ public class SendNotificationAction extends ExecuteAction {
     private final transient Pin iconPin = new Pin(new PinImage(PinSubType.WITH_ICON), R.string.send_notification_action_icon);
     private final transient Pin autoCancelPin = new Pin(new PinBoolean(true), R.string.send_notification_action_auto_cancel);
     private final transient Pin executePin = new Pin(new PinExecute(), R.string.send_notification_action_execute, true);
+    private final transient Pin overridePin = new Pin(new PinBoolean(true), R.string.send_notification_action_override);
 
     public SendNotificationAction() {
         super(ActionType.SEND_NOTIFICATION);
-        addPins(titlePin, contentPin, iconPin, autoCancelPin, executePin);
+        addPins(titlePin, contentPin, iconPin, autoCancelPin, executePin, overridePin);
     }
 
     public SendNotificationAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(titlePin, contentPin, iconPin, autoCancelPin, executePin);
+        reAddPins(titlePin, contentPin, iconPin, autoCancelPin, executePin, overridePin);
     }
 
     @Override
@@ -56,6 +59,7 @@ public class SendNotificationAction extends ExecuteAction {
         PinObject content = getPinValue(runnable, contentPin);
         PinImage icon = getPinValue(runnable, iconPin);
         PinBoolean autoCancel = getPinValue(runnable, autoCancelPin);
+        PinBoolean override = getPinValue(runnable, overridePin);
 
         Context context = MainApplication.getInstance();
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -87,7 +91,11 @@ public class SendNotificationAction extends ExecuteAction {
             PendingIntent pendingIntent = PendingIntent.getActivity(context, getId().hashCode(), intent, PendingIntent.FLAG_IMMUTABLE);
             builder.setContentIntent(pendingIntent);
         }
-        notificationManager.notify(getId().hashCode(), builder.build());
+        String notificationId = getId();
+        if (!override.getValue()) {
+            notificationId = UUID.randomUUID().toString();
+        }
+        notificationManager.notify(notificationId.hashCode(), builder.build());
 
         executeNext(runnable, outPin);
     }

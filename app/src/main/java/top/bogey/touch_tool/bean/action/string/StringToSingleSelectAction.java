@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
@@ -42,6 +43,7 @@ public class StringToSingleSelectAction extends CalculateAction {
         PinBase value = linkedPin.getValue();
 
         if (value instanceof PinSingleSelect pinSingleSelect) {
+            // 如果单选连接的是动态单选，则以options为准，否则以连接的单选为准
             if (pinSingleSelect.isDynamic()) {
                 if (options.isEmpty()) {
                     select.setOptions(new ArrayList<>(Collections.singletonList(text.toString())));

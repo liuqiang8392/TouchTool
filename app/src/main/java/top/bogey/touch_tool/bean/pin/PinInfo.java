@@ -106,7 +106,7 @@ public class PinInfo {
     private final static PinInfo TASK_STRING_INFO = new PinInfo(PinType.STRING, PinSubType.TASK_ID, PinTaskString.class, NormalPinSlotView.class, R.color.StringPinColor, 0, R.string.pin_string_task, PinWidgetString.class, false, false);
     private final static PinInfo ALL_TASK_STRING_INFO = new PinInfo(PinType.STRING, PinSubType.ALL_TASK_ID, PinTaskString.class, NormalPinSlotView.class, R.color.StringPinColor, 0, R.string.pin_string_task, PinWidgetString.class, false, false);
 
-    private final static PinInfo SELECT_STRING_INFO = new PinInfo(PinType.STRING, PinSubType.SINGLE_SELECT, PinSingleSelect.class, NormalPinSlotView.class, R.color.SelectPinColor, 0, R.string.pin_string_select, PinWidgetSelect.class, false, true);
+    private final static PinInfo SELECT_STRING_INFO = new PinInfo(PinType.STRING, PinSubType.SINGLE_SELECT, PinSingleSelect.class, NormalPinSlotView.class, R.color.SelectPinColor, 0, R.string.pin_string_select, PinWidgetSelect.class, true, true);
 
     private final static PinInfo INTEGER_INFO = new PinInfo(PinType.NUMBER, PinSubType.INTEGER, PinInteger.class, NormalPinSlotView.class, R.color.IntegerPinColor, 0, R.string.pin_number_integer, PinWidgetNumber.class, false, true);
     private final static PinInfo FLOAT_INFO = new PinInfo(PinType.NUMBER, PinSubType.FLOAT, PinFloat.class, NormalPinSlotView.class, R.color.FloatPinColor, 0, R.string.pin_number_float, PinWidgetNumber.class, false, true);

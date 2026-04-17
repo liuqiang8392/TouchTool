@@ -11,6 +11,7 @@ import top.bogey.touch_tool.bean.action.parent.CalculateAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
 import top.bogey.touch_tool.service.TaskRunnable;
 
@@ -20,15 +21,16 @@ public class StringEqualAction extends CalculateAction {
     private final transient Pin ignoreCasePin = new Pin(new PinBoolean(), R.string.string_equal_action_ignore_case);
     private final transient Pin resultPin = new Pin(new PinBoolean(), R.string.pin_boolean_result, true);
     private final transient Pin regexPin = new Pin(new PinBoolean(), R.string.string_equal_action_regex);
+    private final transient Pin compareValuePin = new Pin(new PinInteger(), R.string.string_equal_action_value, true);
 
     public StringEqualAction() {
         super(ActionType.STRING_EQUAL);
-        addPins(firstPin, secondPin, ignoreCasePin, resultPin, regexPin);
+        addPins(firstPin, secondPin, ignoreCasePin, resultPin, regexPin, compareValuePin);
     }
 
     public StringEqualAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(firstPin, secondPin, ignoreCasePin, resultPin, regexPin);
+        reAddPins(firstPin, secondPin, ignoreCasePin, resultPin, regexPin, compareValuePin);
     }
 
     @Override
@@ -58,6 +60,12 @@ public class StringEqualAction extends CalculateAction {
             } else {
                 result = Objects.equals(firstValue, secondValue);
             }
+        }
+
+        if (ignoreCase.getValue()) {
+            compareValuePin.getValue(PinInteger.class).setValue(firstValue.compareToIgnoreCase(secondValue));
+        } else {
+            compareValuePin.getValue(PinInteger.class).setValue(firstValue.compareTo(secondValue));
         }
 
         resultPin.getValue(PinBoolean.class).setValue(result);

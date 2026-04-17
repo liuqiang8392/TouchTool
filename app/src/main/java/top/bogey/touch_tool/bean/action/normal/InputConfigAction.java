@@ -61,6 +61,15 @@ public class InputConfigAction extends ExecuteAction implements DynamicPinsActio
             else inPins.put(dynamicPin.getUid(), dynamicPin);
         }
         inPins.forEach((uid, inPin) -> {
+            // 连接的输入针脚需要重置一下
+            if (inPin.isLinked()) {
+                PinBase value = inPin.getValue();
+                if (value instanceof PinSingleSelect pinSingleSelect) {
+                    pinSingleSelect.setOptions(new ArrayList<>());
+                }
+                value.reset();
+            }
+
             PinObject pinValue = getPinValue(runnable, inPin);
             inPin.getValue().sync(pinValue);
         });

@@ -1,5 +1,7 @@
 package top.bogey.touch_tool.bean.save.task;
 
+import android.net.Uri;
+
 import com.tencent.mmkv.MMKV;
 
 import java.util.ArrayList;
@@ -13,6 +15,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.UUID;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
@@ -23,6 +26,7 @@ import top.bogey.touch_tool.bean.save.log.LogSave;
 import top.bogey.touch_tool.bean.save.log.LogSaver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.MainAccessibilityService;
+import top.bogey.touch_tool.ui.InstantActivity;
 import top.bogey.touch_tool.utils.AppUtil;
 
 public class TaskSaver {
@@ -176,12 +180,29 @@ public class TaskSaver {
         return new ArrayList<>(tasks);
     }
 
-    public List<Task> searchTasks(String title) {
+    public List<Task> searchTasks(String searchText) {
         List<Task> tasks = new ArrayList<>();
+
+        Uri uri = Uri.parse(searchText);
+        if ("tt".equals(uri.getScheme()) && "do_action".equals(uri.getHost())) {
+            String taskId = uri.getQueryParameter(InstantActivity.TASK_ID);
+            if (taskId != null) {
+                tasks.add(getTask(taskId));
+                return tasks;
+            }
+        }
+
+        try {
+            UUID.fromString(searchText);
+            tasks.add(getTask(searchText));
+            return tasks;
+        } catch (Exception ignored) {
+        }
+
         for (Map.Entry<String, TaskSave> entry : saves.entrySet()) {
             TaskSave v = entry.getValue();
             Task task = v.getTask();
-            if (AppUtil.isStringContainsWithPinyin(task.getFullDescription(), title)) {
+            if (AppUtil.isStringContainsWithPinyin(task.getFullDescription(), searchText)) {
                 tasks.add(task);
             }
         }

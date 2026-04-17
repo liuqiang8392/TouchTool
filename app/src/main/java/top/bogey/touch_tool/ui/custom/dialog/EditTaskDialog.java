@@ -79,6 +79,7 @@ public class EditTaskDialog extends MaterialAlertDialogBuilder {
         AlertDialog dialog = super.show();
         binding.titleEdit.postDelayed(() -> {
             binding.titleEdit.requestFocus();
+            binding.titleEdit.selectAll();
             InputMethodManager imm = (InputMethodManager) dialog.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.showSoftInput(binding.titleEdit, InputMethodManager.SHOW_IMPLICIT);
         }, 100);
