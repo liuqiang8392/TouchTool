@@ -507,13 +507,17 @@ public class BlueprintView extends Fragment {
         List<Action> searchActions = new ArrayList<>();
         Editable text = binding.searchEdit.getText();
         if (text == null || text.length() == 0) return searchActions;
+        String searchString = text.toString();
 
         boolean pinyin = binding.pinyinCheck.isChecked();
         boolean matchPos = binding.posCheck.isChecked();
         boolean matchCase = binding.caseCheck.isChecked();
         boolean regex = binding.regCheck.isChecked();
 
-        String searchString = text.toString();
+        if (!matchCase) searchString = searchString.toLowerCase();
+        Pattern pattern = null;
+        if (regex) pattern = AppUtil.getPattern(searchString);
+
         Task currTask = taskStack.peek();
         for (Action action : currTask.getActions()) {
             boolean matched = false;
@@ -521,7 +525,6 @@ public class BlueprintView extends Fragment {
                 Point pos = action.getPos();
                 String posString = pos.x + "," + pos.y;
                 if (regex) {
-                    Pattern pattern = AppUtil.getPattern(searchString);
                     if (pattern != null && pattern.matcher(posString).find()) {
                         searchActions.add(action);
                         matched = true;
@@ -536,11 +539,9 @@ public class BlueprintView extends Fragment {
             if (!matched) {
                 String actionString = action.getFullDescription();
                 if (!matchCase) {
-                    searchString = searchString.toLowerCase();
                     actionString = actionString.toLowerCase();
                 }
                 if (regex) {
-                    Pattern pattern = AppUtil.getPattern(searchString);
                     if (pattern != null && pattern.matcher(actionString).find()) {
                         searchActions.add(action);
                         matched = true;

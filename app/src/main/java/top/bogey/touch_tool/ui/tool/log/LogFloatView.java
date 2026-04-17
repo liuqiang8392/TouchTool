@@ -25,6 +25,7 @@ import top.bogey.touch_tool.bean.other.log.LogInfo;
 import top.bogey.touch_tool.bean.save.log.LogSave;
 import top.bogey.touch_tool.bean.save.log.LogSaveListener;
 import top.bogey.touch_tool.bean.save.log.LogSaver;
+import top.bogey.touch_tool.bean.save.setting.SettingSaver;
 import top.bogey.touch_tool.bean.save.task.TaskSaver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.FloatLogBinding;
@@ -152,17 +153,24 @@ public class LogFloatView extends FrameLayout implements FloatInterface, LogSave
         binding.searchEdit.addTextChangedListener(new TextChangedListener() {
             @Override
             public void afterTextChanged(Editable s) {
-                int index = adapter.searchLog(s.toString(), null);
-                if (index > 0) binding.recyclerView.scrollToPosition(index);
-                else binding.recyclerView.scrollToPosition(adapter.getItemCount() - 1);
-                binding.preButton.setVisibility(index > 0 ? VISIBLE : GONE);
-                binding.nextButton.setVisibility(index > 0 ? VISIBLE : GONE);
+                if (adapter.searchIndex >= 0 && adapter.searchIndex < adapter.getItemCount() - 1) {
+                    int index = adapter.searchIndex;
+                    adapter.searchIndex = -1;
+                    adapter.notifyItemChanged(index);
+                }
             }
         });
 
         binding.preButton.setOnClickListener(v -> searchLog(false));
-
         binding.nextButton.setOnClickListener(v -> searchLog(true));
+        binding.pinyinCheck.addOnCheckedChangeListener((buttonView, isChecked) -> SettingSaver.BLUEPRINT_SEARCH_WITH_PINYIN.set(isChecked));
+        binding.pinyinCheck.setChecked(SettingSaver.BLUEPRINT_SEARCH_WITH_PINYIN.get());
+        binding.posCheck.addOnCheckedChangeListener((buttonView, isChecked) -> SettingSaver.BLUEPRINT_SEARCH_WITH_POSITION.set(isChecked));
+        binding.posCheck.setChecked(SettingSaver.BLUEPRINT_SEARCH_WITH_POSITION.get());
+        binding.caseCheck.addOnCheckedChangeListener((buttonView, isChecked) -> SettingSaver.BLUEPRINT_SEARCH_WITH_CASE.set(isChecked));
+        binding.caseCheck.setChecked(SettingSaver.BLUEPRINT_SEARCH_WITH_CASE.get());
+        binding.regCheck.addOnCheckedChangeListener((buttonView, isChecked) -> SettingSaver.BLUEPRINT_SEARCH_WITH_REGEX.set(isChecked));
+        binding.regCheck.setChecked(SettingSaver.BLUEPRINT_SEARCH_WITH_REGEX.get());
 
         binding.clearButton.setOnClickListener(v -> {
             if (this.task == null) return;

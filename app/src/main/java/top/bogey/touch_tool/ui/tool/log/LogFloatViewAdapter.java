@@ -26,6 +26,7 @@ import top.bogey.touch_tool.bean.other.log.NormalLog;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinImage;
 import top.bogey.touch_tool.bean.save.log.LogSave;
+import top.bogey.touch_tool.bean.save.setting.SettingSaver;
 import top.bogey.touch_tool.bean.save.task.TaskSaver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.FloatLogActionItemBinding;
@@ -43,7 +44,7 @@ import top.bogey.touch_tool.utils.tree.TreeNode;
 
 public class LogFloatViewAdapter extends TreeAdapter {
     private Task task;
-    private int searchIndex = -1;
+    int searchIndex = -1;
 
     @NonNull
     @Override
@@ -102,7 +103,7 @@ public class LogFloatViewAdapter extends TreeAdapter {
         }
         if (isNext == null) {
             searchIndex = -1;
-            isNext = false;
+            isNext = true;
         }
         List<TreeNode> subList;
         if (searchIndex < 1 || searchIndex >= treeNodes.size()) {
@@ -121,7 +122,7 @@ public class LogFloatViewAdapter extends TreeAdapter {
             notifyItemChanged(index);
         }
 
-        TreeNode treeNode = findTreeNode(subList, text, AppUtil.getPattern(text), isNext);
+        TreeNode treeNode = findTreeNode(subList, text, isNext);
         if (treeNode != null) {
             expandNode(treeNode);
             searchIndex = treeNodes.indexOf(treeNode);
@@ -130,35 +131,61 @@ public class LogFloatViewAdapter extends TreeAdapter {
         return searchIndex;
     }
 
-    private TreeNode findTreeNode(List<TreeNode> treeNodes, String text, Pattern pattern, boolean isNext) {
+    private TreeNode findTreeNode(List<TreeNode> treeNodes, String text, boolean isNext) {
+        boolean pinyinMatch = SettingSaver.BLUEPRINT_SEARCH_WITH_PINYIN.get();
+        boolean posMatch = SettingSaver.BLUEPRINT_SEARCH_WITH_POSITION.get();
+        boolean caseMatch = SettingSaver.BLUEPRINT_SEARCH_WITH_CASE.get();
+        boolean regexMatch = SettingSaver.BLUEPRINT_SEARCH_WITH_REGEX.get();
+
+        if (!caseMatch) text = text.toLowerCase();
+        Pattern pattern = null;
+        if (regexMatch) pattern = AppUtil.getPattern(text);
+
         if (isNext) {
             for (int i = 0; i < treeNodes.size(); i++) {
                 TreeNode treeNode = treeNodes.get(i);
 
                 LogInfo logInfo = (LogInfo) treeNode.getData();
                 if (logInfo == null) continue;
+                String logString = logInfo.getLog();
+                if (!caseMatch) logString = logString.toLowerCase();
                 if (pattern == null) {
-                    if (logInfo.getLog().contains(text)) return treeNode;
+                    if (logString.contains(text)) return treeNode;
                 } else {
-                    if (pattern.matcher(logInfo.getLog()).find()) return treeNode;
+                    if (pattern.matcher(logString).find()) return treeNode;
                 }
+                if (pinyinMatch) {
+                    if (AppUtil.isPinyinContains(logString, text)) return treeNode;
+                }
+
                 Log log = logInfo.getLogObject();
                 if (log instanceof ActionLog actionLog) {
-                    Action action = task.getAction(actionLog.getActionId());
+                    Task actionTask = TaskSaver.getInstance().downFindTask(task, actionLog.getTaskId());
+                    if (actionTask == null) continue;
+                    Action action = actionTask.getAction(actionLog.getActionId());
                     if (action == null) continue;
-                    Point pos = action.getPos();
-                    String posString = pos.x + "," + pos.y;
+
+                    if (posMatch) {
+                        Point pos = action.getPos();
+                        String posString = pos.x + "," + pos.y;
+                        if (pattern == null) {
+                            if (posString.contains(text)) return treeNode;
+                        } else {
+                            if (pattern.matcher(posString).find()) return treeNode;
+                        }
+                    }
+
+                    String fullDescription = action.getFullDescription();
+                    if (!caseMatch) fullDescription = fullDescription.toLowerCase();
                     if (pattern == null) {
-                        if (action.getFullDescription().contains(text)) return treeNode;
-                        if (posString.contains(text)) return treeNode;
+                        if (fullDescription.contains(text)) return treeNode;
                     } else {
-                        if (pattern.matcher(action.getFullDescription()).find()) return treeNode;
-                        if (pattern.matcher(posString).find()) return treeNode;
+                        if (pattern.matcher(fullDescription).find()) return treeNode;
                     }
                 }
 
                 if (!treeNode.isExpanded()) {
-                    TreeNode tree = findTreeNode(treeNode.getChildren(), text, pattern, true);
+                    TreeNode tree = findTreeNode(treeNode.getChildren(), text, true);
                     if (tree != null) return tree;
                 }
             }
@@ -167,29 +194,46 @@ public class LogFloatViewAdapter extends TreeAdapter {
                 TreeNode treeNode = treeNodes.get(i);
 
                 if (!treeNode.isExpanded()) {
-                    TreeNode tree = findTreeNode(treeNode.getChildren(), text, pattern, false);
+                    TreeNode tree = findTreeNode(treeNode.getChildren(), text, false);
                     if (tree != null) return tree;
                 }
 
                 LogInfo logInfo = (LogInfo) treeNode.getData();
                 if (logInfo == null) continue;
+                String logString = logInfo.getLog();
+                if (!caseMatch) logString = logString.toLowerCase();
                 if (pattern == null) {
-                    if (logInfo.getLog().contains(text)) return treeNode;
+                    if (logString.contains(text)) return treeNode;
                 } else {
-                    if (pattern.matcher(logInfo.getLog()).find()) return treeNode;
+                    if (pattern.matcher(logString).find()) return treeNode;
                 }
+                if (pinyinMatch) {
+                    if (AppUtil.isPinyinContains(logString, text)) return treeNode;
+                }
+
                 Log log = logInfo.getLogObject();
                 if (log instanceof ActionLog actionLog) {
-                    Action action = task.getAction(actionLog.getActionId());
+                    Task actionTask = TaskSaver.getInstance().downFindTask(task, actionLog.getTaskId());
+                    if (actionTask == null) continue;
+                    Action action = actionTask.getAction(actionLog.getActionId());
                     if (action == null) continue;
-                    Point pos = action.getPos();
-                    String posString = pos.x + "," + pos.y;
+
+                    if (posMatch) {
+                        Point pos = action.getPos();
+                        String posString = pos.x + "," + pos.y;
+                        if (pattern == null) {
+                            if (posString.contains(text)) return treeNode;
+                        } else {
+                            if (pattern.matcher(posString).find()) return treeNode;
+                        }
+                    }
+
+                    String fullDescription = action.getFullDescription();
+                    if (!caseMatch) fullDescription = fullDescription.toLowerCase();
                     if (pattern == null) {
-                        if (action.getFullDescription().contains(text)) return treeNode;
-                        if (posString.contains(text)) return treeNode;
+                        if (fullDescription.contains(text)) return treeNode;
                     } else {
-                        if (pattern.matcher(action.getFullDescription()).find()) return treeNode;
-                        if (pattern.matcher(posString).find()) return treeNode;
+                        if (pattern.matcher(fullDescription).find()) return treeNode;
                     }
                 }
             }

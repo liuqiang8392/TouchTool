@@ -15,6 +15,7 @@ import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
@@ -107,13 +108,13 @@ public class BaseActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         Log.d("BaseActivity", "onStart: " + this.getClass().getName());
+        restartAccessibilityServiceBySecurePermission();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         Log.d("BaseActivity", "onResume: " + this.getClass().getName());
-        restartAccessibilityServiceBySecurePermission();
     }
 
     @Override
@@ -301,6 +302,7 @@ public class BaseActivity extends AppCompatActivity {
         // 看一下服务有没有开启
         if (AppUtil.isAccessibilityServiceEnabled(this)) return;
 
+        Toast.makeText(this, R.string.app_setting_reload_tips, Toast.LENGTH_SHORT).show();
         // 没有开启去开启
         String serviceName = String.format("%s/%s", getPackageName(), SelectToSpeakService.class.getName());
         String enabledService = Settings.Secure.getString(getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);

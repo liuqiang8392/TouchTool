@@ -20,8 +20,8 @@ import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class MakeMapAction extends MapCalculateAction implements DynamicPinsAction {
-    private final static Pin keyMorePin = new Pin(new PinObject(PinSubType.DYNAMIC), R.string.map_action_key);
-    private final static Pin valueMorePin = new Pin(new PinObject(PinSubType.DYNAMIC), R.string.map_action_value);
+    private final transient Pin keyMorePin = new Pin(new PinObject(PinSubType.DYNAMIC), R.string.map_action_key);
+    private final transient Pin valueMorePin = new Pin(new PinObject(PinSubType.DYNAMIC), R.string.map_action_value);
     private final transient Pin addPin = new Pin(new PinAdd(Arrays.asList(keyMorePin, valueMorePin)), R.string.pin_add_pin);
     private final transient Pin mapPin = new Pin(new PinMap(), true);
 

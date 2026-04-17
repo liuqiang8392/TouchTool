@@ -7,7 +7,7 @@ import com.tencent.mmkv.MMKV;
 
 public class SettingSave<T> {
     private final String key;
-
+    private T value = null;
     private final T defaultValue;
 
     private final static MMKV mmkv = MMKV.defaultMMKV();
@@ -18,18 +18,25 @@ public class SettingSave<T> {
     }
 
     public T get() {
-        Object value = switch (defaultValue) {
+        if (value != null) return value;
+        Object object = switch (defaultValue) {
             case String stringValue -> mmkv.decodeString(key, stringValue);
             case Integer integerValue -> mmkv.decodeInt(key, integerValue);
             case Boolean booleanValue -> mmkv.decodeBool(key, booleanValue);
             case Float floatValue -> mmkv.decodeFloat(key, floatValue);
-            case Parcelable parcelableValue -> mmkv.decodeParcelable(key, parcelableValue.getClass());
-            case null, default -> defaultValue;
+            case Parcelable parcelableValue -> {
+                Parcelable parcelable = mmkv.decodeParcelable(key, parcelableValue.getClass());
+                if (parcelable == null) yield defaultValue;
+                yield parcelable;
+            }
+            default -> defaultValue;
         };
-        return (T) value;
+        value = (T) object;
+        return value;
     }
 
     public void set(T value) {
+        this.value = value;
         switch (value) {
             case String stringValue -> mmkv.encode(key, stringValue);
             case Integer integerValue -> mmkv.encode(key, integerValue);

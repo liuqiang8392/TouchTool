@@ -71,7 +71,7 @@ public class SettingSaver {
     /// 是否显示任务运行提示
     public final static SettingSave<Boolean> TASK_RUNNING_TIPS = new SettingSave<>("TASK_RUNNING_TIPS", true);
     /// 是否记录任务详细日志
-    public final static SettingSave<Boolean> TASK_DETAIL_LOG = new SettingSave<>("TASK_DETAIL_LOG", false);
+    public final static SettingSave<Boolean> TASK_DETAIL_LOG = new SettingSave<>("TASK_DETAIL_LOG", true);
     /// 是否每次重置任务运行日志
     public final static SettingSave<Boolean> TASK_RESET_DETAIL_LOG = new SettingSave<>("TASK_RESET_DETAIL_LOG", false);
     /// 是否启用音量键关闭任务
@@ -112,7 +112,7 @@ public class SettingSaver {
     /// 手动执行悬浮窗位置
     public final static SettingSave<Point> MANUAL_PLAY_VIEW_POS = new SettingSave<>("MANUAL_PLAY_VIEW_POS", new Point(0, 0));
     /// 手动执行悬浮窗显示时机
-    public final static SettingSave<Integer> MANUAL_PLAY_VIEW_SHOW_TYPE = new SettingSave<>("MANUAL_PLAY_VIEW_SHOW_TYPE", 0);
+    public final static SettingSave<Integer> MANUAL_PLAY_VIEW_SHOW_TYPE = new SettingSave<>("MANUAL_PLAY_VIEW_SHOW_TYPE", 2);
     /// 手动执行悬浮窗按钮暂停/停止
     public final static SettingSave<Integer> MANUAL_PLAY_VIEW_BUTTON_PAUSE_TYPE = new SettingSave<>("MANUAL_PLAY_VIEW_BUTTON_PAUSE_TYPE", 0);
     /// 手动执行悬浮窗按钮长按跳转

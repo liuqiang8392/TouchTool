@@ -102,15 +102,15 @@ public class InstantActivity extends BaseActivity {
     public static void doAction(String taskId, String actionId, String pinId, Map<String, String> params) {
         if (taskId == null || actionId == null) return;
 
+        MainAccessibilityService service = MainApplication.getInstance().getService();
+        if (service == null || !service.isEnabled()) return;
+
         Task task = TaskSaver.getInstance().getTask(taskId);
         if (task == null) return;
         Task copy = task.copy();
 
         Action action = copy.getAction(actionId);
         if (action == null || (action instanceof StartAction startAction && !startAction.isEnable())) return;
-
-        MainAccessibilityService service = MainApplication.getInstance().getService();
-        if (service == null || !service.isEnabled()) return;
 
         if (action instanceof TimeStartAction timeStartAction) {
             service.addAlarm(copy, timeStartAction);

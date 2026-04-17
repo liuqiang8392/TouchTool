@@ -281,7 +281,7 @@ public class TaskInfoSummary {
         }
         return shortcutApps;
     }
-    
+
     public boolean isLauncherApp(String packageName) {
         return launcherApps.contains(packageName);
     }
@@ -305,13 +305,16 @@ public class TaskInfoSummary {
         Map<Action, Task> tasks = new HashMap<>();
         for (Task task : TaskSaver.getInstance().getTasks(ReceivedShareStartAction.class)) {
             for (Action action : task.getActions(ReceivedShareStartAction.class)) {
-                Pin connectToAblePin = action.getPins().stream().filter(p -> p.isSameClass(pinObject.getClass()) && p.isOut()).findFirst().orElse(null);
-                if (connectToAblePin != null) {
-                    Task copy = task.copy();
-                    Action actionCopy = copy.getAction(action.getId());
-                    Pin pinById = actionCopy.getPinById(connectToAblePin.getId());
-                    pinById.setValue(pinObject);
-                    tasks.put(actionCopy, copy);
+                ReceivedShareStartAction startAction = (ReceivedShareStartAction) action;
+                if (startAction.isEnable() && startAction.ready()) {
+                    Pin connectToAblePin = action.getPins().stream().filter(p -> p.isSameClass(pinObject.getClass()) && p.isOut()).findFirst().orElse(null);
+                    if (connectToAblePin != null) {
+                        Task copy = task.copy();
+                        Action actionCopy = copy.getAction(action.getId());
+                        Pin pinById = actionCopy.getPinById(connectToAblePin.getId());
+                        pinById.setValue(pinObject);
+                        tasks.put(actionCopy, copy);
+                    }
                 }
             }
         }

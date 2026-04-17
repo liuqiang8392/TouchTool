@@ -284,6 +284,7 @@
 
     <string name="app_setting_reload">重启无障碍服务</string>
     <string name="app_setting_reload_desc">关闭或清理当前无障碍服务，并重新启动无障碍服务</string>
+    <string name="app_setting_reload_tips">正在重启无障碍服务</string>
     <string name="app_setting_reload_error">重启无障碍失败</string>
     <string name="app_setting_reload_success">重启无障碍成功</string>
     <string name="app_setting_reload_button_text">重启</string>

@@ -31,6 +31,12 @@
                 android:orientation="horizontal">
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/exportButton"
+                    style="?attr/iconButton"
+                    android:layout_marginStart="?attr/iconButtonSize"
+                    app:icon="@drawable/icon_upload" />
+
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/title"
                     style="?attr/iconButtonOutlined"
                     android:layout_width="match_parent"
@@ -48,9 +54,9 @@
                     android:layout_gravity="end">
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/exportButton"
+                        android:id="@+id/clearButton"
                         style="?attr/iconButton"
-                        app:icon="@drawable/icon_upload" />
+                        app:icon="@drawable/icon_delete" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/closeButton"
@@ -65,7 +71,6 @@
                 style="?attr/materialCardViewFilledStyle"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginBottom="?attr/defaultPadding"
                 android:layout_weight="1"
                 app:cardBackgroundColor="?attr/colorSurface"
                 app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large">
@@ -83,8 +88,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="?attr/defaultPadding"
-                android:baselineAligned="false">
+                android:baselineAligned="false"
+                android:gravity="center_vertical">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/searchBox"
@@ -109,22 +114,139 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/preButton"
-                    style="?attr/iconButton"
-                    android:visibility="gone"
-                    app:icon="@drawable/icon_keyboard_arrow_up" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/nextButton"
-                    style="?attr/iconButton"
-                    android:visibility="gone"
-                    app:icon="@drawable/icon_keyboard_arrow_down" />
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/preButton"
+                        style="?attr/materialIconButtonStyle"
+                        android:layout_width="?attr/smallIconButtonSize"
+                        android:layout_height="?attr/smallIconButtonSize"
+                        android:insetLeft="0dp"
+                        android:insetTop="0dp"
+                        android:insetRight="0dp"
+                        android:insetBottom="0dp"
+                        android:padding="0dp"
+                        android:visibility="visible"
+                        app:icon="@drawable/icon_keyboard_arrow_up"
+                        app:iconSize="?attr/smallIconButtonSize" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/clearButton"
-                    style="?attr/iconButton"
-                    app:icon="@drawable/icon_delete" />
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/nextButton"
+                        style="?attr/materialIconButtonStyle"
+                        android:layout_width="?attr/smallIconButtonSize"
+                        android:layout_height="?attr/smallIconButtonSize"
+                        android:insetLeft="0dp"
+                        android:insetTop="0dp"
+                        android:insetRight="0dp"
+                        android:insetBottom="0dp"
+                        android:padding="0dp"
+                        android:visibility="visible"
+                        app:icon="@drawable/icon_keyboard_arrow_down"
+                        app:iconSize="?attr/smallIconButtonSize" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.button.MaterialButtonGroup
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:baselineAligned="false"
+                        android:spacing="?attr/defaultOffset">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/pinyinCheck"
+                            style="?attr/materialIconButtonStyle"
+                            android:layout_width="?attr/halfIconButtonSize"
+                            android:layout_height="?attr/halfIconButtonSize"
+                            android:backgroundTint="@color/fill_button_background_check"
+                            android:checkable="true"
+                            android:checked="false"
+                            android:insetLeft="0dp"
+                            android:insetTop="0dp"
+                            android:insetRight="0dp"
+                            android:insetBottom="0dp"
+                            android:padding="2dp"
+                            app:icon="@drawable/icon_pinyin"
+                            app:iconSize="14dp"
+                            app:iconTint="@color/button_container_check" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/posCheck"
+                            style="?attr/materialIconButtonStyle"
+                            android:layout_width="?attr/halfIconButtonSize"
+                            android:layout_height="?attr/halfIconButtonSize"
+                            android:backgroundTint="@color/fill_button_background_check"
+                            android:checkable="true"
+                            android:checked="false"
+                            android:insetLeft="0dp"
+                            android:insetTop="0dp"
+                            android:insetRight="0dp"
+                            android:insetBottom="0dp"
+                            android:padding="0dp"
+                            app:icon="@drawable/icon_123"
+                            app:iconSize="?attr/halfIconButtonSize"
+                            app:iconTint="@color/button_container_check" />
+
+                    </com.google.android.material.button.MaterialButtonGroup>
+
+                    <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="?attr/defaultOffset" />
+
+                    <com.google.android.material.button.MaterialButtonGroup
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:spacing="?attr/defaultOffset">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/caseCheck"
+                            style="?attr/materialIconButtonStyle"
+                            android:layout_width="?attr/halfIconButtonSize"
+                            android:layout_height="?attr/halfIconButtonSize"
+                            android:layout_row="1"
+                            android:layout_column="1"
+                            android:backgroundTint="@color/fill_button_background_check"
+                            android:checkable="true"
+                            android:checked="false"
+                            android:insetLeft="0dp"
+                            android:insetTop="0dp"
+                            android:insetRight="0dp"
+                            android:insetBottom="0dp"
+                            android:padding="2dp"
+                            app:icon="@drawable/icon_match_case"
+                            app:iconSize="14dp"
+                            app:iconTint="@color/button_container_check" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/regCheck"
+                            style="?attr/materialIconButtonStyle"
+                            android:layout_width="?attr/halfIconButtonSize"
+                            android:layout_height="?attr/halfIconButtonSize"
+                            android:layout_row="1"
+                            android:layout_column="2"
+                            android:backgroundTint="@color/fill_button_background_check"
+                            android:checkable="true"
+                            android:checked="false"
+                            android:insetLeft="0dp"
+                            android:insetTop="0dp"
+                            android:insetRight="0dp"
+                            android:insetBottom="0dp"
+                            android:padding="2dp"
+                            app:icon="@drawable/icon_regular_expression"
+                            app:iconSize="14dp"
+                            app:iconTint="@color/button_container_check" />
+
+                    </com.google.android.material.button.MaterialButtonGroup>
+
+                </LinearLayout>
 
             </LinearLayout>
 
