@@ -12,6 +12,7 @@ import top.bogey.touch_tool.bean.action.parent.DynamicPinsAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinAdd;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class BooleanOrShortCircuitAction extends CalculateAction implements DynamicPinsAction {
@@ -20,26 +21,30 @@ public class BooleanOrShortCircuitAction extends CalculateAction implements Dyna
     private final transient Pin secondPin = new Pin(new PinBoolean(), R.string.pin_boolean_condition);
     private final transient Pin addPin = new Pin(new PinAdd(morePin), R.string.pin_add_pin);
     private final transient Pin resultPin = new Pin(new PinBoolean(), R.string.pin_boolean_result, true);
+    private final transient Pin indexPin = new Pin(new PinInteger(), R.string.boolean_and_short_action_index, true);
 
     public BooleanOrShortCircuitAction() {
         super(ActionType.BOOLEAN_OR_SHORT);
-        addPins(firstPin, secondPin, addPin, resultPin);
+        addPins(firstPin, secondPin, addPin, resultPin, indexPin);
     }
 
     public BooleanOrShortCircuitAction(JsonObject jsonObject) {
         super(jsonObject);
         reAddPins(firstPin, secondPin);
         reAddPins(morePin);
-        reAddPins(addPin, resultPin);
+        reAddPins(addPin, resultPin, indexPin);
     }
 
     @Override
     public void calculate(TaskRunnable runnable, Pin pin) {
         boolean result = false;
-        for (Pin dynamicPin : getDynamicPins()) {
+        List<Pin> dynamicPins = getDynamicPins();
+        for (int i = 0; i < dynamicPins.size(); i++) {
+            Pin dynamicPin = dynamicPins.get(i);
             PinBoolean value = getPinValue(runnable, dynamicPin);
             if (value.getValue()) {
                 result = true;
+                indexPin.getValue(PinInteger.class).setValue(i + 1);
                 break;
             }
         }

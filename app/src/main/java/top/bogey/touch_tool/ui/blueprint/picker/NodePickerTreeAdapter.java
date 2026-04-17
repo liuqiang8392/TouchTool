@@ -186,6 +186,7 @@ public class NodePickerTreeAdapter extends TreeAdapter {
         private String getNodeTitle(NodeInfo nodeInfo) {
             StringBuilder builder = new StringBuilder();
             if (nodeInfo.text != null && !nodeInfo.text.isEmpty()) builder.append(nodeInfo.text).append(" | ");
+            if (nodeInfo.desc != null && !nodeInfo.desc.equals(nodeInfo.text) && !nodeInfo.desc.isEmpty()) builder.append(nodeInfo.desc).append(" | ");
             builder.append(nodeInfo);
             return builder.toString();
         }

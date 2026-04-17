@@ -42,8 +42,8 @@ public class ListSortAction extends ListExecuteAction {
     public void execute(TaskRunnable runnable, Pin pin) {
         PinList list = getPinValue(runnable, listPin);
         list.sort((element1, element2) -> {
-            elementPin1.setValue(element1);
-            elementPin2.setValue(element2);
+            elementPin1.setValue(element1.copy());
+            elementPin2.setValue(element2.copy());
             executeNext(runnable, comparePin);
             PinNumber<?> value = getPinValue(runnable, resultPin);
             return value.intValue();

@@ -67,7 +67,7 @@ public class FindImagesAction extends FindExecuteAction {
         if (rectList != null && !rectList.isEmpty()) {
             rectList.forEach(result -> {
                 areasPin.getValue(PinList.class).add(new PinArea(result.area));
-                similaritiesPin.getValue(PinList.class).add(new PinInteger((int) result.value));
+                similaritiesPin.getValue(PinList.class).add(new PinInteger((int) (result.value * 100)));
             });
         }
         return !areasPin.getValue(PinList.class).isEmpty();

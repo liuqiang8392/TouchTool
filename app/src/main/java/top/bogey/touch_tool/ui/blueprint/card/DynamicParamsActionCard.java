@@ -48,6 +48,7 @@ public class DynamicParamsActionCard extends ActionCard implements IDynamicPinCa
 
         initCardInfo(binding.icon, binding.title, binding.des);
         initEditDesc(binding.editButton, binding.des);
+        initExpand(binding.expandButton);
         initDelete(binding.removeButton);
         initLock(binding.lockButton);
         initPosView(binding.position);
@@ -111,7 +112,7 @@ public class DynamicParamsActionCard extends ActionCard implements IDynamicPinCa
     public boolean isEmptyPosition(float x, float y) {
         float scale = getScaleX();
 
-        List<MaterialButton> buttons = List.of(binding.lockButton, binding.addButton, binding.removeButton, binding.editButton);
+        List<MaterialButton> buttons = List.of(binding.expandButton, binding.lockButton, binding.addButton, binding.removeButton, binding.editButton);
         for (MaterialButton button : buttons) {
             PointF pointF = DisplayUtil.getLocationRelativeToView(button, this);
             float px = pointF.x * scale;
