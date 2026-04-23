@@ -46,7 +46,7 @@ configure<ApplicationExtension> {
 
         release {
             isMinifyEnabled = false
-            isShrinkResources = false
+            isShrinkResources = true
             resValue("string", "app_name", "点击助手")
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
