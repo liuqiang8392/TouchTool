@@ -14,13 +14,13 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
-import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinDouble;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class ListSortAction extends ListExecuteAction {
     private final transient Pin listPin = new Pin(new PinList());
-    private final transient Pin resultPin = new Pin(new PinInteger(), R.string.list_sort_action_result);
+    private final transient Pin resultPin = new Pin(new PinDouble(), R.string.list_sort_action_result);
     private final transient Pin elementPin1 = new Pin(new PinObject(PinSubType.DYNAMIC), R.string.pin_object, true);
     private final transient Pin elementPin2 = new Pin(new PinObject(PinSubType.DYNAMIC), R.string.pin_object, true);
     private final transient Pin comparePin = new Pin(new PinExecute(), R.string.list_sort_action_compare, true);
@@ -46,7 +46,7 @@ public class ListSortAction extends ListExecuteAction {
             elementPin2.setValue(element2.copy());
             executeNext(runnable, comparePin);
             PinNumber<?> value = getPinValue(runnable, resultPin);
-            return value.intValue();
+            return Double.compare(value.doubleValue(), 0);
         });
         executeNext(runnable, outPin);
     }

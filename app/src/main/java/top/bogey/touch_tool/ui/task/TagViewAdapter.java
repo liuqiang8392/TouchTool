@@ -88,8 +88,7 @@ public class TagViewAdapter extends RecyclerView.Adapter<TagViewAdapter.ViewHold
                 AppUtil.showDialog(context, R.string.tag_remove, result -> {
                     if (result) {
                         TagSaver.getInstance().removeTag(tag);
-                        tags.remove(index);
-                        notifyItemRemoved(index);
+                        if (tags.remove(tag)) notifyItemRemoved(index);
                     }
                 });
             });

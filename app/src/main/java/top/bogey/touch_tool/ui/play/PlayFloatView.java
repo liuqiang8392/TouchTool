@@ -431,7 +431,7 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
             super.onRotate();
             View view = FloatWindow.getView(PlayFloatView.class.getName());
             if (view instanceof PlayFloatView playFloatView) {
-                playFloatView.postDelayed(() -> playFloatView.refreshCorner(false), 100);
+                playFloatView.postDelayed(() -> playFloatView.refreshCorner(false), 200);
             }
         }
     }

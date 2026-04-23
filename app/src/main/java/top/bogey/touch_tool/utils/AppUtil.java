@@ -121,6 +121,7 @@ public class AppUtil {
 
         binding.getRoot().postDelayed(() -> {
             binding.titleEdit.requestFocus();
+            binding.titleEdit.selectAll();
             InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.showSoftInput(binding.titleEdit, InputMethodManager.SHOW_IMPLICIT);
         }, 100);

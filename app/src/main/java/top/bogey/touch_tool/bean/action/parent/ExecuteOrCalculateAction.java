@@ -83,6 +83,10 @@ public abstract class ExecuteOrCalculateAction extends Action {
         return realtimeModePin.getValue(PinBoolean.class).getValue();
     }
 
+    public void setRealtimeMode(boolean realtimeMode) {
+        realtimeModePin.getValue(PinBoolean.class).setValue(realtimeMode);
+    }
+
     protected static class ExecuteShowablePin extends ShowAblePin {
         public ExecuteShowablePin(PinBase value) {
             super(value);

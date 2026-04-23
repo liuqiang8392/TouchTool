@@ -16,6 +16,7 @@ import top.bogey.touch_tool.bean.action.parent.SyncAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
 import top.bogey.touch_tool.bean.pin.special_pin.NotLinkAblePin;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.TaskRunnable;
@@ -31,6 +32,8 @@ public class CustomEndAction extends Action implements DynamicPinsAction, SyncAc
         addFlag(SYNC_IN_TASK);
         addPin(realTimeMode);
         setPos(0, 30);
+
+        addPin(new Pin(new PinExecute(), R.string.pin_execute, false, true));
     }
 
     public CustomEndAction(JsonObject jsonObject) {

@@ -6,11 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.parent.DynamicPinsAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class CustomStartAction extends Action implements DynamicPinsAction {
@@ -19,6 +21,8 @@ public class CustomStartAction extends Action implements DynamicPinsAction {
         super(ActionType.CUSTOM_START);
         setExpandType(ExpandType.FULL);
         addFlag(SINGLE_IN_TASK);
+
+        addPin(new Pin(new PinExecute(), R.string.pin_execute, true, true));
     }
 
     public CustomStartAction(JsonObject jsonObject) {

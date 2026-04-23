@@ -15,6 +15,7 @@ import top.bogey.touch_tool.bean.action.ActionMap;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.task.CustomEndAction;
 import top.bogey.touch_tool.bean.action.task.CustomStartAction;
+import top.bogey.touch_tool.bean.action.variable.GetOrSetVariableAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
 import top.bogey.touch_tool.bean.save.task.TaskSaver;
@@ -27,7 +28,12 @@ public class SelectActionByPinDialog extends SelectActionDialog {
     private final Pin touchedPin;
 
     public SelectActionByPinDialog(@NonNull Context context, Task task, Pin touchedPin, ResultCallback<Action> callback) {
-        super(context, task, callback);
+        super(context, task, result -> {
+            if (result instanceof GetOrSetVariableAction getOrSet) {
+                getOrSet.setRealtimeMode(!touchedPin.isOut());
+            }
+            callback.onResult(result);
+        });
         this.touchedPin = touchedPin;
         dataMap = getGroupData(groupType);
         refreshSubGroup(dataMap);

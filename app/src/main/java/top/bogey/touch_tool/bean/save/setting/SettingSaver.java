@@ -124,9 +124,9 @@ public class SettingSaver {
     /// 手动执行悬浮窗按钮是否执行时隐藏
     public final static SettingSave<Boolean> MANUAL_PLAY_VIEW_BUTTON_HIDE_WHEN_EXECUTE = new SettingSave<>("MANUAL_PLAY_VIEW_HIDE_WHEN_EXECUTE", false);
     /// 手动执行悬浮窗是否未使用时淡化
-    public final static SettingSave<Boolean> MANUAL_PLAY_VIEW_NOT_USED_FADE = new SettingSave<>("MANUAL_PLAY_VIEW_NOT_USED_FADE", false);
+    public final static SettingSave<Boolean> MANUAL_PLAY_VIEW_NOT_USED_FADE = new SettingSave<>("MANUAL_PLAY_VIEW_NOT_USED_FADE", true);
     /// 手动执行悬浮窗淡化程度
-    public final static SettingSave<Integer> MANUAL_PLAY_VIEW_NOT_USED_FADE_LEVEL = new SettingSave<>("MANUAL_PLAY_VIEW_NOT_USED_FADE_LEVEL", 0);
+    public final static SettingSave<Integer> MANUAL_PLAY_VIEW_NOT_USED_FADE_LEVEL = new SettingSave<>("MANUAL_PLAY_VIEW_NOT_USED_FADE_LEVEL", 50);
     /// 手动执行悬浮窗贴边距离
     public final static SettingSave<Integer> MANUAL_PLAY_VIEW_PADDING = new SettingSave<>("MANUAL_PLAY_VIEW_PADDING", 0);
     /// 手动执行悬浮窗按钮宽度
