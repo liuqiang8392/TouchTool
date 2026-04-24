@@ -25,6 +25,8 @@ import android.util.AttributeSet;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -55,6 +57,7 @@ import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.bean.task.Variable;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.blueprint.card.ShowTextActionCard;
+import top.bogey.touch_tool.ui.blueprint.pin.PinCachedView;
 import top.bogey.touch_tool.ui.blueprint.pin.PinView;
 import top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionByPinDialog;
 import top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionDialog;
@@ -63,18 +66,20 @@ import top.bogey.touch_tool.utils.DisplayUtil;
 public class CardLayoutView extends FrameLayout implements TaskSaveListener, VariableSaveListener {
     public static final int GRID_DP_SIZE = 12;
 
-    private static final int TOUCH_NONE = 0;
-    private static final int TOUCH_BACKGROUND = 1;
-    private static final int TOUCH_CARD = 2;
-    private static final int TOUCH_PIN = 3;
+    public enum TouchState {
+        TOUCH_NONE,
+        TOUCH_BACKGROUND,
+        TOUCH_CARD,
+        TOUCH_PIN,
 
-    private static final int TOUCH_SCALE = 4;
-    private static final int TOUCH_SELECT_AREA = 5;
+        TOUCH_SCALE,
+        TOUCH_SELECT_AREA,
 
-    private static final int TOUCH_DRAG_BACKGROUND = 6;
-    private static final int TOUCH_DRAG_CARD = 7;
-    private static final int TOUCH_DRAG_PIN = 8;
-    private static final int TOUCH_DRAG_LINK = 9;
+        TOUCH_DRAG_BACKGROUND,
+        TOUCH_DRAG_CARD,
+        TOUCH_DRAG_PIN,
+        TOUCH_DRAG_LINK
+    }
 
     private static final long LONG_TOUCH_TIME = 300L;
 
@@ -87,7 +92,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
 
     private final ScaleGestureDetector detector;
 
-    private int touchState = TOUCH_NONE;
+    private TouchState touchState = TouchState.TOUCH_NONE;
     final Set<ActionCard> selectedCards = new HashSet<>();
     private ActionCard touchedCard;
 
@@ -98,6 +103,10 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
 
     private RectF selectArea = new RectF();
     private SelectActionDialog actionDialog = null;
+
+    private ViewGroup cacheBox = null;
+    private RectF cacheBoxArea = new RectF();
+    private final List<CachedPin> cachedPins = new ArrayList<>();
 
     private float startX, startY, realStartX, realStartY;
     private float lastX, lastY, realLastX, realLastY;
@@ -157,13 +166,13 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
 
             @Override
             public boolean onScaleBegin(@NonNull ScaleGestureDetector detector) {
-                touchState = TOUCH_SCALE;
+                touchState = TouchState.TOUCH_SCALE;
                 return true;
             }
 
             @Override
             public void onScaleEnd(@NonNull ScaleGestureDetector detector) {
-                touchState = TOUCH_NONE;
+                touchState = TouchState.TOUCH_NONE;
             }
         });
         detector.setQuickScaleEnabled(true);
@@ -194,6 +203,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
         offsetY = layoutInfo.getOffsetY();
         scale = layoutInfo.getScale();
         cleanSelectedCards();
+        clearCachePins();
 
         cards.values().forEach(this::removeView);
         cards.clear();
@@ -460,7 +470,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         detector.onTouchEvent(event);
-        if (touchState == TOUCH_SCALE) {
+        if (touchState == TouchState.TOUCH_SCALE) {
             longTouchHandler.removeCallbacksAndMessages(null);
             doubleTouchHandler.removeCallbacksAndMessages(null);
             return true;
@@ -484,7 +494,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
                 realLastX = realX;
                 realLastY = realY;
 
-                touchState = TOUCH_BACKGROUND;
+                touchState = TouchState.TOUCH_BACKGROUND;
                 touchedCard = null;
                 touchedPin = null;
                 selectedLinks.clear();
@@ -493,16 +503,29 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
                 longTouchHandler.removeCallbacksAndMessages(null);
 
                 if (editable) {
-                    ActionCard card = getActionCard(realX, realY, true);
-                    if (card != null) {
-                        touchState = TOUCH_CARD;
-                        touchedCard = card;
+                    CachedPin cachedPin = findCachedPin(x, y);
+                    if (cachedPin != null) {
+                        if (cachedPin.isDragPin()) {
+                            touchState = TouchState.TOUCH_PIN;
+                            touchedPin = cachedPin.getTouchedPin();
+                        } else {
+                            touchState = TouchState.TOUCH_DRAG_LINK;
+                            touchedPin = cachedPin.getTouchedPin();
+                            selectedLinks.putAll(cachedPin.getSelectedLinks());
+                        }
+                        removeCachePin(cachedPin);
+                    } else {
+                        ActionCard card = getActionCard(realX, realY, true);
+                        if (card != null) {
+                            touchState = TouchState.TOUCH_CARD;
+                            touchedCard = card;
 
-                        card.bringToFront();
-                        PinView pinView = card.getLinkAblePinView(x - card.getX(), y - card.getY());
-                        if (pinView != null) {
-                            touchState = TOUCH_PIN;
-                            touchedPin = pinView;
+                            card.bringToFront();
+                            PinView pinView = card.getLinkAblePinView(x - card.getX(), y - card.getY());
+                            if (pinView != null) {
+                                touchState = TouchState.TOUCH_PIN;
+                                touchedPin = pinView;
+                            }
                         }
                     }
                 }
@@ -511,7 +534,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
                     case TOUCH_BACKGROUND -> {
                         if (!editable) break;
                         longTouchHandler.postDelayed(() -> {
-                            touchState = TOUCH_SELECT_AREA;
+                            touchState = TouchState.TOUCH_SELECT_AREA;
                             performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                         }, LONG_TOUCH_TIME);
                     }
@@ -519,7 +542,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
                     case TOUCH_PIN -> longTouchHandler.postDelayed(() -> {
                         Pin pin = touchedPin.getPin();
                         if (pin.isLinked()) {
-                            touchState = TOUCH_DRAG_LINK;
+                            touchState = TouchState.TOUCH_DRAG_LINK;
                             performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
                             selectedLinks.putAll(pin.getLinks());
                             pin.clearLinks(task);
@@ -530,7 +553,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
                         Action action = task.getAction(linkedPin.getOwnerId());
                         if (action == null) return;
 
-                        touchState = TOUCH_NONE;
+                        touchState = TouchState.TOUCH_NONE;
                         focusCard(action.getId());
                     }, LONG_TOUCH_TIME);
                 }
@@ -542,23 +565,23 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
                     longTouchHandler.removeCallbacksAndMessages(null);
 
                     switch (touchState) {
-                        case TOUCH_BACKGROUND -> touchState = TOUCH_DRAG_BACKGROUND;
+                        case TOUCH_BACKGROUND -> touchState = TouchState.TOUCH_DRAG_BACKGROUND;
                         case TOUCH_CARD -> {
-                            touchState = TOUCH_DRAG_CARD;
+                            touchState = TouchState.TOUCH_DRAG_CARD;
                             if (!selectedCards.contains(touchedCard)) {
                                 cleanSelectedCards();
                                 addSelectedCard(touchedCard);
                             }
                         }
                         case TOUCH_PIN -> {
-                            touchState = TOUCH_DRAG_PIN;
+                            touchState = TouchState.TOUCH_DRAG_PIN;
                             cleanSelectedCards();
                         }
                     }
                 }
 
                 // 边界移动
-                if (touchState != TOUCH_DRAG_BACKGROUND) sideMove(x, y);
+                if (touchState != TouchState.TOUCH_DRAG_BACKGROUND) sideMove(x, y);
 
                 switch (touchState) {
                     case TOUCH_DRAG_BACKGROUND -> {
@@ -657,29 +680,34 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
                     }
 
                     case TOUCH_DRAG_PIN, TOUCH_DRAG_LINK -> {
-                        ActionCard card = getActionCard(realX, realY, false);
-                        if (card != null) {
-                            boolean flag = true;
-                            PinView pinView = card.getLinkAblePinView(x - card.getX(), y - card.getY());
-                            if (pinView != null) {
-                                Pin pin = pinView.getPin();
-                                if (touchState == TOUCH_DRAG_PIN) {
-                                    if (pin.linkAble(touchedPin.getPin())) {
-                                        pin.mutualAddLink(task, touchedPin.getPin());
-                                        flag = false;
-                                    }
-                                } else {
-                                    flag = !pin.addLinks(task, selectedLinks);
-                                }
-                            }
-
-                            if (flag) tryLinkTouchPin(card.getAction());
+                        // 拖动到缓存面板上
+                        if (cacheBoxArea.contains(x, y)) {
+                            addCachePin();
                         } else {
-                            showActionSelector();
+                            ActionCard card = getActionCard(realX, realY, false);
+                            if (card != null) {
+                                boolean handled = false;
+                                PinView pinView = card.getLinkAblePinView(x - card.getX(), y - card.getY());
+                                if (pinView != null) {
+                                    Pin pin = pinView.getPin();
+                                    if (touchState == TouchState.TOUCH_DRAG_PIN) {
+                                        if (pin.linkAble(touchedPin.getPin())) {
+                                            pin.mutualAddLink(task, touchedPin.getPin());
+                                            handled = true;
+                                        }
+                                    } else {
+                                        handled = pin.addLinks(task, selectedLinks);
+                                    }
+                                }
+
+                                if (!handled) tryLinkTouchPin(card.getAction());
+                            } else {
+                                showActionSelector();
+                            }
                         }
                     }
                 }
-                touchState = TOUCH_NONE;
+                touchState = TouchState.TOUCH_NONE;
                 lastX = 0;
                 lastY = 0;
             }
@@ -708,14 +736,14 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
         updateCardsPos();
     }
 
-    public boolean isTouchLinkablePin(int touchState, Pin pin) {
+    public boolean isTouchLinkablePin(TouchState touchState, Pin pin) {
         if (!pin.linkAble(task)) return false;
 
-        if (touchState == TOUCH_DRAG_PIN) {
+        if (touchState == TouchState.TOUCH_DRAG_PIN) {
             if (touchedPin == null) return false;
             Pin touchPin = touchedPin.getPin();
             return pin.linkAble(task) && pin.linkAble(touchPin);
-        } else if (touchState == TOUCH_DRAG_LINK) {
+        } else if (touchState == TouchState.TOUCH_DRAG_LINK) {
             if (selectedLinks.isEmpty()) return false;
             boolean flag = true;
             for (Map.Entry<String, String> entry : selectedLinks.entrySet()) {
@@ -735,7 +763,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
         return false;
     }
 
-    public Pin getTouchLinkblePin(int touchState, Action action) {
+    public Pin getTouchLinkblePin(TouchState touchState, Action action) {
         for (Pin pin : action.getPins()) {
             if (isTouchLinkablePin(touchState, pin)) {
                 return pin;
@@ -748,26 +776,26 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
         tryLinkTouchPin(touchState, action);
     }
 
-    public void tryLinkTouchPin(int touchState, Action action) {
+    public void tryLinkTouchPin(TouchState touchState, Action action) {
         Pin linkblePin = getTouchLinkblePin(touchState, action);
         if (linkblePin == null) return;
 
         Pin p = touchedPin.getPin();
 
-        if (touchState == TOUCH_DRAG_PIN) {
+        if (touchState == TouchState.TOUCH_DRAG_PIN) {
             linkblePin.mutualAddLink(task, p);
-        } else if (touchState == TOUCH_DRAG_LINK) {
+        } else if (touchState == TouchState.TOUCH_DRAG_LINK) {
             linkblePin.addLinks(task, selectedLinks);
         }
     }
 
     private void showActionSelector() {
-        int touchState = this.touchState;
+        TouchState touchState = this.touchState;
         float lastX = this.lastX;
         float lastY = this.lastY;
 
         Pin pin = touchedPin.getPin();
-        if (touchState == TOUCH_DRAG_PIN) {
+        if (touchState == TouchState.TOUCH_DRAG_PIN) {
             pin = new Pin(pin.getValue(), 0, pin.isOut());
         } else {
             pin = new Pin(pin.getValue(), 0, !pin.isOut());
@@ -978,7 +1006,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
         linkPaint.setStrokeWidth(gridSize / 4);
 
         // 拖动针脚，要么连线，要么挪线
-        if (touchedPin != null && (touchState == TOUCH_DRAG_PIN || touchState == TOUCH_DRAG_LINK)) {
+        if (touchedPin != null && (touchState == TouchState.TOUCH_DRAG_PIN || touchState == TouchState.TOUCH_DRAG_LINK)) {
             linkPaint.setColor(DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorPrimaryInverse));
 
             if (dragOnPin != null) {
@@ -994,7 +1022,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
                 }
             }
 
-            if (touchState == TOUCH_DRAG_PIN) {
+            if (touchState == TouchState.TOUCH_DRAG_PIN) {
                 canvas.drawPath(calculateLinkPath(touchedPin), linkPaint);
             } else {
                 for (Map.Entry<String, String> entry : selectedLinks.entrySet()) {
@@ -1013,12 +1041,12 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
         super.dispatchDraw(canvas);
 
         // 框选
-        if (touchState == TOUCH_SELECT_AREA || !selectedCards.isEmpty()) {
+        if (touchState == TouchState.TOUCH_SELECT_AREA || !selectedCards.isEmpty()) {
             DashPathEffect dashPathEffect = new DashPathEffect(new float[]{gridSize, gridSize}, 0);
             linkPaint.setPathEffect(new ComposePathEffect(cornerPathEffect, dashPathEffect));
             linkPaint.setColor(DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorPrimaryVariant));
             RectF area = new RectF();
-            if (touchState == TOUCH_SELECT_AREA) {
+            if (touchState == TouchState.TOUCH_SELECT_AREA) {
                 area.set(selectArea);
             } else {
                 area.set(calculateCardsArea(selectedCards));
@@ -1069,6 +1097,55 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
                 card.refreshCardInfo();
             }
         }
+    }
+
+    public void initCacheBoxArea(View areaView, ViewGroup cacheBox) {
+        this.cacheBox = cacheBox;
+
+        int[] viewLocation = new int[2];
+        int[] layoutLocation = new int[2];
+
+        areaView.getLocationInWindow(viewLocation);
+        getLocationInWindow(layoutLocation);
+
+        int x = viewLocation[0] - layoutLocation[0];
+        int y = viewLocation[1] - layoutLocation[1];
+        cacheBoxArea = new RectF(x, y, x + areaView.getWidth(), y + areaView.getHeight());
+    }
+
+    private CachedPin findCachedPin(float x, float y) {
+        for (CachedPin cachedPin : cachedPins) {
+            View slotDragBox = cachedPin.getPinView().getSlotDragBox();
+            int[] pinLocation = new int[2];
+            slotDragBox.getLocationInWindow(pinLocation);
+            if (new RectF(pinLocation[0], pinLocation[1], pinLocation[0] + slotDragBox.getWidth(), pinLocation[1] + slotDragBox.getHeight()).contains(x, y)) {
+                return cachedPin;
+            }
+        }
+        return null;
+    }
+
+    private void addCachePin() {
+        if (cachedPins.size() >= 4) return;
+
+        PinCachedView pinView = new PinCachedView(getContext(), touchedPin.getPin());
+        DisplayUtil.setViewHeight(pinView, (int) DisplayUtil.dp2px(getContext(), 102));
+        CachedPin cachedPin = new CachedPin(pinView, touchedPin, selectedLinks);
+        cachedPins.add(cachedPin);
+
+        cacheBox.addView(pinView);
+    }
+
+    private void removeCachePin(CachedPin cachedPin) {
+        cachedPins.remove(cachedPin);
+        cacheBox.removeView(cachedPin.getPinView());
+    }
+
+    private void clearCachePins() {
+        for (CachedPin cachedPin : cachedPins) {
+            cacheBox.removeView(cachedPin.getPinView());
+        }
+        cachedPins.clear();
     }
 
     public Task getTask() {
@@ -1198,6 +1275,34 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
 
         public void setOffsetY(float offsetY) {
             this.offsetY = offsetY;
+        }
+    }
+
+    private static class CachedPin {
+        private final PinCachedView pinView;
+        private final PinView touchedPin;
+        private final Map<String, String> selectedLinks = new HashMap<>();
+
+        public CachedPin(PinCachedView pinView, PinView touchedPin, Map<String, String> selectedLinks) {
+            this.pinView = pinView;
+            this.touchedPin = touchedPin;
+            if (selectedLinks != null) this.selectedLinks.putAll(selectedLinks);
+        }
+
+        public PinCachedView getPinView() {
+            return pinView;
+        }
+
+        public PinView getTouchedPin() {
+            return touchedPin;
+        }
+
+        public Map<String, String> getSelectedLinks() {
+            return selectedLinks;
+        }
+
+        public boolean isDragPin() {
+            return selectedLinks.isEmpty();
         }
     }
 }

@@ -137,10 +137,18 @@ public class BlueprintView extends Fragment {
         if (DisplayUtil.isPortrait(requireContext())) {
             DisplayUtil.setViewMargin(binding.floatingToolBar, 0, 0, 0, (int) DisplayUtil.dp2px(requireContext(), 48));
             DisplayUtil.setViewMargin(binding.baseToolBar, 0, 0, 0, (int) DisplayUtil.dp2px(requireContext(), 48));
+            DisplayUtil.setViewMargin(binding.cachedPinBar, 0, 0, 0, (int) DisplayUtil.dp2px(requireContext(), 30));
         } else {
             DisplayUtil.setViewMargin(binding.floatingToolBar, 0, 0, 0, (int) DisplayUtil.dp2px(requireContext(), 24));
             DisplayUtil.setViewMargin(binding.baseToolBar, 0, 0, 0, (int) DisplayUtil.dp2px(requireContext(), 24));
+            DisplayUtil.setViewMargin(binding.cachedPinBar, 0, 0, 0, (int) DisplayUtil.dp2px(requireContext(), 6));
         }
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        binding.getRoot().post(() -> binding.cardLayout.initCacheBoxArea(binding.baseToolBar, binding.cachedPinBox));
     }
 
     @Nullable
@@ -450,8 +458,20 @@ public class BlueprintView extends Fragment {
                 }, 1500);
             }
         });
-        refreshUI();
 
+        binding.cachedPinBox.setOnHierarchyChangeListener(new ViewGroup.OnHierarchyChangeListener() {
+            @Override
+            public void onChildViewAdded(View parent, View child) {
+                binding.cachedPinBar.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onChildViewRemoved(View parent, View child) {
+                binding.cachedPinBar.setVisibility(binding.cachedPinBox.getChildCount() == 0 ? View.GONE : View.VISIBLE);
+            }
+        });
+
+        refreshUI();
 
         pushStack(task);
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);

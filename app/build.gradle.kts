@@ -40,13 +40,15 @@ configure<ApplicationExtension> {
     buildTypes {
 
         debug {
+            isMinifyEnabled = false
+            isShrinkResources = false
             applicationIdSuffix = ".debug"
             resValue("string", "app_name", "点击助手Debug")
         }
 
         release {
             isMinifyEnabled = false
-            isShrinkResources = true
+            isShrinkResources = false
             resValue("string", "app_name", "点击助手")
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }

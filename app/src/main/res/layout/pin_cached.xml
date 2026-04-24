@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="?attr/iconButtonSize"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/pinSlotDragBox"
+        android:layout_width="?attr/iconButtonSize"
+        android:layout_height="?attr/iconButtonSize">
+
+        <FrameLayout
+            android:id="@+id/pinSlotBox"
+            android:layout_width="?attr/halfIconButtonSize"
+            android:layout_height="?attr/halfIconButtonSize"
+            android:layout_gravity="bottom|center" />
+
+    </FrameLayout>
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="?attr/minTouchTargetSize" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/halfIconButtonSize"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:singleLine="true"
+        android:textAppearance="@style/TextAppearance.Material3.LabelSmall" />
+
+</LinearLayout>
