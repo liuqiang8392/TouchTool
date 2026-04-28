@@ -18,14 +18,14 @@ public class ShizukuService extends IShizukuService.Stub {
     private Process process = null;
     private BufferedWriter cmdWriter = null;
     private BufferedReader outputReader = null;
-    private BufferedReader errorReader = null;
 
     public ShizukuService() {
         try {
-            process = Runtime.getRuntime().exec("sh");
+            ProcessBuilder builder = new ProcessBuilder("sh");
+            builder.redirectErrorStream(true);
+            process = builder.start();
             cmdWriter = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()));
             outputReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -45,7 +45,6 @@ public class ShizukuService extends IShizukuService.Stub {
                 cmdWriter.close();
             }
             if (outputReader != null) outputReader.close();
-            if (errorReader != null) errorReader.close();
             if (process != null) process.destroy();
         } catch (Exception e) {
             e.printStackTrace();
@@ -74,11 +73,7 @@ public class ShizukuService extends IShizukuService.Stub {
                 output.append(line).append("\n");
             }
 
-            StringBuilder error = new StringBuilder();
-            while ((line = errorReader.readLine()) != null) {
-                error.append(line).append("\n");
-            }
-            return new CmdResult(false, error.toString().trim());
+            return new CmdResult(false, "");
         } catch (Exception e) {
             e.printStackTrace();
             return new CmdResult(false, e.getMessage());

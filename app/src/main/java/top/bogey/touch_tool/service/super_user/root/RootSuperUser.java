@@ -19,7 +19,6 @@ public class RootSuperUser implements ISuperUser {
     private Process rootProcess = null;
     private BufferedWriter cmdWriter = null;
     private BufferedReader outputReader = null;
-    private BufferedReader errorReader = null;
 
     @Keep
     public RootSuperUser() {
@@ -45,7 +44,6 @@ public class RootSuperUser implements ISuperUser {
                 cmdWriter.close();
             }
             if (outputReader != null) outputReader.close();
-            if (errorReader != null) errorReader.close();
             if (rootProcess != null) rootProcess.destroy();
         } catch (Exception e) {
             e.printStackTrace();
@@ -80,11 +78,7 @@ public class RootSuperUser implements ISuperUser {
                 output.append(line).append("\n");
             }
 
-            StringBuilder error = new StringBuilder();
-            while ((line = errorReader.readLine()) != null) {
-                error.append(line).append("\n");
-            }
-            return new CmdResult(false, error.toString().trim());
+            return new CmdResult(false, "");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -96,14 +90,16 @@ public class RootSuperUser implements ISuperUser {
     public boolean openRootSession() {
         if (existRoot) return true;
         try {
-            rootProcess = Runtime.getRuntime().exec("su");
+            ProcessBuilder builder = new ProcessBuilder("su");
+            builder.redirectErrorStream(true);
+            rootProcess = builder.start();
             cmdWriter = new BufferedWriter(new OutputStreamWriter(rootProcess.getOutputStream()));
             outputReader = new BufferedReader(new InputStreamReader(rootProcess.getInputStream()));
-            errorReader = new BufferedReader(new InputStreamReader(rootProcess.getErrorStream()));
 
             existRoot = true;
             CmdResult result = runCommand("echo root");
             existRoot = result.getResult();
+            if (!existRoot) exit();
             return existRoot;
         } catch (Exception e) {
             e.printStackTrace();
