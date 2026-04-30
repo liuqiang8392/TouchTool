@@ -28,7 +28,7 @@ public class ImagePickerPreview extends BasePicker<Bitmap> {
     private final FloatPickerImagePreviewBinding binding;
     private Bitmap template;
     private boolean test;
-    private int scale = 0;
+    private int scale = 1;
 
     public ImagePickerPreview(@NonNull Context context, ResultCallback<Bitmap> callback, Bitmap image) {
         super(context, callback);

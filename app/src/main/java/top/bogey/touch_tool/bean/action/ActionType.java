@@ -47,6 +47,9 @@ public enum ActionType {
     MARK_AREA,
     SHOW_TEXT,
 
+    IS_TASK_RUNNING,
+    GET_ALL_RUNNING_TASK,
+
     // 应用相关
     OPEN_APP,
     OPEN_URI_SCHEME,
