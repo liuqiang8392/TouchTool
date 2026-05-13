@@ -10,6 +10,7 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Handler;
+import android.util.Size;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -278,10 +279,10 @@ public class FloatWindowHelper {
     }
 
     Rect getShowArea() {
-        Point size = DisplayUtil.getScreenSize(context);
+        Size size = DisplayUtil.getScreenSize(context);
         int statusBar = DisplayUtil.getStatusBarHeight(viewParent, params);
 
-        Rect showArea = new Rect(0, 0, size.x, size.y - statusBar);
+        Rect showArea = new Rect(0, 0, size.getWidth(), size.getHeight() - statusBar);
         showArea.left += config.border.left;
         showArea.top += config.border.top;
         showArea.right -= config.border.right;

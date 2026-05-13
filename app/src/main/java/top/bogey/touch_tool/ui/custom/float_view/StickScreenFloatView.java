@@ -7,6 +7,7 @@ import android.graphics.Point;
 import android.graphics.RectF;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Size;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -85,9 +86,9 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
         top = 0;
         minWidth = (int) DisplayUtil.dp2px(context, 48);
         minHeight = (int) DisplayUtil.dp2px(context, 48);
-        Point size = DisplayUtil.getScreenSize(context);
-        maxWidth = size.x;
-        maxHeight = (int) (size.y * 0.8f);
+        Size size = DisplayUtil.getScreenSize(context);
+        maxWidth = size.getWidth();
+        maxHeight = (int) (size.getHeight() * 0.8f);
     }
 
     @Override
@@ -111,7 +112,7 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
         if (object instanceof PinImage pinImage) {
             binding.image.setImageBitmap(pinImage.getImage());
             binding.saveButton.setOnClickListener(v -> {
-                AppUtil.saveImage(getContext(), pinImage.getImage());
+                AppUtil.writePictureImage(getContext(), pinImage.getImage());
                 Toast.makeText(getContext(), R.string.save_image_action, Toast.LENGTH_SHORT).show();
             });
         } else {

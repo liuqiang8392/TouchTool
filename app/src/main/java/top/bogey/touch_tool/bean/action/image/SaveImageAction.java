@@ -42,9 +42,9 @@ public class SaveImageAction extends ExecuteAction {
         String nameString = name.toString();
         Uri uri;
         if (nameString.isEmpty()) {
-            uri = AppUtil.saveImage(MainApplication.getInstance(), image.getImage());
+            uri = AppUtil.writePictureImage(MainApplication.getInstance(), image.getImage());
         } else {
-            uri = AppUtil.saveImage(MainApplication.getInstance(), image.getImage(), nameString);
+            uri = AppUtil.writePictureImage(MainApplication.getInstance(), MainApplication.appName, nameString, image.getImage());
         }
 
         if (delayDelete.longValue() > 0) {

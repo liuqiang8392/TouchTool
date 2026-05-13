@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Point;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Size;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
 
@@ -51,11 +52,11 @@ public class ToastFloatView extends FrameLayout implements FloatInterface {
 
     @Override
     public void show() {
-        Point screenSize = DisplayUtil.getScreenSize(getContext());
+        Size screenSize = DisplayUtil.getScreenSize(getContext());
         FloatWindow.with(MainApplication.getInstance().getService())
                 .setLayout(this)
                 .setTag(ToastFloatView.class.getName())
-                .setLocation(EAnchor.BOTTOM_CENTER, 0, -screenSize.y / 5)
+                .setLocation(EAnchor.BOTTOM_CENTER, 0, -screenSize.getHeight() / 5)
                 .setSpecial(true)
                 .setDragAble(false)
                 .show();

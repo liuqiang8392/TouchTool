@@ -7,6 +7,7 @@ import java.lang.reflect.Constructor;
 import top.bogey.touch_tool.bean.save.setting.SettingSaver;
 import top.bogey.touch_tool.service.super_user.root.RootSuperUser;
 import top.bogey.touch_tool.service.super_user.shizuku.ShizukuSuperUser;
+import top.bogey.touch_tool.utils.callback.BooleanResultCallback;
 
 public class SuperUser implements ISuperUser {
     private static ISuperUser instance;
@@ -48,13 +49,10 @@ public class SuperUser implements ISuperUser {
     }
 
     @Override
-    public boolean init() {
-        return false;
+    public void init(BooleanResultCallback callback) {
+        callback.onResult(false);
     }
 
-    @Override
-    public void tryInit() {
-    }
 
     @Override
     public void exit() {

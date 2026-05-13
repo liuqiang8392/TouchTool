@@ -55,16 +55,17 @@ public class TouchPointAction extends ExecuteAction implements SyncAction {
         int x = (int) (point.getValue().x - offsetValue + Math.random() * offsetValue * 2);
         int y = (int) (point.getValue().y - offsetValue + Math.random() * offsetValue * 2);
 
+        MainAccessibilityService service = MainApplication.getInstance().getService();
         if (type.getIndex() == 0) {
-            MainAccessibilityService service = MainApplication.getInstance().getService();
             service.runGesture(x, y, timeValue, null);
+            runnable.sleep(timeValue);
         } else {
             if (SuperUser.getInstance().isValid()) {
-                SuperUser.getInstance().runCommand(String.format("input tap %d %d", x, y));
+                SuperUser.getInstance().runCommand(String.format("input swipe %d %d %d %d %d", x, y, x, y, timeValue));
             }
+            runnable.sleep(timeValue);
         }
         TouchPathFloatView.showGesture(x, y);
-        runnable.sleep(timeValue);
 
         executeNext(runnable, outPin);
     }

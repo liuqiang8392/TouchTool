@@ -15,6 +15,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
+import android.util.Size;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,29 +77,29 @@ public class DisplayUtil {
 
     public static boolean isInFreeFormMode(Activity activity) {
         if (activity.isInMultiWindowMode()) return true;
-        Point screenSize = getScreenSize(activity);
+        Size screenSize = getScreenSize(activity);
 
         View decorView = activity.getWindow().getDecorView();
         Rect rect = new Rect();
         decorView.getDrawingRect(rect);
-        return screenSize.x != rect.width() || screenSize.y != rect.height();
+        return screenSize.getWidth() != rect.width() || screenSize.getHeight() != rect.height();
     }
 
     public static Rect getScreenArea(Context context) {
-        Point size = getScreenSize(context);
-        return new Rect(0, 0, size.x, size.y);
+        Size size = getScreenSize(context);
+        return new Rect(0, 0, size.getWidth(), size.getHeight());
     }
 
-    public static Point getScreenSize(Context context) {
+    public static Size getScreenSize(Context context) {
         Point point = new Point();
         // 获取屏幕宽高
         ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getRealSize(point);
-        return point;
+        return new Size(point.x, point.y);
     }
 
     public static int getScreenWidth(Context context) {
-        Point size = getScreenSize(context);
-        return Math.min(size.x, size.y);
+        Size size = getScreenSize(context);
+        return Math.min(size.getWidth(), size.getHeight());
     }
 
     @SuppressLint({"DiscouragedApi", "InternalInsetResource"})
@@ -178,8 +179,8 @@ public class DisplayUtil {
 
         int[] location = new int[2];
         anchorView.getLocationOnScreen(location);
-        Point screenSize = DisplayUtil.getScreenSize(context);
-        int maxHeight = screenSize.y - location[1] - anchorView.getHeight();
+        Size screenSize = DisplayUtil.getScreenSize(context);
+        int maxHeight = screenSize.getHeight() - location[1] - anchorView.getHeight();
         int minHeight = (int) DisplayUtil.dp2px(context, 32);
         height = Math.max(Math.min(height, maxHeight), minHeight);
         popup.setHeight(height);

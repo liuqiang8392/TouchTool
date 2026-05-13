@@ -245,12 +245,16 @@ public class SettingView extends Fragment {
 
                 // 尝试超级用户
                 ISuperUser instance = SuperUser.getInstance();
-                if (instance == null || !instance.init()) {
-                    SettingSaver.PERMISSION_SUPER_USER.set(0);
-                    binding.superUserSelect.checkIndex(0);
+                if (instance != null) {
+                    instance.init(result -> {
+                        if (!result) {
+                            SettingSaver.PERMISSION_SUPER_USER.set(0);
+                            binding.superUserSelect.checkIndex(0);
 
-                    if (instance instanceof ShizukuSuperUser) Toast.makeText(activity, R.string.permission_setting_super_user_no_shizuku, Toast.LENGTH_SHORT).show();
-                    else if (instance instanceof RootSuperUser) Toast.makeText(activity, R.string.permission_setting_super_user_no_root, Toast.LENGTH_SHORT).show();
+                            if (instance instanceof ShizukuSuperUser) Toast.makeText(activity, R.string.permission_setting_super_user_no_shizuku, Toast.LENGTH_SHORT).show();
+                            else if (instance instanceof RootSuperUser) Toast.makeText(activity, R.string.permission_setting_super_user_no_root, Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
                 refreshNotificationCmd();
                 refreshAutoReloadService();

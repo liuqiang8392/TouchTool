@@ -48,6 +48,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.lsposed.hiddenapibypass.HiddenApiBypass;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -67,6 +68,7 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.databinding.DialogInputTextBinding;
 import top.bogey.touch_tool.service.TaskInfoSummary;
@@ -276,11 +278,12 @@ public class AppUtil {
 
     public static void copyToClipboard(Context context, Bitmap image, boolean showToast) {
         if (image == null) return;
+
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-        File file = writeFile(context, DOCUMENT_DIR_NAME, "Picture_" + formatDateTime(context, System.currentTimeMillis(), false, true) + ".jpg", outputStream.toByteArray());
-        if (file == null) return;
-        Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".file_provider", file);
+        Uri uri = writeCacheFile(context, DOCUMENT_DIR_NAME, "Picture_" + formatDateTime(context, System.currentTimeMillis(), false, true) + ".jpg", outputStream.toByteArray());
+        if (uri == null) return;
+
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newUri(context.getContentResolver(), "Image", uri);
         clipboard.setPrimaryClip(clip);
@@ -476,38 +479,79 @@ public class AppUtil {
         return file.delete();
     }
 
-    public static File writeFile(Context context, String parent, String fileName, byte[] content) {
-        File fileParent = context.getCacheDir();
-        if (parent != null) fileParent = new File(fileParent, parent);
-
-        File file = new File(fileParent, fileName);
-        if (!file.exists()) {
-            if (!fileParent.exists() && !fileParent.mkdirs()) return null;
-            try {
-                if (!file.createNewFile()) return null;
-            } catch (IOException e) {
-                return null;
+    public static byte[] readFile(Context context, Uri uri) {
+        try (InputStream inputStream = context.getContentResolver().openInputStream(uri)) {
+            if (inputStream == null) return new byte[0];
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, length);
             }
+            byte[] byteArray = outputStream.toByteArray();
+            outputStream.close();
+            return byteArray;
+        } catch (IOException e) {
+            return new byte[0];
+        }
+    }
+
+    public static File writeFile(String path, InputStream inputStream) {
+        File file = new File(path);
+        File parent = file.getParentFile();
+        if (parent != null && !parent.exists()) {
+            if (!parent.mkdirs()) return null;
         }
 
         try (OutputStream outputStream = new FileOutputStream(file)) {
-            outputStream.write(content);
+            byte[] content = new byte[4096];
+            int length;
+            while ((length = inputStream.read(content)) != -1) {
+                outputStream.write(content, 0, length);
+            }
             outputStream.flush();
         } catch (IOException e) {
             return null;
         }
-
         return file;
     }
 
-    public static Uri writeFile(Context context, String fileName, byte[] content) {
-        if (content == null) return null;
+    public static Uri writeCacheFile(Context context, String parent, String fileName, byte[] content) {
+        File fileParent = context.getCacheDir();
+        if (parent != null) fileParent = new File(fileParent, parent);
 
+        File file = new File(fileParent, fileName);
+        file = writeFile(file.getAbsolutePath(), new ByteArrayInputStream(content));
+
+        if (file != null) {
+            return FileProvider.getUriForFile(context, context.getPackageName() + ".file_provider", file);
+        }
+        return null;
+    }
+
+    public static Uri writeFilesFile(Context context, String parent, String fileName, byte[] content) {
+        File fileParent = context.getFilesDir();
+        if (parent != null) fileParent = new File(fileParent, parent);
+
+        File file = new File(fileParent, fileName);
+        file = writeFile(file.getAbsolutePath(), new ByteArrayInputStream(content));
+
+        if (file != null) {
+            return FileProvider.getUriForFile(context, context.getPackageName() + ".file_provider", file);
+        }
+        return null;
+    }
+
+    public static Uri writeDownloadFile(Context context, String parent, String fileName, byte[] content) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             ContentValues contentValues = new ContentValues();
             contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, fileName);
             contentValues.put(MediaStore.Images.Media.MIME_TYPE, "*/*");
-            contentValues.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + File.separator + context.getString(R.string.app_name));
+            if (parent != null) {
+                contentValues.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + File.separator + parent);
+            } else {
+                contentValues.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS);
+            }
 
             try {
                 Uri uri = context.getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues);
@@ -522,13 +566,15 @@ public class AppUtil {
             } catch (IOException ignored) {
             }
         } else {
-            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName);
-            try (OutputStream outputStream = new FileOutputStream(file)) {
-                outputStream.write(content);
-                outputStream.flush();
-            } catch (IOException ignored) {
+            File fileParent = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+            if (parent != null) fileParent = new File(fileParent, parent);
+
+            File file = new File(fileParent, fileName);
+            file = writeFile(file.getAbsolutePath(), new ByteArrayInputStream(content));
+
+            if (file != null) {
+                return FileProvider.getUriForFile(context, context.getPackageName() + ".file_provider", file);
             }
-            return Uri.fromFile(file);
         }
         return null;
     }
@@ -555,67 +601,27 @@ public class AppUtil {
         });
     }
 
-    public static void shareImage(Context context, Bitmap image) {
-        if (image == null) return;
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.setType("image/*");
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-        File file = writeFile(context, DOCUMENT_DIR_NAME, "Picture_" + formatDateTime(context, System.currentTimeMillis(), false, true) + ".jpg", outputStream.toByteArray());
-        if (file != null) {
-            Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".file_provider", file);
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            intent.putExtra(Intent.EXTRA_STREAM, uri);
-            context.startActivity(intent);
-        }
-    }
-
-    public static void shareText(Context context, String text) {
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.setType("text/*");
-        File file = writeFile(context, DOCUMENT_DIR_NAME, "Text_" + formatDateTime(context, System.currentTimeMillis(), false, true) + ".txt", text.getBytes());
-        if (file != null) {
-            Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".file_provider", file);
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            intent.putExtra(Intent.EXTRA_STREAM, uri);
-            context.startActivity(intent);
-        }
-    }
-
-    public static byte[] readFile(Context context, Uri uri) {
-        try (InputStream inputStream = context.getContentResolver().openInputStream(uri)) {
-            if (inputStream == null) return new byte[0];
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            byte[] buffer = new byte[1024];
-            int length;
-            while ((length = inputStream.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, length);
-            }
-            byte[] byteArray = outputStream.toByteArray();
-            outputStream.close();
-            return byteArray;
-        } catch (IOException e) {
-            return new byte[0];
-        }
-    }
-
-    public static Uri saveImage(Context context, Bitmap image) {
+    public static Uri writePictureImage(Context context, Bitmap image) {
         String fileName = "Picture_" + formatDateTime(context, System.currentTimeMillis(), false, true);
-        return saveImage(context, image, fileName);
+        return writePictureImage(context, MainApplication.appName, fileName, image);
     }
 
-    public static Uri saveImage(Context context, Bitmap image, String fileName) {
+    public static Uri writePictureImage(Context context, String parent, String fileName, Bitmap image) {
         if (image == null) return null;
 
+        int index = fileName.lastIndexOf(".");
+        if (index > 0) fileName = fileName.substring(0, index);
         fileName = fileName + ".jpg";
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             ContentValues contentValues = new ContentValues();
             contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, fileName);
             contentValues.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
-            contentValues.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + File.separator + context.getString(R.string.app_name));
+            if (parent != null) {
+                contentValues.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + File.separator + parent);
+            } else {
+                contentValues.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES);
+            }
 
             try {
                 Uri uri = context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
@@ -629,15 +635,49 @@ public class AppUtil {
             } catch (IOException ignored) {
             }
         } else {
-            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), fileName);
+            File fileParent = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+            if (parent != null) fileParent = new File(fileParent, parent);
+            if (!fileParent.exists() && !fileParent.mkdirs()) return null;
+
+            File file = new File(fileParent, fileName);
             try (OutputStream outputStream = new FileOutputStream(file)) {
                 image.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
                 MediaScannerConnection.scanFile(context, new String[]{file.getAbsolutePath()}, new String[]{"image/jpeg"}, null);
             } catch (IOException ignored) {
             }
-            return Uri.fromFile(file);
+            return FileProvider.getUriForFile(context, context.getPackageName() + ".file_provider", file);
         }
         return null;
+    }
+
+    public static void shareImage(Context context, Bitmap image) {
+        if (image == null) return;
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setType("image/*");
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+        Uri uri = writeCacheFile(context, DOCUMENT_DIR_NAME, "Picture_" + formatDateTime(context, System.currentTimeMillis(), false, true) + ".jpg", outputStream.toByteArray());
+
+        if (uri != null) {
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.putExtra(Intent.EXTRA_STREAM, uri);
+            context.startActivity(intent);
+        }
+    }
+
+    public static void shareText(Context context, String text) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setType("text/*");
+
+        Uri uri = writeCacheFile(context, DOCUMENT_DIR_NAME, "Text_" + formatDateTime(context, System.currentTimeMillis(), false, true) + ".txt", text.getBytes());
+        if (uri != null) {
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.putExtra(Intent.EXTRA_STREAM, uri);
+            context.startActivity(intent);
+        }
     }
 
     public static List<AccessibilityNodeInfo> getWindows(AccessibilityService service) {

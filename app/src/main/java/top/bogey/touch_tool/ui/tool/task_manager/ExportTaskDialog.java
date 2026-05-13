@@ -10,11 +10,9 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.FileProvider;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -63,7 +61,7 @@ public class ExportTaskDialog extends FrameLayout {
             TaskRecord record = new TaskRecord(tasks, vars);
             String json = GsonUtil.toJson(record);
             String fileName = record.getDefaultName(context) + ".tt";
-            AppUtil.writeFile(context, fileName, json.getBytes());
+            AppUtil.writeDownloadFile(context, MainApplication.appName, fileName, json.getBytes());
         });
     }
 
@@ -117,9 +115,8 @@ public class ExportTaskDialog extends FrameLayout {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.setType("text/*");
 
-            File file = AppUtil.writeFile(context, AppUtil.TASK_DIR_NAME, filename + ".tt", json.getBytes());
-            if (file != null) {
-                Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".file_provider", file);
+            Uri uri = AppUtil.writeCacheFile(context, AppUtil.TASK_DIR_NAME, filename + ".tt", json.getBytes());
+            if (uri != null) {
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 intent.putExtra(Intent.EXTRA_STREAM, uri);
                 context.startActivity(intent);

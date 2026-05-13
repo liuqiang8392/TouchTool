@@ -5,12 +5,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 
-import androidx.core.content.FileProvider;
-
 import com.google.gson.JsonObject;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
@@ -73,13 +70,10 @@ public class ShareToAction extends ExecuteAction {
                     intent.setType("text/*");
                     bytes = value.toString().getBytes();
                 }
-                File file = AppUtil.writeFile(context, AppUtil.DOCUMENT_DIR_NAME, fileName, bytes);
-                if (file != null) {
-                    Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".file_provider", file);
-                    if (uri != null) {
-                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                        intent.putExtra(Intent.EXTRA_STREAM, uri);
-                    }
+                Uri uri = AppUtil.writeCacheFile(context, AppUtil.DOCUMENT_DIR_NAME, fileName, bytes);
+                if (uri != null) {
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    intent.putExtra(Intent.EXTRA_STREAM, uri);
                 }
             }
         }

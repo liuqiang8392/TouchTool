@@ -207,7 +207,7 @@ public class MainAccessibilityService extends AccessibilityService {
 
             resetAllAlarm();
             resetAllBroadcast();
-            SuperUser.getInstance().tryInit();
+            SuperUser.getInstance().init(result -> {});
             tryStartMainActivity();
         } else {
             if (systemEventReceiver != null) systemEventReceiver.unregister();

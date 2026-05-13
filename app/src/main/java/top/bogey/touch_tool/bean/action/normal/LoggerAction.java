@@ -1,6 +1,7 @@
 package top.bogey.touch_tool.bean.action.normal;
 
 import android.graphics.Point;
+import android.util.Size;
 
 import com.google.gson.JsonObject;
 
@@ -31,8 +32,8 @@ public class LoggerAction extends ExecuteAction {
 
     public LoggerAction() {
         super(ActionType.LOG);
-        Point size = DisplayUtil.getScreenSize(MainApplication.getInstance());
-        showPosPin.getValue(PinPoint.class).setValue(new Point(0, -size.y / 5));
+        Size size = DisplayUtil.getScreenSize(MainApplication.getInstance());
+        showPosPin.getValue(PinPoint.class).setValue(new Point(0, -size.getHeight() / 5));
         addPins(logPin, showPin, anchorPin, gravityPin, showPosPin, savePin);
     }
 

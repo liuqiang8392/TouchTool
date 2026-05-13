@@ -20,6 +20,7 @@ public class MainApplication extends Application implements Thread.UncaughtExcep
 
     private WeakReference<MainActivity> activity = new WeakReference<>(null);
     private WeakReference<MainAccessibilityService> service = new WeakReference<>(null);
+    public static String appName;
 
     public static MainApplication getInstance() {
         return instance;
@@ -33,6 +34,7 @@ public class MainApplication extends Application implements Thread.UncaughtExcep
     public void onCreate() {
         super.onCreate();
         instance = this;
+        appName = getString(R.string.app_name);
 
         MMKV.initialize(this);
         SettingSaver.APP_RUN_TIMES.add();

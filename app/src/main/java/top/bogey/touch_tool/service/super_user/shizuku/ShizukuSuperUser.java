@@ -17,6 +17,7 @@ import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.service.super_user.CmdResult;
 import top.bogey.touch_tool.service.super_user.ISuperUser;
 import top.bogey.touch_tool.utils.AppUtil;
+import top.bogey.touch_tool.utils.callback.BooleanResultCallback;
 
 public class ShizukuSuperUser implements ISuperUser {
     private final static int SHIZUKU_CODE = 16777114;
@@ -25,10 +26,13 @@ public class ShizukuSuperUser implements ISuperUser {
     private IShizukuService shizukuService = null;
     private Shizuku.UserServiceArgs ARGS;
 
+    private BooleanResultCallback callback;
+
     private final ServiceConnection USER_SERVICE_CONNECTION = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             shizukuService = IShizukuService.Stub.asInterface(service);
+            if (callback != null) callback.onResult(true);
         }
 
         @Override
@@ -53,20 +57,18 @@ public class ShizukuSuperUser implements ISuperUser {
     }
 
     @Override
-    public boolean init() {
+    public void init(BooleanResultCallback callback) {
         if (isValid()) {
-            bindShizukuService();
-            return true;
+            callback.onResult(true);
         } else {
-            if (existShizuku()) requestShizukuPermission();
-            return false;
-        }
-    }
-
-    @Override
-    public void tryInit() {
-        if (isValid()) {
-            bindShizukuService();
+            if (existShizuku()) requestShizukuPermission(result -> {
+                if (result) {
+                    this.callback = callback;
+                    bindShizukuService();
+                } else {
+                    callback.onResult(false);
+                }
+            });
         }
     }
 
@@ -83,10 +85,7 @@ public class ShizukuSuperUser implements ISuperUser {
 
     @Override
     public boolean isValid() {
-        if (existShizuku()) {
-            return Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED;
-        }
-        return false;
+        return shizukuService != null;
     }
 
     @Override
@@ -114,10 +113,13 @@ public class ShizukuSuperUser implements ISuperUser {
         }
     }
 
-    private void requestShizukuPermission() {
+    private void requestShizukuPermission(BooleanResultCallback callback) {
         if (!isValid()) {
             AtomicReference<Shizuku.OnRequestPermissionResultListener> listener = new AtomicReference<>();
-            listener.set((requestCode, grantResult) -> Shizuku.removeRequestPermissionResultListener(listener.get()));
+            listener.set((requestCode, grantResult) -> {
+                Shizuku.removeRequestPermissionResultListener(listener.get());
+                callback.onResult(grantResult == PackageManager.PERMISSION_GRANTED);
+            });
             Shizuku.addRequestPermissionResultListener(listener.get());
             Shizuku.requestPermission(SHIZUKU_CODE);
         }

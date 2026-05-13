@@ -2,9 +2,9 @@ package top.bogey.touch_tool.ui.tool.log;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Point;
 import android.graphics.RectF;
 import android.text.Editable;
+import android.util.Size;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
@@ -66,9 +66,9 @@ public class LogFloatView extends FrameLayout implements FloatInterface, LogSave
 
         minWidth = (int) DisplayUtil.dp2px(context, 168);
         minHeight = (int) DisplayUtil.dp2px(context, 128);
-        Point size = DisplayUtil.getScreenSize(context);
-        maxWidth = size.x;
-        maxHeight = (int) (size.y * 0.8f);
+        Size size = DisplayUtil.getScreenSize(context);
+        maxWidth = size.getWidth();
+        maxHeight = (int) (size.getHeight() * 0.8f);
 
         binding = FloatLogBinding.inflate(LayoutInflater.from(context), this, true);
         adapter = new LogFloatViewAdapter();
@@ -274,12 +274,12 @@ public class LogFloatView extends FrameLayout implements FloatInterface, LogSave
 
     @Override
     public void show() {
-        Point size = DisplayUtil.getScreenSize(getContext());
+        Size size = DisplayUtil.getScreenSize(getContext());
         FloatWindow.with(MainApplication.getInstance().getService())
                 .setLayout(this)
                 .setTag(tag)
                 .setSpecial(true)
-                .setLocation(EAnchor.BOTTOM_CENTER, 0, -size.y / 4)
+                .setLocation(EAnchor.BOTTOM_CENTER, 0, -size.getHeight() / 4)
                 .setExistEditText(true)
                 .show();
         LogSaver.getInstance().addListener(this);

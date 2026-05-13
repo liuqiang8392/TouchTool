@@ -3,8 +3,8 @@ package top.bogey.touch_tool.utils.float_window_manager;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.graphics.Point;
 import android.graphics.Rect;
+import android.util.Size;
 import android.view.View;
 import android.view.WindowManager;
 
@@ -22,9 +22,9 @@ public class FloatAnimator {
     private Animator makeAnimator(View view, FloatDockSide side, boolean enter) {
         WindowManager.LayoutParams params = (WindowManager.LayoutParams) view.getLayoutParams();
 
-        Point size = DisplayUtil.getScreenSize(view.getContext());
+        Size size = DisplayUtil.getScreenSize(view.getContext());
         int statusBar = DisplayUtil.getStatusBarHeight(view, params);
-        Rect showArea = new Rect(0, 0, size.x, size.y - statusBar);
+        Rect showArea = new Rect(0, 0, size.getWidth(), size.getHeight() - statusBar);
 
         int width = view.getWidth();
         int height = view.getHeight();

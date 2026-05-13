@@ -9,6 +9,7 @@ import android.graphics.PointF;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
+import android.util.Size;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -304,7 +305,7 @@ public class BlueprintView extends Fragment {
                             .setView(imageView)
                             .setPositiveButton(R.string.save, (dialog, which) -> {
                                 dialog.dismiss();
-                                AppUtil.saveImage(requireContext(), bitmap);
+                                AppUtil.writePictureImage(requireContext(), bitmap);
                             })
                             .setNegativeButton(R.string.share_to_action, (dialog, which) -> {
                                 dialog.dismiss();
@@ -313,9 +314,9 @@ public class BlueprintView extends Fragment {
                             .setNeutralButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
                             .show();
 
-                    Point size = DisplayUtil.getScreenSize(requireContext());
+                    Size size = DisplayUtil.getScreenSize(requireContext());
                     DisplayUtil.setViewWidth(imageView, ViewGroup.LayoutParams.MATCH_PARENT);
-                    DisplayUtil.setViewHeight(imageView, size.y / 2);
+                    DisplayUtil.setViewHeight(imageView, size.getHeight() / 2);
                     return true;
                 }
                 return false;

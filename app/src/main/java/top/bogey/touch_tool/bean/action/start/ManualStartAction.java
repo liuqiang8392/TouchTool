@@ -1,6 +1,7 @@
 package top.bogey.touch_tool.bean.action.start;
 
 import android.graphics.Point;
+import android.util.Size;
 
 import com.google.gson.JsonObject;
 
@@ -41,8 +42,8 @@ public class ManualStartAction extends StartAction {
         super(ActionType.MANUAL_START);
         showPin.setHide(true);
 
-        Point size = DisplayUtil.getScreenSize(MainApplication.getInstance());
-        showPosPin.getValue(PinPoint.class).setValue(new Point(size.x / 2, size.y / 2));
+        Size size = DisplayUtil.getScreenSize(MainApplication.getInstance());
+        showPosPin.getValue(PinPoint.class).setValue(new Point(size.getWidth() / 2, size.getHeight() / 2));
         addPins(appsPin, showTypePin, expandPin, showPosPin, anchorPin, gravityPin, lockPin, appPin);
     }
 

@@ -2,8 +2,8 @@ package top.bogey.touch_tool.ui.tool.app_info;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Point;
 import android.graphics.RectF;
+import android.util.Size;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
@@ -43,9 +43,9 @@ public class AppInfoFloatView extends FrameLayout implements FloatInterface, Res
 
         minWidth = (int) DisplayUtil.dp2px(context, 168);
         minHeight = (int) DisplayUtil.dp2px(context, 128);
-        Point size = DisplayUtil.getScreenSize(context);
-        maxWidth = size.x;
-        maxHeight = (int) (size.y * 0.8f);
+        Size size = DisplayUtil.getScreenSize(context);
+        maxWidth = size.getWidth();
+        maxHeight = (int) (size.getHeight() * 0.8f);
 
         binding = FloatAppInfoBinding.inflate(LayoutInflater.from(context), this, true);
 

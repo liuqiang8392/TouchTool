@@ -352,7 +352,7 @@ Java_top_bogey_touch_1tool_bean_save_model_OcrModel_detPostProcess(JNIEnv *env, 
     vector<int> padWidths = jintarray_to_int_vector(env, widths);
     vector<float> letterBoxInfo = jfloatarray_to_float_vector(env, letter_box_info);
 
-    jfloat* probMapPtr = env->GetFloatArrayElements(prob_map, JNI_FALSE);
+    jfloat *probMapPtr = env->GetFloatArrayElements(prob_map, JNI_FALSE);
     Mat probMap(height, width, CV_32FC1, probMapPtr);
 
     // 检测结果归一化
@@ -461,7 +461,7 @@ Java_top_bogey_touch_1tool_bean_save_model_OcrModel_detPostProcess(JNIEnv *env, 
             }
         }
         int realWidth = padWidths[index];
-        if(realWidth < cropWidth) continue;
+        if (realWidth < cropWidth) continue;
 
         Mat pad(cropHeight, realWidth, CV_32FC3, Scalar(0, 0, 0));
         crop.convertTo(pad(Rect(0, 0, crop.cols, crop.rows)), CV_32FC3, 1.0 / 255);

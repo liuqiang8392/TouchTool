@@ -1,9 +1,9 @@
 package top.bogey.touch_tool.service.super_user;
 
-public interface ISuperUser {
-    boolean init();
+import top.bogey.touch_tool.utils.callback.BooleanResultCallback;
 
-    void tryInit();
+public interface ISuperUser {
+    void init(BooleanResultCallback callback);
 
     void exit();
 
