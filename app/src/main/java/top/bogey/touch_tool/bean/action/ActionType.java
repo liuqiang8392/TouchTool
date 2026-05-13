@@ -214,6 +214,7 @@ public enum ActionType {
     LIST_SUBLIST,
     LIST_FOREACH,
     LIST_SORT,
+    LIST_REVERSE,
 
     // 字典
     MAP_MAKE,

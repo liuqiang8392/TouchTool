@@ -180,6 +180,8 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
         itemView.onStart(runnable);
         runnable.addListener(itemView);
         binding.buttonBox.addView(itemView);
+
+        if (runnable.isInterrupt()) itemView.onFinish(runnable);
     }
 
     public void setActions(List<TaskInfoSummary.ManualExecuteInfo> actions) {

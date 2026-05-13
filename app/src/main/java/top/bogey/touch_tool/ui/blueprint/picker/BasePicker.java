@@ -7,6 +7,7 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 
 import top.bogey.touch_tool.MainApplication;
+import top.bogey.touch_tool.bean.save.setting.SettingSaver;
 import top.bogey.touch_tool.utils.callback.ResultCallback;
 import top.bogey.touch_tool.utils.float_window_manager.FloatCallback;
 import top.bogey.touch_tool.utils.float_window_manager.FloatInterface;
@@ -38,7 +39,7 @@ public class BasePicker<T> extends FrameLayout implements FloatInterface {
                 .setTag(tag)
                 .setDragAble(dragAble)
                 .setExistEditText(editable)
-                .setHideByScreenshot(true)
+                .setHideByScreenshot(SettingSaver.MANUAL_PLAY_VIEW_HIDE_WHEN_SCREENSHOT.get())
                 .setCallback(floatCallback)
                 .show();
     }

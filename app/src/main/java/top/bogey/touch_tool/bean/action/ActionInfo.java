@@ -57,6 +57,7 @@ import top.bogey.touch_tool.bean.action.list.ListIndexOfAction;
 import top.bogey.touch_tool.bean.action.list.ListIsEmptyAction;
 import top.bogey.touch_tool.bean.action.list.ListRemoveAction;
 import top.bogey.touch_tool.bean.action.list.ListRemoveObjectAction;
+import top.bogey.touch_tool.bean.action.list.ListReverseAction;
 import top.bogey.touch_tool.bean.action.list.ListSetAction;
 import top.bogey.touch_tool.bean.action.list.ListSizeAction;
 import top.bogey.touch_tool.bean.action.list.ListSortAction;
@@ -411,6 +412,7 @@ public class ActionInfo {
     private final static ActionInfo LIST_SUBLIST_INFO = new ActionInfo(ActionType.LIST_SUBLIST, ListSubListAction.class, R.drawable.icon_split_scene, R.string.list_sublist_action, R.string.list_sublist_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo LIST_FOREACH_INFO = new ActionInfo(ActionType.LIST_FOREACH, ListForeachAction.class, R.drawable.icon_repeat, R.string.list_foreach_action, R.string.list_foreach_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo LIST_SORT_INFO = new ActionInfo(ActionType.LIST_SORT, ListSortAction.class, R.drawable.icon_swap_horiz, R.string.list_sort_action, R.string.list_sort_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo LIST_REVERSE_INFO = new ActionInfo(ActionType.LIST_REVERSE, ListReverseAction.class, R.drawable.icon_swap_horiz, R.string.list_reverse_action, R.string.list_reverse_action_desc, 0, NormalActionCard.class);
 
 
     // Map操作
@@ -634,6 +636,7 @@ public class ActionInfo {
             case LIST_SUBLIST -> LIST_SUBLIST_INFO;
             case LIST_FOREACH -> LIST_FOREACH_INFO;
             case LIST_SORT -> LIST_SORT_INFO;
+            case LIST_REVERSE -> LIST_REVERSE_INFO;
 
 
             case MAP_MAKE -> MAP_MAKE_INFO;

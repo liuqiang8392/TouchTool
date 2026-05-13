@@ -788,6 +788,9 @@
     <string name="list_sort_action_compare">比较</string>
     <string name="list_sort_action_result">比较结果</string>
 
+    <string name="list_reverse_action">列表翻转</string>
+    <string name="list_reverse_action_desc">对列表中的元素进行翻转</string>
+
 
     <!-- 动作-Map -->
     <string name="map_action_key">键</string>

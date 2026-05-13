@@ -81,6 +81,12 @@ public class SendNotificationAction extends ExecuteAction {
             builder.setSmallIcon(R.mipmap.ic_launcher);
             builder.setLargeIcon(Icon.createWithResource(context, R.mipmap.ic_launcher));
         }
+
+        String notificationId = runnable.getTask().getId() + getId();
+        if (!override.getValue()) {
+            notificationId = UUID.randomUUID().toString();
+        }
+
         Pin linkedPin = executePin.getLinkedPin(runnable.getTask());
         if (linkedPin != null) {
             Intent intent = new Intent(context, InstantActivity.class);
@@ -88,12 +94,8 @@ public class SendNotificationAction extends ExecuteAction {
             intent.putExtra(InstantActivity.TASK_ID, runnable.getTask().getId());
             intent.putExtra(InstantActivity.ACTION_ID, getId());
             intent.putExtra(InstantActivity.PIN_ID, executePin.getId());
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, getId().hashCode(), intent, PendingIntent.FLAG_IMMUTABLE);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, notificationId.hashCode(), intent, PendingIntent.FLAG_IMMUTABLE);
             builder.setContentIntent(pendingIntent);
-        }
-        String notificationId = getId();
-        if (!override.getValue()) {
-            notificationId = UUID.randomUUID().toString();
         }
         notificationManager.notify(notificationId.hashCode(), builder.build());
 

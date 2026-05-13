@@ -164,13 +164,24 @@ public class SelectActionDialog extends BottomSheetDialog {
             if (binding.searchBox.getVisibility() == View.VISIBLE) {
                 binding.searchBox.setVisibility(View.GONE);
                 binding.searchEdit.setText("");
+                SettingSaver.BLUEPRINT_CARD_SEARCH_EXPAND.set(false);
             } else {
                 binding.searchBox.setVisibility(View.VISIBLE);
+                SettingSaver.BLUEPRINT_CARD_SEARCH_EXPAND.set(true);
                 binding.searchEdit.requestFocus();
                 InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.showSoftInput(binding.searchEdit, InputMethodManager.SHOW_IMPLICIT);
             }
         });
+        Boolean expand = SettingSaver.BLUEPRINT_CARD_SEARCH_EXPAND.get();
+        binding.searchBox.setVisibility(expand ? View.VISIBLE : View.GONE);
+        if (expand) {
+            binding.searchBox.postDelayed(() -> {
+                binding.searchEdit.requestFocus();
+                InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(binding.searchEdit, InputMethodManager.SHOW_IMPLICIT);
+            }, 100);
+        }
 
         binding.addButton.setOnClickListener(v -> {
             GroupType groupType = (GroupType) binding.addButton.getTag();

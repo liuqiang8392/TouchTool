@@ -84,6 +84,8 @@ public class SettingSaver {
     public final static SettingSave<String> BLUEPRINT_LAST_GROUP = new SettingSave<>("BLUEPRINT_LAST_GROUP", "");
     /// 蓝图最后打开的子分组
     public final static SettingSave<String> BLUEPRINT_LAST_SUB_GROUP = new SettingSave<>("BLUEPRINT_LAST_SUB_GROUP", "");
+    /// 蓝图卡片搜索展开状态
+    public final static SettingSave<Boolean> BLUEPRINT_CARD_SEARCH_EXPAND = new SettingSave<>("BLUEPRINT_CARD_SEARCH_EXPAND", false);
     /// 蓝图卡片默认展开状态
     public final static SettingSave<Integer> BLUEPRINT_CARD_EXPAND_STATE = new SettingSave<>("BLUEPRINT_CARD_EXPAND_STATE", 2);
     /// 蓝图卡片整理时默认间距
