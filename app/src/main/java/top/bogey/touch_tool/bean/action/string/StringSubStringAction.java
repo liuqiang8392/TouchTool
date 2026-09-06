@@ -38,12 +38,12 @@ public class StringSubStringAction extends CalculateAction {
         if (startPos < 0) {
             startPos = Math.max(0, max + startPos + 1);
         }
-        startPos = Math.max(1, Math.min(max, startPos));
+        startPos = Math.clamp(startPos, 1, max);
         int endPos = end.intValue();
         if (endPos < 0) {
             endPos = Math.max(0, max + endPos + 1);
         }
-        endPos = Math.max(1, Math.min(max, endPos));
+        endPos = Math.clamp(endPos, 1, max);
         if (startPos > endPos) {
             int temp = startPos;
             startPos = endPos;

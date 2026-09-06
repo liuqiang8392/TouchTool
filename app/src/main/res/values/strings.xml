@@ -63,6 +63,7 @@
     <string name="task_add">添加任务</string>
     <string name="task_update">修改任务</string>
     <string name="task_search">搜索任务</string>
+    <string name="task_search_hint">搜索任务名称、拼音</string>
     <string name="task_search_history">搜索历史</string>
     <string name="task_search_result">搜索结果</string>
     <string name="task_tag_add">添加标签</string>
@@ -292,6 +293,9 @@
 
     <string name="app_setting_auto_reload">自动重启无障碍</string>
     <string name="app_setting_auto_reload_desc">授予 写入安全设置 权限能够使应用自动重启无障碍服务</string>
+    <string name="app_setting_auto_reload_title">写入安全设置权限</string>
+    <string name="app_setting_auto_reload_message">请授予写入安全设置权限</string>
+
 
     <string name="app_setting_hide_back">隐藏后台</string>
     <string name="app_setting_hide_back_desc">在最近任务列表里隐藏本应用</string>
@@ -312,7 +316,7 @@
     <string name="app_setting_auto_backup_tips">已备份</string>
 
     <string name="app_setting_clean_cache">清理缓存</string>
-    <string name="app_setting_clean_cache_desc">点击清理任务日志、分享任务、分享文件产生的缓存。当前: %s</string>
+    <string name="app_setting_clean_cache_desc">点击清理任务日志、分享任务、分享文件产生的缓存。\n当前: %s</string>
     <string name="app_setting_clean_cache_button_text">清理</string>
 
 
@@ -329,7 +333,9 @@
     <string name="permission_setting_notification_type_tips">请手动授予读取通知的权限</string>
 
     <string name="permission_setting_notification_type_sensitive">隐私通知</string>
-    <string name="permission_setting_notification_type_sensitive_desc">Android 15及以上版本一些类似验证码之类的通知软件可能无法监听。可授予隐私通知权限解除限制。</string>
+    <string name="permission_setting_notification_type_sensitive_desc">软件可能无法监听Android 15及以上版本一些类似验证码之类的通知。可授予隐私通知权限解除限制。</string>
+    <string name="permission_setting_notification_type_sensitive_dialog_title">隐私通知权限</string>
+    <string name="permission_setting_notification_type_sensitive_dialog_message">请授予隐私通知权限</string>
 
     <string name="permission_setting_capture_channel_name">录屏服务快捷关闭通知</string>
     <string name="permission_setting_capture_channel_tips">能在通知栏快速关闭录屏服务</string>

@@ -181,7 +181,7 @@ import top.bogey.touch_tool.bean.action.system.WriteToClipboardAction;
 import top.bogey.touch_tool.bean.action.task.CustomEndAction;
 import top.bogey.touch_tool.bean.action.task.CustomStartAction;
 import top.bogey.touch_tool.bean.action.task.ExecuteTaskAction;
-import top.bogey.touch_tool.bean.action.task.GetAllRunningTask;
+import top.bogey.touch_tool.bean.action.task.GetAllRunningTaskAction;
 import top.bogey.touch_tool.bean.action.task.IsTaskRunningAction;
 import top.bogey.touch_tool.bean.action.task.StopTaskAction;
 import top.bogey.touch_tool.bean.action.variable.GetOrSetVariableAction;
@@ -217,7 +217,7 @@ public class ActionInfo {
     private final static ActionInfo EXECUTE_TASK_INFO = new ActionInfo(ActionType.EXECUTE_TASK, ExecuteTaskAction.class, R.drawable.icon_assignment, R.string.execute_task_action, 0, 0, ExecuteCustomActionCard.class);
     private final static ActionInfo STOP_TASK_INFO = new ActionInfo(ActionType.STOP_TASK, StopTaskAction.class, R.drawable.icon_stop, R.string.stop_task_action, R.string.stop_task_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo IS_TASK_RUNNING_INFO = new ActionInfo(ActionType.IS_TASK_RUNNING, IsTaskRunningAction.class, R.drawable.icon_assignment, R.string.is_task_running_action, R.string.is_task_running_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo GET_ALL_RUNNING_TASK_INFO = new ActionInfo(ActionType.GET_ALL_RUNNING_TASK, GetAllRunningTask.class, R.drawable.icon_assignment, R.string.get_all_running_task_action, R.string.get_all_running_task_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo GET_ALL_RUNNING_TASK_INFO = new ActionInfo(ActionType.GET_ALL_RUNNING_TASK, GetAllRunningTaskAction.class, R.drawable.icon_assignment, R.string.get_all_running_task_action, R.string.get_all_running_task_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo GET_VARIABLE_INFO = new ActionInfo(ActionType.GET_VARIABLE, GetVariableAction.class, R.drawable.icon_upload, R.string.get_value_action, 0, 0, NormalActionCard.class);
     private final static ActionInfo SET_VARIABLE_INFO = new ActionInfo(ActionType.SET_VARIABLE, SetVariableAction.class, R.drawable.icon_download, R.string.set_value_action, 0, 0, NormalActionCard.class);
     private final static ActionInfo GET_OR_SET_VARIABLE_INFO = new ActionInfo(ActionType.GET_OR_SET_VARIABLE, GetOrSetVariableAction.class, R.drawable.icon_shuffle, R.string.get_or_set_value_action, 0, 0, NormalActionCard.class);

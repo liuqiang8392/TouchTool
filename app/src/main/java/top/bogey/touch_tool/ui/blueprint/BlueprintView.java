@@ -149,6 +149,7 @@ public class BlueprintView extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setHideActivityBackground(false);
         binding.getRoot().post(() -> binding.cardLayout.initCacheBoxArea(binding.baseToolBar, binding.cachedPinBox));
     }
 
@@ -483,6 +484,7 @@ public class BlueprintView extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        setHideActivityBackground(SettingSaver.APP_HIDE_ACTIVITY_BACKGROUND.get());
 
         while (!taskStack.empty()) {
             taskStack.pop().save();
@@ -582,5 +584,20 @@ public class BlueprintView extends Fragment {
             }
         }
         return searchActions;
+    }
+
+    private void setHideActivityBackground(boolean hide) {
+        int taskId = requireActivity().getTaskId();
+        ActivityManager manager = (ActivityManager) requireActivity().getSystemService(Context.ACTIVITY_SERVICE);
+        if (manager != null) {
+            List<ActivityManager.AppTask> taskList = manager.getAppTasks();
+            if (taskList != null) {
+                for (ActivityManager.AppTask task : taskList) {
+                    ActivityManager.RecentTaskInfo taskInfo = task.getTaskInfo();
+                    if (taskInfo == null) continue;
+                    if (taskInfo.id == taskId) task.setExcludeFromRecents(hide);
+                }
+            }
+        }
     }
 }

@@ -92,7 +92,7 @@ public class SelectActionByPinDialog extends SelectActionDialog {
                 List<Object> privateVars = new ArrayList<>();
                 for (Variable var : task.getVariables()) {
                     if (touchedPin.getValue().linkFromAble(var.getValue())) privateVars.add(var);
-                    else if (touchedPin.isSameClass(PinExecute.class)) privateVars.add(var);
+                    else if (touchedPin.getValue() instanceof PinExecute) privateVars.add(var);
                 }
                 map.put(PRIVATE, privateVars);
 
@@ -100,7 +100,7 @@ public class SelectActionByPinDialog extends SelectActionDialog {
                 List<Object> publicVars = new ArrayList<>();
                 for (Variable var : VariableSaver.getInstance().getVars()) {
                     if (touchedPin.getValue().linkFromAble(var.getValue())) publicVars.add(var);
-                    else if (touchedPin.isSameClass(PinExecute.class)) publicVars.add(var);
+                    else if (touchedPin.getValue() instanceof PinExecute) publicVars.add(var);
                 }
                 map.put(GLOBAL, publicVars);
 
@@ -110,7 +110,7 @@ public class SelectActionByPinDialog extends SelectActionDialog {
                     List<Object> list = new ArrayList<>();
                     for (Variable var : parent.getVariables()) {
                         if (touchedPin.getValue().linkFromAble(var.getValue())) list.add(var);
-                        else if (touchedPin.isSameClass(PinExecute.class)) list.add(var);
+                        else if (touchedPin.getValue() instanceof PinExecute) list.add(var);
                     }
                     if (!list.isEmpty()) map.put(PARENT_PREFIX + parent.getTitle(), list);
                     parent = parent.getParent();

@@ -20,12 +20,15 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CombinedVibration;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.os.VibratorManager;
 import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.accessibility.AccessibilityEvent;
@@ -36,7 +39,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.MutableLiveData;
 
-import java.lang.ref.WeakReference;
+import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -46,6 +49,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
@@ -207,7 +211,9 @@ public class MainAccessibilityService extends AccessibilityService {
 
             resetAllAlarm();
             resetAllBroadcast();
-            SuperUser.getInstance().init(result -> {});
+            initTTS();
+            SuperUser.getInstance().init(result -> {
+            });
             tryStartMainActivity();
         } else {
             if (systemEventReceiver != null) systemEventReceiver.unregister();
@@ -221,6 +227,7 @@ public class MainAccessibilityService extends AccessibilityService {
             stopSound(null);
             cancelAllAlarm();
             cancelAllBroadcast();
+            destroyTTS();
             SuperUser.getInstance().exit();
             FloatWindow.dismiss(KeepAliveFloatView.class.getName());
         }
@@ -521,7 +528,9 @@ public class MainAccessibilityService extends AccessibilityService {
             AlarmManager.AlarmClockInfo clockInfo = new AlarmManager.AlarmClockInfo(nextStartTime, null);
             manager.setAlarmClock(clockInfo, pendingIntent);
         }
-        LogSaver.getInstance().addLog(task.getId(), new LogInfo(new NormalLog(getString(R.string.time_start_action_set_tips, AppUtil.formatDateTime(this, nextStartTime, false, true)))), true);
+        if (timeStartAction.isShowTimeLog()) {
+            LogSaver.getInstance().addLog(task.getId(), new LogInfo(new NormalLog(getString(R.string.time_start_action_set_tips, AppUtil.formatDateTime(this, nextStartTime, false, true)))), true);
+        }
     }
 
     public void replaceAlarm(Task task) {
@@ -681,9 +690,12 @@ public class MainAccessibilityService extends AccessibilityService {
 
     public void stopCapture() {
         if (captureConnection != null) {
-            unbindService(captureConnection);
-            captureConnection = null;
-            stopService(new Intent(this, CaptureService.class));
+            try {
+                unbindService(captureConnection);
+                captureConnection = null;
+                stopService(new Intent(this, CaptureService.class));
+            } catch (Exception ignored) {
+            }
         }
         captureBinder = null;
     }
@@ -722,13 +734,20 @@ public class MainAccessibilityService extends AccessibilityService {
 
     // 截图 ----------------------------------------------------------------------------- start
 
-    private WeakReference<Bitmap> screenShot = new WeakReference<>(null);
+    private SoftReference<Bitmap> screenShot = new SoftReference<>(null);
 
     public synchronized Bitmap getScreenShotByCapture() {
-        if (captureBinder == null) return screenShot.get();
+        Bitmap cachedBitmap = screenShot.get();
+        if (captureBinder == null) return cachedBitmap;
+
         Bitmap bitmap = captureBinder.getScreenShot();
-        screenShot = new WeakReference<>(bitmap);
-        return bitmap;
+        if (bitmap == null) {
+            return cachedBitmap;
+        } else {
+            if (cachedBitmap != null && !cachedBitmap.isRecycled()) cachedBitmap.recycle();
+            screenShot = new SoftReference<>(bitmap);
+            return bitmap;
+        }
     }
 
     // 不能递归调用，会锁死
@@ -742,7 +761,11 @@ public class MainAccessibilityService extends AccessibilityService {
                         Bitmap bitmap = Bitmap.wrapHardwareBuffer(hardwareBuffer, result.getColorSpace());
                         if (bitmap != null) {
                             Bitmap copy = bitmap.copy(Bitmap.Config.ARGB_8888, true);
-                            screenShot = new WeakReference<>(copy);
+
+                            Bitmap cachedBitmap = screenShot.get();
+                            if (cachedBitmap != null && !cachedBitmap.isRecycled()) cachedBitmap.recycle();
+
+                            screenShot = new SoftReference<>(copy);
                             bitmap.recycle();
                             future.complete(copy);
                         }
@@ -782,7 +805,7 @@ public class MainAccessibilityService extends AccessibilityService {
     @Override
     protected boolean onKeyEvent(KeyEvent event) {
         if (!SettingSaver.TASK_VOLUME_KEY_STOP.get()) return super.onKeyEvent(event);
-        if (handler == null) handler = new Handler();
+        if (handler == null) handler = new Handler(Looper.getMainLooper());
 
         if (event != null && event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN) {
             if (event.getAction() == KeyEvent.ACTION_DOWN) {
@@ -909,25 +932,65 @@ public class MainAccessibilityService extends AccessibilityService {
     }
 
     private TextToSpeech tts;
+    private final Map<String, BooleanResultCallback> speakCallbacks = new HashMap<>();
 
-    public void speak(String text) {
-        if (tts == null) {
-            tts = new TextToSpeech(this, status -> {
-                if (status == TextToSpeech.SUCCESS) {
-                    tts.setLanguage(Locale.CHINA);
-                    tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
-                }
-            });
-        } else {
-            tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
+    private void initTTS() {
+        if (tts != null) return;
+        tts = new TextToSpeech(this, status -> {
+            if (status == TextToSpeech.SUCCESS) {
+                tts.setLanguage(Locale.CHINA);
+                tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                    @Override
+                    public void onDone(String utteranceId) {
+                        BooleanResultCallback callback = speakCallbacks.remove(utteranceId);
+                        if (callback != null) callback.onResult(true);
+                    }
+
+                    @Override
+                    public void onError(String utteranceId) {
+                        BooleanResultCallback callback = speakCallbacks.remove(utteranceId);
+                        if (callback != null) callback.onResult(false);
+                    }
+
+                    @Override
+                    public void onStart(String utteranceId) {
+
+                    }
+                });
+            }
+        });
+    }
+
+    private void destroyTTS() {
+        if (tts != null) {
+            tts.stop();
+            tts.shutdown();
+            tts = null;
         }
+    }
+
+    public void speak(String text, BooleanResultCallback callback) {
+        if (tts == null) return;
+        String id = UUID.randomUUID().toString();
+        speakCallbacks.put(id, callback);
+
+        Bundle params = new Bundle();
+        params.putString(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, id);
+
+        tts.speak(text, TextToSpeech.QUEUE_FLUSH, params, id);
     }
 
     // 播放声音 ----------------------------------------------------------------------------- end
 
     // 震动 ----------------------------------------------------------------------------- start
     public void vibrate(long duration) {
-        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        Vibrator vibrator;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            VibratorManager manager = (VibratorManager) getSystemService(Context.VIBRATOR_MANAGER_SERVICE);
+            vibrator = manager.getDefaultVibrator();
+        } else {
+            vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        }
         if (vibrator == null) return;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

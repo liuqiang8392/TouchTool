@@ -57,8 +57,8 @@ public class PinTouchPath extends PinScaleAble<String> {
 
         for (PathPart pathPart : paths) {
             for (PathPoint point : pathPart.getPoints()) {
-                int x = point.x + offsetX;
-                int y = point.y + offsetY;
+                int x = Math.max(0, point.x + offsetX);
+                int y = Math.max(0, point.y + offsetY);
 
                 Path path = prePathMap.get(point.getId());
                 int time = preTimeMap.computeIfAbsent(point.getId(), k -> 0);
@@ -108,8 +108,8 @@ public class PinTouchPath extends PinScaleAble<String> {
 
             int lastX, lastY;
             for (PathPoint point : pathPart.getPoints()) {
-                int x = point.x + offsetX;
-                int y = point.y + offsetY;
+                int x = Math.max(0, point.x + offsetX);
+                int y = Math.max(0, point.y + offsetY);
                 boolean willContinue = !point.isEnd() && !end;
 
                 Point prePoint = prePointMap.get(point.getId());

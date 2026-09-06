@@ -265,8 +265,7 @@
     <top.bogey.touch_tool.ui.blueprint.CardLayoutView
         android:id="@+id/cardLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:layout_height="match_parent" />
 
     <FrameLayout
         android:id="@+id/cachedPinBar"
@@ -295,7 +294,6 @@
 
     </FrameLayout>
 
-
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/baseToolBar"
         style="?attr/materialCardViewFilledStyle"
@@ -314,7 +312,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/editButton"
-                style="?attr/materialIconButtonStyle"
+                style="?attr/defaultIconButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/fill_button_background_check"
@@ -324,21 +322,21 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/addButton"
-                style="?attr/materialIconButtonFilledStyle"
+                style="?attr/defaultIconButtonFilled"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:icon="@drawable/icon_add" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/sortButton"
-                style="?attr/materialIconButtonStyle"
+                style="?attr/defaultIconButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:icon="@drawable/icon_refresh" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/pasteButton"
-                style="?attr/materialIconButtonStyle"
+                style="?attr/defaultIconButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="4dp"
@@ -368,14 +366,14 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/exchangeButton"
-                style="?attr/materialIconButtonStyle"
+                style="?attr/defaultIconButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:icon="@drawable/icon_swap_horiz" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/lockButton"
-                style="?attr/materialIconButtonStyle"
+                style="?attr/defaultIconButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/fill_button_background_check"
@@ -385,7 +383,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/copyButton"
-                style="?attr/materialIconButtonStyle"
+                style="?attr/defaultIconButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="4dp"
@@ -394,7 +392,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/deleteButton"
-                style="?attr/materialIconButtonFilledStyle"
+                style="?attr/defaultIconButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/fill_button_background_error_check"

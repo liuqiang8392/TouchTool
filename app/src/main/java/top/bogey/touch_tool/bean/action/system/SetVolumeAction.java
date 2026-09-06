@@ -39,15 +39,15 @@ public class SetVolumeAction extends ExecuteAction {
         int idx = volumeType.getIndex();
         if (idx == 0) {
             int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-            int value = Math.max(0, Math.min(volume.intValue(), maxVolume));
+            int value = Math.clamp(volume.intValue(), 0, maxVolume);
             audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, value, 0);
         } else if (idx == 1) {
             int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION);
-            int value = Math.max(0, Math.min(volume.intValue(), maxVolume));
+            int value = Math.clamp(volume.intValue(), 0, maxVolume);
             audioManager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, value, 0);
         } else if (idx == 2) {
             int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM);
-            int value = Math.max(0, Math.min(volume.intValue(), maxVolume));
+            int value = Math.clamp(volume.intValue(), 0, maxVolume);
             audioManager.setStreamVolume(AudioManager.STREAM_ALARM, value, 0);
         }
         executeNext(runnable, outPin);

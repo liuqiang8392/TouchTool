@@ -35,21 +35,21 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/backButton"
-                style="?attr/materialIconButtonFilledStyle"
+                style="?attr/defaultIconButtonFilled"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:icon="@drawable/icon_arrow_back" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/saveButton"
-                style="?attr/materialIconButtonFilledStyle"
+                style="?attr/defaultIconButtonFilled"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:icon="@drawable/icon_check" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/detailButton"
-                style="?attr/materialIconButtonFilledStyle"
+                style="?attr/defaultIconButtonFilled"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:icon="@drawable/icon_more_horiz" />
@@ -174,21 +174,21 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/exportButton"
-                    style="?attr/materialIconButtonOutlinedStyle"
+                    style="?attr/defaultIconButtonOutlined"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:icon="@drawable/icon_upload" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/importButton"
-                    style="?attr/materialIconButtonOutlinedStyle"
+                    style="?attr/defaultIconButtonOutlined"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:icon="@drawable/icon_download" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/typeButton"
-                    style="?attr/materialIconButtonOutlinedStyle"
+                    style="?attr/defaultIconButtonOutlined"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/TextAppearance.Material3.BodySmall"

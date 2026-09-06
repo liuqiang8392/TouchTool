@@ -170,7 +170,7 @@ public class SelectActionDialog extends BottomSheetDialog {
                 SettingSaver.BLUEPRINT_CARD_SEARCH_EXPAND.set(true);
                 binding.searchEdit.requestFocus();
                 InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(binding.searchEdit, InputMethodManager.SHOW_IMPLICIT);
+                imm.showSoftInput(binding.searchEdit, 0);
             }
         });
         Boolean expand = SettingSaver.BLUEPRINT_CARD_SEARCH_EXPAND.get();
@@ -179,7 +179,7 @@ public class SelectActionDialog extends BottomSheetDialog {
             binding.searchBox.postDelayed(() -> {
                 binding.searchEdit.requestFocus();
                 InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(binding.searchEdit, InputMethodManager.SHOW_IMPLICIT);
+                imm.showSoftInput(binding.searchEdit, 0);
             }, 100);
         }
 

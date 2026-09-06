@@ -102,6 +102,7 @@ public class TaskRunnable implements Runnable {
     }
 
     public Task getTask() {
+        if (taskContextStack.isEmpty()) return task;
         return taskContextStack.peek().getTask();
     }
 

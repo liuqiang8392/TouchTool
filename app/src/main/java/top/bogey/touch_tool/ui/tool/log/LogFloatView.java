@@ -252,8 +252,8 @@ public class LogFloatView extends FrameLayout implements FloatInterface, LogSave
                 if (params.height <= 0) params.height = originHeight;
                 params.width += (int) dx;
                 params.height += (int) dy;
-                params.width = Math.min(maxWidth, Math.max(minWidth, params.width));
-                params.height = Math.min(maxHeight, Math.max(minHeight, params.height));
+                params.width = Math.clamp(params.width, minWidth, maxWidth);
+                params.height = Math.clamp(params.height, minHeight, maxHeight);
                 binding.getRoot().setLayoutParams(params);
                 FloatWindow.updateLayoutParam(tag);
                 lastX = x;

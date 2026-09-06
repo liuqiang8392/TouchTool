@@ -14,15 +14,15 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskRunnable;
 
-public class GetAllRunningTask extends ExecuteOrCalculateAction {
+public class GetAllRunningTaskAction extends ExecuteOrCalculateAction {
     private final transient Pin tasksPin = new Pin(new PinList(new PinString()), R.string.get_all_running_task_action_result, true);
 
-    public GetAllRunningTask() {
+    public GetAllRunningTaskAction() {
         super(ActionType.GET_ALL_RUNNING_TASK);
         addPin(tasksPin);
     }
 
-    public GetAllRunningTask(JsonObject jsonObject) {
+    public GetAllRunningTaskAction(JsonObject jsonObject) {
         super(jsonObject);
         reAddPin(tasksPin);
     }
@@ -34,7 +34,7 @@ public class GetAllRunningTask extends ExecuteOrCalculateAction {
         MainAccessibilityService service = MainApplication.getInstance().getService();
         List<TaskRunnable> runningTask = service.getRunningTask();
         for (TaskRunnable taskRunnable : runningTask) {
-            list.add(new PinString(taskRunnable.getTask().getTitle()));
+            list.add(new PinString(taskRunnable.getStartTask().getTitle()));
         }
     }
 }

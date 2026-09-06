@@ -1,10 +1,10 @@
 package top.bogey.touch_tool.bean.save.log;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.bean.other.log.LogInfo;
@@ -23,7 +23,7 @@ public class LogSaver {
     }
 
     private final static String LOG_DIR = MainApplication.getInstance().getCacheDir().getAbsolutePath() + "/" + AppUtil.LOG_DIR_NAME;
-    private final Map<String, LogSave> saves = new HashMap<>();
+    private final Map<String, LogSave> saves = new ConcurrentHashMap<>();
     private final Set<LogSaveListener> listeners = new HashSet<>();
 
     public LogSave getLogSave(String key) {

@@ -61,7 +61,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/keySlot"
-            style="?attr/materialButtonOutlinedStyle"
+            style="?attr/defaultIconButtonOutlined"
             android:layout_width="wrap_content"
             android:layout_height="?attr/iconButtonSize"
             android:layout_weight="1"
@@ -81,7 +81,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/valueSlot"
-            style="?attr/materialButtonOutlinedStyle"
+            style="?attr/defaultIconButtonOutlined"
             android:layout_width="wrap_content"
             android:layout_height="?attr/iconButtonSize"
             android:layout_weight="1"

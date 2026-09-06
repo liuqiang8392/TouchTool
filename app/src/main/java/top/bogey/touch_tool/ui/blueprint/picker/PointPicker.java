@@ -67,8 +67,8 @@ public class PointPicker extends FullScreenPicker<Point> {
             if (dx == 0 && dy == 0) return true;
             currentX += dx / 5;
             currentY += dy / 5;
-            currentX = Math.max(0, Math.min(currentX, getWidth() + location[0] - 1));
-            currentY = Math.max(0, Math.min(currentY, getHeight() + location[1] - 1));
+            currentX = Math.clamp(currentX, 0, getWidth() + location[0] - 1);
+            currentY = Math.clamp(currentY, 0, getHeight() + location[1] - 1);
             lastX = x;
             lastY = y;
             picking = true;

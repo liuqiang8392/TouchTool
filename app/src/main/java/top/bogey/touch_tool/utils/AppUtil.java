@@ -125,7 +125,7 @@ public class AppUtil {
             binding.titleEdit.requestFocus();
             binding.titleEdit.selectAll();
             InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.showSoftInput(binding.titleEdit, InputMethodManager.SHOW_IMPLICIT);
+            imm.showSoftInput(binding.titleEdit, 0);
         }, 100);
     }
 
@@ -168,6 +168,7 @@ public class AppUtil {
     }
 
     public static TaskInfoSummary.WifiInfo getWifiInfo(Context context) {
+        String wifiName, gatewayIp = "", ip = "";
         WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         if (wifiManager == null) return null;
 
@@ -177,9 +178,8 @@ public class AppUtil {
         DhcpInfo dhcpInfo = wifiManager.getDhcpInfo();
         if (dhcpInfo == null) return null;
 
-        String wifiName = wifiInfo.getSSID();
+        wifiName = wifiInfo.getSSID();
 
-        String gatewayIp = "";
         int gateway = dhcpInfo.gateway;
         byte[] bytes = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(gateway).array();
 
@@ -190,7 +190,6 @@ public class AppUtil {
             e.printStackTrace();
         }
 
-        String ip = "";
         int ipAddress = wifiInfo.getIpAddress();
         bytes = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(ipAddress).array();
 
@@ -200,7 +199,6 @@ public class AppUtil {
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
-
         return new TaskInfoSummary.WifiInfo(wifiName, gatewayIp, ip);
     }
 

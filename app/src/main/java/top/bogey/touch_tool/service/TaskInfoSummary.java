@@ -69,7 +69,7 @@ public class TaskInfoSummary {
     private PackageActivity lastPackageActivity = new PackageActivity("", "");
     private final List<ResultCallback<PackageActivity>> packageActivityListeners = new ArrayList<>();
 
-    private Notification notification;
+    private final Map<String, Notification> notifications = new ConcurrentHashMap<>();
     private BatteryInfo batteryInfo;
     private final List<BluetoothInfo> bluetoothInfoList = new ArrayList<>();
     private BluetoothInfo lastBluetoothInfo;
@@ -298,6 +298,21 @@ public class TaskInfoSummary {
         }
     }
 
+    public void tryStartNotificationActions(Notification notification) {
+        MainAccessibilityService service = MainApplication.getInstance().getService();
+        if (service == null || !service.isEnabled()) return;
+
+        for (Task task : TaskSaver.getInstance().getTasks(NotificationStartAction.class)) {
+            for (Action action : task.getActions(NotificationStartAction.class)) {
+                NotificationStartAction startAction = (NotificationStartAction) action;
+                if (startAction.isEnable() && startAction.ready(notification)) {
+                    notifications.put(startAction.getId(), notification);
+                    service.runTask(task, startAction);
+                }
+            }
+        }
+    }
+
     public void tryStartShareTask(PinObject pinObject) {
         MainAccessibilityService service = MainApplication.getInstance().getService();
         if (service == null || !service.isEnabled()) return;
@@ -327,7 +342,7 @@ public class TaskInfoSummary {
         }
         List<ChoiceExecuteFloatView.Choice> choices = new ArrayList<>();
         tasks.forEach((action, task) -> choices.add(new ChoiceExecuteFloatView.Choice(action.getId(), task.getTitle(), null)));
-        ChoiceExecuteFloatView.showChoice(service.getString(R.string.execute_task_action), choices, result -> {
+        ChoiceExecuteFloatView.showChoice(service.getString(R.string.execute_task_action), choices, 0, result -> {
             Action action = tasks.keySet().stream().filter(a -> a.getId().equals(result)).findFirst().orElse(null);
             if (action == null) return;
             Task task = tasks.get(action);
@@ -426,13 +441,13 @@ public class TaskInfoSummary {
         packageActivityListeners.remove(listener);
     }
 
-    public Notification getNotification() {
-        return notification;
+    public Notification getNotification(String id) {
+        return notifications.get(id);
     }
 
     public void setNotification(NotificationType type, String packageName, Map<String, String> content) {
-        notification = new Notification(type, packageName, content);
-        tryStartActions(NotificationStartAction.class);
+        Notification notification = new Notification(type, packageName, content);
+        tryStartNotificationActions(notification);
     }
 
     public BatteryInfo getBatteryInfo() {

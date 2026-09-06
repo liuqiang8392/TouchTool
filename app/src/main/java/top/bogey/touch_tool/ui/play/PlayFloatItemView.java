@@ -194,7 +194,11 @@ public class PlayFloatItemView extends FrameLayout implements ITaskListener {
     public void onFinish(TaskRunnable runnable) {
         post(() -> {
             stop();
-            if (remove) ((ViewGroup) getParent()).removeView(this);
+            if (remove) {
+                ViewGroup parent = (ViewGroup) getParent();
+                if (parent == null) return;
+                parent.removeView(this);
+            }
         });
     }
 }

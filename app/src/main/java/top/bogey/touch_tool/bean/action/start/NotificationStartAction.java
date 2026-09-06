@@ -41,7 +41,7 @@ public class NotificationStartAction extends StartAction {
     @Override
     public void execute(TaskRunnable runnable, Pin pin) {
         super.execute(runnable, pin);
-        TaskInfoSummary.Notification notification = TaskInfoSummary.getInstance().getNotification();
+        TaskInfoSummary.Notification notification = TaskInfoSummary.getInstance().getNotification(getId());
         PinApplication application = new PinApplication(notification.packageName());
         notifyAppPin.setValue(application);
         Map<String, String> content = notification.content();
@@ -53,7 +53,10 @@ public class NotificationStartAction extends StartAction {
 
     @Override
     public boolean ready() {
-        TaskInfoSummary.Notification notification = TaskInfoSummary.getInstance().getNotification();
+        return false;
+    }
+
+    public boolean ready(TaskInfoSummary.Notification notification) {
         if (notification == null || notification.content() == null) return false;
         int index = typePin.getValue(PinSingleSelect.class).getIndex();
         if (index != notification.type().ordinal()) return false;

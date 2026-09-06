@@ -25,19 +25,21 @@ import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 @SuppressLint("ViewConstructor")
 public class ChoiceExecuteFloatView extends FrameLayout implements FloatInterface {
     private final FloatChoiceExecuteBinding binding;
+    private int timeout;
+    private String title;
     private StringResultCallback callback;
 
-    public static void showChoice(String title, List<Choice> choices, StringResultCallback callback) {
-        showChoice(title, choices, callback, EAnchor.CENTER, EAnchor.CENTER, SettingSaver.FLOAT_VIEW_POS.get());
+    public static void showChoice(String title, List<Choice> choices, int timeout, StringResultCallback callback) {
+        showChoice(title, choices, timeout, callback, EAnchor.CENTER, EAnchor.CENTER, SettingSaver.FLOAT_VIEW_POS.get());
     }
 
-    public static void showChoice(String title, List<Choice> choices, StringResultCallback callback, EAnchor anchor, EAnchor gravity, Point location) {
+    public static void showChoice(String title, List<Choice> choices, int timeout, StringResultCallback callback, EAnchor anchor, EAnchor gravity, Point location) {
         KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
         if (keepView == null) return;
         new Handler(Looper.getMainLooper()).post(() -> {
             ChoiceExecuteFloatView choiceView = new ChoiceExecuteFloatView(keepView.getThemeContext());
             choiceView.show();
-            choiceView.innerShowChoice(title, choices, callback, anchor, gravity, location);
+            choiceView.innerShowChoice(title, choices, timeout, callback, anchor, gravity, location);
         });
     }
 
@@ -51,9 +53,12 @@ public class ChoiceExecuteFloatView extends FrameLayout implements FloatInterfac
         });
     }
 
-    public void innerShowChoice(String title, List<Choice> choices, StringResultCallback callback, EAnchor anchor, EAnchor gravity, Point location) {
+    public void innerShowChoice(String title, List<Choice> choices, int timeout, StringResultCallback callback, EAnchor anchor, EAnchor gravity, Point location) {
         FloatWindow.setLocation(ChoiceExecuteFloatView.class.getName(), anchor, gravity, location);
-        binding.title.setText(title);
+        this.title = title;
+        this.timeout = timeout;
+        if (timeout > 0) refreshTimeout();
+        else binding.title.setText(title);
 
         this.callback = callback;
         for (Choice choice : choices) {
@@ -66,6 +71,18 @@ public class ChoiceExecuteFloatView extends FrameLayout implements FloatInterfac
                 dismiss();
             });
         }
+    }
+
+    @SuppressLint("DefaultLocale")
+    public void refreshTimeout() {
+        if (timeout <= 0) {
+            callback.onResult(null);
+            dismiss();
+            return;
+        }
+        timeout -= 100;
+        binding.title.setText(String.format("%s(%.1fs)", title, timeout / 1000f));
+        postDelayed(this::refreshTimeout, 100);
     }
 
     @Override

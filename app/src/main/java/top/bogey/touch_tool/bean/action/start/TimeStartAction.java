@@ -6,6 +6,7 @@ import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionCheckResult;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.pin.Pin;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinDate;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinPeriodic;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinTime;
@@ -16,18 +17,19 @@ import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.utils.AppUtil;
 
 public class TimeStartAction extends StartAction {
+    private final transient Pin showTimeLogPin = new NotLinkAblePin(new PinBoolean(true), R.string.time_start_action_show_time_log);
     private final transient Pin datePin = new NotLinkAblePin(new PinDate(), R.string.time_start_action_date);
     private final transient Pin timePin = new NotLinkAblePin(new PinTime(), R.string.time_start_action_time);
     private final transient Pin periodic = new NotLinkAblePin(new PinPeriodic(), R.string.time_start_action_periodic);
 
     public TimeStartAction() {
         super(ActionType.TIME_START);
-        addPins(datePin, timePin, periodic);
+        addPins(showTimeLogPin, datePin, timePin, periodic);
     }
 
     public TimeStartAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(datePin, timePin, periodic);
+        reAddPins(showTimeLogPin, datePin, timePin, periodic);
     }
 
     @Override
@@ -44,6 +46,10 @@ public class TimeStartAction extends StartAction {
 
     public long getPeriodic() {
         return periodic.getValue(PinPeriodic.class).getValue();
+    }
+
+    public boolean isShowTimeLog() {
+        return showTimeLogPin.getValue(PinBoolean.class).getValue();
     }
 
     @Override

@@ -29,6 +29,7 @@
 
     <string name="time_start_action">定时执行</string>
     <string name="time_start_action_desc">在设定的时间执行</string>
+    <string name="time_start_action_show_time_log">定时日志</string>
     <string name="time_start_action_date">日期</string>
     <string name="time_start_action_time">时间</string>
     <string name="time_start_action_periodic">间隔</string>
@@ -257,6 +258,7 @@
 
     <string name="text_to_speak_action">文本转语音</string>
     <string name="text_to_speak_action_desc">将文本转为语音并播放</string>
+    <string name="text_to_speak_action_mode">阻塞模式</string>
 
     <string name="vibrate_action">震动</string>
     <string name="vibrate_action_desc">震动手机</string>
@@ -317,6 +319,7 @@
     <string name="get_date_action_month">月</string>
     <string name="get_date_action_day">日</string>
     <string name="get_date_action_week">星期</string>
+    <string name="get_date_action_timestamp">时间戳(默认当前时间)</string>
 
     <string name="get_time_action">获取时间</string>
     <string name="get_time_action_desc">获取当前时间</string>
@@ -325,6 +328,7 @@
     <string name="get_time_action_second">秒</string>
     <string name="get_time_action_millisecond">毫秒</string>
     <string name="get_time_action_timestamp">时间戳</string>
+    <string name="get_time_action_in_timestamp">时间戳(默认当前时间)</string>
 
     <string name="switch_screen_action">开关屏幕</string>
     <string name="switch_screen_action_desc">打开或关闭屏幕</string>

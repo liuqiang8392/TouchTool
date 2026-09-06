@@ -66,29 +66,7 @@ public class TaskView extends Fragment implements TaskSaveListener {
 
         @Override
         public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-            MainActivity activity = (MainActivity) requireActivity();
-            if (menuItem.getItemId() == R.id.importTask) {
-                activity.launcherOpenDocument((code, intent) -> {
-                    if (code == Activity.RESULT_OK && intent != null) {
-                        ImportTaskDialog.showDialog(activity, intent.getData());
-                    }
-                }, "*/*");
-
-                return true;
-            } else if (menuItem.getItemId() == R.id.exportTask) {
-                if (selecting) {
-                    List<Task> tasks = new ArrayList<>();
-                    selected.forEach(id -> {
-                        Task task = TaskSaver.getInstance().getTask(id);
-                        if (task == null) return;
-                        tasks.add(task);
-                    });
-                    ExportTaskDialog.showDialog(activity, tasks);
-                } else {
-                    ExportTaskDialog.showDialog(activity);
-                }
-                return true;
-            } else if (menuItem.getItemId() == R.id.cleanSearch) {
+            if (menuItem.getItemId() == R.id.cleanSearch) {
                 binding.searchBar.setText("");
                 resetTags();
             }
@@ -125,7 +103,8 @@ public class TaskView extends Fragment implements TaskSaveListener {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
+        MainActivity activity = (MainActivity) requireActivity();
+        activity.getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
 
         binding = ViewTaskBinding.inflate(inflater, container, false);
 
@@ -165,6 +144,12 @@ public class TaskView extends Fragment implements TaskSaveListener {
             refreshSearchHistory();
         });
         refreshSearchHistory();
+
+        binding.importButton.setOnClickListener(v -> activity.launcherOpenDocument((code, intent) -> {
+            if (code == Activity.RESULT_OK && intent != null) {
+                ImportTaskDialog.showDialog(activity, intent.getData());
+            }
+        }, "*/*"));
 
         adapter = new TaskPageViewAdapter(this);
         binding.tasksBox.setAdapter(adapter);

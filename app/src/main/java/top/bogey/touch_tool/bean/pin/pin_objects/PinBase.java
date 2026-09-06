@@ -115,6 +115,7 @@ public abstract class PinBase implements Copyable {
     }
 
     public static PinBase parseValue(Object value) {
+        if (value == null) return new PinString();
         switch (value) {
             case Map<?, ?> map -> {
                 PinMap pinMap = new PinMap();

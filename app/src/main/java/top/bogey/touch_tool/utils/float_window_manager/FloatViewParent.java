@@ -66,8 +66,8 @@ public class FloatViewParent extends FrameLayout {
                 if (dx * dx + dy * dy < 81) return false;
                 config.dragging = true;
 
-                helper.params.x = (int) Math.max(Math.min(helper.params.x + dx, showArea.right), showArea.left);
-                helper.params.y = (int) Math.max(Math.min(helper.params.y + dy, showArea.bottom), showArea.top);
+                helper.params.x = (int) Math.clamp(helper.params.x + dx, showArea.left, showArea.right);
+                helper.params.y = (int) Math.clamp(helper.params.y + dy, showArea.top, showArea.bottom);
                 helper.manager.updateViewLayout(this, helper.params);
 
                 if (config.callback != null) config.callback.onDrag();

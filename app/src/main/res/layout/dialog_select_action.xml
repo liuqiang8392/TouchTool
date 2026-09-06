@@ -32,7 +32,7 @@
 
         <com.google.android.material.button.MaterialButtonToggleGroup
             android:id="@+id/group"
-            style="@style/Widget.Material3.MaterialButtonGroup.Connected"
+            style="@style/Widget.Material3Expressive.MaterialButtonGroup.Connected"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:selectionRequired="true"
@@ -50,7 +50,7 @@
 
                 <com.google.android.material.button.MaterialButtonToggleGroup
                     android:id="@+id/subGroup"
-                    style="@style/Widget.Material3.MaterialButtonGroup.Connected"
+                    style="@style/Widget.Material3Expressive.MaterialButtonGroup.Connected"
                     android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -87,7 +87,7 @@
         android:clipChildren="false"
         android:clipToPadding="false"
         android:orientation="vertical"
-        android:padding="?attr/iconButtonSize">
+        android:padding="?attr/smallIconButtonSize">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/pasteButton"
@@ -95,7 +95,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
-            android:layout_marginBottom="?attr/halfIconButtonSize"
             android:src="@drawable/icon_assignment"
             android:visibility="gone"
             tools:ignore="ContentDescription" />
@@ -106,7 +105,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
-            android:layout_marginBottom="?attr/halfIconButtonSize"
+            android:layout_marginTop="?attr/halfIconButtonSize"
             android:src="@drawable/icon_search"
             tools:ignore="ContentDescription" />
 
@@ -115,7 +114,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
-            android:layout_marginBottom="12dp"
+            android:layout_marginTop="?attr/halfIconButtonSize"
             android:src="@drawable/icon_add"
             android:visibility="gone"
             tools:ignore="ContentDescription" />

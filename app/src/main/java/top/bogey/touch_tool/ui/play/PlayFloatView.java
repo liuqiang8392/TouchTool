@@ -176,10 +176,10 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
         Task task = runnable.getStartTask();
         StartAction action = runnable.getStartAction();
         PlayFloatItemView itemView = new PlayFloatItemView(getContext(), task, action);
+        binding.buttonBox.addView(itemView);
         itemView.setNeedRemove(true);
         itemView.onStart(runnable);
         runnable.addListener(itemView);
-        binding.buttonBox.addView(itemView);
 
         if (runnable.isInterrupt()) itemView.onFinish(runnable);
     }

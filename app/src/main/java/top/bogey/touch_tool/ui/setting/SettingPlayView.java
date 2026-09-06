@@ -91,7 +91,7 @@ public class SettingPlayView extends Fragment {
         binding.notPlayHideAlpha.setValue(SettingSaver.MANUAL_PLAY_VIEW_NOT_USED_FADE_LEVEL.get());
 
         // 重置位置
-        binding.manualPlayReset.setOnButtonClickListener(v -> {
+        binding.manualPlayReset.setOnClickListener(v -> {
             SettingSaver.MANUAL_PLAY_VIEW_POS.set(new Point());
             SettingSaver.MANUAL_PLAY_VIEW_EXPAND_STATE.set(true);
             Toast.makeText(activity, R.string.preference_setting_manual_play_reset_tips, Toast.LENGTH_SHORT).show();

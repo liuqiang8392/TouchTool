@@ -75,21 +75,21 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/backButton"
-            style="?attr/materialIconButtonFilledStyle"
+            style="?attr/defaultIconButtonFilled"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:icon="@drawable/icon_arrow_back" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/saveButton"
-            style="?attr/materialIconButtonFilledStyle"
+            style="?attr/defaultIconButtonFilled"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:icon="@drawable/icon_check" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/fullButton"
-            style="?attr/materialIconButtonFilledStyle"
+            style="?attr/defaultIconButtonFilled"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:icon="@drawable/icon_zoom_out_map" />

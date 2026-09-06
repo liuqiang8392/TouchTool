@@ -282,7 +282,7 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
             binding.markBox.setY(area.top);
 
             float x = area.left + (area.width() - binding.buttonBox.getWidth()) / 2f;
-            x = Math.max(0, Math.min(getWidth() - binding.buttonBox.getWidth(), x));
+            x = Math.clamp(x, 0, getWidth() - binding.buttonBox.getWidth());
             binding.buttonBox.setX(x);
 
             float offset = DisplayUtil.dp2px(getContext(), 8);

@@ -136,39 +136,49 @@ public class SettingView extends Fragment {
         binding.enableSwitch.setChecked(serv != null && serv.isEnabled());
 
         // 重启服务
-        binding.reloadService.setOnButtonClickListener(v -> {
-            binding.reloadService.setButtonText(getString(R.string.app_setting_reload_button_running));
+        binding.reloadService.setOnClickListener(v -> {
             binding.reloadService.setEnabled(false);
 
             if (activity.stopAccessibilityServiceBySecurePermission()) {
                 binding.getRoot().postDelayed(() -> {
                     SettingSaver.APP_SERVICE.set(true);
-                    binding.enableSwitch.setChecked(true);
                     activity.restartAccessibilityServiceBySecurePermission();
                     Toast.makeText(activity, R.string.app_setting_reload_success, Toast.LENGTH_SHORT).show();
-                    binding.reloadService.setEnabled(true);
-                    binding.reloadService.setButtonText(getString(R.string.app_setting_reload_button_text));
+                    try {
+                        binding.enableSwitch.setChecked(true);
+                        binding.reloadService.setEnabled(true);
+                    } catch (Exception ignored) {
+                    }
                 }, 1000);
             } else {
                 Toast.makeText(activity, R.string.app_setting_reload_error, Toast.LENGTH_SHORT).show();
                 binding.reloadService.setEnabled(true);
-                binding.reloadService.setButtonText(getString(R.string.app_setting_reload_button_text));
             }
         });
         refreshReloadService();
 
         // 自动重启服务
-        binding.autoReloadService.setOnButtonClickListener(v -> {
+        binding.autoReloadService.setOnClickListener(v -> {
+
+            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(R.string.app_setting_auto_reload_title)
+                    .setMessage(R.string.app_setting_auto_reload_message);
             String cmd = String.format("pm grant %s %s", requireActivity().getPackageName(), Manifest.permission.WRITE_SECURE_SETTINGS);
             if (SuperUser.getInstance().isValid()) {
-                SuperUser.getInstance().runCommand(cmd);
-                binding.getRoot().postDelayed(() -> {
-                    refreshReloadService();
-                    refreshAutoReloadService();
-                }, 500);
+                builder.setPositiveButton(R.string.setting_execute_shell, (dialog, which) -> {
+                            SuperUser.getInstance().runCommand(cmd);
+                            binding.getRoot().postDelayed(() -> {
+                                refreshReloadService();
+                                refreshAutoReloadService();
+                            }, 500);
+                        })
+                        .setNegativeButton(R.string.setting_copy_shell, (dialog, which) -> AppUtil.copyToClipboard(requireContext(), cmd))
+                        .setNeutralButton(R.string.cancel, null)
+                        .show();
             } else {
-                AppUtil.copyToClipboard(activity, cmd);
-                Toast.makeText(activity, R.string.copy_tips, Toast.LENGTH_SHORT).show();
+                builder.setPositiveButton(R.string.setting_copy_shell, (dialog, which) -> AppUtil.copyToClipboard(requireContext(), cmd))
+                        .setNegativeButton(R.string.cancel, null)
+                        .show();
             }
         });
         refreshAutoReloadService();
@@ -197,8 +207,26 @@ public class SettingView extends Fragment {
         binding.forgeServiceSwitch.setOnSwitchClickListener(v -> SettingSaver.APP_KEEP_ALIVE_SERVICE.set(activity, binding.forgeServiceSwitch.isChecked()));
         binding.forgeServiceSwitch.setChecked(SettingSaver.APP_KEEP_ALIVE_SERVICE.get());
 
+        // 自动备份
+        binding.autoBackupSelect.setOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            if (isChecked) {
+                View view = group.findViewById(checkedId);
+                int index = group.indexOfChild(view);
+                SettingSaver.TASK_AUTO_BACKUP.set(index);
+                MainAccessibilityService service = MainApplication.getInstance().getService();
+                if (service != null && service.isEnabled()) {
+                    service.addAlarm();
+                }
+            }
+        });
+        binding.autoBackupSelect.checkIndex(SettingSaver.TASK_AUTO_BACKUP.get());
+        binding.autoBackupSelect.setOnClickListener(v -> {
+            ExportTaskDialog.autoBackup(activity);
+            Toast.makeText(activity, R.string.app_setting_auto_backup_tips, Toast.LENGTH_SHORT).show();
+        });
+
         // 清理缓存
-        binding.cleanCacheButton.setOnButtonClickListener(v -> {
+        binding.cleanCacheButton.setOnClickListener(v -> {
             String[] dirs = new String[]{AppUtil.LOG_DIR_NAME, AppUtil.TASK_DIR_NAME, AppUtil.DOCUMENT_DIR_NAME};
             String[] dirNames = getResources().getStringArray(R.array.cache_dir_name);
 
@@ -232,9 +260,6 @@ public class SettingView extends Fragment {
                     .show();
         });
         binding.cleanCacheButton.setDescription(getString(R.string.app_setting_clean_cache_desc, AppUtil.getCacheDirsSizeString(activity)));
-        if (!AppUtil.isRelease(activity)) {
-            binding.cleanCacheButton.setOnClickListener(v -> AppUtil.crashTest());
-        }
 
         // 超级用户
         binding.superUserSelect.setOnButtonCheckedListener((group, checkedId, isChecked) -> {
@@ -284,13 +309,20 @@ public class SettingView extends Fragment {
             }
         });
 
-        binding.notificationTypeCmd.setOnButtonClickListener(v -> {
+        binding.notificationTypeCmd.setOnClickListener(v -> {
+            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(R.string.permission_setting_notification_type_sensitive_dialog_title)
+                    .setMessage(R.string.permission_setting_notification_type_sensitive_dialog_message);
             String cmd = String.format("appops set %s RECEIVE_SENSITIVE_NOTIFICATIONS allow", requireActivity().getPackageName());
             if (SuperUser.getInstance().isValid()) {
-                SuperUser.getInstance().runCommand(cmd);
+                builder.setPositiveButton(R.string.setting_execute_shell, (dialog, which) -> SuperUser.getInstance().runCommand(cmd))
+                        .setNegativeButton(R.string.setting_copy_shell, (dialog, which) -> AppUtil.copyToClipboard(requireContext(), cmd))
+                        .setNeutralButton(R.string.cancel, null)
+                        .show();
             } else {
-                AppUtil.copyToClipboard(activity, cmd);
-                Toast.makeText(activity, R.string.copy_tips, Toast.LENGTH_SHORT).show();
+                builder.setPositiveButton(R.string.setting_copy_shell, (dialog, which) -> AppUtil.copyToClipboard(requireContext(), cmd))
+                        .setNegativeButton(R.string.cancel, null)
+                        .show();
             }
         });
         refreshNotificationCmd();
@@ -358,23 +390,6 @@ public class SettingView extends Fragment {
         binding.locationSwitch.setChecked(SettingSaver.PERMISSION_LOCATION.get());
 
 
-        // 自动备份
-        binding.autoBackupSelect.setOnButtonCheckedListener((group, checkedId, isChecked) -> {
-            if (isChecked) {
-                View view = group.findViewById(checkedId);
-                int index = group.indexOfChild(view);
-                SettingSaver.TASK_AUTO_BACKUP.set(index);
-                MainAccessibilityService service = MainApplication.getInstance().getService();
-                if (service != null && service.isEnabled()) {
-                    service.addAlarm();
-                }
-            }
-        });
-        binding.autoBackupSelect.checkIndex(SettingSaver.TASK_AUTO_BACKUP.get());
-        binding.autoBackupSelect.setOnClickListener(v -> {
-            ExportTaskDialog.autoBackup(activity);
-            Toast.makeText(activity, R.string.app_setting_auto_backup_tips, Toast.LENGTH_SHORT).show();
-        });
         // 手势轨迹
         binding.showTouchSwitch.setOnSwitchClickListener(v -> SettingSaver.TASK_GESTURE_TRACE.set(binding.showTouchSwitch.isChecked()));
         binding.showTouchSwitch.setChecked(SettingSaver.TASK_GESTURE_TRACE.get());
@@ -420,10 +435,6 @@ public class SettingView extends Fragment {
             NavController controller = Navigation.findNavController(MainApplication.getInstance().getActivity(), R.id.conView);
             controller.navigate(SettingViewDirections.actionSettingToSettingPlayView());
         });
-        binding.manualPlaySetting.setOnButtonClickListener(v -> {
-            NavController controller = Navigation.findNavController(MainApplication.getInstance().getActivity(), R.id.conView);
-            controller.navigate(SettingViewDirections.actionSettingToSettingPlayView());
-        });
 
         // 小窗优化
         binding.supportFreeFormSwitch.setOnSwitchClickListener(v -> SettingSaver.FREE_FORM_OPTIMIZE.set(binding.supportFreeFormSwitch.isChecked()));
@@ -459,7 +470,6 @@ public class SettingView extends Fragment {
         int notificationType = SettingSaver.PERMISSION_NOTIFICATION.get();
         boolean version = Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM;
         binding.notificationTypeCmd.setVisibility(notificationType == 1 && version ? View.VISIBLE : View.GONE);
-        binding.notificationTypeCmd.setButtonText(getString(SuperUser.getInstance().isValid() ? R.string.setting_execute_shell : R.string.setting_copy_shell));
     }
 
     private void refreshReloadService() {
@@ -470,6 +480,5 @@ public class SettingView extends Fragment {
     private void refreshAutoReloadService() {
         boolean granted = requireActivity().checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) == PackageManager.PERMISSION_GRANTED;
         binding.autoReloadService.setVisibility(granted ? View.GONE : View.VISIBLE);
-        binding.autoReloadService.setButtonText(getString(SuperUser.getInstance().isValid() ? R.string.setting_execute_shell : R.string.setting_copy_shell));
     }
 }

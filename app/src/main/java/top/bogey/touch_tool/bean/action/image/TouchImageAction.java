@@ -60,7 +60,7 @@ public class TouchImageAction extends ExecuteAction {
         PinBoolean random = getPinValue(runnable, randomPin);
         PinBoolean canny = getPinValue(runnable, cannyPin);
 
-        Rect rect = DisplayUtil.matchTemplate(bitmap, template.getImage(), area.getValue(), similarity.intValue(), scale.getIndex() + 1, canny.getValue());
+        Rect rect = DisplayUtil.matchTemplate(bitmap, template.getImage(), area.getValue(), similarity.intValue(), scale.getIndex(), canny.getValue());
         if (rect == null || rect.isEmpty()) {
             executeNext(runnable, elsePin);
             return;

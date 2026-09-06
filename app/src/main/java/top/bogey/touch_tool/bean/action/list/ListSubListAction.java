@@ -45,8 +45,8 @@ public class ListSubListAction extends ListCalculateAction {
 
         if (start < 0) start = start + size + 1;
         if (end < 0) end = end + size + 1;
-        start = Math.max(1, Math.min(start, size));
-        end = Math.max(1, Math.min(end, size));
+        start = Math.clamp(start, 1, size);
+        end = Math.clamp(end, 1, size);
 
         if (start > end) {
             int temp = start;

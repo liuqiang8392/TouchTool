@@ -11,6 +11,7 @@ import top.bogey.touch_tool.bean.other.NodeInfo;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinArea;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinNodePathString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinNodePathTextString;
@@ -51,8 +52,8 @@ public class IsNodeExistAction extends CalculateAction {
 
         switch (type.getIndex()) {
             case 0 -> {
-                PinString pathString = getPinValue(runnable, pathPin);
-                PinNodePathString path = new PinNodePathString(pathString.getValue());
+                PinObject pathString = getPinValue(runnable, pathPin);
+                PinNodePathString path = new PinNodePathString(pathString.toString());
                 PinBoolean fullPath = getPinValue(runnable, fullPathPin);
                 NodeInfo nodeInfo = path.findNode(NodeInfo.getWindows(), fullPath.getValue());
                 if (nodeInfo == null) break;
@@ -65,14 +66,14 @@ public class IsNodeExistAction extends CalculateAction {
                 if (nodeInfo == null) break;
                 List<NodeInfo> children;
                 if (type.getIndex() == 1) {
-                    PinString text = getPinValue(runnable, textPin);
-                    String value = text.getValue();
-                    if (value == null || value.isEmpty()) break;
+                    PinObject text = getPinValue(runnable, textPin);
+                    String value = text.toString();
+                    if (value.isEmpty()) break;
                     children = nodeInfo.findChildrenByText(value, area.getValue());
                 } else {
-                    PinString id = getPinValue(runnable, idPin);
-                    String value = id.getValue();
-                    if (value == null || value.isEmpty()) break;
+                    PinObject id = getPinValue(runnable, idPin);
+                    String value = id.toString();
+                    if (value.isEmpty()) break;
                     children = nodeInfo.findChildrenById(value, area.getValue());
                 }
                 if (children == null || children.isEmpty()) break;
@@ -82,8 +83,8 @@ public class IsNodeExistAction extends CalculateAction {
                 result = true;
             }
             case 3 -> {
-                PinString pathString = getPinValue(runnable, pathTextPin);
-                PinNodePathTextString path = new PinNodePathTextString(pathString.getValue());
+                PinObject pathString = getPinValue(runnable, pathTextPin);
+                PinNodePathTextString path = new PinNodePathTextString(pathString.toString());
                 List<NodeInfo> findNodes = path.findNodes(NodeInfo.getWindows());
                 if (findNodes == null || findNodes.isEmpty()) break;
                 for (NodeInfo findNode : findNodes) {
@@ -93,10 +94,10 @@ public class IsNodeExistAction extends CalculateAction {
             }
             case 4 -> {
                 PinArea area = getPinValue(runnable, areaPin);
-                PinString className = getPinValue(runnable, classPin);
+                PinObject className = getPinValue(runnable, classPin);
                 NodeInfo nodeInfo = NodeInfo.getActiveWindow();
                 if (nodeInfo == null) break;
-                List<NodeInfo> children = nodeInfo.findChildrenByClass(className.getValue(), area.getValue());
+                List<NodeInfo> children = nodeInfo.findChildrenByClass(className.toString(), area.getValue());
                 if (children == null || children.isEmpty()) break;
                 for (NodeInfo child : children) {
                     MarkTargetFloatView.showTargetArea(child.area);
@@ -105,10 +106,10 @@ public class IsNodeExistAction extends CalculateAction {
             }
             case 5 -> {
                 PinArea area = getPinValue(runnable, areaPin);
-                PinString desc = getPinValue(runnable, descPin);
+                PinObject desc = getPinValue(runnable, descPin);
                 NodeInfo nodeInfo = NodeInfo.getActiveWindow();
                 if (nodeInfo == null) break;
-                List<NodeInfo> children = nodeInfo.findChildrenByDesc(desc.getValue(), area.getValue());
+                List<NodeInfo> children = nodeInfo.findChildrenByDesc(desc.toString(), area.getValue());
                 if (children == null || children.isEmpty()) break;
                 for (NodeInfo child : children) {
                     MarkTargetFloatView.showTargetArea(child.area);

@@ -84,8 +84,8 @@ public class MapActionLinkEventHandler {
             if (keyFlag) keyTemplate = toValue.copy();
             if (valueFlag) valueTemplate = toValue.copy();
         }
-        if (keyTemplate != null) keyTemplate.reset();
-        if (valueTemplate != null) valueTemplate.reset();
+        if (keyFlag) keyTemplate.reset();
+        if (valueFlag) valueTemplate.reset();
 
         for (Pin pin : pins) {
             PinBase value = pin.getValue();

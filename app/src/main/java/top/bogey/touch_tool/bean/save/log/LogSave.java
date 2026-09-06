@@ -32,14 +32,16 @@ public class LogSave implements ITreeNodeDataLoader {
         return mmkv.decodeInt(COUNT, 0);
     }
 
-    public void addLog(LogInfo log, boolean autoUid) {
+    public synchronized void addLog(LogInfo log, boolean autoUid) {
         if (autoUid) {
             int index = getLogCount();
             index++;
-            mmkv.encode(COUNT, index);
             log.setUid(String.valueOf(index));
+            mmkv.encode(log.getUid(), GsonUtil.toJson(log));
+            mmkv.encode(COUNT, index);
+        } else {
+            mmkv.encode(log.getUid(), GsonUtil.toJson(log));
         }
-        mmkv.encode(log.getUid(), GsonUtil.toJson(log));
         time = System.currentTimeMillis();
     }
 

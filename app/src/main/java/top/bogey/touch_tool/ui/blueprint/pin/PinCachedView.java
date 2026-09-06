@@ -14,7 +14,6 @@ import androidx.annotation.NonNull;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.databinding.PinCachedBinding;
-import top.bogey.touch_tool.utils.DisplayUtil;
 
 @SuppressLint("ViewConstructor")
 public class PinCachedView extends PinView {

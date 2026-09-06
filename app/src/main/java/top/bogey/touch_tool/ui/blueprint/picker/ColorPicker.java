@@ -90,8 +90,8 @@ public class ColorPicker extends FullScreenPicker<PinColor.ColorInfo> {
             if (dx == 0 && dy == 0) return true;
             currentX += dx / 5;
             currentY += dy / 5;
-            currentX = Math.max(0, Math.min(currentX, getWidth() - 1));
-            currentY = Math.max(0, Math.min(currentY, getHeight() - 1));
+            currentX = Math.clamp(currentX, 0, getWidth() - 1);
+            currentY = Math.clamp(currentY, 0, getHeight() - 1);
             lastX = x;
             lastY = y;
             picking = true;

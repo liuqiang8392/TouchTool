@@ -44,7 +44,7 @@ public class SystemKeyAction extends ExecuteAction {
             }
             case 7 -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) service.performGlobalAction(MainAccessibilityService.GLOBAL_ACTION_TAKE_SCREENSHOT);
-                else Toast.makeText(service, R.string.device_not_support_lock, Toast.LENGTH_SHORT).show();
+                else Toast.makeText(service, R.string.device_not_support_snap, Toast.LENGTH_SHORT).show();
             }
         }
         executeNext(runnable, outPin);

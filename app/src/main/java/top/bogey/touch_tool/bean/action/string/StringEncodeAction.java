@@ -39,7 +39,12 @@ public class StringEncodeAction extends CalculateAction {
         if (value == null || value.isEmpty()) return;
         String result = switch (type.getIndex()) {
             case 0 -> {
-                yield URLEncoder.encode(value, StandardCharsets.UTF_8);
+                try {
+                    yield URLEncoder.encode(value, StandardCharsets.UTF_8.name());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    yield value;
+                }
             }
             case 1 -> Base64.encodeToString(value.getBytes(), Base64.NO_WRAP);
             default -> value;

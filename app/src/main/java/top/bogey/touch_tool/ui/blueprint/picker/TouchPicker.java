@@ -9,6 +9,7 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 
@@ -73,7 +74,7 @@ public class TouchPicker extends FullScreenPicker<PinTouchPath> {
             dismiss();
         });
 
-        handler = new Handler();
+        handler = new Handler(Looper.getMainLooper());
 
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(DisplayUtil.getAttrColor(getContext(), R.attr.colorPrimaryLight));
@@ -290,7 +291,7 @@ public class TouchPicker extends FullScreenPicker<PinTouchPath> {
             binding.bottomRightButton.setY(height - binding.bottomRightButton.getHeight());
 
             float x = pathArea.left + (pathArea.width() - binding.buttonBox.getWidth()) / 2f;
-            x = Math.max(0, Math.min(getWidth() - binding.buttonBox.getWidth(), x));
+            x = Math.clamp(x, 0, getWidth() - binding.buttonBox.getWidth());
             binding.buttonBox.setX(x);
 
             int doubleOffset = padding * 2;

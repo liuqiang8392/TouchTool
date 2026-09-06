@@ -1,7 +1,6 @@
 package top.bogey.touch_tool.bean.action.image;
 
 import android.graphics.Bitmap;
-import android.graphics.Rect;
 import android.os.Build;
 
 import com.google.gson.JsonObject;

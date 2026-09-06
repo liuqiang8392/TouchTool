@@ -308,6 +308,7 @@ public class BaseActivity extends AppCompatActivity {
         String enabledService = Settings.Secure.getString(getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
         if (enabledService == null) enabledService = "";
         Set<String> services = new HashSet<>(Arrays.asList(enabledService.split(":")));
+        services.remove("");
         services.add(serviceName);
         enabledService = TextUtils.join(":", services);
         Settings.Secure.putString(getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES, enabledService);
@@ -323,6 +324,7 @@ public class BaseActivity extends AppCompatActivity {
         String enabledService = Settings.Secure.getString(getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
         if (enabledService == null) enabledService = "";
         Set<String> services = new HashSet<>(Arrays.asList(enabledService.split(":")));
+        services.remove("");
         services.remove(serviceName);
         enabledService = TextUtils.join(":", services);
         Settings.Secure.putString(getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES, enabledService);

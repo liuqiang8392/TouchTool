@@ -1,6 +1,6 @@
 <resources>
 
-    <style name="Theme.TouchTool" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Theme.TouchTool" parent="Theme.Material3Expressive.DayNight.NoActionBar">
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowActionBar">false</item>
@@ -12,6 +12,11 @@
         <item name="defaultOffset">2dp</item>
         <item name="smallIconButtonSize">24dp</item>
         <item name="halfIconButtonSize">18dp</item>
+
+        <item name="defaultIconButton">@style/Widget.Material3.Button.IconButton</item>
+        <item name="defaultIconButtonFilled">@style/Widget.Material3.Button.IconButton.Filled</item>
+        <item name="defaultIconButtonOutlined">@style/Widget.Material3.Button.IconButton.Outlined</item>
+
         <item name="iconButton">@style/Theme.TouchTool.IconButton</item>
         <item name="iconButtonOutlined">@style/Theme.TouchTool.IconButton.Outlined</item>
         <item name="iconButtonFilled">@style/Theme.TouchTool.IconButton.Filled</item>

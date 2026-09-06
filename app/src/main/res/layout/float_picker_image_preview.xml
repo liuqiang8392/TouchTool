@@ -71,7 +71,7 @@
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/spinner"
-                            style="?attr/materialButtonOutlinedStyle"
+                            style="?attr/defaultIconButtonOutlined"
                             android:layout_width="wrap_content"
                             android:layout_height="?attr/smallIconButtonSize"
                             android:insetTop="?attr/defaultOffset"

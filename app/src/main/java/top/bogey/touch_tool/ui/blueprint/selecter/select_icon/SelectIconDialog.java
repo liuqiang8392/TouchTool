@@ -86,7 +86,7 @@ public class SelectIconDialog extends BottomSheetDialog {
                 binding.searchBox.setVisibility(View.VISIBLE);
                 binding.searchEdit.requestFocus();
                 InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(binding.searchEdit, InputMethodManager.SHOW_IMPLICIT);
+                imm.showSoftInput(binding.searchEdit, 0);
             }
         });
 
@@ -143,6 +143,9 @@ public class SelectIconDialog extends BottomSheetDialog {
         List<Integer> icons = new ArrayList<>();
         icons.addAll(Arrays.asList(R.drawable.icon_add, R.drawable.icon_remove, R.drawable.icon_close, R.drawable.icon_check));
         icons.addAll(Arrays.asList(R.drawable.icon_keyboard_arrow_up, R.drawable.icon_keyboard_arrow_down, R.drawable.icon_keyboard_arrow_left, R.drawable.icon_keyboard_arrow_right));
+        icons.addAll(Arrays.asList(R.drawable.icon_counter_0, R.drawable.icon_counter_1, R.drawable.icon_counter_2, R.drawable.icon_counter_3));
+        icons.addAll(Arrays.asList(R.drawable.icon_counter_4, R.drawable.icon_counter_5, R.drawable.icon_counter_6, R.drawable.icon_counter_7));
+        icons.addAll(Arrays.asList(R.drawable.icon_counter_8, R.drawable.icon_counter_9));
         icons.addAll(Arrays.asList(R.drawable.icon_graph_1, R.drawable.icon_graph_2, R.drawable.icon_shuffle, R.drawable.icon_tactic));
         icons.addAll(Arrays.asList(R.drawable.icon_input, R.drawable.icon_output, R.drawable.icon_zoom_in_map, R.drawable.icon_zoom_out_map));
         icons.addAll(Arrays.asList(R.drawable.icon_text_fields, R.drawable.icon_image, R.drawable.icon_palette, R.drawable.icon_widgets));

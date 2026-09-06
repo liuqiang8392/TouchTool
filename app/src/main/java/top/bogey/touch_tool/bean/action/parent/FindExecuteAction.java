@@ -30,12 +30,12 @@ public abstract class FindExecuteAction extends ExecuteAction {
         PinNumber<?> timeout = getPinValue(runnable, timeoutPin);
         PinNumber<?> interval = getPinValue(runnable, intervalPin);
 
-        boolean found = find(runnable);
         long startTime = System.currentTimeMillis();
+        boolean found = find(runnable);
         while (!found) {
-            runnable.sleep(interval.intValue());
             if (runnable.isCurrentInterrupt()) return;
             if (timeout.intValue() < System.currentTimeMillis() - startTime) break;
+            runnable.sleep(interval.intValue());
             found = find(runnable);
         }
 

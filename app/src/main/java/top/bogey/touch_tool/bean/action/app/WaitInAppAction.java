@@ -8,7 +8,6 @@ import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.parent.FindExecuteAction;
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplication;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinApplications;
 import top.bogey.touch_tool.service.TaskInfoSummary;

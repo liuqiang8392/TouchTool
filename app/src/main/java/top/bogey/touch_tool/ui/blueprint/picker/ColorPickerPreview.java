@@ -146,7 +146,7 @@ public class ColorPickerPreview extends BasePicker<PinColor.ColorInfo> {
         if (s == null || s.length() == 0) return 0;
         try {
             int i = Integer.parseInt(s.toString());
-            return Math.min(255, Math.max(0, i));
+            return Math.clamp(i, 0, 255);
         } catch (NumberFormatException e) {
             e.printStackTrace();
             return 0;

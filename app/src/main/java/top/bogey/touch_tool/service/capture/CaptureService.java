@@ -21,7 +21,6 @@ import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.DisplayMetrics;
-import android.view.WindowManager;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -157,9 +156,7 @@ public class CaptureService extends Service {
     }
 
     private void setVirtualDisplay() {
-        WindowManager manager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-        DisplayMetrics metrics = new DisplayMetrics();
-        manager.getDefaultDisplay().getRealMetrics(metrics);
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
         imageReader = ImageReader.newInstance(metrics.widthPixels, metrics.heightPixels, PixelFormat.RGBA_8888, 2);
         virtualDisplay = projection.createVirtualDisplay("CaptureService", metrics.widthPixels, metrics.heightPixels, metrics.densityDpi, DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, imageReader.getSurface(), null, null);
     }
@@ -170,9 +167,7 @@ public class CaptureService extends Service {
         if (width == this.width && height == this.height) return;
         this.width = width;
         this.height = height;
-        WindowManager manager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-        DisplayMetrics metrics = new DisplayMetrics();
-        manager.getDefaultDisplay().getRealMetrics(metrics);
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
         int densityDpi = metrics.densityDpi;
         imageReader.close();
         imageReader = ImageReader.newInstance(width, height, PixelFormat.RGBA_8888, 2);

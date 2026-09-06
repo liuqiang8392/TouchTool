@@ -7,16 +7,4 @@
         android:icon="@drawable/menu_clean"
         android:title="@string/task_import"
         app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/importTask"
-        android:icon="@drawable/menu_download"
-        android:title="@string/task_import"
-        app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/exportTask"
-        android:icon="@drawable/menu_upload"
-        android:title="@string/task_export"
-        app:showAsAction="ifRoom" />
 </menu>

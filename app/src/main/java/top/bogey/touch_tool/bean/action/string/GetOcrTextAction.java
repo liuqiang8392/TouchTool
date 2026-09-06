@@ -28,7 +28,6 @@ import top.bogey.touch_tool.bean.save.model.ModelResult;
 import top.bogey.touch_tool.bean.save.model.ModelSaver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.MainAccessibilityService;
-import top.bogey.touch_tool.service.TaskInfoSummary;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class GetOcrTextAction extends ExecuteOrCalculateAction implements SyncAction {

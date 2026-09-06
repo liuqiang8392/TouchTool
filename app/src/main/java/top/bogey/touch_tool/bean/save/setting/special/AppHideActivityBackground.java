@@ -26,7 +26,9 @@ public class AppHideActivityBackground extends SettingSave<Boolean> {
             List<ActivityManager.AppTask> taskList = manager.getAppTasks();
             if (taskList != null) {
                 for (ActivityManager.AppTask task : taskList) {
-                    if (task.getTaskInfo().id == taskId) task.setExcludeFromRecents(get());
+                    ActivityManager.RecentTaskInfo taskInfo = task.getTaskInfo();
+                    if (taskInfo == null) continue;
+                    if (taskInfo.id == taskId) task.setExcludeFromRecents(get());
                 }
             }
         }

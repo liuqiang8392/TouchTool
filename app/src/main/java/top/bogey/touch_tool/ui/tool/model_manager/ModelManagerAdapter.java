@@ -2,6 +2,7 @@ package top.bogey.touch_tool.ui.tool.model_manager;
 
 import android.content.Context;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -57,7 +58,7 @@ public class ModelManagerAdapter extends RecyclerView.Adapter<ModelManagerAdapte
             super(binding.getRoot());
             this.context = binding.getRoot().getContext();
             this.binding = binding;
-            this.handler = new Handler();
+            this.handler = new Handler(Looper.getMainLooper());
 
             binding.delete.setOnClickListener(v -> {
                 if (delete) {

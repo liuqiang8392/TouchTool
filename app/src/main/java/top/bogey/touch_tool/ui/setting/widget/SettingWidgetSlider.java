@@ -48,7 +48,7 @@ public class SettingWidgetSlider extends FrameLayout {
     }
 
     public void setValue(float value) {
-        value = Math.max(Math.min(value, binding.slider.getValueTo()), binding.slider.getValueFrom());
+        value = Math.clamp(value, binding.slider.getValueFrom(), binding.slider.getValueTo());
         binding.slider.setValue(value);
     }
 

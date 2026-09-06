@@ -3,6 +3,7 @@ package top.bogey.touch_tool.ui.custom.float_view;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Handler;
+import android.os.Looper;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
@@ -29,7 +30,7 @@ public class KeepAliveFloatView extends FrameLayout implements FloatInterface, I
 
     public KeepAliveFloatView(@NonNull Context context) {
         super(context);
-        handler = new Handler();
+        handler = new Handler(Looper.getMainLooper());
         MainAccessibilityService service = MainApplication.getInstance().getService();
         service.addListener(this);
 

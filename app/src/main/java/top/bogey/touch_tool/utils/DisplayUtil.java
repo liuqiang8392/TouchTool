@@ -3,6 +3,7 @@ package top.bogey.touch_tool.utils;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -14,9 +15,9 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Size;
-import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -48,7 +49,7 @@ public class DisplayUtil {
 
     @ColorInt
     public static int blendColor(int color1, int color2, float ratio) {
-        ratio = Math.max(0f, Math.min(1f, ratio));
+        ratio = Math.clamp(ratio, 0f, 1f);
         final float inverseRatio = 1f - ratio;
         int a = (int) (Color.alpha(color1) * inverseRatio + Color.alpha(color2) * ratio);
         int r = (int) (Color.red(color1) * inverseRatio + Color.red(color2) * ratio);
@@ -71,8 +72,8 @@ public class DisplayUtil {
     }
 
     public static boolean isPortrait(Context context) {
-        WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        return manager.getDefaultDisplay().getRotation() % 2 == Surface.ROTATION_0;
+        int orientation = context.getResources().getConfiguration().orientation;
+        return orientation != Configuration.ORIENTATION_LANDSCAPE;
     }
 
     public static boolean isInFreeFormMode(Activity activity) {
@@ -182,7 +183,7 @@ public class DisplayUtil {
         Size screenSize = DisplayUtil.getScreenSize(context);
         int maxHeight = screenSize.getHeight() - location[1] - anchorView.getHeight();
         int minHeight = (int) DisplayUtil.dp2px(context, 32);
-        height = Math.max(Math.min(height, maxHeight), minHeight);
+        height = Math.clamp(height, minHeight, maxHeight);
         popup.setHeight(height);
         popup.show();
     }
@@ -235,7 +236,7 @@ public class DisplayUtil {
     }
 
     public static Bitmap safeScaleBitmap(Bitmap bitmap, int maxWidth, int maxHeight) {
-        if (bitmap == null) return null;
+        if (bitmap == null || bitmap.isRecycled()) return null;
         final int srcWidth = bitmap.getWidth();
         final int srcHeight = bitmap.getHeight();
         if (srcWidth <= maxWidth && srcHeight <= maxHeight) return bitmap;
@@ -249,7 +250,7 @@ public class DisplayUtil {
     }
 
     public static Rect safeClipBitmapArea(Bitmap bitmap, int x, int y, int width, int height) {
-        if (bitmap == null) return null;
+        if (bitmap == null || bitmap.isRecycled()) return null;
         if (x < 0) {
             width += x;
             x = 0;

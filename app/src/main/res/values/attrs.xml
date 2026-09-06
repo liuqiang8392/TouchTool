@@ -9,6 +9,10 @@
     <attr name="smallIconButtonSize" format="dimension" />
     <attr name="halfIconButtonSize" format="dimension" />
 
+    <attr name="defaultIconButton" format="reference" />
+    <attr name="defaultIconButtonFilled" format="reference" />
+    <attr name="defaultIconButtonOutlined" format="reference" />
+
     <attr name="iconButton" format="reference" />
     <attr name="iconButtonOutlined" format="reference" />
     <attr name="iconButtonFilled" format="reference" />
@@ -22,12 +26,6 @@
         <attr name="icon" />
         <attr name="title" />
         <attr name="description" />
-        <attr name="buttonVisible">
-            <enum name="none" value="0" />
-            <enum name="button" value="1" />
-            <enum name="arrow" value="2" />
-        </attr>
-        <attr name="buttonText" format="string" />
     </declare-styleable>
 
     <declare-styleable name="SettingWidgetSwitch">

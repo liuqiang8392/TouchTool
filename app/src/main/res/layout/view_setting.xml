@@ -82,8 +82,6 @@
                         android:id="@+id/reloadService"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:buttonText="@string/app_setting_reload_button_text"
-                        app:buttonVisible="button"
                         app:description="@string/app_setting_reload_desc"
                         app:icon="@drawable/icon_refresh"
                         app:title="@string/app_setting_reload" />
@@ -92,8 +90,6 @@
                         android:id="@+id/autoReloadService"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:buttonText="@string/setting_copy_shell"
-                        app:buttonVisible="button"
                         app:description="@string/app_setting_auto_reload_desc"
                         app:icon="@drawable/icon_refresh"
                         app:title="@string/app_setting_auto_reload" />
@@ -135,8 +131,6 @@
                         android:id="@+id/cleanCacheButton"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:buttonText="@string/app_setting_clean_cache_button_text"
-                        app:buttonVisible="button"
                         app:description="@string/app_setting_clean_cache_desc"
                         app:icon="@drawable/icon_delete"
                         app:title="@string/app_setting_clean_cache" />
@@ -199,8 +193,6 @@
                         android:id="@+id/notificationTypeCmd"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:buttonText="@string/setting_copy_shell"
-                        app:buttonVisible="button"
                         app:description="@string/permission_setting_notification_type_sensitive_desc"
                         app:icon="@drawable/icon_visibility"
                         app:title="@string/permission_setting_notification_type_sensitive" />
@@ -408,7 +400,6 @@
                         android:id="@+id/manualPlaySetting"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:buttonVisible="arrow"
                         app:description="@string/preference_setting_manual_play_desc_1"
                         app:icon="@drawable/icon_touch_app"
                         app:title="@string/preference_setting_manual_play" />

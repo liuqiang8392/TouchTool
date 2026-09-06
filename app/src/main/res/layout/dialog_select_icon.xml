@@ -56,7 +56,7 @@
         android:clipChildren="false"
         android:clipToPadding="false"
         android:orientation="vertical"
-        android:padding="?attr/iconButtonSize">
+        android:padding="?attr/smallIconButtonSize">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/searchButton"

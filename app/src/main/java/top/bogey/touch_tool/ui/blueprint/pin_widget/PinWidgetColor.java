@@ -26,6 +26,7 @@ public class PinWidgetColor extends PinWidget<PinColor> {
     @Override
     protected void initBase() {
         PinColor.ColorInfo colorInfo = pinBase.getValue();
+        pinBase.setValue(colorInfo);
         binding.colorText.setText(colorInfo.getColorString());
         binding.color.setBackgroundColor(colorInfo.getColor());
 

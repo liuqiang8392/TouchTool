@@ -1,11 +1,11 @@
 [versions]
 appcompat = "1.7.1"
-material = "1.13.0"
+material = "1.14.0"
 nav = "2.9.8"
-agp = "9.2.1"
+agp = "9.3.1"
 
 #序列化与反序列化
-gson = "2.13.2"
+gson = "2.14.0"
 #存储
 mmkv = "2.4.0"
 
@@ -16,14 +16,14 @@ shizuku = "13.1.5"
 # 数学运算
 exp4j = "0.4.8"
 # 二维码
-zxing = "3.4.1"
+zxing = "3.5.0"
 # 拼音
 tinypinyin = "2.0.3"
 # 隐藏api
 hiddenapibypass = "6.1"
 
 # 端侧模型运行环境
-litert = "2.1.4"
+litert = "2.1.5"
 litert-support-api = "1.4.2"
 
 [libraries]

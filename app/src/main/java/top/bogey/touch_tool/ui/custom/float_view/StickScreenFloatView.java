@@ -200,7 +200,7 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
                 float xScale = width / originWidth;
                 float yScale = height / originHeight;
                 float scale = (xScale + yScale) / 2;
-                scale = Math.min(Math.max(scale, minScale), maxScale);
+                scale = Math.clamp(scale, minScale, maxScale);
                 binding.scaleBox.setScaleX(scale);
                 binding.scaleBox.setScaleY(scale);
                 width = originWidth * scale;

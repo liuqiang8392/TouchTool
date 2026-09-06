@@ -224,7 +224,7 @@ public class AreaPicker extends FullScreenPicker<Rect> {
             binding.markBox.setY(area.top - offset);
 
             float x = area.left + (area.width() - binding.buttonBox.getWidth()) / 2f;
-            x = Math.max(0, Math.min(getWidth() - binding.buttonBox.getWidth(), x));
+            x = Math.clamp(x, 0, getWidth() - binding.buttonBox.getWidth());
             binding.buttonBox.setX(x);
 
             if (getHeight() < area.height() + binding.buttonBox.getHeight() + doubleOffset) {

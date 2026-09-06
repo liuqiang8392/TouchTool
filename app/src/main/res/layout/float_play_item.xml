@@ -32,6 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:indeterminate="false"
+        app:indeterminateAnimationTypeCircular="advance"
         app:indicatorInset="0dp"
         app:indicatorSize="?attr/iconButtonSize"
         app:trackCornerRadius="1dp"

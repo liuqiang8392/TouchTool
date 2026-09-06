@@ -40,7 +40,7 @@ public class ToastFloatView extends FrameLayout implements FloatInterface {
     private ToastFloatView(@NonNull Context context) {
         super(context);
         binding = FloatToastBinding.inflate(LayoutInflater.from(context), this, true);
-        handler = new Handler();
+        handler = new Handler(Looper.getMainLooper());
     }
 
     private void innerShowToast(String msg, EAnchor anchor, EAnchor gravity, Point pos) {
