@@ -10,6 +10,7 @@ import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.parent.DynamicPinsAction;
+import top.bogey.touch_tool.bean.action.parent.ExecuteAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinAdd;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
@@ -28,12 +29,8 @@ import top.bogey.touch_tool.ui.custom.float_view.ChoiceExecuteFloatView;
 import top.bogey.touch_tool.utils.EAnchor;
 import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 
-public class ChoiceExecuteAction extends Action implements DynamicPinsAction {
-    private final transient Pin inPin = new Pin(new PinExecute(), R.string.pin_execute);
-    // 默认的首个分支针脚，和动态添加的分支一样可以移除
-    private final transient Pin outPin = new Pin(new PinIconExecute(), R.string.pin_execute, true, true);
+public class ChoiceExecuteAction extends ExecuteAction implements DynamicPinsAction {
     private final static Pin morePin = new Pin(new PinIconExecute(), R.string.pin_execute, true);
-
 
     private final transient Pin timeoutPin = new NotLinkAblePin(new PinInteger(0), R.string.choice_action_timeout);
     private final transient Pin posTypePin = new Pin(new PinSingleSelect(R.array.float_pos_type, 0), R.string.pin_point, false, false, true);
@@ -42,19 +39,19 @@ public class ChoiceExecuteAction extends Action implements DynamicPinsAction {
     private final transient Pin gravityPin = new PosShowablePin(new PinSingleSelect(R.array.anchor, 4), R.string.screen_anchor, false, false, true);
     private final transient Pin posPin = new PosShowablePin(new PinPoint(), R.string.screen_anchor_pos, false, false, true);
 
-    // 默认的第二个分支针脚，同样可以移除
-    private final transient Pin secondPin = new Pin(new PinIconExecute(), R.string.pin_execute, true, true);
     private final transient Pin addPin = new AlwaysShowPin(new PinAdd(morePin), R.string.pin_add_execute, true);
     private final transient Pin defaultPin = new Pin(new PinExecute(), R.string.choice_action_default, true);
 
     public ChoiceExecuteAction() {
         super(ActionType.CHOICE_LOGIC);
-        addPins(inPin, outPin, timeoutPin, posTypePin, anchorPin, gravityPin, posPin, secondPin, addPin, defaultPin);
+        // 默认的第二个分支针脚，可以移除
+        Pin secondPin = new Pin(new PinIconExecute(), R.string.pin_execute, true, true);
+        addPins(timeoutPin, posTypePin, anchorPin, gravityPin, posPin, secondPin, addPin, defaultPin);
     }
 
     public ChoiceExecuteAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(inPin, outPin, timeoutPin, posTypePin, anchorPin, gravityPin, posPin, secondPin);
+        reAddPins(timeoutPin, posTypePin, anchorPin, gravityPin, posPin);
         reAddPins(morePin);
         reAddPins(addPin, defaultPin);
     }
@@ -100,11 +97,6 @@ public class ChoiceExecuteAction extends Action implements DynamicPinsAction {
         executeNext(runnable, defaultPin);
     }
 
-    @Override
-    public void calculate(TaskRunnable runnable, Pin pin) {
-
-    }
-
     private Action getNextAction(TaskRunnable runnable, Pin pin) {
         Task task = runnable.getTask();
         Pin linkedPin = pin.getLinkedPin(runnable.getTask());
@@ -118,9 +110,9 @@ public class ChoiceExecuteAction extends Action implements DynamicPinsAction {
         pins.add(outPin);
         boolean start = false;
         for (Pin pin : getPins()) {
-            if (pin == secondPin) start = true;
             if (pin == addPin) start = false;
             if (start) pins.add(pin);
+            if (pin == posPin) start = true;
         }
         return pins;
     }

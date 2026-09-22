@@ -159,7 +159,7 @@ public class MapActionLinkEventHandler {
                 if (valueFlag) pinMap.setValueType(new PinObject(PinSubType.DYNAMIC));
                 pinMap.reset();
                 pin.setValue(task, pinMap); // 通知针脚刷新
-            } else if (!pin.isDynamic() && value instanceof PinList pinList) {
+            } else if (value instanceof PinList pinList) {
                 pinList.setValueType(new PinObject(PinSubType.DYNAMIC));
                 pinList.reset();
                 pin.setValue(task, pinList); // 通知针脚刷新

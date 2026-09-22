@@ -12,10 +12,8 @@ import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinType;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
-import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class ListIndexOfAction extends ListCalculateAction {
@@ -39,9 +37,6 @@ public class ListIndexOfAction extends ListCalculateAction {
     public void calculate(TaskRunnable runnable, Pin pin) {
         PinList list = getPinValue(runnable, listPin);
         PinObject element = getPinValue(runnable, elementPin);
-        if (list.getValueType() instanceof PinString) {
-            element = new PinString(element.toString());
-        }
         int index = list.indexOf(element);
         indexPin.getValue(PinInteger.class).setValue(index + 1);
     }

@@ -16,20 +16,20 @@ import top.bogey.touch_tool.service.TaskRunnable;
 
 public class BooleanAndAction extends CalculateAction implements DynamicPinsAction {
     private final static Pin morePin = new Pin(new PinBoolean(), R.string.pin_boolean_condition);
-    // 默认条件针脚，和动态添加的一样可以移除
-    private final transient Pin firstPin = new Pin(new PinBoolean(), R.string.pin_boolean_condition, false, true);
-    private final transient Pin secondPin = new Pin(new PinBoolean(), R.string.pin_boolean_condition, false, true);
+
     private final transient Pin addPin = new Pin(new PinAdd(morePin), R.string.pin_add_pin);
     private final transient Pin resultPin = new Pin(new PinBoolean(), R.string.pin_boolean_result, true);
 
     public BooleanAndAction() {
         super(ActionType.BOOLEAN_AND);
+        // 默认条件针脚，和动态添加的一样可以移除
+        Pin firstPin = new Pin(new PinBoolean(), R.string.pin_boolean_condition, false, true);
+        Pin secondPin = new Pin(new PinBoolean(), R.string.pin_boolean_condition, false, true);
         addPins(firstPin, secondPin, addPin, resultPin);
     }
 
     public BooleanAndAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(firstPin, secondPin);
         reAddPins(morePin);
         reAddPins(addPin, resultPin);
     }
