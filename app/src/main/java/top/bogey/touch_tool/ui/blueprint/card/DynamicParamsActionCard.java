@@ -66,6 +66,24 @@ public class DynamicParamsActionCard extends ActionCard implements IDynamicPinCa
         initLock(binding.lockButton);
     }
 
+    // 展开模式切换会成片隐藏针脚，藏光了的那条列表会被压成 0 高并回收掉针脚视图，
+    // 只改针脚可见性不会再触发列表布局，所以这里让列表重新量一次
+    @Override
+    public void setExpandType(Action.ExpandType expandType) {
+        super.setExpandType(expandType);
+        requestPinBoxLayout();
+    }
+
+    @Override
+    public void expand() {
+        super.expand();
+        requestPinBoxLayout();
+    }
+
+    private void requestPinBoxLayout() {
+        binding.outPinBox.requestLayout();
+    }
+
     @Override
     public boolean check() {
         return true;

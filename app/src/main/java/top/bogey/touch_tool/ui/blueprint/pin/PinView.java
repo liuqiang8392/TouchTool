@@ -269,6 +269,13 @@ public abstract class PinView extends FrameLayout implements PinListener {
     }
 
     @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        // 针脚视图会被列表回收后重新挂回来，重新挂载时要把监听补上
+        pin.addListener(this);
+    }
+
+    @Override
     protected void onDetachedFromWindow() {
         pin.removeListener(this);
         super.onDetachedFromWindow();
