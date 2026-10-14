@@ -32,6 +32,8 @@ public class ImportTaskDialogAdapter extends RecyclerView.Adapter<ImportTaskDial
 
     private final Set<String> importTags = new HashSet<>();
 
+    private boolean importCopy = false;
+
     public ImportTaskDialogAdapter(List<TaskPackage> taskPackages) {
         this.taskPackages.addAll(taskPackages);
         for (TaskPackage taskPackage : taskPackages) {
@@ -91,6 +93,12 @@ public class ImportTaskDialogAdapter extends RecyclerView.Adapter<ImportTaskDial
         return importTags;
     }
 
+    // 切换导入副本模式，刷新条目上的覆盖提示
+    public void setImportCopy(boolean importCopy) {
+        this.importCopy = importCopy;
+        notifyDataSetChanged();
+    }
+
     public void selectAll() {
         for (TaskPackage aPackage : taskPackages) {
             taskReference.addTaskPackage(aPackage);
@@ -148,7 +156,7 @@ public class ImportTaskDialogAdapter extends RecyclerView.Adapter<ImportTaskDial
             Task savedTask = TaskSaver.getInstance().getTask(taskPackage.getTask().getId());
             if (savedTask != null && times > 0) {
                 binding.errorText.setVisibility(View.VISIBLE);
-                binding.errorText.setText(context.getString(R.string.task_import_error_tips, savedTask.getTitle()));
+                binding.errorText.setText(context.getString(importCopy ? R.string.task_import_copy_tips : R.string.task_import_error_tips, savedTask.getTitle()));
             }
 
             binding.referenceCard.setVisibility(taskPackage.isEmpty() ? View.GONE : View.VISIBLE);

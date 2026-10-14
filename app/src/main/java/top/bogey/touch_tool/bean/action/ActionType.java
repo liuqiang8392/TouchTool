@@ -21,6 +21,7 @@ public enum ActionType {
     CUSTOM_END,
     EXECUTE_TASK,
     STOP_TASK,
+    SWITCH_TASK,
     GET_VARIABLE,
     SET_VARIABLE,
     GET_OR_SET_VARIABLE,

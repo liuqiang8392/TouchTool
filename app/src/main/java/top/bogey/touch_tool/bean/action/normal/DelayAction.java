@@ -28,4 +28,8 @@ public class DelayAction extends ExecuteAction {
         runnable.sleep(delayValue.getRandomValue());
         executeNext(runnable, outPin);
     }
+
+    public Pin getDelay() {
+        return delay;
+    }
 }

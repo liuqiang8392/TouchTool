@@ -2,9 +2,7 @@ package top.bogey.touch_tool.ui.blueprint.pin;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.PointF;
 import android.text.Editable;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -26,7 +24,6 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinType;
 import top.bogey.touch_tool.bean.task.Variable;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
-import top.bogey.touch_tool.ui.blueprint.card.IDynamicPinCard;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.listener.TextChangedListener;
 
@@ -137,22 +134,6 @@ public abstract class PinCustomView extends PinView {
             pin.setHide(!pin.isHide());
             visibleButton.setIconResource(pin.isHide() ? R.drawable.icon_visibility_off : R.drawable.icon_visibility);
         });
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        // 抑制一下recycleView的滚动，让针脚连线能够生效
-        if (getCard() instanceof IDynamicPinCard dynamicPinCard) {
-            float x = event.getX();
-            float y = event.getY();
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                PointF pointF = DisplayUtil.getLocationRelativeToView(this, getCard());
-                if (getCard().getLinkAblePinView((x + pointF.x) * getCard().getScaleX(), (y + pointF.y) * getCard().getScaleY()) == this) {
-                    dynamicPinCard.suppressLayout();
-                }
-            }
-        }
-        return super.onTouchEvent(event);
     }
 
     @Override

@@ -42,6 +42,9 @@ public class SelectActionByPinDialog extends SelectActionDialog {
     @Override
     protected Map<String, List<Object>> getGroupData(GroupType groupType) {
         Map<String, List<Object>> map = new LinkedHashMap<>();
+        // 分组到宿主对象的映射必须一起维护，否则粘贴时取不到宿主
+        // 会掉进 subGroupMap 取值为 null 的兜底分支，把本该放进私有分组的东西当成打标签存到全局
+        subGroupMap.clear();
         if (touchedPin == null) return map;
         switch (groupType) {
             case PRESET -> {
@@ -67,6 +70,7 @@ public class SelectActionByPinDialog extends SelectActionDialog {
                     if (isConnectAbleTask(task)) privateTasks.add(task);
                 }
                 map.put(PRIVATE, privateTasks);
+                subGroupMap.put(PRIVATE, task);
 
                 // 公共任务
                 List<Object> publicTasks = new ArrayList<>();
@@ -74,6 +78,7 @@ public class SelectActionByPinDialog extends SelectActionDialog {
                     if (isConnectAbleTask(task)) publicTasks.add(task);
                 }
                 map.put(GLOBAL, publicTasks);
+                subGroupMap.put(GLOBAL, GLOBAL);
 
                 // 父任务
                 Task parent = task.getParent();
@@ -83,7 +88,10 @@ public class SelectActionByPinDialog extends SelectActionDialog {
                     for (Task task : parent.getTasks()) {
                         if (isConnectAbleTask(task)) list.add(task);
                     }
-                    if (!list.isEmpty()) map.put(PARENT_PREFIX + parent.getTitle(), list);
+                    if (!list.isEmpty()) {
+                        map.put(PARENT_PREFIX + parent.getTitle(), list);
+                        subGroupMap.put(PARENT_PREFIX + parent.getTitle(), parent);
+                    }
                     parent = parent.getParent();
                 }
             }
@@ -95,6 +103,7 @@ public class SelectActionByPinDialog extends SelectActionDialog {
                     else if (touchedPin.getValue() instanceof PinExecute) privateVars.add(var);
                 }
                 map.put(PRIVATE, privateVars);
+                subGroupMap.put(PRIVATE, task);
 
                 // 全局变量
                 List<Object> publicVars = new ArrayList<>();
@@ -103,6 +112,7 @@ public class SelectActionByPinDialog extends SelectActionDialog {
                     else if (touchedPin.getValue() instanceof PinExecute) publicVars.add(var);
                 }
                 map.put(GLOBAL, publicVars);
+                subGroupMap.put(GLOBAL, GLOBAL);
 
                 // 父级变量
                 Task parent = task.getParent();
@@ -112,7 +122,10 @@ public class SelectActionByPinDialog extends SelectActionDialog {
                         if (touchedPin.getValue().linkFromAble(var.getValue())) list.add(var);
                         else if (touchedPin.getValue() instanceof PinExecute) list.add(var);
                     }
-                    if (!list.isEmpty()) map.put(PARENT_PREFIX + parent.getTitle(), list);
+                    if (!list.isEmpty()) {
+                        map.put(PARENT_PREFIX + parent.getTitle(), list);
+                        subGroupMap.put(PARENT_PREFIX + parent.getTitle(), parent);
+                    }
                     parent = parent.getParent();
                 }
             }

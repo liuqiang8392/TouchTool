@@ -63,6 +63,9 @@ public class CustomStartAction extends Action implements DynamicPinsAction {
         });
     }
 
+    public Pin getOutPin() {
+        return getPins().stream().filter(Pin::isVertical).findFirst().orElse(null);
+    }
     @Override
     public List<Pin> getDynamicPins() {
         return new ArrayList<>(getPins());

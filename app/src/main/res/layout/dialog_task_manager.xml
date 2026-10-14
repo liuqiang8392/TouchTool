@@ -37,6 +37,13 @@
             android:layout_height="wrap_content"
             android:text="@string/task_import_tag" />
 
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/importCopy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="?attr/defaultPadding"
+            android:text="@string/task_import_copy" />
+
         <Space
             android:layout_width="0dp"
             android:layout_height="wrap_content"

@@ -2,16 +2,13 @@ package top.bogey.touch_tool.bean.save.model;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.RectF;
 import android.net.Uri;
 import android.util.Log;
 
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-
-import org.tensorflow.lite.support.common.ops.NormalizeOp;
-import org.tensorflow.lite.support.image.ImageProcessor;
-import org.tensorflow.lite.support.image.TensorImage;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -108,11 +105,16 @@ public class YoloModel extends LiteRTModel {
         int inputHeight = inputShape[2];
         LetterBox letterBox = new LetterBox(bitmap, inputWidth, inputHeight);
 
-        TensorImage tensorImage = TensorImage.fromBitmap(letterBox.getBitmap());
-        ImageProcessor processor = new ImageProcessor.Builder().add(new NormalizeOp(0, 255)).build();
-        tensorImage = processor.process(tensorImage);
+        float[] input = new float[inputWidth * inputHeight * 3];
+        int[] pixels = new int[inputWidth * inputHeight];
+        letterBox.getBitmap().getPixels(pixels, 0, inputWidth, 0, 0, inputWidth, inputHeight);
+        for (int i = 0; i < pixels.length; i++) {
+            int pixel = pixels[i];
+            input[i * 3] = (float) Color.red(pixel) / 255.0f;
+            input[i * 3 + 1] = (float) Color.green(pixel) / 255.0f;
+            input[i * 3 + 2] = (float) Color.blue(pixel) / 255.0f;
+        }
 
-        float[] input = tensorImage.getTensorBuffer().getFloatArray();
         float[] output = executor.execute(input);
         if (output == null) return new ArrayList<>();
 

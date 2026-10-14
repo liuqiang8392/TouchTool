@@ -27,8 +27,8 @@ public class MakeMapAction extends MapCalculateAction implements DynamicPinsActi
 
     public MakeMapAction() {
         super(ActionType.MAP_MAKE);
-        Pin keyPin = new Pin(new PinObject(PinSubType.DYNAMIC), R.string.map_action_key);
-        Pin valuePin = new Pin(new PinObject(PinSubType.DYNAMIC), R.string.map_action_value);
+        Pin keyPin = new Pin(new PinObject(PinSubType.DYNAMIC), R.string.map_action_key, false, true);
+        Pin valuePin = new Pin(new PinObject(PinSubType.DYNAMIC), R.string.map_action_value, false, true);
         addPins(keyPin, valuePin, addPin, mapPin);
     }
 

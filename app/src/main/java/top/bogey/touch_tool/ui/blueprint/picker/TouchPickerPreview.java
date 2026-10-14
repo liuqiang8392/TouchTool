@@ -43,7 +43,7 @@ public class TouchPickerPreview extends BasePicker<PinTouchPath> {
         binding.backButton.setOnClickListener(v -> dismiss());
 
         binding.saveButton.setOnClickListener(v -> {
-            callback.onResult(touchPath);
+            if (callback != null) callback.onResult(touchPath);
             dismiss();
         });
 

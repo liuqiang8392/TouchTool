@@ -3,6 +3,7 @@ package top.bogey.touch_tool.ui.custom.dialog;
 import android.content.Context;
 import android.text.Editable;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
@@ -15,10 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import top.bogey.touch_tool.R;
+import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.save.TagSaver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.DialogCreateTaskBinding;
 import top.bogey.touch_tool.databinding.ViewTagListItemBinding;
+import top.bogey.touch_tool.ui.recorder.RecorderFloatView;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.callback.BooleanResultCallback;
 
@@ -35,6 +38,14 @@ public class EditTaskDialog extends MaterialAlertDialogBuilder {
 
         binding.titleEdit.setText(task.getTitle());
         binding.desEdit.setText(task.getDescription());
+
+        binding.recordButton.setOnClickListener(v -> new RecorderFloatView(getContext(), result -> {
+            if (result == null) return;
+            for (Action action : result.getActions()) {
+                task.addAction(action);
+            }
+        }).show());
+        binding.recordButton.setVisibility(task.getActions().isEmpty() ? View.VISIBLE : View.GONE);
 
         binding.addTagBtn.setOnClickListener(v -> AppUtil.showEditDialog(context, R.string.task_tag_add, "", result -> {
             if (result != null && !result.isEmpty()) {

@@ -265,6 +265,8 @@ public class DisplayUtil {
         if (y > bitmapHeight) return null;
         if (x + width > bitmapWidth) width = bitmapWidth - x;
         if (y + height > bitmapHeight) height = bitmapHeight - y;
+        // 裁剪后宽高可能为零或负数，此时没有可截取的区域
+        if (width <= 0 || height <= 0) return null;
         return new Rect(x, y, x + width, y + height);
     }
 

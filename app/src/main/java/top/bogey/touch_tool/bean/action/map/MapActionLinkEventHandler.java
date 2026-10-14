@@ -154,12 +154,12 @@ public class MapActionLinkEventHandler {
             if (value instanceof PinAdd pinAdd) {
                 if (keyFlag) pinAdd.getPin(0).setValue(new PinObject(PinSubType.DYNAMIC));
                 if (valueFlag) pinAdd.getPin(1).setValue(new PinObject(PinSubType.DYNAMIC));
-            } else if (!pin.isDynamic() && value instanceof PinMap pinMap) {
+            } else if (value instanceof PinMap pinMap) {
                 if (keyFlag) pinMap.setKeyType(new PinObject(PinSubType.DYNAMIC));
                 if (valueFlag) pinMap.setValueType(new PinObject(PinSubType.DYNAMIC));
                 pinMap.reset();
                 pin.setValue(task, pinMap); // 通知针脚刷新
-            } else if (!pin.isDynamic() && value instanceof PinList pinList) {
+            } else if (value instanceof PinList pinList) {
                 pinList.setValueType(new PinObject(PinSubType.DYNAMIC));
                 pinList.reset();
                 pin.setValue(task, pinList); // 通知针脚刷新

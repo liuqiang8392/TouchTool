@@ -77,13 +77,17 @@ public class TaskRunnable implements Runnable {
             addLog(errorInfo);
         }
 
-        while (!logStack.isEmpty()) {
-            addLog(logStack.pop(), 0);
+        try {
+            while (!logStack.isEmpty()) {
+                addLog(logStack.pop(), 0);
+            }
+            if (logged) addLog(new LogInfo(new DateTimeLog()), 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            interrupt = true;
+            listeners.stream().filter(Objects::nonNull).forEach(listener -> listener.onFinish(this));
         }
-        if (logged) addLog(new LogInfo(new DateTimeLog()), 0);
-
-        interrupt = true;
-        listeners.stream().filter(Objects::nonNull).forEach(listener -> listener.onFinish(this));
     }
 
     public void pushStack(Task task, Action action) {

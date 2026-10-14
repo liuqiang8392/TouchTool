@@ -20,7 +20,6 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.CombinedVibration;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
@@ -53,6 +52,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -136,8 +136,8 @@ public class MainAccessibilityService extends AccessibilityService {
                 if (notification != null && notification.extras != null) {
                     Bundle extras = notification.extras;
                     for (String key : extras.keySet()) {
-                        Object value = extras.get(key);
-                        content.put(key, String.valueOf(value));
+                        String value = extras.getString(key);
+                        content.put(key, value);
                     }
                 } else if (!textList.isEmpty()) {
                     String s = textList.get(0).toString();
@@ -271,6 +271,8 @@ public class MainAccessibilityService extends AccessibilityService {
     }
 
     public TaskRunnable runTask(Task task, StartAction startAction, ITaskListener listener) {
+        cleanInterruptTask();
+
         if (task == null || startAction == null) return null;
         if (!isEnabled()) return null;
 
@@ -310,7 +312,16 @@ public class MainAccessibilityService extends AccessibilityService {
         tasks.add(runnable);
 
         listeners.stream().filter(Objects::nonNull).forEach(runnable::addListener);
-        Future<?> future = ThreadUtil.submitTask(runnable);
+        Future<?> future;
+        try {
+            future = ThreadUtil.submitTask(runnable);
+        } catch (RejectedExecutionException e) {
+            // 线程池容量已满，任务没有真正提交，也就永远不会触发 onFinish，
+            // 必须立刻从运行列表里移除，否则会被当成运行中的任务
+            tasks.remove(runnable);
+            Log.e("TAG", "runTask: 线程池已满，任务未能提交", e);
+            return null;
+        }
         runnable.setFuture(future);
         return runnable;
     }
@@ -347,7 +358,15 @@ public class MainAccessibilityService extends AccessibilityService {
     }
 
     public List<TaskRunnable> getRunningTask() {
-        return new ArrayList<>(tasks);
+        // 任务中断后要等线程跑完 onFinish 才会从列表移除，
+        // 这段窗口里已停止的任务不能算运行中，过滤掉才与 isTaskRunning 的判断一致
+        List<TaskRunnable> runningTasks = new ArrayList<>(tasks);
+        runningTasks.removeIf(TaskRunnable::isInterrupt);
+        return runningTasks;
+    }
+
+    private void cleanInterruptTask() {
+        tasks.removeIf(TaskRunnable::isInterrupt);
     }
 
     public void stopTask(Task task) {
@@ -616,7 +635,7 @@ public class MainAccessibilityService extends AccessibilityService {
                 Bundle bundle = intent.getExtras();
                 if (bundle != null) {
                     for (String name : bundle.keySet()) {
-                        extras.put(name, String.valueOf(bundle.get(name)));
+                        extras.put(name, bundle.getString(name));
                     }
                 }
                 TaskInfoSummary.getInstance().setBroadcastInfo(action, data, extras);
@@ -754,7 +773,7 @@ public class MainAccessibilityService extends AccessibilityService {
     public Bitmap getScreenShotByAccessibility() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             CompletableFuture<Bitmap> future = new CompletableFuture<>();
-            takeScreenshot(0, ThreadUtil.getExecutorService(), new TakeScreenshotCallback() {
+            TakeScreenshotCallback callback = new TakeScreenshotCallback() {
                 @Override
                 public void onSuccess(@NonNull ScreenshotResult result) {
                     try (HardwareBuffer hardwareBuffer = result.getHardwareBuffer()) {
@@ -778,7 +797,15 @@ public class MainAccessibilityService extends AccessibilityService {
                 public void onFailure(int errorCode) {
                     future.complete(screenShot.get());
                 }
-            });
+            };
+
+            try {
+                takeScreenshot(0, ThreadUtil.getExecutorService(), callback);
+            } catch (RejectedExecutionException e) {
+                // 线程池已满，截图请求没有提交，直接退回缓存的截图
+                Log.e("TAG", "getScreenShotByAccessibility: 线程池已满，截图未能提交", e);
+                return screenShot.get();
+            }
             return future.join();
         } else {
             return getScreenShotByCapture();

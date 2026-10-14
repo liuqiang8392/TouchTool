@@ -62,4 +62,8 @@ public class NodeTouchAction extends ExecuteAction {
         }
         executeNext(runnable, elsePin);
     }
+
+    public Pin getNodePin() {
+        return nodePin;
+    }
 }

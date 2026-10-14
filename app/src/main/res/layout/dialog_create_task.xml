@@ -40,7 +40,7 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="?attr/defaultPadding">
@@ -55,10 +55,20 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/addTagBtn"
             style="?attr/iconButtonFilled"
-            android:layout_gravity="end"
+            android:layout_marginStart="?attr/defaultPadding"
             app:icon="@drawable/icon_add" />
 
-    </FrameLayout>
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/recordButton"
+            style="?attr/iconButtonFilled"
+            app:icon="@drawable/icon_video_call" />
+
+    </LinearLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"

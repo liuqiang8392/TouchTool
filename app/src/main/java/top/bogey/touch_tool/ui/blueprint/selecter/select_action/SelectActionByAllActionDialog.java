@@ -34,6 +34,8 @@ public class SelectActionByAllActionDialog extends SelectActionDialog {
     @Override
     protected Map<String, List<Object>> getGroupData(GroupType groupType) {
         Map<String, List<Object>> map = new LinkedHashMap<>();
+        // 顶级对话框同样要在重建分组时清空映射，避免残留上一次的状态
+        subGroupMap.clear();
         if (groupType == GroupType.TASK) {
             // 私有任务
             List<Object> privateTasks = new ArrayList<>(task.getTasks());

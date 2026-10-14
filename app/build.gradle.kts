@@ -104,7 +104,4 @@ dependencies {
     implementation(libs.hiddenapibypass)
 
     implementation(libs.litert)
-    implementation(libs.litert.support.api) {
-        exclude(group = "com.google.ai.edge.litert", module = "litert-api")
-    }
 }

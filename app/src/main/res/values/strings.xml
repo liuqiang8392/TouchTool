@@ -72,8 +72,10 @@
 
     <string name="task_import">导入任务</string>
     <string name="task_import_tag">导入分类</string>
+    <string name="task_import_copy">导入副本</string>
     <string name="task_import_desc">从你选择的文件中选择需要导入的任务配置和通用自定义卡片</string>
     <string name="task_import_error_tips">将覆盖本地任务“%s”</string>
+    <string name="task_import_copy_tips">本地已存在“%s”，将导入为副本</string>
 
     <string name="task_export">导出任务</string>
     <string name="task_export_desc">选择需要导出的任务配置和通用自定义卡片到你选择的文件夹中</string>
@@ -135,6 +137,8 @@
     <string name="check_need_bluetooth_permission_error">需要蓝牙监听权限</string>
 
     <!-- 警告 -->
+    <string name="task_recorder_not_recording_tips">当前未开始录制</string>
+
     <string name="check_need_capture_warning">需要开启录屏动作</string>
     <string name="check_may_need_use_pos_pin_warning">可能需要使用位置针脚做偏移</string>
     <string name="check_need_notification_warning">需要开启通知权限</string>
@@ -248,6 +252,7 @@
     <string name="capture_service">屏幕录制</string>
     <string name="package_activity">应用信息</string>
     <string name="node_picker">控件信息</string>
+    <string name="color_picker">颜色信息</string>
     <string name="running_log">任务日志</string>
     <string name="model_manager">模型管理</string>
 
@@ -270,8 +275,8 @@
     <string name="setting_help_doc">帮助文档</string>
     <string name="setting_help_doc_url">https://mr-bogey.github.io/TouchTool/</string>
     <string name="setting_help_video">视频教程</string>
-    <string name="setting_help_video_url">2</string>
-    <string name="setting_qq_group_url">https://jq.qq.com/?_wv=1027&amp;k=c1HOe3Gk</string>
+    <string name="setting_help_video_url">https://space.bilibili.com/114428414/lists/8647316</string>
+    <string name="setting_qq_group_url">https://pd.qq.com/s/379om0lhx?b=9</string>
 
     <!-- 设置-应用设置 -->
     <string name="app_setting">应用设置</string>

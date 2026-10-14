@@ -3,6 +3,7 @@ package top.bogey.touch_tool.ui.custom.dialog;
 import android.content.Context;
 import android.text.Editable;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
@@ -35,6 +36,7 @@ public class EditVariableDialog extends MaterialAlertDialogBuilder {
 
         binding.titleEdit.setText(var.getTitle());
         binding.desEdit.setText(var.getDescription());
+        binding.recordButton.setVisibility(View.GONE);
 
         binding.addTagBtn.setOnClickListener(v -> AppUtil.showEditDialog(context, R.string.task_tag_add, "", result -> {
             if (result != null && !result.isEmpty()) {

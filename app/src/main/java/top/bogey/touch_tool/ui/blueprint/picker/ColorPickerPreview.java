@@ -23,6 +23,7 @@ import top.bogey.touch_tool.databinding.FloatPickerColorPreviewBinding;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.ui.custom.float_view.KeepAliveFloatView;
 import top.bogey.touch_tool.ui.custom.float_view.TouchPathFloatView;
+import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.callback.ResultCallback;
 import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
@@ -51,32 +52,36 @@ public class ColorPickerPreview extends BasePicker<PinColor.ColorInfo> {
         PinColor.ColorInfo colorInfo = new PinColor.ColorInfo(color.getColor(), color.getMinArea(), color.getMaxArea());
 
         int colorValue = colorInfo.getColor();
-        binding.color.setBackgroundColor(colorValue);
         binding.redEdit.setText(String.valueOf(Color.red(colorValue)));
         binding.greenEdit.setText(String.valueOf(Color.green(colorValue)));
         binding.blueEdit.setText(String.valueOf(Color.blue(colorValue)));
+
+        refreshColorInfo(colorInfo);
 
         binding.redEdit.addTextChangedListener(new TextChangedListener() {
             @Override
             public void afterTextChanged(Editable s) {
                 colorInfo.setRed(toColorInt(s));
-                binding.color.setBackgroundColor(colorInfo.getColor());
+                refreshColorInfo(colorInfo);
             }
         });
         binding.greenEdit.addTextChangedListener(new TextChangedListener() {
             @Override
             public void afterTextChanged(Editable s) {
                 colorInfo.setGreen(toColorInt(s));
-                binding.color.setBackgroundColor(colorInfo.getColor());
+                refreshColorInfo(colorInfo);
             }
         });
         binding.blueEdit.addTextChangedListener(new TextChangedListener() {
             @Override
             public void afterTextChanged(Editable s) {
                 colorInfo.setBlue(toColorInt(s));
-                binding.color.setBackgroundColor(colorInfo.getColor());
+                refreshColorInfo(colorInfo);
             }
         });
+
+        binding.copyRgbButton.setOnClickListener(v -> AppUtil.copyToClipboard(context, binding.colorRgbText.getText().toString()));
+        binding.copyHexButton.setOnClickListener(v -> AppUtil.copyToClipboard(context, binding.colorHexText.getText().toString()));
 
         binding.switchButton.setVisibility(VISIBLE);
         binding.switchButton.setOnClickListener(v -> {
@@ -96,7 +101,7 @@ public class ColorPickerPreview extends BasePicker<PinColor.ColorInfo> {
         binding.backButton.setOnClickListener(v -> dismiss());
 
         binding.saveButton.setOnClickListener(v -> {
-            callback.onResult(colorInfo);
+            if (callback != null) callback.onResult(colorInfo);
             dismiss();
         });
 
@@ -105,10 +110,12 @@ public class ColorPickerPreview extends BasePicker<PinColor.ColorInfo> {
             colorInfo.setMinArea(result.getMinArea());
             colorInfo.setMaxArea(result.getMaxArea());
             int resultColor = result.getColor();
-            binding.color.setBackgroundColor(resultColor);
+
             binding.redEdit.setText(String.valueOf(Color.red(resultColor)));
             binding.greenEdit.setText(String.valueOf(Color.green(resultColor)));
             binding.blueEdit.setText(String.valueOf(Color.blue(resultColor)));
+
+            refreshColorInfo(colorInfo);
         }, colorInfo).show());
 
         binding.timeSlider.setLabelFormatter(value -> getContext().getString(R.string.picker_color_offset, (int) value));
@@ -140,6 +147,13 @@ public class ColorPickerPreview extends BasePicker<PinColor.ColorInfo> {
                 }, 100);
             }
         });
+    }
+
+    @SuppressLint("DefaultLocale")
+    private void refreshColorInfo(PinColor.ColorInfo colorInfo) {
+        binding.color.setBackgroundColor(colorInfo.getColor());
+        binding.colorRgbText.setText(String.format("%d,%d,%d", Color.red(colorInfo.getColor()), Color.green(colorInfo.getColor()), Color.blue(colorInfo.getColor())));
+        binding.colorHexText.setText(String.format("#%06X", 0xFFFFFF & colorInfo.getColor()));
     }
 
     private int toColorInt(Editable s) {

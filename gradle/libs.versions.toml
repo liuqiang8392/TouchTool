@@ -1,13 +1,13 @@
 [versions]
-appcompat = "1.7.1"
+appcompat = "1.8.0"
 material = "1.14.0"
-nav = "2.9.8"
-agp = "9.3.1"
+nav = "2.10.0"
+agp = "9.3.2"
 
 #序列化与反序列化
 gson = "2.14.0"
 #存储
-mmkv = "2.4.0"
+mmkv = "2.4.2"
 
 # 自动换行的流式布局
 flexbox = "3.0.0"
@@ -24,7 +24,6 @@ hiddenapibypass = "6.1"
 
 # 端侧模型运行环境
 litert = "2.1.5"
-litert-support-api = "1.4.2"
 
 [libraries]
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
@@ -47,7 +46,6 @@ tinypinyin = { group = "com.github.promeg", name = "tinypinyin", version.ref = "
 hiddenapibypass = { group = "org.lsposed.hiddenapibypass", name = "hiddenapibypass", version.ref = "hiddenapibypass" }
 
 litert = { group = "com.google.ai.edge.litert", name = "litert", version.ref = "litert" }
-litert-support-api = { group = "com.google.ai.edge.litert", name = "litert-support-api", version.ref = "litert-support-api" }
 
 [plugins]
 application = { id = "com.android.application", version.ref = "agp" }

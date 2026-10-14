@@ -203,6 +203,30 @@ public class OpenAppAction extends ExecuteAction {
 
     public static void putBundle(Bundle bundle, String key, String value) {
         if (value == null || value.isEmpty()) return;
+        if (value.startsWith("int:")) {
+            String raw = value.substring(4);
+            try {
+                bundle.putInt(key, Integer.parseInt(raw));
+                return;
+            } catch (NumberFormatException ignored) {
+            }
+        } else if (value.startsWith("double:")) {
+            String raw = value.substring(7);
+            try {
+                bundle.putDouble(key, Double.parseDouble(raw));
+                return;
+            } catch (NumberFormatException ignored) {
+            }
+        } else if (value.startsWith("boolean:")) {
+            String raw = value.substring(8);
+            if ("true".equalsIgnoreCase(raw) || "false".equalsIgnoreCase(raw)) {
+                bundle.putBoolean(key, Boolean.parseBoolean(raw));
+                return;
+            }
+        } else if (value.startsWith("string:")) {
+            bundle.putString(key, value.substring(7));
+            return;
+        }
         try {
             int i = Integer.parseInt(value);
             bundle.putInt(key, i);

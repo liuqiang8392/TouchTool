@@ -13,7 +13,6 @@ import top.bogey.touch_tool.databinding.FloatPickerPointPreviewBinding;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.ui.custom.float_view.TouchPathFloatView;
 import top.bogey.touch_tool.utils.callback.ResultCallback;
-import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 import top.bogey.touch_tool.utils.listener.TextChangedListener;
 
 @SuppressLint("ViewConstructor")
@@ -22,6 +21,7 @@ public class PointPickerPreview extends BasePicker<Point> {
 
     public PointPickerPreview(@NonNull Context context, ResultCallback<Point> callback, Point p) {
         super(context, callback);
+        editable = true;
         binding = FloatPickerPointPreviewBinding.inflate(LayoutInflater.from(context), this, true);
         Point point = new Point(p);
 
@@ -50,7 +50,7 @@ public class PointPickerPreview extends BasePicker<Point> {
         binding.backButton.setOnClickListener(v -> dismiss());
 
         binding.saveButton.setOnClickListener(v -> {
-            callback.onResult(point);
+            if (callback != null) callback.onResult(point);
             dismiss();
         });
 
@@ -59,17 +59,6 @@ public class PointPickerPreview extends BasePicker<Point> {
             binding.xEdit.setText(String.valueOf(result.x));
             binding.yEdit.setText(String.valueOf(result.y));
         }, point).show());
-    }
-
-    @Override
-    public void show() {
-        FloatWindow.with(MainApplication.getInstance().getService())
-                .setLayout(this)
-                .setTag(tag)
-                .setDragAble(dragAble)
-                .setCallback(floatCallback)
-                .setExistEditText(true)
-                .show();
     }
 
     private int toInt(Editable s) {

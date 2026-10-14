@@ -49,7 +49,7 @@ public class ColorPicker extends FullScreenPicker<PinColor.ColorInfo> {
         binding.backButton.setOnClickListener(v -> dismiss());
 
         binding.saveButton.setOnClickListener(v -> {
-            callback.onResult(colorInfo);
+            if (callback != null) callback.onResult(colorInfo);
             dismiss();
         });
 

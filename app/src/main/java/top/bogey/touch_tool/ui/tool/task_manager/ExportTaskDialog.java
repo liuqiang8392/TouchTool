@@ -72,6 +72,7 @@ public class ExportTaskDialog extends FrameLayout {
         DialogTaskManagerBinding binding = DialogTaskManagerBinding.inflate(LayoutInflater.from(context), this, true);
 
         binding.importTag.setVisibility(View.GONE);
+        binding.importCopy.setVisibility(View.GONE);
 
         adapter = new ExportTaskDialogAdapter();
         binding.selectionBox.setAdapter(adapter);

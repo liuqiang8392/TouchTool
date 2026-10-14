@@ -37,6 +37,11 @@ public class ToastFloatView extends FrameLayout implements FloatInterface {
         });
     }
 
+    public static void showToast(String msg) {
+        Size size = DisplayUtil.getScreenSize(MainApplication.getInstance());
+        showToast(msg, EAnchor.BOTTOM_CENTER, EAnchor.BOTTOM_CENTER, new Point(0, -size.getHeight() / 5));
+    }
+
     private ToastFloatView(@NonNull Context context) {
         super(context);
         binding = FloatToastBinding.inflate(LayoutInflater.from(context), this, true);

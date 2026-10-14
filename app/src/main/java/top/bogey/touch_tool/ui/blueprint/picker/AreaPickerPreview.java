@@ -23,7 +23,6 @@ import top.bogey.touch_tool.databinding.FloatPickerAreaPreviewBinding;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.callback.ResultCallback;
-import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 import top.bogey.touch_tool.utils.listener.TextChangedListener;
 
 @SuppressLint("ViewConstructor")
@@ -34,8 +33,7 @@ public class AreaPickerPreview extends BasePicker<Rect> {
 
     public AreaPickerPreview(@NonNull Context context, ResultCallback<Rect> callback, Rect rect) {
         super(context, callback);
-
-        dragAble = true;
+        editable = true;
 
         Rect area = new Rect(rect);
         binding = FloatPickerAreaPreviewBinding.inflate(LayoutInflater.from(context), this, true);
@@ -121,7 +119,7 @@ public class AreaPickerPreview extends BasePicker<Rect> {
         binding.backButton.setOnClickListener(v -> dismiss());
 
         binding.saveButton.setOnClickListener(v -> {
-            callback.onResult(area);
+            if (callback != null) callback.onResult(area);
             dismiss();
         });
 
@@ -132,17 +130,6 @@ public class AreaPickerPreview extends BasePicker<Rect> {
             binding.rightEdit.setText(String.valueOf(result.right));
             binding.bottomEdit.setText(String.valueOf(result.bottom));
         }, area).show());
-    }
-
-    @Override
-    public void show() {
-        FloatWindow.with(MainApplication.getInstance().getService())
-                .setLayout(this)
-                .setTag(tag)
-                .setDragAble(dragAble)
-                .setCallback(floatCallback)
-                .setExistEditText(true)
-                .show();
     }
 
     private int toInt(Editable s) {

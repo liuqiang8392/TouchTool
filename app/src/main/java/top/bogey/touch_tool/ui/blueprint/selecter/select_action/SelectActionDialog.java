@@ -231,10 +231,12 @@ public class SelectActionDialog extends BottomSheetDialog {
                 String tag = (String) view.getTag();
                 if (PRIVATE.equals(tag)) {
                     task.addTask(newTask);
-                    newTask.addAction(new CustomStartAction());
-                    CustomEndAction customEndAction = new CustomEndAction();
-                    customEndAction.setPos(0, 30);
-                    newTask.addAction(customEndAction);
+                    if (newTask.getActions().isEmpty()) {
+                        newTask.addAction(new CustomStartAction());
+                        CustomEndAction customEndAction = new CustomEndAction();
+                        customEndAction.setPos(0, 30);
+                        newTask.addAction(customEndAction);
+                    }
                 }
                 newTask.save();
                 dataList.add(0, newTask);

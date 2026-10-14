@@ -36,7 +36,6 @@ public class ParallelExecuteAction extends ExecuteAction implements DynamicPinsA
     private final transient Pin countPin = new Pin(new PinInteger(1), R.string.parallel_action_count);
     private final transient Pin timeoutPin = new Pin(new PinInteger(5000), R.string.parallel_action_timeout);
 
-    private final transient Pin secondPin = new Pin(new PinExecute(), R.string.pin_execute, true);
     private final transient Pin addPin = new AlwaysShowPin(new PinAdd(morePin), R.string.pin_add_execute, true);
     private final transient Pin resultPin = new Pin(new PinBoolean(), R.string.pin_boolean_result, true);
     private final transient Pin completePin = new Pin(new PinExecute(), R.string.random_action_complete, true);
@@ -44,12 +43,13 @@ public class ParallelExecuteAction extends ExecuteAction implements DynamicPinsA
 
     public ParallelExecuteAction() {
         super(ActionType.PARALLEL_LOGIC);
+        Pin secondPin = new Pin(new PinExecute(), R.string.pin_execute, true, true);
         addPins(countPin, timeoutPin, secondPin, addPin, resultPin, completePin);
     }
 
     public ParallelExecuteAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(countPin, timeoutPin, secondPin);
+        reAddPins(countPin, timeoutPin);
         reAddPins(morePin);
         reAddPins(addPin, resultPin, completePin);
     }
@@ -146,9 +146,9 @@ public class ParallelExecuteAction extends ExecuteAction implements DynamicPinsA
         pins.add(outPin);
         boolean start = false;
         for (Pin pin : getPins()) {
-            if (pin == secondPin) start = true;
             if (pin == addPin) start = false;
             if (start) pins.add(pin);
+            if (pin == timeoutPin) start = true;
         }
         return pins;
     }

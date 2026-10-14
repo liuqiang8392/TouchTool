@@ -12,7 +12,9 @@ import androidx.annotation.NonNull;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.save.TagSaver;
@@ -91,6 +93,9 @@ public class ImportTaskDialog extends FrameLayout {
             }
         });
 
+        // 打开副本模式后，条目下方的提示文案也跟着变
+        binding.importCopy.setOnCheckedChangeListener((buttonView, isChecked) -> adapter.setImportCopy(isChecked));
+
         TaskRecord record = adapter.getTaskRecord(true);
         if (record.tasks() != null && record.variables() != null) {
             binding.selectAllButton.setChecked(record.tasks().size() == taskRecord.tasks().size() && record.variables().size() == taskRecord.variables().size());
@@ -100,12 +105,31 @@ public class ImportTaskDialog extends FrameLayout {
     }
 
     public void importTask() {
+        TaskSaver taskSaver = TaskSaver.getInstance();
+        VariableSaver variableSaver = VariableSaver.getInstance();
+
+        boolean importCopy = binding.importCopy.isChecked();
         TaskRecord taskRecord = adapter.getTaskRecord(binding.importTag.isChecked());
+        if (importCopy) {
+            // 本地已有任务的标题，用来给副本错开名字
+            Set<String> localTitles = new HashSet<>();
+            for (Task task : taskSaver.getTasks()) {
+                localTitles.add(task.getTitle());
+            }
+
+            taskRecord = taskRecord.duplicate();
+            for (Task task : taskRecord.tasks()) {
+                task.setTitle(getUniqueTitle(task.getTitle(), localTitles));
+            }
+        }
+
         for (Task task : taskRecord.tasks()) {
-            TaskSaver.getInstance().saveTask(task);
+            taskSaver.saveTask(task);
         }
         for (Variable variable : taskRecord.variables()) {
-            VariableSaver.getInstance().saveVar(variable);
+            // 副本模式不覆盖本地已有的全局变量
+            if (importCopy && variableSaver.getVar(variable.getId()) != null) continue;
+            variableSaver.saveVar(variable);
         }
 
         if (!binding.importTag.isChecked()) return;
@@ -117,5 +141,20 @@ public class ImportTaskDialog extends FrameLayout {
             }
         }
         tagSaver.setTags(tags);
+    }
+
+    // 标题与本地已有任务冲突时，依次尝试 “x_复制”、“x_复制_2”
+    private String getUniqueTitle(String title, Set<String> titles) {
+        if (title == null) title = "";
+        if (!titles.contains(title)) return title;
+
+        String copyTitle = getContext().getString(R.string.copy_title, title);
+        String result = copyTitle;
+        int index = 2;
+        while (titles.contains(result)) {
+            result = copyTitle + "_" + index;
+            index++;
+        }
+        return result;
     }
 }

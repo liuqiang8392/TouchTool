@@ -8,6 +8,7 @@ import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.parent.ExecuteAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskRunnable;
@@ -28,11 +29,11 @@ public class TextToSpeechAction extends ExecuteAction {
 
     @Override
     public void execute(TaskRunnable runnable, Pin pin) {
-        PinString text = getPinValue(runnable, textPin);
+        PinObject text = getPinValue(runnable, textPin);
         PinBoolean mode = getPinValue(runnable, modePin);
 
         MainAccessibilityService service = MainApplication.getInstance().getService();
-        service.speak(text.getValue(), result -> {
+        service.speak(text.toString(), result -> {
             if (mode.getValue()) runnable.resume();
         });
 

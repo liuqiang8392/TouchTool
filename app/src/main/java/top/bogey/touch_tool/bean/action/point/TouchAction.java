@@ -66,4 +66,8 @@ public class TouchAction extends ExecuteAction {
         if (pause.get()) runnable.await();
         executeNext(runnable, outPin);
     }
+
+    public Pin getTouchPin() {
+        return touchPin;
+    }
 }

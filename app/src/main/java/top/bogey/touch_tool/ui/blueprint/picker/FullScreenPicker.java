@@ -30,7 +30,7 @@ public abstract class FullScreenPicker<T> extends BasePicker<T> {
 
     protected abstract void realShow();
 
-    private void onShow() {
+    protected void onShow() {
         postDelayed(() -> {
             screenInfo = new ScreenInfo(service);
             Bitmap bitmap = screenInfo.getScreenShot();

@@ -36,6 +36,7 @@ public class LiteRTModelExecutor {
 
     public LiteRTModelExecutor(String modelPath) {
         for (Accelerator accelerator : accelerators) {
+            Log.d("TAG", "LiteRTModelExecutor: " + accelerator);
             try {
                 model = CompiledModel.create(modelPath, new CompiledModel.Options(accelerator), ENVIRONMENT);
                 inputs = model.createInputBuffers();

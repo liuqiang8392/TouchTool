@@ -26,7 +26,6 @@ public class RandomExecuteAction extends ExecuteAction implements DynamicPinsAct
     private final transient Pin timesPin = new Pin(new PinInteger(1), R.string.random_action_times);
     private final transient Pin allowRepeatPin = new Pin(new PinBoolean(false), R.string.random_action_allow_repeat);
 
-    private final transient Pin secondPin = new Pin(new PinExecute(), R.string.pin_execute, true);
     private final transient Pin addPin = new AlwaysShowPin(new PinAdd(morePin), R.string.pin_add_execute, true);
     private final transient Pin completePin = new Pin(new PinExecute(), R.string.random_action_complete, true);
 
@@ -34,12 +33,13 @@ public class RandomExecuteAction extends ExecuteAction implements DynamicPinsAct
 
     public RandomExecuteAction() {
         super(ActionType.RANDOM_LOGIC);
+        Pin secondPin = new Pin(new PinExecute(), R.string.pin_execute, true, true);
         addPins(timesPin, allowRepeatPin, secondPin, addPin, completePin);
     }
 
     public RandomExecuteAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(timesPin, allowRepeatPin, secondPin);
+        reAddPins(timesPin, allowRepeatPin);
         reAddPins(morePin);
         reAddPins(addPin, completePin);
     }
@@ -77,9 +77,9 @@ public class RandomExecuteAction extends ExecuteAction implements DynamicPinsAct
         pins.add(outPin);
         boolean start = false;
         for (Pin pin : getPins()) {
-            if (pin == secondPin) start = true;
             if (pin == addPin) start = false;
             if (start) pins.add(pin);
+            if (pin == allowRepeatPin) start = true;
         }
         return pins;
     }

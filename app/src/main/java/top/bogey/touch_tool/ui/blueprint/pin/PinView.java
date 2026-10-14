@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -30,6 +31,7 @@ import top.bogey.touch_tool.bean.pin.special_pin.NotShowPin;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.ui.blueprint.BlueprintView;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
+import top.bogey.touch_tool.ui.blueprint.card.IDynamicPinCard;
 import top.bogey.touch_tool.ui.blueprint.pin_slot.PinSlotView;
 import top.bogey.touch_tool.ui.blueprint.pin_widget.PinWidget;
 import top.bogey.touch_tool.utils.DisplayUtil;
@@ -72,6 +74,13 @@ public abstract class PinView extends FrameLayout implements PinListener {
             removeButton.setOnClickListener(v -> card.removePin(pin));
         }
 
+        // 拖动柄只出现在可拖动排序的卡片里，且只给动态添加的针脚做提示
+        Button dragButton = getDragButton();
+        if (dragButton != null) {
+            boolean dragAble = card instanceof IDynamicPinCard && pin.isDynamic();
+            dragButton.setVisibility(dragAble ? VISIBLE : GONE);
+        }
+
         Button copyButton = getCopyAndPasteButton();
         if (copyButton != null) {
             copyButton.setOnClickListener(v -> {
@@ -90,7 +99,28 @@ public abstract class PinView extends FrameLayout implements PinListener {
         refreshPin();
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        // 抑制一下recycleView的滚动，让针脚连线能够生效
+        if (card instanceof IDynamicPinCard dynamicPinCard) {
+            float x = event.getX();
+            float y = event.getY();
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                PointF pointF = DisplayUtil.getLocationRelativeToView(this, card);
+                if (card.getLinkAblePinView((x + pointF.x) * card.getScaleX(), (y + pointF.y) * card.getScaleY()) == this) {
+                    dynamicPinCard.suppressLayout();
+                }
+            }
+        }
+        return super.onTouchEvent(event);
+    }
+
     public abstract Button getRemoveButton();
+
+    // 可拖动排序的针脚布局提供拖动柄，其余返回 null
+    public Button getDragButton() {
+        return null;
+    }
 
     public abstract ViewGroup getSlotBox();
 
@@ -236,6 +266,13 @@ public abstract class PinView extends FrameLayout implements PinListener {
     @Override
     public void onTitleChanged(Pin origin, String title) {
         post(this::refreshPin);
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        // 针脚视图会被列表回收后重新挂回来，重新挂载时要把监听补上
+        pin.addListener(this);
     }
 
     @Override

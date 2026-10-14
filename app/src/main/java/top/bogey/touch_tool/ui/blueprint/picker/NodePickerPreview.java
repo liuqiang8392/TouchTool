@@ -83,7 +83,11 @@ public class NodePickerPreview extends BasePicker<String> {
         Bitmap bitmap = service.tryGetScreenShot();
         if (bitmap != null) {
             NodeInfo nodeInfo = nodePath.findNode(NodeInfo.getWindows(), true);
-            if (nodeInfo == null) return;
+            // 控件不存在或区域为空（宽高为零，如已移除的控件）时无法截取，清空预览
+            if (nodeInfo == null || nodeInfo.area == null || nodeInfo.area.isEmpty()) {
+                binding.matchedImage.setImageDrawable(null);
+                return;
+            }
             Rect rect = nodeInfo.area;
             int px = (int) DisplayUtil.dp2px(getContext(), 16);
             Rect area = DisplayUtil.safeClipBitmapArea(bitmap, rect.left - px, rect.top - px, rect.width() + px * 2, rect.height() + px * 2);

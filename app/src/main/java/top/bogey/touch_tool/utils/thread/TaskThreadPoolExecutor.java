@@ -28,7 +28,10 @@ public class TaskThreadPoolExecutor extends ThreadPoolExecutor {
         try {
             super.execute(command);
         } catch (Throwable throwable) {
+            // 提交失败（容量已满被拒绝）必须如实抛出：吞掉的话调用方会以为任务已提交，
+            // 而它从未执行，也不会触发任何回调
             submittedTaskCount.decrementAndGet();
+            throw throwable;
         }
     }
 }

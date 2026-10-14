@@ -35,6 +35,11 @@ public class PinBottomView extends PinView {
     }
 
     @Override
+    public Button getDragButton() {
+        return binding.dragButton;
+    }
+
+    @Override
     public Button getRemoveButton() {
         return binding.removeButton;
     }

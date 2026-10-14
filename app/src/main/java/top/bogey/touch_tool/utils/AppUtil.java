@@ -80,6 +80,8 @@ public class AppUtil {
     public final static String LOG_DIR_NAME = "log";
     public final static String TASK_DIR_NAME = "task";
     public final static String DOCUMENT_DIR_NAME = "document";
+    /// 外部存储应用专属目录（/Android/data/<包名>/files/data），供用户自行投放文件
+    public final static String EXTERNAL_DIR_NAME = "data";
 
     // 判断当前环境是否为发布环境
     public static boolean isRelease(Context context) {
@@ -538,6 +540,15 @@ public class AppUtil {
             return FileProvider.getUriForFile(context, context.getPackageName() + ".file_provider", file);
         }
         return null;
+    }
+
+    /// 获取外部存储的应用专属目录，不存在则创建
+    /// 返回 /storage/emulated/0/Android/data/<包名>/files/data，应用启动时调用
+    public static void initExternalDir(Context context) {
+        File dir = context.getExternalFilesDir(EXTERNAL_DIR_NAME);
+        // 外部存储未挂载或不可用时退回内部存储，保证返回的路径一定可读写
+        if (dir == null) dir = new File(context.getFilesDir(), EXTERNAL_DIR_NAME);
+        if (!dir.exists()) dir.mkdirs();
     }
 
     public static Uri writeDownloadFile(Context context, String parent, String fileName, byte[] content) {

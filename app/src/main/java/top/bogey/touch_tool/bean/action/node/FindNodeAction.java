@@ -139,6 +139,23 @@ public class FindNodeAction extends FindExecuteAction {
         return type.getIndex();
     }
 
+    public void setTypeValue(int index) {
+        PinSingleSelect type = typePin.getValue();
+        type.setIndex(index);
+    }
+
+    public Pin getPathPin() {
+        return pathPin;
+    }
+
+    public Pin getTextPin() {
+        return textPin;
+    }
+
+    public Pin getNodePin() {
+        return nodePin;
+    }
+
     private static class PathShowablePin extends ShowAblePin {
         public PathShowablePin(PinBase value, int titleId) {
             super(value, titleId);

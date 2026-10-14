@@ -24,6 +24,12 @@ public class PinLeftView extends PinView {
     }
 
     @Override
+    public void refreshPin() {
+        super.refreshPin();
+        binding.pinBox.setVisibility(pin.isLinked() ? GONE : VISIBLE);
+    }
+
+    @Override
     public ViewGroup getSlotBox() {
         return binding.pinSlotBox;
     }
@@ -31,6 +37,11 @@ public class PinLeftView extends PinView {
     @Override
     public TextView getTitleView() {
         return binding.title;
+    }
+
+    @Override
+    public Button getDragButton() {
+        return binding.dragButton;
     }
 
     @Override
@@ -46,11 +57,5 @@ public class PinLeftView extends PinView {
     @Override
     public Button getCopyAndPasteButton() {
         return binding.cpButton;
-    }
-
-    @Override
-    public void refreshPin() {
-        super.refreshPin();
-        binding.pinBox.setVisibility(pin.isLinked() ? GONE : VISIBLE);
     }
 }

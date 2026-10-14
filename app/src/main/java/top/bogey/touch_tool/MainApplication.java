@@ -14,6 +14,7 @@ import java.lang.ref.WeakReference;
 import top.bogey.touch_tool.bean.save.setting.SettingSaver;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.ui.MainActivity;
+import top.bogey.touch_tool.utils.AppUtil;
 
 public class MainApplication extends Application implements Thread.UncaughtExceptionHandler {
     private static MainApplication instance;
@@ -39,6 +40,9 @@ public class MainApplication extends Application implements Thread.UncaughtExcep
         MMKV.initialize(this);
         SettingSaver.APP_RUN_TIMES.add();
         SettingSaver.getInstance().init(this);
+
+        // 创建外部存储的应用专属目录，方便用户自行往里放文件
+        AppUtil.initExternalDir(this);
 
         handler = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler(this);

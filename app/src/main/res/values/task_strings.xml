@@ -143,6 +143,11 @@
     <string name="stop_task_action_task_id">任务(默认当前)</string>
     <string name="stop_task_action_task_all">除自身所有任务</string>
 
+    <string name="switch_task_action">开关任务</string>
+    <string name="switch_task_action_desc">打开或关闭对应任务，关闭任务后手动执行悬浮窗会刷新</string>
+    <string name="switch_task_action_task_id">任务</string>
+    <string name="switch_task_action_switch">关/开</string>
+
     <string name="is_task_running_action">任务是否运行中</string>
     <string name="is_task_running_action_desc">判断任务是否正在运行中</string>
     <string name="is_task_running_action_task_id">任务</string>
@@ -397,6 +402,7 @@
 
     <string name="number_random_action">随机数</string>
     <string name="number_random_action_desc">生成一个随机数值</string>
+    <string name="number_random_action_offset">精度</string>
 
     <string name="number_to_integer_action">取整</string>
     <string name="number_to_integer_action_desc">将数值按规则取整</string>

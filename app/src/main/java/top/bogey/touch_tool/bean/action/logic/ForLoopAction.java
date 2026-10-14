@@ -70,4 +70,14 @@ public class ForLoopAction extends ExecuteAction {
             super.beforeExecuteNext(runnable, pin);
         }
     }
+
+    @Override
+    public void resetReturnValue(TaskRunnable runnable, Pin pin) {
+        // currentPin 记录的是循环进行到哪一步，只能在循环真正开始时清空
+        // 否则从 break 针脚进来（以及循环结束走 completePin）时会被清成 0，循环结束后再取值就拿不到最后一次的值
+        // 与 ListForeachAction、MapForeachAction 的写法保持一致
+        if (pin == inPin) {
+            super.resetReturnValue(runnable, pin);
+        }
+    }
 }

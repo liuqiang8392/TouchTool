@@ -25,6 +25,7 @@ import top.bogey.touch_tool.bean.action.map.MakeMapAction;
 import top.bogey.touch_tool.bean.action.map.MapActionLinkEventHandler;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.PinInfo;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinAdd;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
@@ -40,17 +41,25 @@ import top.bogey.touch_tool.ui.blueprint.pin.PinView;
 import top.bogey.touch_tool.utils.DisplayUtil;
 
 @SuppressLint("ViewConstructor")
-public class CreateListActionCard extends ActionCard {
+public class CreateListActionCard extends ActionCard implements IDynamicPinCard {
     private final static Map<PinType, List<PinInfo>> PIN_INFO_MAP = PinInfo.getCustomPinInfoMap();
     private CardCreateListBinding binding;
+    private CreateListActionAdapter pinAdapter;
 
     public CreateListActionCard(Context context, Task task, Action action) {
         super(context, task, action);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void init() {
         binding = CardCreateListBinding.inflate(LayoutInflater.from(getContext()), this, true);
+
+        // 列表、字典的输入项可以拖动调换顺序
+        if (action instanceof MakeListAction || action instanceof MakeMapAction) {
+            pinAdapter = new CreateListActionAdapter(this);
+            pinAdapter.attachToRecyclerView(binding.inPinBox);
+        }
 
         initCardInfo(binding.icon, binding.title, binding.des);
         initEditDesc(binding.editButton, binding.des);
@@ -139,6 +148,24 @@ public class CreateListActionCard extends ActionCard {
         initLock(binding.lockButton);
     }
 
+    // 展开模式切换会成片隐藏针脚，藏光了的那条列表会被压成 0 高并回收掉针脚视图，
+    // 只改针脚可见性不会再触发列表布局，所以这里让列表重新量一次
+    @Override
+    public void setExpandType(Action.ExpandType expandType) {
+        super.setExpandType(expandType);
+        requestPinBoxLayout();
+    }
+
+    @Override
+    public void expand() {
+        super.expand();
+        requestPinBoxLayout();
+    }
+
+    private void requestPinBoxLayout() {
+        binding.inPinBox.requestLayout();
+    }
+
     private void refreshKeyValueType() {
         if (action instanceof MakeListAction makeListAction) {
             Pin listPin = makeListAction.getListPin();
@@ -178,7 +205,11 @@ public class CreateListActionCard extends ActionCard {
     @Override
     public void addPinView(Pin pin, int offset) {
         PinView pinView;
-        if (pin.isOut()) {
+        if (isListItem(pin)) {
+            // 字典的值针脚要和前面的键针脚同一行，其余输入项各占一行
+            boolean sameRow = action instanceof MakeMapAction makeMapAction && makeMapAction.getDynamicValueTypePins().contains(pin);
+            pinView = sameRow ? pinAdapter.addPinToLast(pin) : pinAdapter.addPin(pin);
+        } else if (pin.isOut()) {
             if (pin.isVertical()) {
                 pinView = new PinBottomView(getContext(), this, pin);
                 binding.bottomBox.addView(pinView, binding.bottomBox.getChildCount() - offset);
@@ -186,17 +217,39 @@ public class CreateListActionCard extends ActionCard {
                 pinView = new PinRightView(getContext(), this, pin);
                 binding.outBox.addView(pinView, binding.outBox.getChildCount() - offset);
             }
+        } else if (pin.isVertical()) {
+            pinView = new PinTopView(getContext(), this, pin);
+            binding.topBox.addView(pinView, binding.topBox.getChildCount() - offset);
         } else {
-            if (pin.isVertical()) {
-                pinView = new PinTopView(getContext(), this, pin);
-                binding.topBox.addView(pinView, binding.topBox.getChildCount() - offset);
-            } else {
-                pinView = new PinLeftView(getContext(), this, pin);
-                binding.inBox.addView(pinView, binding.inBox.getChildCount() - offset);
-            }
+            pinView = new PinLeftView(getContext(), this, pin);
+            binding.inBox.addView(pinView, binding.inBox.getChildCount() - offset);
         }
         pinView.expand(action.getExpandType());
         pinViews.put(pin.getId(), pinView);
+    }
+
+    @Override
+    public void removePinView(Pin pin) {
+        if (isListItem(pin)) {
+            pinViews.remove(pin.getId());
+            pinAdapter.removePin(pin);
+        } else {
+            super.removePinView(pin);
+        }
+    }
+
+    // 列表的输入项：由适配器管理、可拖动排序的左侧针脚，添加针脚除外
+    private boolean isListItem(Pin pin) {
+        if (pinAdapter == null) return false;
+        if (pin.getValue() instanceof PinAdd) return false;
+        return !pin.isOut() && !pin.isVertical();
+    }
+
+    @Override
+    public void suppressLayout() {
+        // 抑制列表滚动，让针脚连线能够生效
+        binding.inPinBox.suppressLayout(true);
+        postDelayed(() -> binding.inPinBox.suppressLayout(false), 100);
     }
 
     @Override

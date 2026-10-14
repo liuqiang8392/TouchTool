@@ -48,4 +48,9 @@ public class BasePicker<T> extends FrameLayout implements FloatInterface {
     public void dismiss() {
         FloatWindow.dismiss(tag);
     }
+
+    @Override
+    public String getTag() {
+        return tag;
+    }
 }

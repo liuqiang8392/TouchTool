@@ -26,13 +26,12 @@ public class ListActionLinkEventHandler {
             if (!origin.getValue().isDynamic()) return;
 
             for (Pin pin : valuePins) {
-                if (pin.isLinked()) {
-                    Pin linkedPin = pin.getLinkedPin(task);
-                    if (linkedPin == null) continue;
-                    // 两边的值都是动态的，无法确定类型，跳过
-                    if (pin.getValue().isDynamic() && linkedPin.getValue().isDynamic()) continue;
-                    count++;
-                }
+                if (!pin.isLinked()) continue;
+                Pin linkedPin = pin.getLinkedPin(task);
+                if (linkedPin == null) continue;
+                // 两边的值都是动态的，无法确定类型，跳过
+                if (pin.getValue().isDynamic() && linkedPin.getValue().isDynamic()) continue;
+                count++;
             }
             if (count != 1) return;
         }
@@ -53,7 +52,15 @@ public class ListActionLinkEventHandler {
             PinBase value = pin.getValue();
 
             if (value instanceof PinAdd pinAdd) {
-                pinAdd.getPin().setValue(template.copy());
+                Pin addPin = pinAdd.getPin();
+                PinBase addValue = addPin.getValue();
+                if (addValue instanceof PinList pinList) {
+                    pinList.setValueType((PinObject) template.copy());
+                    pinList.reset();
+                    addPin.setValue(task, pinList);
+                } else {
+                    addPin.setValue(task, template.copy());
+                }
             } else if (value instanceof PinList pinList) {
                 pinList.setValueType((PinObject) template.copy());
                 pinList.reset();
@@ -74,28 +81,39 @@ public class ListActionLinkEventHandler {
     }
 
     public static void onUnLinkedFrom(List<Pin> valuePins, Task task, Pin origin) {
-        // 所有动态类型针脚都断开连接，则所有动态类型针脚重置
-        if (valuePins.contains(origin)) {
-            boolean flag = true;
-            for (Pin pin : valuePins) {
-                if (pin.isLinked()) {
-                    flag = false;
-                    break;
-                }
+        // 只有动态类型针脚中的连接断开才处理
+        if (!valuePins.contains(origin)) {
+            return;
+        }
+        boolean flag = true;
+        for (Pin pin : valuePins) {
+            if (pin.isLinked()) {
+                flag = false;
+                break;
             }
-            if (flag) {
-                for (Pin pin : valuePins) {
-                    PinBase value = pin.getValue();
-                    if (value instanceof PinAdd pinAdd) {
-                        pinAdd.getPin().setValue(new PinObject(PinSubType.DYNAMIC));
-                    } else if (!pin.isDynamic() && value instanceof PinList pinList) {
-                        pinList.setValueType(new PinObject(PinSubType.DYNAMIC));
-                        pinList.reset();
-                        pin.setValue(task, pinList);
-                    } else {
-                        pin.setValue(task, new PinObject(PinSubType.DYNAMIC));
-                    }
+        }
+        // 还有连接，不恢复动态类型
+        if (!flag) {
+            return;
+        }
+        for (Pin pin : valuePins) {
+            PinBase value = pin.getValue();
+            if (value instanceof PinAdd pinAdd) {
+                Pin addPin = pinAdd.getPin();
+                PinBase addValue = addPin.getValue();
+                if (addValue instanceof PinList pinList) {
+                    pinList.setValueType(new PinObject(PinSubType.DYNAMIC));
+                    pinList.reset();
+                    addPin.setValue(task, pinList);
+                } else {
+                    addPin.setValue(task, new PinObject(PinSubType.DYNAMIC));
                 }
+            } else if (value instanceof PinList pinList) {
+                pinList.setValueType(new PinObject(PinSubType.DYNAMIC));
+                pinList.reset();
+                pin.setValue(task, pinList);
+            } else {
+                pin.setValue(task, new PinObject(PinSubType.DYNAMIC));
             }
         }
     }

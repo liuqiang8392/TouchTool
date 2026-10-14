@@ -79,7 +79,12 @@ public class AppInfoFloatView extends FrameLayout implements FloatInterface, Res
 
         adapter = new AppInfoFloatViewAdapter();
         binding.recyclerView.setAdapter(adapter);
-        binding.recyclerView.scrollToPosition(adapter.getItemCount() - 1);
+        // 打开时先填充一条当前所处界面信息
+        TaskInfoSummary.PackageActivity packageActivity = TaskInfoSummary.getInstance().getPackageActivity();
+        if (packageActivity != null && !packageActivity.packageName().isEmpty() && !packageActivity.activityName().isEmpty()) {
+            adapter.addPackageActivity(packageActivity);
+        }
+        if (adapter.getItemCount() > 0) binding.recyclerView.scrollToPosition(adapter.getItemCount() - 1);
     }
 
     @Override

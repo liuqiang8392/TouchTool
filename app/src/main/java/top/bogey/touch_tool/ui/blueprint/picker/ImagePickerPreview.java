@@ -54,7 +54,7 @@ public class ImagePickerPreview extends BasePicker<Bitmap> {
         binding.backButton.setOnClickListener(v -> dismiss());
 
         binding.saveButton.setOnClickListener(v -> {
-            callback.onResult(template);
+            if (callback != null) callback.onResult(template);
             dismiss();
         });
 

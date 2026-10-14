@@ -63,6 +63,9 @@ public class CustomEndAction extends Action implements DynamicPinsAction, SyncAc
 
     }
 
+    public Pin getInPin() {
+        return getPins().stream().filter(Pin::isVertical).findFirst().orElse(null);
+    }
 
     @Override
     public List<Pin> getDynamicPins() {

@@ -87,4 +87,8 @@ public class TouchImageAction extends ExecuteAction {
             }
         }
     }
+
+    public Pin getTemplatePin() {
+        return templatePin;
+    }
 }
